@@ -25,6 +25,15 @@
   </Target>
 
   <ItemGroup>
+    <Compile Remove="Dependencies\**" />
+    <Compile Remove="WorldEdit-UnitTest\**" />
+    <EmbeddedResource Remove="Dependencies\**" />
+    <EmbeddedResource Remove="WorldEdit-UnitTest\**" />
+    <None Remove="Dependencies\**" />
+    <None Remove="WorldEdit-UnitTest\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Eco.Core">
       <HintPath>Dependencies\Eco.Core.dll</HintPath>
     </Reference>
