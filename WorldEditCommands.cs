@@ -97,13 +97,13 @@ namespace Eco.Mods.WorldEdit
         {
             try
             {
-                string[] splitted = pTypeNames.Split(' ');
-                string toFind = splitted[0].ToLower();
+                string[] splitted = pTypeNames.Trim().Split(',');
+                string toFind = splitted[0].ToLower().Replace(" ", "");
 
                 string toReplace = string.Empty;
 
                 if (splitted.Length >= 2)
-                    toReplace = pTypeNames.Split(' ')[1].ToLower();
+                    toReplace = splitted[1].Trim().ToLower().Replace(" ", "");
 
                 WorldEditUserData weud = WorldEditManager.GetUserData(user.Name);
 
@@ -185,6 +185,7 @@ namespace Eco.Mods.WorldEdit
         {
             try
             {
+                pTypeName = pTypeName.Replace(" ", "");
                 WorldEditUserData weud = WorldEditManager.GetUserData(user.Name);
 
                 if (weud.FirstPos == null || weud.SecondPos == null)
@@ -703,7 +704,7 @@ namespace Eco.Mods.WorldEdit
         [ChatCommand("World Edit Version - For Debugging", ChatAuthorizationLevel.Admin)]
         public static void WEVersion(User user)
         {
-            user.Player.MsgLocStr($"World Edit - Beta Test Version: 1.1");
+            user.Player.MsgLocStr($"World Edit - Beta Test Version: Experimental");
         }
 
         [ChatCommand("/grow", "", ChatAuthorizationLevel.Admin)]
