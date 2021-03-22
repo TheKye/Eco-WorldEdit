@@ -20,7 +20,7 @@ namespace Eco.Mods.WorldEdit
 {
     public class WorldEditCommands : IChatCommandHandler
     {
-        [ChatCommand("/wand", "", ChatAuthorizationLevel.Admin)]
+        [ChatCommand("Gives the player a Wand for using world edit", ChatAuthorizationLevel.Admin)]
         public static void Wand(User user)
         {
             try
@@ -33,7 +33,7 @@ namespace Eco.Mods.WorldEdit
             }
         }
 
-        [ChatCommand("/rmwand", "", ChatAuthorizationLevel.Admin)]
+        [ChatCommand("Removes the wand from the players inventory", ChatAuthorizationLevel.Admin)]
         public static void RmWand(User user)
         {
             try
@@ -46,11 +46,12 @@ namespace Eco.Mods.WorldEdit
             }
         }
 
-        [ChatCommand("/set", "", ChatAuthorizationLevel.Admin)]
+        [ChatCommand("Sets The Selected Area to the desired Block", ChatAuthorizationLevel.Admin)]
         public static void Set(User user, string pTypeName)
         {
             try
             {
+                pTypeName = pTypeName.Replace(" ", "");
                 WorldEditUserData weud = WorldEditManager.GetUserData(user.Name);
 
                 if (weud.FirstPos == null || weud.SecondPos == null)
@@ -91,7 +92,7 @@ namespace Eco.Mods.WorldEdit
             }
         }
 
-        [ChatCommand("/replace", "", ChatAuthorizationLevel.Admin)]
+        [ChatCommand("Replace a Specific Block Type with Another Block", ChatAuthorizationLevel.Admin)]
         public static void Replace(User user, string pTypeNames = "")
         {
             try
@@ -179,7 +180,7 @@ namespace Eco.Mods.WorldEdit
             }
         }
 
-        [ChatCommand("/walls", "", ChatAuthorizationLevel.Admin)]
+        [ChatCommand("Sets the Area on the outside of the selection to selected wall type", ChatAuthorizationLevel.Admin)]
         public static void Walls(User user, string pTypeName)
         {
             try

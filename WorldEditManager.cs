@@ -55,7 +55,6 @@ namespace Eco.Mods.WorldEdit
 
         public static void SetBlock(Type pType, Vector3i pPosition, UserSession pSession = null, Vector3i? pSourcePosition = null, Block pSourceBlock = null, byte[] pData = null)
         {
-
             if (pType == null || pType.DerivesFrom<PickupableBlock>())
                 pType = typeof(EmptyBlock);
             if (pType.FullName == "Eco.Gameplay.Objects.WorldObjectBlock" || pType.FullName == "Eco.Gameplay.Objects.BuildingWorldObjectBlock")
@@ -63,8 +62,7 @@ namespace Eco.Mods.WorldEdit
 
             Log.WriteErrorLineLocStr(Localizer.DoStr($"{pType}, {pPosition}, {pSourceBlock}"));
 
-            var worldObjectBlock = Eco.World.World.GetBlock(pPosition) as WorldObjectBlock;
-            if (worldObjectBlock != null)
+            if (World.World.GetBlock(pPosition) is WorldObjectBlock worldObjectBlock)
             {
                 if (worldObjectBlock.WorldObjectHandle.Object.Position3i == pPosition)
                 {
@@ -74,7 +72,7 @@ namespace Eco.Mods.WorldEdit
 
             if (pType == typeof(EmptyBlock))
             {
-                Eco.World.World.DeleteBlock(pPosition);
+                World.World.DeleteBlock(pPosition);
                 return;
             }
 
