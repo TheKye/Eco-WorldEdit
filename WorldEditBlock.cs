@@ -26,11 +26,11 @@ namespace Eco.Mods.WorldEdit
 
                 if (pBlock is WorldObjectBlock)
                 {
-                    WorldObjectBlock wob = (WorldObjectBlock)pBlock;
+                    WorldObject wob = (WorldObjectBlock)pBlock;
 
-                    if (wob.WorldObjectHandle.Object.Position3i == pSourcePosition)
+                    if (wob.Position3i == pSourcePosition)
                     {
-                        web.Data = EcoSerializer.Serialize(wob.WorldObjectHandle.Object).ToArray();
+                        web.Data = EcoSerializer.Serialize(wob).ToArray();
                     }
                 }
             }

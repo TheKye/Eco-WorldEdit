@@ -2,7 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <RootNamespace>World_Edit</RootNamespace>
+    <RootNamespace>Eco.EM.WorldEdit</RootNamespace>
+      <Authors>Elixr Mods</Authors>
+      <Company>Elixr Solutions</Company>
+      <Product>EM WorldEdit</Product>
+      <Version>1.0.0</Version>
+      <Copyright>Elixr Solutions 2020</Copyright>
+      <PackageLicenseExpression>MIT</PackageLicenseExpression>
+      <PackageProjectUrl>https://elixrmods.com/</PackageProjectUrl>
+      <PackageIcon></PackageIcon>
+      <RepositoryUrl>https://git.elixr-solutions.com/elixrmods/elixr-mods</RepositoryUrl>
+      <RepositoryType>Private GitLab</RepositoryType>
+      <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -55,6 +66,10 @@
     <Reference Include="Eco.WorldGenerator">
       <HintPath>..\dlls\Eco.WorldGenerator.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\em-framework\em-framework.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

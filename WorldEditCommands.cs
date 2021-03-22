@@ -1,51 +1,22 @@
-﻿
-using Eco.Gameplay.Plants;
+﻿using Eco.Gameplay.Plants;
 using Eco.Gameplay.Players;
 using Eco.Gameplay.Systems.Chat;
 using Eco.Mods.TechTree;
 using Eco.Shared.Localization;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
+using Eco.Simulation.Agents;
 using Eco.World;
 using Eco.World.Blocks;
 using EcoWorldEdit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace Eco.Mods.WorldEdit
 {
     public class WorldEditCommands : IChatCommandHandler
     {
-        const string version = "1.0.1";
-        #region
-
-        public static class BlockUtils
-        {
-
-            public static Type GetBlockType(string pBlockName)
-            {
-                pBlockName = pBlockName.ToLower();
-
-                if (pBlockName == "air")
-                    return typeof(EmptyBlock);
-
-                Type blockType = BlockManager.BlockTypes.FirstOrDefault(t => t.Name.ToLower() == pBlockName + "floorblock");
-
-                if (blockType != null)
-                    return blockType;
-
-                blockType = BlockManager.BlockTypes.FirstOrDefault(t => t.Name.ToLower() == pBlockName + "block");
-
-                if (blockType != null)
-                    return blockType;
-
-                return BlockManager.BlockTypes.FirstOrDefault(t => t.Name.ToLower() == pBlockName + "block");
-            }
-        }
-        #endregion
-
         [ChatCommand("/wand", "", ChatAuthorizationLevel.Admin)]
         public static void Wand(User user)
         {
@@ -55,7 +26,7 @@ namespace Eco.Mods.WorldEdit
             }
             catch (Exception e)
             {
-                Log.WriteError(Localizer.Do($"{e}"));
+                Log.WriteError(Localizer.DoStr($"{e}"));
             }
         }
 
@@ -68,7 +39,7 @@ namespace Eco.Mods.WorldEdit
             }
             catch (Exception e)
             {
-                Log.WriteError(Localizer.Do($"{e}"));
+                Log.WriteError(Localizer.DoStr($"{e}"));
             }
         }
 
@@ -81,7 +52,7 @@ namespace Eco.Mods.WorldEdit
 
                 if (weud.FirstPos == null || weud.SecondPos == null)
                 {
-                    user.Player.MsgLoc($"Please set both Points with the Wand Tool first!");
+                    user.Player.ErrorLocStr($"Please set both Points with the Wand Tool first!");
                     return;
                 }
 
@@ -89,7 +60,7 @@ namespace Eco.Mods.WorldEdit
 
                 if (blockType == null)
                 {
-                    user.Player.MsgLoc($"No BlockType with name {pTypeName} found!");
+                    user.Player.ErrorLocStr($"No BlockType with name {pTypeName} found!");
                     return;
                 }
 
@@ -109,32 +80,39 @@ namespace Eco.Mods.WorldEdit
                             changedBlocks++;
                         }
 
-                user.Player.MsgLoc($"{changedBlocks} blocks changed.");
+                user.Player.ErrorLocStr($"{changedBlocks} blocks changed.");
             }
             catch (Exception e)
             {
-                Log.WriteError(Localizer.Do($"{e}"));
+                Log.WriteError(Localizer.DoStr($"{e}"));
             }
         }
 
-        [ChatCommand("Replace a block with another block", ChatAuthorizationLevel.Admin)]
-        public static void Replace(User user, string pTypeNames, string toReplace)
+        [ChatCommand("/replace", "", ChatAuthorizationLevel.Admin)]
+        public static void Replace(User user, string pTypeNames = "")
         {
             try
             {
-                toReplace = toReplace.Trim();
+                string[] splitted = pTypeNames.Split(' ');
+                string toFind = splitted[0].ToLower();
+
+                string toReplace = string.Empty;
+
+                if (splitted.Length >= 2)
+                    toReplace = pTypeNames.Split(' ')[1].ToLower();
+
                 WorldEditUserData weud = WorldEditManager.GetUserData(user.Name);
 
                 if (weud.FirstPos == null || weud.SecondPos == null)
                 {
-                    user.Player.MsgLoc($"Please set both points with the Wand Tool first!");
+                    user.Player.ErrorLocStr($"Please set both points with the Wand Tool first!");
                     return;
                 }
 
-                Type blockTypeToFind = BlockManager.BlockTypes.FirstOrDefault(t => t.Name.ToLower() == (pTypeNames + "block").ToLower());
+                Type blockTypeToFind = BlockUtils.GetBlockType(toFind);
                 if (blockTypeToFind == null)
                 {
-                    user.Player.MsgLoc($"No BlockType with name {pTypeNames} found!");
+                    user.Player.ErrorLocStr($"No BlockType with name {toFind} found!");
                     return;
                 }
 
@@ -142,10 +120,10 @@ namespace Eco.Mods.WorldEdit
 
                 if (toReplace != string.Empty)
                 {
-                    blockTypeToReplace = BlockManager.BlockTypes.FirstOrDefault(t => t.Name.ToLower() == (toReplace + "block").ToLower());
+                    blockTypeToReplace = BlockUtils.GetBlockType(toReplace);
                     if (blockTypeToReplace == null)
                     {
-                        user.Player.MsgLoc($"No BlockType with name { toReplace } found!");
+                        user.Player.ErrorLocStr($"No BlockType with name { toReplace } found!");
                         return;
                     }
                 }
@@ -190,15 +168,15 @@ namespace Eco.Mods.WorldEdit
                                 }
                             }
 
-                user.Player.MsgLoc($"{changedBlocks} blocks changed.");
+                user.Player.ErrorLocStr($"{changedBlocks} blocks changed.");
             }
             catch (Exception e)
             {
-                Log.WriteError(Localizer.Do($"{e}"));
+                Log.WriteError(Localizer.DoStr($"{e}"));
             }
         }
 
-        [ChatCommand("Set the outside area as a specific wall", ChatAuthorizationLevel.Admin)]
+        [ChatCommand("/walls", "", ChatAuthorizationLevel.Admin)]
         public static void Walls(User user, string pTypeName)
         {
             try
@@ -207,16 +185,15 @@ namespace Eco.Mods.WorldEdit
 
                 if (weud.FirstPos == null || weud.SecondPos == null)
                 {
-                    user.Player.MsgLoc($"Please set both Points with the Wand Tool first!");
+                    user.Player.ErrorLocStr($"Please set both Points with the Wand Tool first!");
                     return;
                 }
-                pTypeName = pTypeName.Replace(" ", "");
-                
-                Type blockType = BlockManager.BlockTypes.FirstOrDefault(t => t.Name == (pTypeName + "block").ToLower()); 
+
+                Type blockType = BlockUtils.GetBlockType(pTypeName);
 
                 if (blockType == null)
                 {
-                    user.Player.MsgLoc($"No BlockType with name {pTypeName} found!");
+                    user.Player.ErrorLocStr($"No BlockType with name {pTypeName} found!");
                     return;
                 }
 
@@ -261,21 +238,21 @@ namespace Eco.Mods.WorldEdit
                         changedBlocks++;
                     }
 
-                //   int changedBlocks = (((vectors.Higher.X - vectors.Lower.X) * 2 + (vectors.Higher.Z - vectors.Lower.Z) * 2) - 4) * (vectors.Higher.Y - vectors.Lower.Y);
+                //    int changedBlocks = (((vectors.Higher.X - vectors.Lower.X) * 2 + (vectors.Higher.Z - vectors.Lower.Z) * 2) - 4) * (vectors.Higher.Y - vectors.Lower.Y);
 
                 if (changedBlocks == 0) //maybe better math?
                     changedBlocks = 1;
 
-                user.Player.MsgLoc($"{ changedBlocks } blocks changed.");
+                user.Player.ErrorLocStr($"{ changedBlocks } blocks changed.");
 
             }
             catch (Exception e)
             {
-                Log.WriteError(Localizer.Do($"{e}"));
+                Log.WriteError(Localizer.DoStr($"{e}"));
             }
         }
 
-        [ChatCommand("", ChatAuthorizationLevel.Admin)]
+        [ChatCommand("/stack", "", ChatAuthorizationLevel.Admin)]
         public static void Stack(User user, string pDirectionAndAmount = "1")
         {
             try
@@ -284,7 +261,7 @@ namespace Eco.Mods.WorldEdit
 
                 if (weud.FirstPos == null || weud.SecondPos == null)
                 {
-                    user.Player.MsgLoc($"Please set both points with the Wand Tool first!");
+                    user.Player.ErrorLocStr($"Please set both points with the Wand Tool first!");
                     return;
                 }
 
@@ -316,15 +293,15 @@ namespace Eco.Mods.WorldEdit
 
                 //   int changedBlocks = (int)((vectors.Higher.X - vectors.Lower.X) * (vectors.Higher.Y - vectors.Lower.Y) * (vectors.Higher.Z - vectors.Lower.Z)) * amount;
 
-                user.Player.MsgLoc($"{changedBlocks} blocks changed.");
+                user.Player.ErrorLocStr($"{changedBlocks} blocks changed.");
             }
             catch (Exception e)
             {
-                Log.WriteError(Localizer.Do($"{e}"));
+                Log.WriteError(Localizer.DoStr($"{e}"));
             }
         }
 
-        [ChatCommand("", ChatAuthorizationLevel.Admin)]
+        [ChatCommand("/move", "", ChatAuthorizationLevel.Admin)]
         public static void Move(User user, string pDirectionAndAmount = "1")
         {
             try
@@ -333,7 +310,7 @@ namespace Eco.Mods.WorldEdit
 
                 if (weud.FirstPos == null || weud.SecondPos == null)
                 {
-                    user.Player.MsgLoc($"Please set both points with the Wand Tool first!");
+                    user.Player.ErrorLocStr($"Please set both points with the Wand Tool first!");
                     return;
                 }
 
@@ -353,17 +330,17 @@ namespace Eco.Mods.WorldEdit
                 long changedBlocks = 0;
 
                 Action<int, int, int> action = (int x, int y, int z) =>
-                  {
-                      var pos = new Vector3i(x, y, z);
+                {
+                    var pos = new Vector3i(x, y, z);
 
-                      weud.AddBlockChangedEntry(Eco.World.World.GetBlock(pos), pos);
-                      weud.AddBlockChangedEntry(Eco.World.World.GetBlock(pos + offset), pos + offset);
+                    weud.AddBlockChangedEntry(Eco.World.World.GetBlock(pos), pos);
+                    weud.AddBlockChangedEntry(Eco.World.World.GetBlock(pos + offset), pos + offset);
 
-                      var sourceBlock = Eco.World.World.GetBlock(pos);
-                      WorldEditManager.SetBlock(sourceBlock.GetType(), pos + offset, session, pos, sourceBlock);
-                      WorldEditManager.SetBlock(typeof(EmptyBlock), pos, session);
-                      changedBlocks++;
-                  };
+                    var sourceBlock = Eco.World.World.GetBlock(pos);
+                    WorldEditManager.SetBlock(sourceBlock.GetType(), pos + offset, session, pos, sourceBlock);
+                    WorldEditManager.SetBlock(typeof(EmptyBlock), pos, session);
+                    changedBlocks++;
+                };
 
 
                 if (dir == Direction.Left || dir == Direction.Back || dir == Direction.Down)
@@ -409,15 +386,15 @@ namespace Eco.Mods.WorldEdit
 
                 // int changedBlocks = (int)((vectors.Higher.X - vectors.Lower.X) * (vectors.Higher.Y - vectors.Lower.Y) * (vectors.Higher.Z - vectors.Lower.Z)) * amount;
 
-                user.Player.MsgLoc($"{changedBlocks} blocks moved.");
+                user.Player.ErrorLocStr($"{changedBlocks} blocks moved.");
             }
             catch (Exception e)
             {
-                Log.WriteError(Localizer.Do($"{e}"));
+                Log.WriteError(Localizer.DoStr($"{e}"));
             }
         }
 
-        [ChatCommand("", ChatAuthorizationLevel.Admin)]
+        [ChatCommand("/expand", "", ChatAuthorizationLevel.Admin)]
         public static void Expand(User user, string pDirectionAndAmount = "1")
         {
             try
@@ -429,17 +406,17 @@ namespace Eco.Mods.WorldEdit
                 WorldEditUserData weud = WorldEditManager.GetUserData(user.Name);
 
                 if (weud.ExpandSelection(direction.ToVec() * amount))
-                    user.Player.MsgLoc($"Expanded selection {amount} {direction}");
+                    user.Player.ErrorLocStr($"Expanded selection {amount} {direction}");
                 else
-                    user.Player.MsgLoc($"Please set both points with the Wand Tool first!");
+                    user.Player.ErrorLocStr($"Please set both points with the Wand Tool first!");
             }
             catch (Exception e)
             {
-                Log.WriteError(Localizer.Do($"{e}"));
+                Log.WriteError(Localizer.DoStr($"{e}"));
             }
         }
 
-        [ChatCommand("", ChatAuthorizationLevel.Admin)]
+        [ChatCommand("/contract", "", ChatAuthorizationLevel.Admin)]
         public static void Contract(User user, string pDirectionAndAmount = "1")
         {
             try
@@ -451,17 +428,17 @@ namespace Eco.Mods.WorldEdit
                 WorldEditUserData weud = WorldEditManager.GetUserData(user.Name);
 
                 if (weud.ExpandSelection(direction.ToVec() * -amount, true))
-                    user.Player.MsgLoc($"Contracted selection {amount} {direction}");
+                    user.Player.ErrorLocStr($"Contracted selection {amount} {direction}");
                 else
-                    user.Player.MsgLoc($"Please set both points with the Wand Tool first!");
+                    user.Player.ErrorLocStr($"Please set both points with the Wand Tool first!");
             }
             catch (Exception e)
             {
-                Log.WriteError(Localizer.Do($"{e}"));
+                Log.WriteError(Localizer.DoStr($"{e}"));
             }
         }
 
-        [ChatCommand("", ChatAuthorizationLevel.Admin)]
+        [ChatCommand("/shift", "", ChatAuthorizationLevel.Admin)]
         public static void Shift(User user, string pDirectionAndAmount = "1")
         {
             try
@@ -473,17 +450,17 @@ namespace Eco.Mods.WorldEdit
                 WorldEditUserData weud = WorldEditManager.GetUserData(user.Name);
 
                 if (weud.ShiftSelection(direction.ToVec() * amount))
-                    user.Player.MsgLoc($"Shifted selection {amount} {direction}");
+                    user.Player.ErrorLocStr($"Shifted selection {amount} {direction}");
                 else
-                    user.Player.MsgLoc($"Please set both points with the Wand Tool first!");
+                    user.Player.ErrorLocStr($"Please set both points with the Wand Tool first!");
             }
             catch (Exception e)
             {
-                Log.WriteError(Localizer.Do($"{e}"));
+                Log.WriteError(Localizer.DoStr($"{e}"));
             }
         }
 
-        [ChatCommand("", ChatAuthorizationLevel.Admin)]
+        [ChatCommand("/up", "", ChatAuthorizationLevel.Admin)]
         public static void Up(User user, int pCount = 1)
         {
             try
@@ -496,11 +473,12 @@ namespace Eco.Mods.WorldEdit
             }
             catch (Exception e)
             {
-                Log.WriteError(Localizer.Do($"{e}"));
+                Log.WriteError(Localizer.DoStr($"{e}"));
             }
         }
 
-        [ChatCommand("", ChatAuthorizationLevel.Admin)]
+
+        [ChatCommand("/undo", "", ChatAuthorizationLevel.Admin)]
         public static void Undo(User user)
         {
             try
@@ -508,17 +486,18 @@ namespace Eco.Mods.WorldEdit
                 WorldEditUserData weud = WorldEditManager.GetUserData(user.Name);
 
                 if (weud.Undo())
-                    user.Player.MsgLoc($"Undo done.");
+                    user.Player.ErrorLocStr($"Undo done.");
                 else
-                    user.Player.MsgLoc($"You can't use undo right now!");
+                    user.Player.ErrorLocStr($"You can't use undo right now!");
             }
             catch (Exception e)
             {
-                Log.WriteError(Localizer.Do($"{e}"));
+                Log.WriteError(Localizer.DoStr($"{e}"));
             }
         }
 
-        [ChatCommand("", ChatAuthorizationLevel.Admin)]
+
+        [ChatCommand("/copy", "", ChatAuthorizationLevel.Admin)]
         public static void Copy(User user)
         {
             try
@@ -526,17 +505,17 @@ namespace Eco.Mods.WorldEdit
                 WorldEditUserData weud = WorldEditManager.GetUserData(user.Name);
 
                 if (weud.SaveSelectionToClipboard(user))
-                    user.Player.MsgLoc($"Copy done.");
+                    user.Player.ErrorLocStr($"Copy done.");
                 else
-                    user.Player.MsgLoc($"Please set both points with the Wand Tool first!");
+                    user.Player.ErrorLocStr($"Please set both points with the Wand Tool first!");
             }
             catch (Exception e)
             {
-                Log.WriteError(Localizer.Do($"{e}"));
+                Log.WriteError(Localizer.DoStr($"{e}"));
             }
         }
 
-        [ChatCommand("", ChatAuthorizationLevel.Admin)]
+        [ChatCommand("/paste", "", ChatAuthorizationLevel.Admin)]
         public static void Paste(User user)
         {
             try
@@ -544,17 +523,17 @@ namespace Eco.Mods.WorldEdit
                 WorldEditUserData weud = WorldEditManager.GetUserData(user.Name);
 
                 if (weud.LoadSelectionFromClipboard(user, weud))
-                    user.Player.MsgLoc($"Paste done.");
+                    user.Player.ErrorLocStr($"Paste done.");
                 else
-                    user.Player.MsgLoc($"Please copy a selection first!");
+                    user.Player.ErrorLocStr($"Please copy a selection first!");
             }
             catch (Exception e)
             {
-                Log.WriteError(Localizer.Do($"{e}"));
+                Log.WriteError(Localizer.DoStr($"{e}"));
             }
         }
 
-        [ChatCommand("", ChatAuthorizationLevel.Admin)]
+        [ChatCommand("/rotate", "", ChatAuthorizationLevel.Admin)]
         public static void Rotate(User user, int pDegree = 90)
         {
             try
@@ -562,17 +541,17 @@ namespace Eco.Mods.WorldEdit
                 WorldEditUserData weud = WorldEditManager.GetUserData(user.Name);
 
                 if (weud.RotateClipboard(pDegree))
-                    user.Player.MsgLoc($"Rotation in clipboard done.");
+                    user.Player.ErrorLocStr($"Rotation in clipboard done.");
                 else
-                    user.Player.MsgLoc($"Please copy a selection first!");
+                    user.Player.ErrorLocStr($"Please copy a selection first!");
             }
             catch (Exception e)
             {
-                Log.WriteError(Localizer.Do($"{e}"));
+                Log.WriteError(Localizer.DoStr($"{e}"));
             }
         }
 
-        [ChatCommand("", ChatAuthorizationLevel.Admin)]
+        [ChatCommand("/export", "", ChatAuthorizationLevel.Admin)]
         public static void Export(User user, string pFileName)
         {
             try
@@ -580,17 +559,17 @@ namespace Eco.Mods.WorldEdit
                 WorldEditUserData weud = WorldEditManager.GetUserData(user.Name);
 
                 if (weud.SaveClipboard(pFileName))
-                    user.Player.MsgLoc($"Export done.");
+                    user.Player.ErrorLocStr($"Export done.");
                 else
-                    user.Player.MsgLoc($"Please //copy a selection first!");
+                    user.Player.ErrorLocStr($"Please /copy a selection first!");
             }
             catch (Exception e)
             {
-                Log.WriteError(Localizer.Do($"{e}"));
+                Log.WriteError(Localizer.DoStr($"{e}"));
             }
         }
 
-        [ChatCommand("", ChatAuthorizationLevel.Admin)]
+        [ChatCommand("/import", "", ChatAuthorizationLevel.Admin)]
         public static void Import(User user, string pFileName)
         {
             try
@@ -598,17 +577,17 @@ namespace Eco.Mods.WorldEdit
                 WorldEditUserData weud = WorldEditManager.GetUserData(user.Name);
 
                 if (weud.LoadClipboard(pFileName))
-                    user.Player.MsgLoc($"Import done. Use //paste");
+                    user.Player.ErrorLocStr($"Import done. Use //paste");
                 else
-                    user.Player.MsgLoc($"Schematic file not found!");
+                    user.Player.ErrorLocStr($"Schematic file not found!");
             }
             catch (Exception e)
             {
-                Log.WriteError(Localizer.Do($"{e}"));
+                Log.WriteError(Localizer.DoStr($"{e}"));
             }
         }
 
-        [ChatCommand("", ChatAuthorizationLevel.Admin)]
+        [ChatCommand("/distr", "", ChatAuthorizationLevel.Admin)]
         public static void Distr(User user)
         {
             try
@@ -617,7 +596,7 @@ namespace Eco.Mods.WorldEdit
 
                 if (weud.FirstPos == null || weud.SecondPos == null)
                 {
-                    user.Player.MsgLoc($"Please set both points with the Wand Tool first!");
+                    user.Player.ErrorLocStr($"Please set both points with the Wand Tool first!");
                     return;
                 }
 
@@ -640,18 +619,19 @@ namespace Eco.Mods.WorldEdit
 
                 double amountBlocks = mBlocks.Values.Sum(); // (vectors.Higher.X - vectors.Lower.X) * (vectors.Higher.Y - vectors.Lower.Y) * (vectors.Higher.Z - vectors.Lower.Z);
 
-                user.Player.MsgLoc($"total blocks: {amountBlocks}");
-
+                user.OKBoxLoc($"total blocks: {amountBlocks}");
+                string msg = string.Empty;
                 foreach (var entry in mBlocks)
                 {
                     string percent = (Math.Round((entry.Value / amountBlocks) * 100, 2)).ToString() + "%";
                     string nameOfBlock = entry.Key.Substring(entry.Key.LastIndexOf(".") + 1);
-                    user.Player.MsgLoc($"{entry.Value.ToString().PadRight(6)} {percent.PadRight(6)} {nameOfBlock}");
+                    msg += $"{entry.Value.ToString().PadRight(6)} {percent.PadRight(6)} {nameOfBlock}";
                 }
+                user.Player.OpenInfoPanel("", msg, null);
             }
             catch (Exception e)
             {
-                Log.WriteError(Localizer.Do($"{e}"));
+                Log.WriteError(Localizer.DoStr($"{e}"));
             }
         }
 
@@ -669,7 +649,7 @@ namespace Eco.Mods.WorldEdit
                 pos.Z = pos.Z % Shared.Voxel.World.VoxelSize.Z;
 
                 WorldEditUserData weud = WorldEditManager.GetUserData(user.Player.User.Name);
-                weud.FirstPos = (Vector3i?)pos;
+                weud.FirstPos = (Vector3i)pos;
 
                 user.Player.MsgLoc($"First Position set to ({pos.x}, {pos.y}, {pos.z})");
             }
@@ -679,7 +659,6 @@ namespace Eco.Mods.WorldEdit
 
             }
         }
-
         [ChatCommand("Set Second Position To players position", ChatAuthorizationLevel.Admin)]
         public static void SetPos2(User user)
         {
@@ -694,7 +673,7 @@ namespace Eco.Mods.WorldEdit
                 pos.Z = pos.Z % Shared.Voxel.World.VoxelSize.Z;
 
                 WorldEditUserData weud = WorldEditManager.GetUserData(user.Player.User.Name);
-                weud.SecondPos = (Vector3i?)pos;
+                weud.SecondPos = (Vector3i)pos;
 
                 user.Player.MsgLoc($"Second Position set to ({pos.x}, {pos.y}, {pos.z})");
             }
@@ -707,10 +686,10 @@ namespace Eco.Mods.WorldEdit
         [ChatCommand("World Edit Version - For Debugging", ChatAuthorizationLevel.Admin)]
         public static void WEVersion(User user)
         {
-            user.Player.MsgLocStr($"World Edit - Beta Test Version:" + version);
+            user.Player.MsgLocStr($"World Edit - Beta Test Version: 1.1");
         }
 
-      /*  [ChatCommand("/grow", "", ChatAuthorizationLevel.Admin)]
+        [ChatCommand("/grow", "", ChatAuthorizationLevel.Admin)]
         public static void Grow(User user, string pFileName)
         {
             try
@@ -732,12 +711,12 @@ namespace Eco.Mods.WorldEdit
                             var pos = new Vector3i(x, y, z);
                             var block = Eco.World.World.GetBlock(pos);
 
-                            if (block is PlantBlock)
+                            if (block.GetType() == typeof(PlantBlock))
                             {
-                                var pb = block as PlantBlock;
+                                var pb = PlantBlock.GetPlant(pos);
                                 pb.GrowthPercent = 1;
-                                pb.TryGet() = 1;
-                                pb.Tick(pos);
+                                pb.Tended = true;
+                                pb.Tick();
                             }
 
                         }
@@ -745,9 +724,31 @@ namespace Eco.Mods.WorldEdit
             }
             catch (Exception e)
             {
-               Log.WriteError(Localizer.Do($"{e}"));
+                Log.WriteError(Localizer.Do($"{e}"));
             }
         }
-      */
+
+        public static class BlockUtils
+        {
+            public static Type GetBlockType(string pBlockName)
+            {
+                pBlockName = pBlockName.ToLower();
+
+                if (pBlockName == "air")
+                    return typeof(EmptyBlock);
+
+                Type blockType = BlockManager.BlockTypes.FirstOrDefault(t => t.Name.ToLower() == pBlockName + "floorblock");
+
+                if (blockType != null)
+                    return blockType;
+
+                blockType = BlockManager.BlockTypes.FirstOrDefault(t => t.Name.ToLower() == pBlockName);
+
+                if (blockType != null)
+                    return blockType;
+
+                return BlockManager.BlockTypes.FirstOrDefault(t => t.Name.ToLower() == pBlockName + "block");
+            }
+        }
     }
 }
