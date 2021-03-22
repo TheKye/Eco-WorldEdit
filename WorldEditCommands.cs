@@ -1,4 +1,5 @@
-﻿using Eco.Gameplay.Plants;
+﻿using Eco.Gameplay.Objects;
+using Eco.Gameplay.Plants;
 using Eco.Gameplay.Players;
 using Eco.Gameplay.Systems.Chat;
 using Eco.Mods.TechTree;
@@ -12,6 +13,8 @@ using EcoWorldEdit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ComponentModel;
+using Eco.EM.Framework.Utils;
 
 namespace Eco.Mods.WorldEdit
 {
@@ -609,8 +612,22 @@ namespace Eco.Mods.WorldEdit
                         for (int z = vectors.Lower.Z; z != vectors.Higher.Z; z = (z + 1) % Shared.Voxel.World.VoxelSize.Z)
                         {
                             //                 Console.WriteLine($"{x} {y} {z}");
+                            var block = "";
                             var pos = new Vector3i(x, y, z);
-                            var block = Eco.World.World.GetBlock(pos).GetType().ToString();
+                            var ablock = Eco.World.World.GetBlock(pos);
+                            
+                            if (ablock.GetType() == typeof(WorldObjectBlock))
+                            {
+                                var worldObject = ablock as WorldObjectBlock;
+                                block = worldObject.WorldObjectHandle.Object.Name.GetType().Name;
+                            }
+                            else if (ablock.GetType() == typeof(BuildingWorldObjectBlock))
+                            {
+                                var worldObject = ablock as BuildingWorldObjectBlock;
+                                block = worldObject.WorldObjectHandle.Object.Name.GetType().Name;
+                            }
+                            else
+                                block = World.World.GetBlock(pos).GetType().ToString();
 
                             long count;
                             mBlocks.TryGetValue(block, out count);
@@ -619,13 +636,12 @@ namespace Eco.Mods.WorldEdit
 
                 double amountBlocks = mBlocks.Values.Sum(); // (vectors.Higher.X - vectors.Lower.X) * (vectors.Higher.Y - vectors.Lower.Y) * (vectors.Higher.Z - vectors.Lower.Z);
 
-                user.OKBoxLoc($"total blocks: {amountBlocks}");
-                string msg = string.Empty;
+                string msg = $"total blocks: {amountBlocks}\n";
                 foreach (var entry in mBlocks)
                 {
                     string percent = (Math.Round((entry.Value / amountBlocks) * 100, 2)).ToString() + "%";
                     string nameOfBlock = entry.Key.Substring(entry.Key.LastIndexOf(".") + 1);
-                    msg += $"{entry.Value.ToString().PadRight(6)} {percent.PadRight(6)} {nameOfBlock}";
+                    msg += $"{entry.Value.ToString().PadRight(6)} {percent.PadRight(6)} {nameOfBlock} \n";
                 }
                 user.Player.OpenInfoPanel("", msg, null);
             }
@@ -690,7 +706,7 @@ namespace Eco.Mods.WorldEdit
         }
 
         [ChatCommand("/grow", "", ChatAuthorizationLevel.Admin)]
-        public static void Grow(User user, string pFileName)
+        public static void Grow(User user)
         {
             try
             {
@@ -725,29 +741,6 @@ namespace Eco.Mods.WorldEdit
             catch (Exception e)
             {
                 Log.WriteError(Localizer.Do($"{e}"));
-            }
-        }
-
-        public static class BlockUtils
-        {
-            public static Type GetBlockType(string pBlockName)
-            {
-                pBlockName = pBlockName.ToLower();
-
-                if (pBlockName == "air")
-                    return typeof(EmptyBlock);
-
-                Type blockType = BlockManager.BlockTypes.FirstOrDefault(t => t.Name.ToLower() == pBlockName + "floorblock");
-
-                if (blockType != null)
-                    return blockType;
-
-                blockType = BlockManager.BlockTypes.FirstOrDefault(t => t.Name.ToLower() == pBlockName);
-
-                if (blockType != null)
-                    return blockType;
-
-                return BlockManager.BlockTypes.FirstOrDefault(t => t.Name.ToLower() == pBlockName + "block");
             }
         }
     }

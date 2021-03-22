@@ -207,7 +207,7 @@ namespace Eco.Mods.WorldEdit
                     return false;
 
                 StartEditingBlocks();
-                var currentPos = pUser.Position;
+                var currentPos = pUser.Player.Position;
 
                 UserSession session = pWeud.GetNewSession();
 
