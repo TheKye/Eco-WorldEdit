@@ -207,13 +207,13 @@ namespace Eco.Mods.WorldEdit
                     return false;
 
                 StartEditingBlocks();
-                var currentPos = pUser.Position;
+                var currentPos = pUser.Player.Position.Round;
                 UserSession session = pWeud.GetNewSession();
 
                 foreach (var entry in mClipboard)
                 {
                     var web = entry.Clone();
-                    web.Position += currentPos.XYZi.AddY(17);
+                    web.Position += currentPos;
                     AddBlockChangedEntry(World.World.GetBlock(web.Position), web.Position);
                     WorldEditManager.SetBlock(web.Type, web.Position, session, null, null, web.Data);
                 }
@@ -252,7 +252,7 @@ namespace Eco.Mods.WorldEdit
             if (mClipboard == null || mClipboard.Count <= 0)
                 return false;
 
-            var stream = EcoSerializer.Serialize<List<WorldEditBlock>>(mClipboard.ToList());
+            var stream = EcoSerializer.Serialize<List<WorldEditBlock>>(mClipboard);
 
             Directory.CreateDirectory(mSchematicPath);
             pFileName = new string(pFileName.Where(x => !Path.GetInvalidFileNameChars().Contains(x)).ToArray());
