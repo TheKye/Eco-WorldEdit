@@ -34,6 +34,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ElixrMods.Framework" Version="2.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Eco.Core">
       <HintPath>Dependencies\Eco.Core.dll</HintPath>
     </Reference>
@@ -78,9 +82,6 @@
     </Reference>
     <Reference Include="Eco.WorldGenerator">
       <HintPath>Dependencies\Eco.WorldGenerator.dll</HintPath>
-    </Reference>
-    <Reference Include="em-framework">
-      <HintPath>Dependencies\em-framework.dll</HintPath>
     </Reference>
   </ItemGroup>
 

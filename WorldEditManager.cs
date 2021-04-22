@@ -60,8 +60,6 @@ namespace Eco.Mods.WorldEdit
             if (pType.FullName == "Eco.Gameplay.Objects.WorldObjectBlock" || pType.FullName == "Eco.Gameplay.Objects.BuildingWorldObjectBlock")
                 pType = typeof(EmptyBlock);
 
-            Log.WriteErrorLineLocStr(Localizer.DoStr($"{pType}, {pPosition}, {pSourceBlock}"));
-
             if (World.World.GetBlock(pPosition) is WorldObjectBlock worldObjectBlock)
             {
                 if (worldObjectBlock.WorldObjectHandle.Object.Position3i == pPosition)
