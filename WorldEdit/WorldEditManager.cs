@@ -55,8 +55,11 @@ namespace Eco.Mods.WorldEdit
 
         public static void SetBlock(Type pType, Vector3i pPosition, UserSession pSession = null, Vector3i? pSourcePosition = null, Block pSourceBlock = null, byte[] pData = null)
         {
+
+
             if (pType == null || pType.DerivesFrom<PickupableBlock>())
                 pType = typeof(EmptyBlock);
+
             if (pType.FullName == "Eco.Gameplay.Objects.WorldObjectBlock" || pType.FullName == "Eco.Gameplay.Objects.BuildingWorldObjectBlock")
                 pType = typeof(EmptyBlock);
 

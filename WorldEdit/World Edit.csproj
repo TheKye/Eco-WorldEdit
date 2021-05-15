@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ElixrMods.Framework" Version="2.2.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -82,6 +82,9 @@
     </Reference>
     <Reference Include="Eco.WorldGenerator">
       <HintPath>..\Dependencies\Eco.WorldGenerator.dll</HintPath>
+    </Reference>
+    <Reference Include="em-framework">
+      <HintPath>..\Dependencies\em-framework.dll</HintPath>
     </Reference>
   </ItemGroup>
 

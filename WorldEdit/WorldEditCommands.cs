@@ -574,6 +574,24 @@ namespace Eco.Mods.WorldEdit
             }
         }
 
+        [ChatCommand("Import Legacy", ChatAuthorizationLevel.Admin)]
+        public static void ImportLegacy(User user, string pFileName)
+        {
+            try
+            {
+                WorldEditUserData weud = WorldEditManager.GetUserData(user.Name);
+
+                if (weud.LoadClipboardLegacy(pFileName))
+                    user.Player.ErrorLocStr($"Import done. Use //paste");
+                else
+                    user.Player.ErrorLocStr($"Schematic file not found!");
+            }
+            catch (Exception e)
+            {
+                Log.WriteError(Localizer.DoStr($"{e}"));
+            }
+        }
+
         [ChatCommand("/import", "", ChatAuthorizationLevel.Admin)]
         public static void Import(User user, string pFileName)
         {

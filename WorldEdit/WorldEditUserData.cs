@@ -12,12 +12,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Eco.EM.Framework.FileManager;
+using Newtonsoft.Json;
 
 namespace Eco.Mods.WorldEdit
 {
     public class WorldEditUserData
     {
-        public const string mSchematicPath = "./Schematics/";
+        public const string mSchematicPath = "./Configs/Mods/WorldEdit/Schematics/";
+        public const string schemtaic = ".Schematic";
         public Vector3i? FirstPos;
         public Vector3i? SecondPos;
 
@@ -159,7 +162,7 @@ namespace Eco.Mods.WorldEdit
         public void AddBlockChangedEntry(Block pBlock, Vector3i pPosition, Vector3i? pSourcePosition = null)
         {
             pSourcePosition = pSourcePosition ?? pPosition;
-            mLastCommandBlocks.Push(WorldEditBlock.CreateNew(pBlock, pPosition, pSourcePosition));
+            mLastCommandBlocks.Push(WorldEditBlock.API.CreateNew(pBlock, pPosition, pSourcePosition));
         }
 
         public bool Undo()
@@ -193,8 +196,7 @@ namespace Eco.Mods.WorldEdit
                     {
                         var pos = new Vector3i(x, y, z);
 
-                        //pos - mUserClipboardPosition: "Spitze minus Anfang"
-                        mClipboard.Add(WorldEditBlock.CreateNew(Eco.World.World.GetBlock(pos), pos - mUserClipboardPosition, pos));
+                        mClipboard.Add(WorldEditBlock.API.CreateNew(Eco.World.World.GetBlock(pos), pos - mUserClipboardPosition, pos));
                     }
             return true;
         }
@@ -252,18 +254,42 @@ namespace Eco.Mods.WorldEdit
             if (mClipboard == null || mClipboard.Count <= 0)
                 return false;
 
+            /*
             var stream = EcoSerializer.Serialize<List<WorldEditBlock>>(mClipboard);
-
             Directory.CreateDirectory(mSchematicPath);
             pFileName = new string(pFileName.Where(x => !Path.GetInvalidFileNameChars().Contains(x)).ToArray());
-
             File.WriteAllBytes(Path.Combine(mSchematicPath, pFileName + ".ecoschematic"), stream.ToArray());
+            */
+
+            FileManager<List<WorldEditBlock>>.WriteToFile(mClipboard, mSchematicPath, pFileName, schemtaic);
 
             return true;
         }
 
         public bool LoadClipboard(string pFileName)
         {
+            /*
+            pFileName = new string(pFileName.Where(x => !Path.GetInvalidFileNameChars().Contains(x)).ToArray());
+
+            pFileName = Path.Combine(mSchematicPath, pFileName + ".ecoschematic");
+
+            if (!File.Exists(pFileName))
+                return false;
+
+            mClipboard = EcoSerializer.Deserialize<List<WorldEditBlock>>(File.OpenRead(pFileName)).ToList();
+            */
+
+            if (!File.Exists(Path.Combine(mSchematicPath + pFileName + schemtaic)))
+                return false;
+
+            mClipboard = FileManager<List<WorldEditBlock>>.ReadFromFile(mSchematicPath, pFileName, schemtaic);
+
+            return true;
+        }
+
+        public bool LoadClipboardLegacy(string pFileName)
+        {
+            
             pFileName = new string(pFileName.Where(x => !Path.GetInvalidFileNameChars().Contains(x)).ToArray());
 
             pFileName = Path.Combine(mSchematicPath, pFileName + ".ecoschematic");
