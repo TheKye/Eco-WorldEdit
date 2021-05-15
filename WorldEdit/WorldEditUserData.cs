@@ -261,7 +261,7 @@ namespace Eco.Mods.WorldEdit
             File.WriteAllBytes(Path.Combine(mSchematicPath, pFileName + ".ecoschematic"), stream.ToArray());
             */
 
-            FileManager<List<WorldEditBlock>>.WriteToFile(mClipboard, mSchematicPath, pFileName, schemtaic);
+            FileManager<List<WorldEditBlock>>.WriteTypeHandledToFile(mClipboard, mSchematicPath, pFileName, schemtaic);
 
             return true;
         }
@@ -282,7 +282,7 @@ namespace Eco.Mods.WorldEdit
             if (!File.Exists(Path.Combine(mSchematicPath + pFileName + schemtaic)))
                 return false;
 
-            mClipboard = FileManager<List<WorldEditBlock>>.ReadFromFile(mSchematicPath, pFileName, schemtaic);
+            mClipboard = FileManager<List<WorldEditBlock>>.ReadTypeHandledFromFile(mSchematicPath, pFileName, schemtaic);
 
             return true;
         }
@@ -297,7 +297,7 @@ namespace Eco.Mods.WorldEdit
             if (!File.Exists(pFileName))
                 return false;
 
-            mClipboard = EcoSerializer.Deserialize<List<WorldEditBlock>>(File.OpenRead(pFileName)).ToList();
+            mClipboard = EcoSerializer.Deserialize<List<WorldEditBlock>>(File.OpenRead(pFileName));
 
             return true;
         }
