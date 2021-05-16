@@ -745,7 +745,7 @@ namespace Eco.Mods.WorldEdit
         [ChatCommand("World Edit Version - For Debugging", ChatAuthorizationLevel.Admin)]
         public static void WEVersion(User user)
         {
-            user.Player.MsgLocStr($"World Edit - Beta Test Version: Experimental");
+            user.Player.MsgLocStr($"World Edit - Beta Test Version: Experimental version B-145");
         }
 
         [ChatCommand("/grow", "", ChatAuthorizationLevel.Admin)]
