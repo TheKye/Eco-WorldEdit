@@ -67,7 +67,7 @@ namespace Eco.Mods.WorldEdit
             {
                 if (worldObjectBlock.WorldObjectHandle.Object.Position3i == pPosition)
                 {
-                    worldObjectBlock.WorldObjectHandle.Object.Destroy();
+                    worldObjectBlock.WorldObjectHandle.Object.PlaceWorldObjectBlocks();
                 }
             }
 

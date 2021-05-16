@@ -15,29 +15,30 @@ namespace Eco.Mods.WorldEdit
 
         public WorldEditBlock CreateNew(Block pBlock, Vector3i pPosition, Vector3i? pSourcePosition)
         {
+            WorldEditBlock web = new WorldEditBlock();
+
+            if (pBlock is WorldObjectBlock)
+            {
+                WorldObject wob = (WorldObjectBlock)pBlock;
+
+                CreateNew(wob, pPosition, pSourcePosition);
+            }
+            else
+            {
+                web.Type = pBlock.GetType();
+                web.Position = pPosition;
+            }
+
+            return web;
+        }
+
+        public WorldEditBlock CreateNew(WorldObject obj, Vector3i pPosition, Vector3i? pSourcePosition)
+        {
             WorldEditBlock web = new WorldEditBlock
             {
-                Type = pBlock.GetType(),
+                Type = obj.GetType(),
                 Position = pPosition,
             };
-
-            var constuctor = web.Type.GetConstructor(Type.EmptyTypes);
-
-            if (constuctor == null)
-            {
-                if (pBlock is PlantBlock)
-                    web.Data = EcoSerializer.Serialize(PlantBlock.GetPlant(web.Position)).ToArray();
-
-                if (pBlock is WorldObjectBlock)
-                {
-                    WorldObject wob = (WorldObjectBlock)pBlock;
-
-                    if (wob.Position3i == pSourcePosition)
-                    {
-                        web.Data = EcoSerializer.Serialize(wob).ToArray();
-                    }
-                }
-            }
 
             return web;
         }

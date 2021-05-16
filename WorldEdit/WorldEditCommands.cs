@@ -520,7 +520,7 @@ namespace Eco.Mods.WorldEdit
             }
         }
 
-        [ChatCommand("/paste", "", ChatAuthorizationLevel.Admin)]
+        [ChatCommand("Pastes the current clipboard selection", "", ChatAuthorizationLevel.Admin)]
         public static void Paste(User user)
         {
             try
@@ -528,6 +528,24 @@ namespace Eco.Mods.WorldEdit
                 WorldEditUserData weud = WorldEditManager.GetUserData(user.Name);
 
                 if (weud.LoadSelectionFromClipboard(user, weud))
+                    user.Player.ErrorLocStr($"Paste done.");
+                else
+                    user.Player.ErrorLocStr($"Please copy a selection first!");
+            }
+            catch (Exception e)
+            {
+                Log.WriteError(Localizer.DoStr($"{e}"));
+            }
+        }
+
+        [ChatCommand("Paste Clipboard Selection and specify y offset", "paste-offset", ChatAuthorizationLevel.Admin)]
+        public static void PasteOffset(User user, int offset)
+        {
+            try
+            {
+                WorldEditUserData weud = WorldEditManager.GetUserData(user.Name);
+
+                if (weud.LoadSelectionFromClipboard(user, weud, offset))
                     user.Player.ErrorLocStr($"Paste done.");
                 else
                     user.Player.ErrorLocStr($"Please copy a selection first!");
@@ -639,12 +657,17 @@ namespace Eco.Mods.WorldEdit
                             if (ablock.GetType() == typeof(WorldObjectBlock))
                             {
                                 var worldObject = ablock as WorldObjectBlock;
-                                block = worldObject.WorldObjectHandle.Object.Name.GetType().Name;
+                                block = worldObject.WorldObjectHandle.Object.GetType().Name;
+                            }
+                            else if (ablock.GetType() == typeof(TreeBlock))
+                            {
+                                var worldObject = ablock as TreeBlock;
+                                block = worldObject.GetType().Name;
                             }
                             else if (ablock.GetType() == typeof(BuildingWorldObjectBlock))
                             {
                                 var worldObject = ablock as BuildingWorldObjectBlock;
-                                block = worldObject.WorldObjectHandle.Object.Name.GetType().Name;
+                                block = worldObject.WorldObjectHandle.Object.GetType().Name;
                             }
                             else
                                 block = World.World.GetBlock(pos).GetType().ToString();

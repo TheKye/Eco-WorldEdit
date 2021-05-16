@@ -195,10 +195,39 @@ namespace Eco.Mods.WorldEdit
                     for (int z = vectors.Lower.Z; z != vectors.Higher.Z; z = (z + 1) % Shared.Voxel.World.VoxelSize.Z)
                     {
                         var pos = new Vector3i(x, y, z);
-
-                        mClipboard.Add(WorldEditBlock.API.CreateNew(Eco.World.World.GetBlock(pos), pos - mUserClipboardPosition, pos));
+                        
+                        mClipboard.Add(WorldEditBlock.API.CreateNew(World.World.GetBlock(pos), pos - mUserClipboardPosition, pos));
                     }
             return true;
+        }
+
+        public bool LoadSelectionFromClipboard(User pUser, WorldEditUserData pWeud, int offset)
+        {
+            try
+            {
+                if (mClipboard == null)
+                    return false;
+
+                StartEditingBlocks();
+                var currentPos = pUser.Player.Position.Round;
+                UserSession session = pWeud.GetNewSession();
+                Vector3i newOffset = new Vector3i(0, offset, 0);
+
+                foreach (var entry in mClipboard)
+                {
+                    var web = entry.Clone();
+                    web.Position += currentPos;
+                    AddBlockChangedEntry(World.World.GetBlock(web.Position + newOffset), web.Position + newOffset);
+                    WorldEditManager.SetBlock(web.Type, web.Position + newOffset, session, null, null, web.Data);
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                Log.WriteErrorLineLocStr(Localizer.DoStr($"{e}"));
+                return false;
+            }
+
         }
 
         public bool LoadSelectionFromClipboard(User pUser, WorldEditUserData pWeud)
