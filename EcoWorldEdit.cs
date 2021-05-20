@@ -1,17 +1,19 @@
 ﻿using Eco.Core.Plugins.Interfaces;
 
-namespace EcoWorldEdit
+namespace Eco.Mods.WorldEdit
 {
-    public class EcoWorldEdit : IModKitPlugin, IServerPlugin
-    {
-        public string GetStatus()
-        {
-            return "";
-        }
+	public class EcoWorldEdit : IModKitPlugin, IServerPlugin
+	{
+		public const string SchematicDirectoryPath = "./Schematics/";
 
-        public override string ToString()
-        {
-            return "EcoWorldEdit";
-        }
-    }
+		public string GetStatus()
+		{
+			return "";
+		}
+
+		public override string ToString()
+		{
+			return "Eco.Mods.WorldEdit";
+		}
+	}
 }
