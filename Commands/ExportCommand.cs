@@ -18,9 +18,9 @@ namespace Eco.Mods.WorldEdit.Commands
 		protected override void Execute()
 		{
 			WorldEditSerializer serializer = WorldEditSerializer.FromClipboard(this.UserSession.Clipboard);
-			using (MemoryStream stream = serializer.Serialize())
+			using (FileStream stream = File.Create(this.fileName))
 			{
-				File.WriteAllBytes(this.fileName, stream.ToArray());
+				serializer.Serialize(stream);
 			}
 		}
 	}

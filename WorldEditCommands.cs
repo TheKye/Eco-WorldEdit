@@ -10,8 +10,6 @@ namespace Eco.Mods.WorldEdit
 {
 	public class WorldEditCommands : IChatCommandHandler
 	{
-		const string version = "2.0.0";
-
 		[ChatCommand("Lists of world edit commands", "we", ChatAuthorizationLevel.Admin)] public static void WorldEdit(User user) { }
 
 		[ChatSubCommand("WorldEdit", "Gives the player a Wand for using world edit", "wand", ChatAuthorizationLevel.Admin)]
@@ -464,7 +462,7 @@ namespace Eco.Mods.WorldEdit
 		[ChatSubCommand("WorldEdit", "Show World Edit version", "WEversion", ChatAuthorizationLevel.Admin)]
 		public static void Version(User user)
 		{
-			user.Player.MsgLocStr($"World Edit - Beta Test Version:" + version);
+			user.Player.MsgLocStr($"World Edit Version:" + EcoWorldEdit.Version);
 		}
 	}
 }

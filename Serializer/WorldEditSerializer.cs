@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using Eco.Mods.WorldEdit.Model;
-using Eco.Shared.Utils;
 using Newtonsoft.Json;
 
 namespace Eco.Mods.WorldEdit.Serializer
@@ -78,24 +77,22 @@ namespace Eco.Mods.WorldEdit.Serializer
 			return serializer;
 		}
 
-		public MemoryStream Serialize()
+		public void Serialize(Stream stream)
 		{
 			EcoBlueprint schematic = EcoBlueprint.Create(this.blockList, this.plantList, this.worldObjectList);
-			return Serialize(schematic);
+			Serialize(stream, schematic);
 		}
 
-		public static MemoryStream Serialize(object obj)
+		public void Serialize(Stream stream, object obj)
 		{
-			MemoryStream stream = StreamPool.GetStream();
 			using (StreamWriter sw = new StreamWriter(stream, System.Text.Encoding.UTF8, 1024, true))
 			using (JsonWriter writer = new JsonTextWriter(sw))
 			{
-				writer.Formatting = Newtonsoft.Json.Formatting.Indented;
+				writer.Formatting = Newtonsoft.Json.Formatting.None;
 				JsonSerializer serializer = JsonSerializer.CreateDefault(SerializerSettings);
 				serializer.Serialize(writer, obj);
 			}
 			stream.Seek(0, SeekOrigin.Begin);
-			return stream;
 		}
 
 		public void Deserialize(Stream stream)

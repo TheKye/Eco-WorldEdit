@@ -1,6 +1,8 @@
 # WorldEdit
 WorldEdit Plugin for game Eco.
+
 Original author: Mampf
+
 This is fork from [TheKye/Eco-WorldEdit](https://github.com/TheKye/Eco-WorldEdit) and this version deleoped independently by the Russian Eco Community.
 Some changes and bugfixes can be implimented from the original repository.
 
@@ -9,13 +11,20 @@ Some changes and bugfixes can be implimented from the original repository.
 
 ## Notes
 This version where we rewrite the original code, do refactoring and review and keep working on it, adding new features and commands.
+
 Our first goal is make exported files usable at anytime and enywhere so you not lost your creations. To achieve that we exporting creations into JSON format with own extension **.ecobp**
+
 There currently no support for other extensions and formats.
 
+
 @TheKye have updated it to 9.0 and made it standalone, The commands are the same but there is a few things to note:
-/walls 
+
+/walls
+
 Using the walls command has been changed up for 9.0, When using this command you can now use it like this:
+
 /walls Ashlar Limestone Wall
+
 In 9.0 the block call is AshlarLimestoneWallBlock - We have auto included the Block part and removed the spaces for you when you use the command to make life easier in the next update i will force both to lower to make it easier again
 
 ## Commands
