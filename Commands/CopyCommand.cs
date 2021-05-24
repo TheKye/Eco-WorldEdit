@@ -24,6 +24,7 @@ namespace Eco.Mods.WorldEdit.Commands
 			this.UserSession.Clipboard.Clear();
 			for (int x = vectors.Lower.X; x != vectors.Higher.X; x = (x + 1) % Shared.Voxel.World.VoxelSize.X)
 			{
+				//Console.WriteLine($"Copy {vectors.Lower.X} {x} {vectors.Higher.X}"); //TODO Remove debug! Check for vector problems
 				for (int y = vectors.Lower.Y; y < vectors.Higher.Y; y++)
 				{
 					for (int z = vectors.Lower.Z; z != vectors.Higher.Z; z = (z + 1) % Shared.Voxel.World.VoxelSize.Z)

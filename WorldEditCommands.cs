@@ -47,7 +47,7 @@ namespace Eco.Mods.WorldEdit
 				SetCommand command = new SetCommand(user, pTypeName);
 				if (command.Invoke())
 				{
-					user.Player.MsgLoc($"{command.BlocksChanged} blocks changed.");
+					user.Player.MsgLoc($"{command.BlocksChanged} blocks changed in {command.ElapsedMilliseconds}ms.");
 				}
 			}
 			catch (WorldEditCommandException e)
@@ -58,6 +58,12 @@ namespace Eco.Mods.WorldEdit
 			{
 				Log.WriteError(Localizer.Do($"{e}"));
 			}
+		}
+
+		[ChatSubCommand("WorldEdit", "Clears the Selected Area", "del", ChatAuthorizationLevel.Admin)]
+		public static void Delete(User user)
+		{
+			Set(user, "Empty");
 		}
 
 		[ChatSubCommand("WorldEdit", "Replace a Specific Block Type with Another Block", "replace", ChatAuthorizationLevel.Admin)]
@@ -274,7 +280,7 @@ namespace Eco.Mods.WorldEdit
 				WorldEditCommand command = new CopyCommand(user);
 				if (command.Invoke())
 				{
-					user.Player.MsgLoc($"Copy done.");
+					user.Player.MsgLoc($"Copy done in {command.ElapsedMilliseconds}ms.");
 				}
 			}
 			catch (WorldEditCommandException e)
@@ -295,7 +301,7 @@ namespace Eco.Mods.WorldEdit
 				WorldEditCommand command = new PasteCommand(user);
 				if (command.Invoke())
 				{
-					user.Player.MsgLoc($"Paste done.");
+					user.Player.MsgLoc($"Paste done in {command.ElapsedMilliseconds}ms.");
 				}
 			}
 			catch (WorldEditCommandException e)
@@ -337,7 +343,7 @@ namespace Eco.Mods.WorldEdit
 				WorldEditCommand command = new ExportCommand(user, fileName);
 				if (command.Invoke())
 				{
-					user.Player.MsgLoc($"Export done.");
+					user.Player.MsgLoc($"Export done in {command.ElapsedMilliseconds}ms.");
 				}
 			}
 			catch (WorldEditCommandException e)
@@ -358,7 +364,7 @@ namespace Eco.Mods.WorldEdit
 				WorldEditCommand command = new ImportCommand(user, fileName);
 				if (command.Invoke())
 				{
-					user.Player.MsgLoc($"Import done. Use /paste");
+					user.Player.MsgLoc($"Import done in {command.ElapsedMilliseconds}ms. Use /paste");
 				}
 			}
 			catch (WorldEditCommandException e)
@@ -452,6 +458,23 @@ namespace Eco.Mods.WorldEdit
 				session.SetSecondPosition((Vector3i?)pos);
 
 				user.Player.MsgLoc($"Second Position set to ({pos.x}, {pos.y}, {pos.z})");
+			}
+			catch (Exception e)
+			{
+				Log.WriteError(Localizer.Do($"{e}"));
+			}
+		}
+
+		[ChatSubCommand("WorldEdit", "Resets selection and both positions", "reset", ChatAuthorizationLevel.Admin)]
+		public static void Reset(User user)
+		{
+			try
+			{
+				UserSession session = WorldEditManager.GetUserSession(user);
+				session.SetFirstPosition(null);
+				session.SetSecondPosition(null);
+
+				user.Player.MsgLoc($"WorldEdit: Positions reset");
 			}
 			catch (Exception e)
 			{

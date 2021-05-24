@@ -5,7 +5,7 @@ namespace Eco.Mods.WorldEdit
 	public class EcoWorldEdit : IModKitPlugin, IServerPlugin
 	{
 		public const string Version = "2.0.1";
-		public const string SchematicDirectoryPath = "./Configs/Mods/WorldEdit/Schematics/";
+		public const string SchematicDirectoryPath = "./Mods/UserCode/WorldEdit/Schematics/";
 
 		public string GetStatus()
 		{
