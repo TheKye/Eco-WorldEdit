@@ -3,7 +3,17 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<RootNamespace>Eco.Mods.WorldEdit</RootNamespace>
+    <Authors>Elixr Mods</Authors>
+    <Company>Elixr Solutions</Company>
+    <Product>EM WorldEdit</Product>
 		<Version>2.0.1</Version>
+    <Copyright>Elixr Solutions 2020</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://elixrmods.com/</PackageProjectUrl>
+    <PackageIcon></PackageIcon>
+    <RepositoryUrl>https://git.elixr-solutions.com/elixrmods/elixr-mods</RepositoryUrl>
+    <RepositoryType>Private GitLab</RepositoryType>
+    <NeutralLanguage>en</NeutralLanguage>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -13,6 +23,15 @@
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<Exec Command="cd $(TargetDir)&#xD;&#xA;del *.pdb&#xD;&#xA;del *.config&#xD;&#xA;del Eco*&#xD;&#xA;del *.json&#xD;&#xA;del A*&#xD;&#xA;del B*&#xD;&#xA;del C*&#xD;&#xA;del D*&#xD;&#xA;del F*&#xD;&#xA;del G*&#xD;&#xA;del H*&#xD;&#xA;del I*&#xD;&#xA;del J*&#xD;&#xA;del K*&#xD;&#xA;del L*&#xD;&#xA;del M*&#xD;&#xA;del N*&#xD;&#xA;del O*&#xD;&#xA;del P*&#xD;&#xA;del Q*&#xD;&#xA;del R*&#xD;&#xA;del S*&#xD;&#xA;del T*&#xD;&#xA;del U*&#xD;&#xA;del V*&#xD;&#xA;del X*&#xD;&#xA;del Y*&#xD;&#xA;del Z*" />
 	</Target>
+  
+  <ItemGroup>
+    <Compile Remove="Dependencies\**" />
+    <Compile Remove="WorldEdit-UnitTest\**" />
+    <EmbeddedResource Remove="Dependencies\**" />
+    <EmbeddedResource Remove="WorldEdit-UnitTest\**" />
+    <None Remove="Dependencies\**" />
+    <None Remove="WorldEdit-UnitTest\**" />
+  </ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
@@ -65,5 +84,4 @@
 	    <HintPath>..\Dependencies\Eco.WorldGenerator.dll</HintPath>
 	  </Reference>
 	</ItemGroup>
-
 </Project>
