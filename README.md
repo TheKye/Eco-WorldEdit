@@ -2,6 +2,10 @@
 
 the WorldEdit Plugin By Mampf
 
+you may not redistribute modified versions of this plugin. this plugin remains the property of the original creator and you may not without their consent release a modified version of this plugin.
+
+This plugin remains the property of the original creator Mampf and all rights reserved. 
+
 I have updated it to 9.0 and made it standalone, The commands are the same but there is a few things to note:
 
 /walls 
