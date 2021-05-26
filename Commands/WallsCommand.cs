@@ -25,7 +25,9 @@ namespace Eco.Mods.WorldEdit.Commands
 			{
 				for (int y = vectors.Lower.Y; y < vectors.Higher.Y; y++)
 				{
+					//TODO: Get this out into method
 					Vector3i pos = new Vector3i(x, y, vectors.Lower.Z);
+					if (WorldEditBlockManager.IsImpenetrable(pos)) continue;
 					this.AddBlockChangedEntry(pos);
 					WorldEditBlockManager.SetBlock(this.blockType, pos);
 					this.BlocksChanged++;
@@ -36,7 +38,9 @@ namespace Eco.Mods.WorldEdit.Commands
 			{
 				for (int y = vectors.Lower.Y; y < vectors.Higher.Y; y++)
 				{
+					//TODO: Get this out into method
 					Vector3i pos = new Vector3i(x, y, vectors.Higher.Z - 1);
+					if (WorldEditBlockManager.IsImpenetrable(pos)) continue;
 					this.AddBlockChangedEntry(pos);
 					WorldEditBlockManager.SetBlock(this.blockType, pos);
 					this.BlocksChanged++;
@@ -47,7 +51,9 @@ namespace Eco.Mods.WorldEdit.Commands
 			{
 				for (int y = vectors.Lower.Y; y < vectors.Higher.Y; y++)
 				{
+					//TODO: Get this out into method
 					Vector3i pos = new Vector3i(vectors.Lower.X, y, z);
+					if (WorldEditBlockManager.IsImpenetrable(pos)) continue;
 					this.AddBlockChangedEntry(pos);
 					WorldEditBlockManager.SetBlock(this.blockType, pos);
 					this.BlocksChanged++;
@@ -58,7 +64,9 @@ namespace Eco.Mods.WorldEdit.Commands
 			{
 				for (int y = vectors.Lower.Y; y < vectors.Higher.Y; y++)
 				{
+					//TODO: Get this out into method
 					Vector3i pos = new Vector3i(vectors.Higher.X - 1, y, z);
+					if (WorldEditBlockManager.IsImpenetrable(pos)) continue;
 					this.AddBlockChangedEntry(pos);
 					WorldEditBlockManager.SetBlock(this.blockType, pos);
 					this.BlocksChanged++;

@@ -27,7 +27,9 @@ namespace Eco.Mods.WorldEdit.Commands
 		{
 			foreach (WorldEditBlock entry in list)
 			{
-				AddBlockChangedEntry(WorldEditBlockManager.ApplyOffset(entry.Position, this.playerPos));
+				Vector3i pos = WorldEditBlockManager.ApplyOffset(entry.Position, this.playerPos);
+				if (WorldEditBlockManager.IsImpenetrable(pos)) continue;
+				AddBlockChangedEntry(pos);
 				WorldEditBlockManager.RestoreBlockOffset(entry, this.playerPos, this.UserSession.Player);
 			}
 		}

@@ -45,13 +45,13 @@ In 9.0 the block call is AshlarLimestoneWallBlock - We have auto included the Bl
 /stack <amount> <direction> | "Stacks" the current selection
 /copy | Copies a selection.
 /paste | Pastes a copied selection from clipboard.
-/rotate degree | Rotate the clipboard
+/rotate <degree> | Rotate the clipboard
 /undo | Revert the last command. Can undo up to 10 commands
 /import <name> | Import a schematic file into clipboard
 /export <name> | Export the clipboard into a file
 /distr | Show information about current selection
 /setpos1 | Set first position to where you are standing
-/setPos2 | Set second position to where you are standing
+/setpos2 | Set second position to where you are standing
 /reset | Resets First and Second positions
 /we version (/weversion) | for debugging gives you the current version when reporting bugs
 ```

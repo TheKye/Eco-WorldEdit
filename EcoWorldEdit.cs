@@ -9,7 +9,7 @@ namespace Eco.Mods.WorldEdit
 
 		public string GetStatus()
 		{
-			return "";
+			return string.Empty;
 		}
 
 		public override string ToString()

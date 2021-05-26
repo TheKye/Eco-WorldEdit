@@ -29,8 +29,8 @@ namespace Eco.Mods.WorldEdit.Commands
 
 			Action<int, int, int> action = (int x, int y, int z) =>
 			{
-				var pos = new Vector3i(x, y, z);
-
+				Vector3i pos = new Vector3i(x, y, z);
+				if (WorldEditBlockManager.IsImpenetrable(pos)) return;
 				AddBlockChangedEntry(pos);
 				AddBlockChangedEntry(pos + offset);
 

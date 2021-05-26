@@ -33,8 +33,8 @@ namespace Eco.Mods.WorldEdit.Commands
 					{
 						for (int z = vectors.Lower.Z; z != vectors.Higher.Z; z = (z + 1) % Shared.Voxel.World.VoxelSize.Z)
 						{
-							var pos = new Vector3i(x, y, z);
-
+							Vector3i pos = new Vector3i(x, y, z);
+							if (WorldEditBlockManager.IsImpenetrable(pos)) continue;
 							AddBlockChangedEntry(pos + offset);
 							WorldEditBlock sourceBlock = WorldEditBlock.Create(Eco.World.World.GetBlock(pos), pos);
 							WorldEditBlockManager.RestoreBlockOffset(sourceBlock, offset, this.UserSession.Player);

@@ -28,6 +28,7 @@ namespace Eco.Mods.WorldEdit.Commands
 					for (int z = vectors.Lower.Z; z != vectors.Higher.Z; z = (z + 1) % Shared.Voxel.World.VoxelSize.Z)
 					{
 						Vector3i pos = new Vector3i(x, y, z);
+						if (WorldEditBlockManager.IsImpenetrable(pos)) continue;
 						AddBlockChangedEntry(pos);
 						WorldEditBlockManager.SetBlock(blockType, pos);
 						BlocksChanged++;

@@ -18,6 +18,8 @@ using Newtonsoft.Json.Linq;
 
 namespace Eco.Mods.WorldEdit
 {
+	using World = Eco.World.World;
+
 	internal static class WorldEditBlockManager
 	{
 		public static void SetBlock(Type type, Vector3i position)
@@ -52,12 +54,12 @@ namespace Eco.Mods.WorldEdit
 
 		public static void RestoreEmptyBlock(Vector3i position)
 		{
-			Eco.World.World.DeleteBlock(position);
+			World.DeleteBlock(position);
 		}
 
 		public static void RestoreBlock(Type type, Vector3i position)
 		{
-			Eco.World.World.SetBlock(type, position);
+			World.SetBlock(type, position);
 		}
 
 		public static void RestoreWorldObjectBlock(Type type, Vector3i position, IWorldEditBlockData blockData, Player player)
@@ -119,18 +121,19 @@ namespace Eco.Mods.WorldEdit
 
 		private static void ClearPosition(Vector3i position)
 		{
-			Block block = World.World.GetBlock(position);
+			Block block = World.GetBlock(position);
 
-			if (block is EmptyBlock)
-				return;
+			if (block is EmptyBlock) return;
 
 			switch (block)
 			{
 				case WorldObjectBlock worldObjectBlock:
 					worldObjectBlock.WorldObjectHandle.Object.Destroy();
 					break;
+				case ImpenetrableStoneBlock _:
+					break;
 				default:
-					Eco.World.World.DeleteBlock(position);
+					World.DeleteBlock(position);
 					break;
 			}
 		}
@@ -149,9 +152,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		public static Vector3i ApplyOffset(Vector3i position, Vector3i offset)
-		{
-			return position + offset;
-		}
+		public static bool IsImpenetrable(Vector3i position) => World.GetBlock(position).Is<Impenetrable>() || position.y < 0;
+		public static Vector3i ApplyOffset(Vector3i position, Vector3i offset) => position + offset;
 	}
 }
