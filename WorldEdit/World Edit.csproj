@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<RootNamespace>Eco.Mods.WorldEdit</RootNamespace>
+		<Version>2.0.1</Version>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<OutputPath></OutputPath>
+	</PropertyGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="cd $(TargetDir)&#xD;&#xA;del *.pdb&#xD;&#xA;del *.config&#xD;&#xA;del Eco*&#xD;&#xA;del *.json&#xD;&#xA;del A*&#xD;&#xA;del B*&#xD;&#xA;del C*&#xD;&#xA;del D*&#xD;&#xA;del F*&#xD;&#xA;del G*&#xD;&#xA;del H*&#xD;&#xA;del I*&#xD;&#xA;del J*&#xD;&#xA;del K*&#xD;&#xA;del L*&#xD;&#xA;del M*&#xD;&#xA;del N*&#xD;&#xA;del O*&#xD;&#xA;del P*&#xD;&#xA;del Q*&#xD;&#xA;del R*&#xD;&#xA;del S*&#xD;&#xA;del T*&#xD;&#xA;del U*&#xD;&#xA;del V*&#xD;&#xA;del X*&#xD;&#xA;del Y*&#xD;&#xA;del Z*" />
+	</Target>
+
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="Eco.Core">
+	    <HintPath>..\Dependencies\Eco.Core.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Eco.Gameplay">
+	    <HintPath>..\Dependencies\Eco.Gameplay.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Eco.ModKit">
+	    <HintPath>..\Dependencies\Eco.ModKit.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Eco.Mods">
+	    <HintPath>..\Dependencies\Eco.Mods.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Eco.Networking.ENet">
+	    <HintPath>..\Dependencies\Eco.Networking.ENet.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Eco.Networking.Lidgren">
+	    <HintPath>..\Dependencies\Eco.Networking.Lidgren.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Eco.Plugins">
+	    <HintPath>..\Dependencies\Eco.Plugins.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Eco.Shared">
+	    <HintPath>..\Dependencies\Eco.Shared.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Eco.Simulation">
+	    <HintPath>..\Dependencies\Eco.Simulation.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Eco.Stats">
+	    <HintPath>..\Dependencies\Eco.Stats.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Eco.Tests">
+	    <HintPath>..\Dependencies\Eco.Tests.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Eco.WebServer">
+	    <HintPath>..\Dependencies\Eco.WebServer.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Eco.WindowsForms">
+	    <HintPath>..\Dependencies\Eco.WindowsForms.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Eco.World">
+	    <HintPath>..\Dependencies\Eco.World.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Eco.WorldGenerator">
+	    <HintPath>..\Dependencies\Eco.WorldGenerator.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
+</Project>
