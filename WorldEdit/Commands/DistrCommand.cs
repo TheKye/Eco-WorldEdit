@@ -4,6 +4,7 @@ using System.Linq;
 using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Utils;
+using Eco.Shared.Localization;
 using Eco.Shared.Math;
 
 namespace Eco.Mods.WorldEdit.Commands
@@ -44,7 +45,7 @@ namespace Eco.Mods.WorldEdit.Commands
 			{
 				string percent = Math.Round((entry.Value / amountBlocks) * 100, 2).ToString() + "%";
 				string nameOfBlock = entry.Key[(entry.Key.LastIndexOf(".") + 1)..];
-				msg += $"{entry.Value,-6} {percent,-6} {nameOfBlock} \n";
+				msg += $"<ecoicon name='{nameOfBlock}'></ecoicon>{entry.Value,-6} {percent,-6} {Localizer.DoStr(nameOfBlock)} \n";
 			}
 			this.UserSession.Player.OpenInfoPanel("", msg, "WorldEditDistr");
 		}
