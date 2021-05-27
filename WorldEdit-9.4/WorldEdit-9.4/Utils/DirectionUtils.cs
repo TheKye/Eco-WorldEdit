@@ -33,36 +33,17 @@ namespace Eco.Mods.WorldEdit.Utils
 			if (string.IsNullOrWhiteSpace(direction))
 				return Direction.Unknown;
 
-			switch (direction.Trim().ToLower())
-			{
-				case "up":
-				case "u":
-					return Direction.Up;
-
-				case "down":
-				case "d":
-					return Direction.Down;
-
-				case "left":
-				case "l":
-					return Direction.Left;
-
-				case "right":
-				case "r":
-					return Direction.Right;
-
-				case "back":
-				case "b":
-					return Direction.Back;
-
-				case "forward":
-				case "f":
-					return Direction.Forward;
-
-				default:
-					return Direction.Unknown;
-			}
-		}
+            return direction.Trim().ToLower() switch
+            {
+                "up" or "u" => Direction.Up,
+                "down" or "d" => Direction.Down,
+                "left" or "l" => Direction.Left,
+                "right" or "r" => Direction.Right,
+                "back" or "b" => Direction.Back,
+                "forward" or "f" => Direction.Forward,
+                _ => Direction.Unknown,
+            };
+        }
 
 		public static Direction GetDirectionOrLooking(User user, string direction)
 		{
