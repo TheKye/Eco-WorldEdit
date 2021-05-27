@@ -13,7 +13,9 @@ Contributions are Welcome! if you feel like you can improve something or have an
 
 ## Current Contributors 
 Kye - Elixr Mods, Eco Modding Community - Code and Project Management
+
 Tavren - Eco Russian Community - Code
+
 StallEF - Eco Russian Community - Project Management Assitance
 
 ## Previous Contributors
