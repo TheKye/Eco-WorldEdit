@@ -66,7 +66,7 @@ namespace Eco.Mods.WorldEdit
 			Set(user, "Empty");
 		}
 
-		[ChatSubCommand("WorldEdit", "Replace a Specific Block Type with Another Block", "replace", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "Replace a Specific Block Type with Another Block Example: replace sand, dirt, this will replace sand with dirt", "replace", ChatAuthorizationLevel.Admin)]
 		public static void Replace(User user, string pTypeNames)
 		{
 			try
@@ -117,7 +117,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "/stack", "stack", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "/stack", "Stack ", ChatAuthorizationLevel.Admin)]
 		public static void Stack(User user, string directionAndAmount = "1")
 		{
 			try
@@ -159,7 +159,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "/expand", "expand", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "expand the selected area by the specified amount in the looking direction", "expands", ChatAuthorizationLevel.Admin)]
 		public static void Expand(User user, string directionAndAmount = "1")
 		{
 			try
@@ -180,7 +180,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "/contract", "contract", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "contract will lessen the selected area by the specified amount in the looking direction", "contract", ChatAuthorizationLevel.Admin)]
 		public static void Contract(User user, string directionAndAmount = "1")
 		{
 			try
@@ -201,7 +201,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "/shift", "shift", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "shift will move the selected area by the specified amount in the looking direction", "shift", ChatAuthorizationLevel.Admin)]
 		public static void Shift(User user, string directionAndAmount = "1")
 		{
 			try
@@ -222,7 +222,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "/up", "up", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "up will move the player upwards by the specified amount and place a block under the player if needed", "up", ChatAuthorizationLevel.Admin)]
 		public static void Up(User user, int count = 1)
 		{
 			try
@@ -243,7 +243,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "/undo", "undo", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "undo will revert the last action done using world edit, up too 10 times", "undo", ChatAuthorizationLevel.Admin)]
 		public static void Undo(User user)
 		{
 			try
@@ -272,7 +272,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "/copy", "copy", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "copy will copy the selected area ready for pasting or exporting", "copy", ChatAuthorizationLevel.Admin)]
 		public static void Copy(User user)
 		{
 			try
@@ -293,7 +293,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "/paste", "paste", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "paste will paste the copied selection or imported schematic from where the player is standing", "paste", ChatAuthorizationLevel.Admin)]
 		public static void Paste(User user)
 		{
 			try
@@ -314,7 +314,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "/rotate", "rotate", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "rotate will rotate all blocks and items in your clipboard, usable by degrees IE: 90, 180, 270", "rotate", ChatAuthorizationLevel.Admin)]
 		public static void Rotate(User user, int degrees = 90)
 		{
 			try
@@ -335,7 +335,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "/export", "export", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "export will turn your copied selection into a schematic that you can share with friends or import into a fresh world!", "export", ChatAuthorizationLevel.Admin)]
 		public static void Export(User user, string fileName)
 		{
 			try
@@ -356,7 +356,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "/import", "import", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "import will import a schematic that you or someone else has exported", "import", ChatAuthorizationLevel.Admin)]
 		public static void Import(User user, string fileName)
 		{
 			try
@@ -377,7 +377,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "/distr", "distr", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "distr will give you a detailed list of all items in your selected area", "distr", ChatAuthorizationLevel.Admin)]
 		public static void Distr(User user)
 		{
 			try

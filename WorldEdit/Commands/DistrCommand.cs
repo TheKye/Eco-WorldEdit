@@ -4,6 +4,7 @@ using System.Linq;
 using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Utils;
+using Eco.Shared.Localization;
 using Eco.Shared.Math;
 
 namespace Eco.Mods.WorldEdit.Commands
@@ -39,14 +40,14 @@ namespace Eco.Mods.WorldEdit.Commands
 
 			double amountBlocks = mBlocks.Values.Sum(); // (vectors.Higher.X - vectors.Lower.X) * (vectors.Higher.Y - vectors.Lower.Y) * (vectors.Higher.Z - vectors.Lower.Z);
 
-			this.UserSession.Player.MsgLoc($"total blocks: {amountBlocks}");
-
+			string msg = $"total blocks: {amountBlocks}\n";
 			foreach (var entry in mBlocks)
 			{
-				string percent = (Math.Round((entry.Value / amountBlocks) * 100, 2)).ToString() + "%";
-				string nameOfBlock = entry.Key.Substring(entry.Key.LastIndexOf(".") + 1);
-				this.UserSession.Player.MsgLoc($"{entry.Value.ToString().PadRight(6)} {percent.PadRight(6)} {nameOfBlock}");
+				string percent = Math.Round((entry.Value / amountBlocks) * 100, 2).ToString() + "%";
+				string nameOfBlock = entry.Key[(entry.Key.LastIndexOf(".") + 1)..];
+				msg += $"<ecoicon name='{nameOfBlock}'></ecoicon>{entry.Value,-6} {percent,-6} {Localizer.DoStr(nameOfBlock)} \n";
 			}
+			this.UserSession.Player.OpenInfoPanel("", msg, "WorldEditDistr");
 		}
 	}
 }
