@@ -8,6 +8,17 @@ This plugin remains the property of the original creator Mampf and all rights re
 ## Supported Eco Version
 **9.3.4**
 
+## Contributions
+Contributions are Welcome! if you feel like you can improve something or have an idea Create an Issue or a Pull Request!
+
+## Current Contributors 
+Kye - Elixr Mods, Eco Modding Community - Code and Project Management
+Tavren - Eco Russian Community - Code
+StallEF - Eco Russian Community - Project Management Assitance
+
+## Previous Contributors
+Mampf - Original Creator
+
 ## Notes
 I have updated it to 9.0 and made it standalone, The commands are the same but there is a few things to note:
 
