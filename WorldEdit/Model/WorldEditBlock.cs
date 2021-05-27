@@ -9,6 +9,7 @@ using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
+using Eco.Simulation;
 using Eco.Simulation.Agents;
 using Eco.World;
 using Eco.World.Blocks;
@@ -38,22 +39,37 @@ namespace Eco.Mods.WorldEdit.Model
 			switch (block)
 			{
 				case PlantBlock plantBlock:
-					//Log.Debug($"{worldEditBlock.BlockType.ToString()} is a PlantBlock");
-					Plant plant = PlantBlock.GetPlant(worldEditBlock.OriginalPosition);
-					worldEditBlock.BlockData = WorldEditPlantBlockData.From(plant);
+					//Log.Debug($"{worldEditBlock.BlockType.ToString()} at {originalPosition} is a PlantBlock");
+					Plant plant = EcoSim.PlantSim.GetPlant(originalPosition);
+					if (plant != null)
+					{
+						worldEditBlock.Position = plant.Position.XYZi - offsetPosition;
+						worldEditBlock.BlockData = WorldEditPlantBlockData.From(plant);
+					}
+					else { worldEditBlock.BlockType = typeof(EmptyBlock); }
+					break;
+				case TreeBlock treeBlock:
+					//Log.Debug($"{worldEditBlock.BlockType.ToString()} at {originalPosition} is a TreeBlock");
+					Plant treePlant = EcoSim.PlantSim.GetPlant(originalPosition);
+					if (treePlant != null)
+					{
+						worldEditBlock.Position = treePlant.Position.XYZi - offsetPosition;
+						worldEditBlock.BlockData = WorldEditPlantBlockData.From(treePlant);
+					}
+					else { worldEditBlock.BlockType = typeof(EmptyBlock); }
 					break;
 				case WorldObjectBlock objectBlock:
-					//Log.Debug($"{worldEditBlock.BlockType.ToString()} is a WorldObjectBlock");
+					//Log.Debug($"{worldEditBlock.BlockType.ToString()} at {originalPosition} is a WorldObjectBlock");
 					WorldObject worldObject = objectBlock.WorldObjectHandle.Object;
 					worldEditBlock.BlockData = WorldEditWorldObjectBlockData.From(worldObject);
 					relativePosition = worldObject.Position3i - offsetPosition;
 					worldEditBlock.Position = relativePosition;
 					break;
 				case EmptyBlock emptyBlock:
-					//Log.Debug($"{worldEditBlock.BlockType.ToString()} is a EmptyBlock");
+					//Log.Debug($"{worldEditBlock.BlockType.ToString()} at {originalPosition} is a EmptyBlock");
 					break;
 				default:
-					//Log.Debug($"{worldEditBlock.BlockType.ToString()} is a Block");
+					//Log.Debug($"{worldEditBlock.BlockType.ToString()} at {originalPosition} is a Block");
 					System.Reflection.ConstructorInfo constuctor = worldEditBlock.BlockType.GetConstructor(Type.EmptyTypes);
 					if (constuctor == null) { throw new ArgumentOutOfRangeException(message: "Block type is not supported", paramName: worldEditBlock.BlockType.ToString()); }
 					if (BlockContainerManager.Obj.IsBlockContained(originalPosition))
@@ -132,15 +148,9 @@ namespace Eco.Mods.WorldEdit.Model
 			}
 		}
 
-		public bool IsPlantBlock()
-		{
-			return this.BlockType.DerivesFrom<PlantBlock>();
-		}
-
-		public bool IsWorldObjectBlock()
-		{
-			return this.BlockType.DerivesFrom<WorldObjectBlock>();
-		}
+		public bool IsPlantBlock() => this.BlockType.DerivesFrom<PlantBlock>() || this.BlockType.DerivesFrom<TreeBlock>();
+		public bool IsWorldObjectBlock() => this.BlockType.DerivesFrom<WorldObjectBlock>();
+		public bool IsEmptyBlock() => this.BlockType.Equals(typeof(EmptyBlock));
 
 		public WorldEditBlock Clone()
 		{

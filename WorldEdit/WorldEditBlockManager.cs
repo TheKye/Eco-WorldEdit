@@ -34,15 +34,15 @@ namespace Eco.Mods.WorldEdit
 		public static void RestoreBlock(WorldEditBlock block, Vector3i position, Player player)
 		{
 			ClearPosition(position);
-			if (block.BlockType.Equals(typeof(EmptyBlock)))
+			if (block.IsEmptyBlock())
 			{
 				RestoreEmptyBlock(position);
 			}
-			else if (block.BlockType.DerivesFrom<PlantBlock>())
+			else if (block.IsPlantBlock())
 			{
 				RestorePlantBlock(block.BlockType, position, block.BlockData);
 			}
-			else if (block.BlockType.DerivesFrom<WorldObjectBlock>())
+			else if (block.IsWorldObjectBlock())
 			{
 				RestoreWorldObjectBlock(block.BlockType, position, block.BlockData, player);
 			}
@@ -109,8 +109,15 @@ namespace Eco.Mods.WorldEdit
 		public static void RestorePlantBlock(Type type, Vector3i position, IWorldEditBlockData blockData)
 		{
 			WorldEditPlantBlockData plantBlockData = (WorldEditPlantBlockData)blockData;
-			PlantSpecies plantSpecies = EcoSim.AllSpecies.OfType<PlantSpecies>().First(species => species.BlockType == type);
-			Plant plant = EcoSim.PlantSim.SpawnPlant(plantSpecies, position);
+			PlantSpecies plantSpecies = null;
+			try { plantSpecies = EcoSim.AllSpecies.OfType<PlantSpecies>().First(species => species.GetType() == plantBlockData.PlantType); }
+			catch (InvalidOperationException)
+			{
+				//TODO: Temporary support for the old serialized format! Should be done with migration!
+				plantSpecies = EcoSim.AllSpecies.OfType<PlantSpecies>().First(species => species.Name == plantBlockData.PlantType.Name);
+			}
+			if (plantSpecies == null) return;
+			Plant plant = EcoSim.PlantSim.SpawnPlant(plantSpecies, position, true);
 			plant.YieldPercent = plantBlockData.YieldPercent;
 			plant.Dead = plantBlockData.Dead;
 			plant.DeadType = plantBlockData.DeadType;
@@ -131,6 +138,11 @@ namespace Eco.Mods.WorldEdit
 					worldObjectBlock.WorldObjectHandle.Object.Destroy();
 					break;
 				case ImpenetrableStoneBlock _:
+					break;
+				case PlantBlock plantBlock:
+				case TreeBlock treeBlock:
+					Plant plant = EcoSim.PlantSim.GetPlant(position);
+					if (plant != null) { EcoSim.PlantSim.DestroyPlant(plant, DeathType.DivineIntervention, true); }
 					break;
 				default:
 					World.DeleteBlock(position);
