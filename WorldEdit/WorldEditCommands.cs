@@ -244,22 +244,32 @@ namespace Eco.Mods.WorldEdit
 		}
 
 		[ChatSubCommand("WorldEdit", "undo will revert the last action done using world edit, up too 10 times", "undo", ChatAuthorizationLevel.Admin)]
-		public static void Undo(User user)
+		public static void Undo(User user, int count = 1)
 		{
 			try
 			{
 				UserSession userSession = WorldEditManager.GetUserSession(user);
-				if (userSession.ExecutedCommands.TryPop(out WorldEditCommand command))
+
+				if (count > userSession.ExecutedCommands.Count) count = userSession.ExecutedCommands.Count;
+				if (count.Equals(0)) { user.Player.ErrorLocStr($"Nothing to undo"); return; }
+
+				for (int i = 1; i <= count; i++)
 				{
-					if (command.Undo())
+					if (userSession.ExecutedCommands.TryPop(out WorldEditCommand command))
 					{
-						user.Player.MsgLoc($"Undo done.");
+						if (command.Undo())
+						{
+							if (count.Equals(1))
+								user.Player.MsgLoc($"Undo done.");
+							else
+								user.Player.MsgLoc($"Undo {i}/{count} done.");
+						}
 					}
-				}
-				else
-				{
-					user.Player.ErrorLocStr($"Nothing to undo");
-					//user.Player.ErrorLocStr($"You can't use undo right now!");
+					else
+					{
+						user.Player.ErrorLocStr($"Nothing to undo");
+						//user.Player.ErrorLocStr($"You can't use undo right now!");
+					}
 				}
 			}
 			catch (WorldEditCommandException e)
