@@ -388,11 +388,29 @@ namespace Eco.Mods.WorldEdit
 		}
 
 		[ChatSubCommand("WorldEdit", "distr will give you a detailed list of all items in your selected area", "distr", ChatAuthorizationLevel.Admin)]
-		public static void Distr(User user)
+		public static void Distr(User user, string type = "brief")
 		{
+			type = type.Replace(" ", "").Trim();
+			if (type.Contains("brief")) type = "brief";
+			if (type.Contains("detail")) type = "detail";
+			switch (type)
+			{
+				case "brief":
+				case "b":
+					type = "brief";
+					break;
+				case "detail":
+				case "d":
+					type = "detail";
+					break;
+				default:
+					type = "brief";
+					break;
+			}
+
 			try
 			{
-				WorldEditCommand command = new DistrCommand(user);
+				WorldEditCommand command = new DistrCommand(user, type);
 				if (command.Invoke())
 				{
 					//Output done in he command
