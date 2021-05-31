@@ -7,11 +7,12 @@ namespace Eco.Mods.WorldEdit.Serializer
 {
 	internal class WorldEditSerializer
 	{
-		public const float currentVersion = 1.2f;
+		public const float CurrentVersion = 1.2f;
 		/* Version History:
 		 * 1.0 - Old and unused format, supported blocks only.
 		 * 1.1 - Support plants, objects, blocks at separate layers
 		 * TODO: Write migration for this! 1.2 - Changed WorldEditPlantBlockData.PlantType form plant.GetType() to plant.Species.GetType()
+		 *	added AuthorInformation
 		 * */
 
 		public string CurrentEcoVersion => Shared.EcoVersion.VersionNumber;
@@ -58,6 +59,8 @@ namespace Eco.Mods.WorldEdit.Serializer
 			}
 		}
 
+		public AuthorInformation AuthorInformation { get; set; }
+
 		public WorldEditSerializer()
 		{
 
@@ -85,7 +88,7 @@ namespace Eco.Mods.WorldEdit.Serializer
 
 		public void Serialize(Stream stream)
 		{
-			EcoBlueprint schematic = EcoBlueprint.Create(this.blockList, this.plantList, this.worldObjectList);
+			EcoBlueprint schematic = EcoBlueprint.Create(this.blockList, this.plantList, this.worldObjectList, this.AuthorInformation);
 			Serialize(stream, schematic);
 		}
 
@@ -105,7 +108,7 @@ namespace Eco.Mods.WorldEdit.Serializer
 		{
 			EcoBlueprint schematic = Deserialize<EcoBlueprint>(stream);
 
-			if (!currentVersion.Equals(schematic.Version))
+			if (!CurrentVersion.Equals(schematic.Version))
 			{
 				//TODO: Handle serialization version changes and support previous versions
 				//throw new FileLoadException(message: $"EcoBlueprint file version missmatch [file version: {schematic.Version}, current version: {currentVersion}]");
@@ -120,6 +123,7 @@ namespace Eco.Mods.WorldEdit.Serializer
 			this.BlockList = schematic.Blocks;
 			this.PlantList = schematic.Plants;
 			this.WorldObjectList = schematic.Objects;
+			this.AuthorInformation = schematic.Author;
 		}
 
 		public static T Deserialize<T>(Stream stream)

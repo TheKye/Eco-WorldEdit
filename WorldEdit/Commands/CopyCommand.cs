@@ -34,6 +34,7 @@ namespace Eco.Mods.WorldEdit.Commands
 					}
 				}
 			}
+			this.UserSession.AuthorInfo.MarkDirty();
 		}
 	}
 }

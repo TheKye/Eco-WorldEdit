@@ -21,6 +21,7 @@ namespace Eco.Mods.WorldEdit.Commands
 				WorldEditSerializer serializer = new WorldEditSerializer();
 				serializer.Deserialize(stream);
 				this.UserSession.Clipboard.Parse(serializer);
+				this.UserSession.SetImportedSchematicAuthor(serializer.AuthorInformation);
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 ﻿using System;
 using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Commands;
+using Eco.Mods.WorldEdit.Serializer;
 using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared.Math;
 
@@ -15,6 +16,7 @@ namespace Eco.Mods.WorldEdit
 		public Vector3i? SecondPos { get; private set; }
 
 		public WorldEditClipboard Clipboard { get; }
+		public AuthorInformation AuthorInfo { get; private set; }
 		public LimitedStack<WorldEditCommand> ExecutedCommands { get => this.executedCommands; }
 		private LimitedStack<WorldEditCommand> executedCommands = new LimitedStack<WorldEditCommand>(10);
 
@@ -22,6 +24,7 @@ namespace Eco.Mods.WorldEdit
 		{
 			this.User = user ?? throw new ArgumentNullException(nameof(user));
 			this.Clipboard = new WorldEditClipboard();
+			this.AuthorInfo = new AuthorInformation(this.User);
 		}
 
 		public void SetFirstPosition(Vector3i? value)
@@ -31,6 +34,10 @@ namespace Eco.Mods.WorldEdit
 		public void SetSecondPosition(Vector3i? value)
 		{
 			this.SecondPos = value;
+		}
+		public void SetImportedSchematicAuthor(AuthorInformation information)
+		{
+			this.AuthorInfo = information;
 		}
 	}
 }
