@@ -159,7 +159,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "expand the selected area by the specified amount in the looking direction", "expands", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "expand the selected area by the specified amount in the looking direction", "expand", ChatAuthorizationLevel.Admin)]
 		public static void Expand(User user, string directionAndAmount = "1")
 		{
 			try

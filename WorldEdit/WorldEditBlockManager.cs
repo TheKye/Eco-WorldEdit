@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Eco.Core.Utils;
 using Eco.Gameplay.Components;
 using Eco.Gameplay.Objects;
 using Eco.Gameplay.Plants;
@@ -96,7 +97,12 @@ namespace Eco.Mods.WorldEdit
 				foreach (InventoryStack stack in inventoryStacks)
 				{
 					if (stack.ItemType == null) continue;
-					storageComponent.Inventory.AddItems(stack.ItemType, stack.Quantity);
+					Result result = storageComponent.Inventory.TryAddItems(stack.ItemType, stack.Quantity);
+					if (result.Failed)
+					{
+						player.ErrorLocStr(result.Message.Trim());
+						try { storageComponent.Inventory.AddItems(stack.GetItemStack()); } catch (InvalidOperationException) { /*Already show error to user*/ }
+					}
 				}
 			}
 			if (worldObject.HasComponent<CustomTextComponent>() && worldObjectBlockData.Components.ContainsKey(typeof(CustomTextComponent)))
