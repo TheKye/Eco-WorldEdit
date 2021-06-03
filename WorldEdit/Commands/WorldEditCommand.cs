@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Shared.Math;
+using Eco.Shared.Utils;
 using Eco.World;
 
 namespace Eco.Mods.WorldEdit.Commands
 {
+	using World = Eco.World.World;
+
 	internal abstract class WorldEditCommand : IWorldEditCommand
 	{
 		protected UserSession UserSession { get; private set; }
@@ -25,11 +30,14 @@ namespace Eco.Mods.WorldEdit.Commands
 		public TimeSpan Elapsed => this.timer.Elapsed;
 		public long ElapsedMilliseconds => this.timer.ElapsedMilliseconds;
 		public long ElapsedTicks => this.timer.ElapsedTicks;
+		public bool IsRunning => this.timer.IsRunning;
+		public bool PerformingUndo { get; internal set; } = false;
 
 		public WorldEditCommand(User user)
 		{
 			if (user == null) throw new ArgumentNullException(nameof(user));
 			this.UserSession = WorldEditManager.GetUserSession(user);
+			if (this.UserSession.ExecutingCommand != null && this.UserSession.ExecutingCommand.IsRunning) throw new WorldEditCommandException("Another command still executing"); //TODO: Probably need to rework that and impliment aborting
 		}
 
 		public bool Invoke()
@@ -37,6 +45,7 @@ namespace Eco.Mods.WorldEdit.Commands
 			bool result = false;
 			try
 			{
+				this.UserSession.ExecutingCommand = this;
 				this.timer.Start();
 				this.Execute();
 				this.timer.Stop();
@@ -52,19 +61,18 @@ namespace Eco.Mods.WorldEdit.Commands
 			}
 			finally
 			{
-				if (this.timer.IsRunning)
-				{
-					this.timer.Stop();
-				}
+				if (this.timer.IsRunning) this.timer.Stop();
+				this.UserSession.ExecutingCommand = null;
 			}
 			return result;
 		}
 
-		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void AddBlockChangedEntry(Vector3i position)
 		{
-			Block block = Eco.World.World.GetBlock(position);
-			this.AffectedBlocks.Push(WorldEditBlock.Create(block, position));
+			Block block = World.GetBlock(position);
+			WorldEditBlock worldEditBlock = WorldEditBlock.Create(block, position);
+			this.AffectedBlocks.Push(worldEditBlock);
 		}
 
 		public bool Undo()
@@ -72,13 +80,18 @@ namespace Eco.Mods.WorldEdit.Commands
 			bool result = false;
 			try
 			{
+				this.PerformingUndo = true;
 				this.timer.Restart();
 				if (this.affectedBlocks != null)
 				{
-					foreach (WorldEditBlock entry in this.AffectedBlocks)
+					this.AffectedBlocks.Where(b => !b.IsPlantBlock() || !b.IsWorldObjectBlock()).ForEach(b =>
 					{
-						WorldEditBlockManager.RestoreBlock(entry, entry.Position, this.UserSession.Player);
-					}
+						WorldEditBlockManager.RestoreBlock(b, b.Position, this.UserSession);
+					});
+					this.AffectedBlocks.Where(b => b.IsPlantBlock() || b.IsWorldObjectBlock()).ForEach(b =>
+					{
+						WorldEditBlockManager.RestoreBlock(b, b.Position, this.UserSession);
+					});
 					result = true;
 				}
 				this.timer.Stop();
@@ -89,10 +102,8 @@ namespace Eco.Mods.WorldEdit.Commands
 			}
 			finally
 			{
-				if (this.timer.IsRunning)
-				{
-					this.timer.Stop();
-				}
+				if (this.timer.IsRunning) this.timer.Stop();
+				this.PerformingUndo = false;
 			}
 			return result;
 		}

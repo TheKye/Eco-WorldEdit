@@ -63,7 +63,22 @@ namespace Eco.Mods.WorldEdit
 		[ChatSubCommand("WorldEdit", "Clears the Selected Area", "del", ChatAuthorizationLevel.Admin)]
 		public static void Delete(User user)
 		{
-			Set(user, "Empty");
+			try
+			{
+				SetCommand command = new SetCommand(user, "Empty");
+				if (command.Invoke())
+				{
+					user.Player.MsgLoc($"{command.BlocksChanged} blocks cleared in {command.ElapsedMilliseconds}ms.");
+				}
+			}
+			catch (WorldEditCommandException e)
+			{
+				user.Player.ErrorLocStr(e.Message);
+			}
+			catch (Exception e)
+			{
+				Log.WriteError(Localizer.Do($"{e}"));
+			}
 		}
 
 		[ChatSubCommand("WorldEdit", "Replace a Specific Block Type with Another Block Example: replace sand, dirt, this will replace sand with dirt", "replace", ChatAuthorizationLevel.Admin)]
@@ -249,26 +264,31 @@ namespace Eco.Mods.WorldEdit
 			try
 			{
 				UserSession userSession = WorldEditManager.GetUserSession(user);
+				if (userSession.ExecutingCommand != null && userSession.ExecutingCommand.IsRunning) throw new WorldEditCommandException("You can't use undo right now!"); //TODO: Probably need to rework that and impliment aborting
 
 				if (count > userSession.ExecutedCommands.Count) count = userSession.ExecutedCommands.Count;
-				if (count.Equals(0)) { user.Player.ErrorLocStr($"Nothing to undo"); return; }
+				if (count.Equals(0)) throw new WorldEditCommandException("Nothing to undo");
 
 				for (int i = 1; i <= count; i++)
 				{
 					if (userSession.ExecutedCommands.TryPop(out WorldEditCommand command))
 					{
+						userSession.ExecutingCommand = command;
 						if (command.Undo())
 						{
 							if (count.Equals(1))
+							{
 								user.Player.MsgLoc($"Undo done.");
+								break;
+							}
 							else
 								user.Player.MsgLoc($"Undo {i}/{count} done.");
 						}
+						userSession.ExecutingCommand = null;
 					}
 					else
 					{
-						user.Player.ErrorLocStr($"Nothing to undo");
-						//user.Player.ErrorLocStr($"You can't use undo right now!");
+						throw new WorldEditCommandException("Nothing to undo");
 					}
 				}
 			}

@@ -16,10 +16,10 @@ namespace Eco.Mods.WorldEdit.Commands
 			this.blockType = BlockUtils.GetBlockType(blockType) ?? throw new WorldEditCommandException($"No BlockType with name {blockType} found!");
 		}
 
+
 		protected override void Execute()
 		{
 			SortedVectorPair vectors = (SortedVectorPair)WorldEditUtils.GetSortedVectors(this.UserSession.FirstPos.Value, this.UserSession.SecondPos.Value);
-			this.BlocksChanged = 0;
 
 			for (int x = vectors.Lower.X; x != vectors.Higher.X; x = (x + 1) % Shared.Voxel.World.VoxelSize.X)
 			{

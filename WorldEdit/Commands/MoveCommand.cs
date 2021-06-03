@@ -35,7 +35,7 @@ namespace Eco.Mods.WorldEdit.Commands
 				AddBlockChangedEntry(pos + offset);
 
 				WorldEditBlock sourceBlock = WorldEditBlock.Create(Eco.World.World.GetBlock(pos), pos);
-				WorldEditBlockManager.RestoreBlockOffset(sourceBlock, offset, this.UserSession.Player);
+				WorldEditBlockManager.RestoreBlockOffset(sourceBlock, offset, this.UserSession);
 				WorldEditBlockManager.SetBlock(typeof(EmptyBlock), pos);
 				this.BlocksChanged++;
 			};

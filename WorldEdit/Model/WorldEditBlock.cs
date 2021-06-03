@@ -39,22 +39,13 @@ namespace Eco.Mods.WorldEdit.Model
 			switch (block)
 			{
 				case PlantBlock plantBlock:
-					//Log.Debug($"{worldEditBlock.BlockType.ToString()} at {originalPosition} is a PlantBlock");
+				case TreeBlock treeBlock:
+					//Log.Debug($"{worldEditBlock.BlockType.ToString()} at {originalPosition} is a PlantBlock or TreeBlock");
 					Plant plant = EcoSim.PlantSim.GetPlant(originalPosition);
 					if (plant != null)
 					{
 						worldEditBlock.Position = plant.Position.XYZi - offsetPosition;
 						worldEditBlock.BlockData = WorldEditPlantBlockData.From(plant);
-					}
-					else { worldEditBlock.BlockType = typeof(EmptyBlock); }
-					break;
-				case TreeBlock treeBlock:
-					//Log.Debug($"{worldEditBlock.BlockType.ToString()} at {originalPosition} is a TreeBlock");
-					Plant treePlant = EcoSim.PlantSim.GetPlant(originalPosition);
-					if (treePlant != null)
-					{
-						worldEditBlock.Position = treePlant.Position.XYZi - offsetPosition;
-						worldEditBlock.BlockData = WorldEditPlantBlockData.From(treePlant);
 					}
 					else { worldEditBlock.BlockType = typeof(EmptyBlock); }
 					break;
@@ -71,7 +62,7 @@ namespace Eco.Mods.WorldEdit.Model
 				default:
 					//Log.Debug($"{worldEditBlock.BlockType.ToString()} at {originalPosition} is a Block");
 					System.Reflection.ConstructorInfo constuctor = worldEditBlock.BlockType.GetConstructor(Type.EmptyTypes);
-					if (constuctor == null) { throw new ArgumentOutOfRangeException(message: "Block type is not supported", paramName: worldEditBlock.BlockType.ToString()); }
+					if (constuctor == null) { throw new ArgumentOutOfRangeException(message: "Block type is not supported", paramName: worldEditBlock.BlockType.FullName); }
 					if (BlockContainerManager.Obj.IsBlockContained(originalPosition))
 					{
 						worldEditBlock.BlockType = typeof(EmptyBlock);

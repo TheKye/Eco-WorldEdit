@@ -37,7 +37,7 @@ namespace Eco.Mods.WorldEdit.Commands
 							if (WorldEditBlockManager.IsImpenetrable(pos)) continue;
 							AddBlockChangedEntry(pos + offset);
 							WorldEditBlock sourceBlock = WorldEditBlock.Create(Eco.World.World.GetBlock(pos), pos);
-							WorldEditBlockManager.RestoreBlockOffset(sourceBlock, offset, this.UserSession.Player);
+							WorldEditBlockManager.RestoreBlockOffset(sourceBlock, offset, this.UserSession);
 							this.BlocksChanged++;
 						}
 					}

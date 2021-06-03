@@ -19,6 +19,8 @@ namespace Eco.Mods.WorldEdit
 		public AuthorInformation AuthorInfo { get; private set; }
 		public LimitedStack<WorldEditCommand> ExecutedCommands { get => this.executedCommands; }
 		private LimitedStack<WorldEditCommand> executedCommands = new LimitedStack<WorldEditCommand>(10);
+		public WorldEditCommand ExecutingCommand { get => this.executingCommand; internal set => this.executingCommand = value; }
+		private volatile WorldEditCommand executingCommand = null;
 
 		public UserSession(User user)
 		{

@@ -5,9 +5,7 @@ using Eco.Core.Utils;
 using Eco.Gameplay.Components;
 using Eco.Gameplay.Objects;
 using Eco.Gameplay.Plants;
-using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Model;
-using Eco.Shared.Localization;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
 using Eco.Simulation;
@@ -26,13 +24,13 @@ namespace Eco.Mods.WorldEdit
 		public static void SetBlock(Type type, Vector3i position)
 		{
 			ClearPosition(position);
-			RestoreBlock(type, position);
+			if (type != typeof(EmptyBlock)) RestoreBlock(type, position);
 		}
-		public static void RestoreBlockOffset(WorldEditBlock block, Vector3i offsetPos, Player player)
+		public static void RestoreBlockOffset(WorldEditBlock block, Vector3i offsetPos, UserSession session)
 		{
-			RestoreBlock(block, ApplyOffset(block.Position, offsetPos), player);
+			RestoreBlock(block, ApplyOffset(block.Position, offsetPos), session);
 		}
-		public static void RestoreBlock(WorldEditBlock block, Vector3i position, Player player)
+		public static void RestoreBlock(WorldEditBlock block, Vector3i position, UserSession session)
 		{
 			ClearPosition(position);
 			if (block.IsEmptyBlock())
@@ -45,7 +43,7 @@ namespace Eco.Mods.WorldEdit
 			}
 			else if (block.IsWorldObjectBlock())
 			{
-				RestoreWorldObjectBlock(block.BlockType, position, block.BlockData, player);
+				RestoreWorldObjectBlock(block.BlockType, position, block.BlockData, session);
 			}
 			else
 			{
@@ -63,20 +61,21 @@ namespace Eco.Mods.WorldEdit
 			World.SetBlock(type, position);
 		}
 
-		public static void RestoreWorldObjectBlock(Type type, Vector3i position, IWorldEditBlockData blockData, Player player)
+		public static void RestoreWorldObjectBlock(Type type, Vector3i position, IWorldEditBlockData blockData, UserSession session)
 		{
+			if (blockData == null) { return; }
 			WorldEditWorldObjectBlockData worldObjectBlockData = (WorldEditWorldObjectBlockData)blockData;
-			ClearWorldObjectPlace(worldObjectBlockData.WorldObjectType, position, worldObjectBlockData.Rotation);
+			ClearWorldObjectPlace(worldObjectBlockData.WorldObjectType, position, worldObjectBlockData.Rotation, session);
 
 			WorldObject worldObject = null;
-			try { worldObject = WorldObjectManager.ForceAdd(worldObjectBlockData.WorldObjectType, player.User, position, worldObjectBlockData.Rotation, true); }
+			try { worldObject = WorldObjectManager.ForceAdd(worldObjectBlockData.WorldObjectType, session.User, position, worldObjectBlockData.Rotation, true); }
 			catch (Exception e)
 			{
-				Log.WriteLine(new LocString(e.ToString()));
+				Log.WriteException(e);
 			}
 			if (worldObject == null)
 			{
-				Log.WriteLine(Localizer.Do($"Unable spawn WorldObject {worldObjectBlockData.WorldObjectType} at {position}"));
+				Log.WriteErrorLineLoc($"Unable spawn WorldObject {worldObjectBlockData.WorldObjectType} at {position}");
 				return;
 			}
 			if (worldObject.HasComponent<StorageComponent>() && worldObjectBlockData.Components.ContainsKey(typeof(StorageComponent)))
@@ -100,7 +99,7 @@ namespace Eco.Mods.WorldEdit
 					Result result = storageComponent.Inventory.TryAddItems(stack.ItemType, stack.Quantity);
 					if (result.Failed)
 					{
-						player.ErrorLocStr(result.Message.Trim());
+						session.Player.ErrorLocStr(result.Message.Trim());
 						try { storageComponent.Inventory.AddItems(stack.GetItemStack()); } catch (InvalidOperationException) { /*Already show error to user*/ }
 					}
 				}
@@ -114,6 +113,7 @@ namespace Eco.Mods.WorldEdit
 
 		public static void RestorePlantBlock(Type type, Vector3i position, IWorldEditBlockData blockData)
 		{
+			if (blockData == null) { return; }
 			WorldEditPlantBlockData plantBlockData = (WorldEditPlantBlockData)blockData;
 			PlantSpecies plantSpecies = null;
 			try { plantSpecies = EcoSim.AllSpecies.OfType<PlantSpecies>().First(species => species.GetType() == plantBlockData.PlantType); }
@@ -156,7 +156,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		private static void ClearWorldObjectPlace(Type worldObjectType, Vector3i position, Quaternion rotation)
+		private static void ClearWorldObjectPlace(Type worldObjectType, Vector3i position, Quaternion rotation, UserSession session)
 		{
 			List<BlockOccupancy> blockOccupancies = WorldObject.GetOccupancy(worldObjectType);
 			if (!blockOccupancies.Any(x => x.BlockType != null)) return;
@@ -165,6 +165,7 @@ namespace Eco.Mods.WorldEdit
 				if (blockOccupancy.BlockType != null)
 				{
 					Vector3i worldPos = position + rotation.RotateVector(blockOccupancy.Offset).XYZi;
+					if (!session.ExecutingCommand.PerformingUndo) session.ExecutingCommand.AddBlockChangedEntry(worldPos); //Do not record changes when doing undo
 					ClearPosition(worldPos);
 				}
 			}
