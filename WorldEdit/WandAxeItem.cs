@@ -36,7 +36,7 @@
 				if (context.BlockPosition == null || !context.BlockPosition.HasValue)
 					return InteractResult.Success;
 
-				var pos = context.BlockPosition.Value;
+				Vector3i pos = context.BlockPosition.Value;
 
 				pos.X = pos.X < 0 ? pos.X + Shared.Voxel.World.VoxelSize.X : pos.X;
 				pos.Z = pos.Z < 0 ? pos.Z + Shared.Voxel.World.VoxelSize.Z : pos.Z;
@@ -64,7 +64,7 @@
 				if (context.BlockPosition == null || !context.BlockPosition.HasValue)
 					return InteractResult.Success;
 
-				var pos = context.BlockPosition.Value;
+				Vector3i pos = context.BlockPosition.Value;
 
 				pos.X = pos.X < 0 ? pos.X + Shared.Voxel.World.VoxelSize.X : pos.X;
 				pos.Z = pos.Z < 0 ? pos.Z + Shared.Voxel.World.VoxelSize.Z : pos.Z;

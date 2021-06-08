@@ -480,7 +480,7 @@ namespace Eco.Mods.WorldEdit
 				pos.Z = pos.Z % Shared.Voxel.World.VoxelSize.Z;
 
 				UserSession session = WorldEditManager.GetUserSession(user);
-				session.SetFirstPosition((Vector3i?)pos);
+				session.SetFirstPosition(pos.Round);
 
 				user.Player.MsgLoc($"First Position set to ({pos.x}, {pos.y}, {pos.z})");
 			}
@@ -503,7 +503,7 @@ namespace Eco.Mods.WorldEdit
 				pos.Z = pos.Z % Shared.Voxel.World.VoxelSize.Z;
 
 				UserSession session = WorldEditManager.GetUserSession(user);
-				session.SetSecondPosition((Vector3i?)pos);
+				session.SetSecondPosition(pos.Round);
 
 				user.Player.MsgLoc($"Second Position set to ({pos.x}, {pos.y}, {pos.z})");
 			}
@@ -519,8 +519,7 @@ namespace Eco.Mods.WorldEdit
 			try
 			{
 				UserSession session = WorldEditManager.GetUserSession(user);
-				session.SetFirstPosition(null);
-				session.SetSecondPosition(null);
+				session.ResetSelection();
 
 				user.Player.MsgLoc($"WorldEdit: Positions reset");
 			}

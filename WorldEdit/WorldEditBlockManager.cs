@@ -136,6 +136,8 @@ namespace Eco.Mods.WorldEdit
 		{
 			Block block = World.GetBlock(position);
 
+			Console.WriteLine($"ClearPosition {block.GetType()}");
+
 			if (block is EmptyBlock) return;
 
 			switch (block)

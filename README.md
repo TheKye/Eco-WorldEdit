@@ -51,10 +51,10 @@ In 9.0 the block call is AshlarLimestoneWallBlock - We have auto included the Bl
 /copy | Copies a selection.
 /paste | Pastes a copied selection from clipboard.
 /rotate <degree> | Rotate the clipboard
-/undo | Revert the last command. Can undo up to 10 commands
+/undo <count> | Revert the last command. Can undo up to 10 commands. If count provided as number undo the number of commands
 /import <name> | Import a schematic file into clipboard
 /export <name> | Export the clipboard into a file
-/distr | Show information about current selection
+/distr <out> | Show information about current selection. Optional <out> parameter can be brief or detail (short: b or d)
 /setpos1 | Set first position to where you are standing
 /setpos2 | Set second position to where you are standing
 /reset | Resets First and Second positions

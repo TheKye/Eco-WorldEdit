@@ -8,7 +8,6 @@ using Eco.Gameplay.Plants;
 using Eco.Gameplay.Players;
 using Eco.Gameplay.Systems.TextLinks;
 using Eco.Gameplay.Systems.Tooltip;
-using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared.Localization;
 using Eco.Shared.Math;
@@ -27,54 +26,48 @@ namespace Eco.Mods.WorldEdit.Commands
 
 		public DistrCommand(User user, string type) : base(user)
 		{
-			if (!this.UserSession.FirstPos.HasValue || !this.UserSession.SecondPos.HasValue) { throw new WorldEditCommandException("Please set both points first!"); }
+			if (!this.UserSession.Selection.IsSet()) throw new WorldEditCommandException("Please set both points first!");
 			this.outputType = type;
 		}
 
 		protected override void Execute()
 		{
-			SortedVectorPair vectors = (SortedVectorPair)WorldEditUtils.GetSortedVectors(this.UserSession.FirstPos.Value, this.UserSession.SecondPos.Value);
+			WorldRange range = this.UserSession.Selection;
+			range.Fix(Shared.Voxel.World.VoxelSize);
+
 			Dictionary<object, long> blocks = new Dictionary<object, long>();
 
-			for (int x = vectors.Lower.X; x != vectors.Higher.X; x = (x + 1) % Shared.Voxel.World.VoxelSize.X)
+			foreach (Vector3i pos in range.XYZIterInc())
 			{
-				for (int y = vectors.Lower.Y; y < vectors.Higher.Y; y++)
+				Block block = Eco.World.World.GetBlock(pos);
+				Type blockType = null;
+				switch (block)
 				{
-					for (int z = vectors.Lower.Z; z != vectors.Higher.Z; z = (z + 1) % Shared.Voxel.World.VoxelSize.Z)
+					case PlantBlock _:
+					case TreeBlock _:
+						Plant plant = EcoSim.PlantSim.GetPlant(pos);
+						if (plant != null && plant.Position.Equals(pos)) blockType = plant.Species.GetType();
+						break;
+					case WorldObjectBlock worldObjectBlock:
+						WorldObject worldObject = worldObjectBlock.WorldObjectHandle.Object;
+						if (worldObject.Position3i.Equals(pos)) blockType = worldObject.GetType();
+						break;
+					default:
+						blockType = block.GetType();
+						break;
+				}
+				if (blockType != null)
+				{
+					if (this.outputType.Equals("brief"))
 					{
-						//                 Console.WriteLine($"{x} {y} {z}");
-						Vector3i pos = new Vector3i(x, y, z);
-						Block block = Eco.World.World.GetBlock(pos);
-						Type blockType = null;
-						switch (block)
-						{
-							case PlantBlock _:
-							case TreeBlock _:
-								Plant plant = EcoSim.PlantSim.GetPlant(pos);
-								if (plant != null && plant.Position.Equals(pos)) blockType = plant.Species.GetType();
-								break;
-							case WorldObjectBlock worldObjectBlock:
-								WorldObject worldObject = worldObjectBlock.WorldObjectHandle.Object;
-								if (worldObject.Position3i.Equals(pos)) blockType = worldObject.GetType();
-								break;
-							default:
-								blockType = block.GetType();
-								break;
-						}
-						if (blockType != null)
-						{
-							if (this.outputType.Equals("brief"))
-							{
-								string name = this.GetBlockFancyName(blockType);
-								blocks.TryGetValue(name, out long count);
-								blocks[name] = count + 1;
-							}
-							else
-							{
-								blocks.TryGetValue(blockType, out long count);
-								blocks[blockType] = count + 1;
-							}
-						}
+						string name = this.GetBlockFancyName(blockType);
+						blocks.TryGetValue(name, out long count);
+						blocks[name] = count + 1;
+					}
+					else
+					{
+						blocks.TryGetValue(blockType, out long count);
+						blocks[blockType] = count + 1;
 					}
 				}
 			}
