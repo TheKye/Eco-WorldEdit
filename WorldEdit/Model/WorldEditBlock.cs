@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Eco.Core.IoC;
 using Eco.Gameplay.Blocks;
 using Eco.Gameplay.Objects;
 using Eco.Gameplay.Plants;
@@ -66,6 +67,14 @@ namespace Eco.Mods.WorldEdit.Model
 					if (BlockContainerManager.Obj.IsBlockContained(originalPosition))
 					{
 						worldEditBlock.BlockType = typeof(EmptyBlock);
+						WorldObject obj = ServiceHolder<IWorldObjectManager>.Obj.All.Where(x => x.Position3i.Equals(originalPosition)).FirstOrDefault();
+						if (obj != null)
+						{
+							worldEditBlock.BlockType = typeof(WorldObjectBlock);
+							worldEditBlock.BlockData = WorldEditWorldObjectBlockData.From(obj);
+							relativePosition = obj.Position3i - offsetPosition;
+							worldEditBlock.Position = relativePosition;
+						}
 					}
 					break;
 			}

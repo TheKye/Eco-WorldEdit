@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Eco.Core.IoC;
 using Eco.Core.Utils;
+using Eco.Gameplay.Blocks;
 using Eco.Gameplay.Components;
 using Eco.Gameplay.Objects;
 using Eco.Gameplay.Plants;
@@ -136,8 +138,6 @@ namespace Eco.Mods.WorldEdit
 		{
 			Block block = World.GetBlock(position);
 
-			Console.WriteLine($"ClearPosition {block.GetType()}");
-
 			if (block is EmptyBlock) return;
 
 			switch (block)
@@ -153,7 +153,15 @@ namespace Eco.Mods.WorldEdit
 					if (plant != null) { EcoSim.PlantSim.DestroyPlant(plant, DeathType.DivineIntervention, true); }
 					break;
 				default:
-					World.DeleteBlock(position);
+					if (BlockContainerManager.Obj.IsBlockContained(position))
+					{
+						WorldObject worldObject = ServiceHolder<IWorldObjectManager>.Obj.All.Where(x => x.Position3i.Equals(position)).FirstOrDefault();
+						if (worldObject != null) worldObject.Destroy();
+					}
+					else
+					{
+						World.DeleteBlock(position);
+					}
 					break;
 			}
 		}
