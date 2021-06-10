@@ -11,11 +11,11 @@ namespace Eco.Mods.WorldEdit.Commands
 		public ImportCommand(User user, string fileName) : base(user)
 		{
 			this.fileName = WorldEditManager.GetSchematicFileName(fileName);
-			if (!File.Exists(this.fileName)) throw new WorldEditCommandException($"Schematic file {fileName} not found!");
 		}
 
 		protected override void Execute()
 		{
+			if (!File.Exists(this.fileName)) throw new WorldEditCommandException($"Schematic file {fileName} not found!");
 			using (FileStream stream = File.OpenRead(this.fileName))
 			{
 				WorldEditSerializer serializer = new WorldEditSerializer();

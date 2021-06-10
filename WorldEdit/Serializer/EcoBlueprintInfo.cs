@@ -1,15 +1,45 @@
 ﻿using System;
+using System.IO;
+using Eco.Shared.Utils;
+using Newtonsoft.Json;
 
 namespace Eco.Mods.WorldEdit.Serializer
 {
 	internal struct EcoBlueprintInfo
 	{
-		public float Version { get; private set; }
-		public string EcoVersion { get; private set; }
-		public AuthorInformation Author { get; private set; }
-		public DateTime FileCreatedDate { get; private set; }
-		public DateTime FileChangedDate { get; private set; }
-		public long FileSize { get; private set; }
+		[JsonProperty("Version")] public float Version { get; internal set; }
+		[JsonProperty("EcoVersion")] public string EcoVersion { get; internal set; }
+		[JsonProperty("Author")] public AuthorInformation Author { get; internal set; }
+		[JsonIgnore] public DateTime FileCreatedDate { get; private set; }
+		[JsonIgnore] public DateTime FileChangedDate { get; private set; }
+		[JsonIgnore] public long FileSize { get; private set; }
+		[JsonIgnore] public string FileName { get; private set; }
 
+		public static EcoBlueprintInfo FromFile(string file)
+		{
+			EcoBlueprintInfo blueprintInfo = default;
+			FileInfo info = new FileInfo(file);
+
+			if (!info.Exists) { throw new FileNotFoundException("File not found", file); }
+			Log.Debug($"Reading: {file}");
+			using (FileStream stream = File.OpenRead(file))
+			{
+				blueprintInfo = WorldEditSerializer.Deserialize<EcoBlueprintInfo>(stream);
+				blueprintInfo.FileCreatedDate = info.CreationTime;
+				blueprintInfo.FileChangedDate = info.LastWriteTime;
+				blueprintInfo.FileSize = info.Length;
+				blueprintInfo.FileName = info.Name;
+			}
+			Log.Debug($"Done");
+			return blueprintInfo;
+		}
+
+		[JsonConstructor]
+		public EcoBlueprintInfo(float version, string ecoVersion, AuthorInformation author) : this()
+		{
+			this.Version = version;
+			this.EcoVersion = ecoVersion;
+			this.Author = author ?? AuthorInformation.Unowned();
+		}
 	}
 }

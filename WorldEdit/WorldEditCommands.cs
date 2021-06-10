@@ -17,7 +17,7 @@ namespace Eco.Mods.WorldEdit
 		{
 			try
 			{
-				user.Inventory.AddItems(WorldEditManager.getWandItemStack());
+				user.Inventory.AddItems(WorldEditManager.GetWandItemStack());
 			}
 			catch (Exception e)
 			{
@@ -30,7 +30,7 @@ namespace Eco.Mods.WorldEdit
 		{
 			try
 			{
-				user.Inventory.TryRemoveItems(WorldEditManager.getWandItemStack());
+				user.Inventory.TryRemoveItems(WorldEditManager.GetWandItemStack());
 			}
 			catch (Exception e)
 			{
@@ -387,24 +387,34 @@ namespace Eco.Mods.WorldEdit
 		}
 
 		[ChatSubCommand("WorldEdit", "import will import a schematic that you or someone else has exported", "import", ChatAuthorizationLevel.Admin)]
-		public static void Import(User user, string fileName)
+		public static void Import(User user, string fileName = null)
 		{
 			try
 			{
-				WorldEditCommand command = new ImportCommand(user, fileName);
-				if (command.Invoke())
+				WorldEditCommand command;
+
+				if (!string.IsNullOrEmpty(fileName))
 				{
-					user.Player.MsgLoc($"Import done in {command.ElapsedMilliseconds}ms. Use /paste");
+					command = new ImportCommand(user, fileName);
+					if (command.Invoke())
+					{
+						user.Player.MsgLoc($"Import done in {command.ElapsedMilliseconds}ms. Use /paste");
+					}
+					else
+					{
+						new PrintBlueprintListCommand(user).Invoke();
+					}
+				}
+				else
+				{
+					new PrintBlueprintListCommand(user).Invoke();
 				}
 			}
 			catch (WorldEditCommandException e)
 			{
 				user.Player.ErrorLocStr(e.Message);
 			}
-			catch (Exception e)
-			{
-				Log.WriteError(Localizer.Do($"{e}"));
-			}
+			catch (Exception e) { Log.WriteException(e); }
 		}
 
 		[ChatSubCommand("WorldEdit", "distr will give you a detailed list of all items in your selected area", "distr", ChatAuthorizationLevel.Admin)]

@@ -107,7 +107,7 @@ namespace Eco.Mods.WorldEdit.Commands
 				decimal percent = Math.Round((entry.Value / totalBlocks) * 100, 2);
 
 				sb.Append(this.outputType.Equals("detail") ? this.GetBlockFancyName((Type)entry.Key) : (string)entry.Key);
-				sb.Append(Text.Pos(300, Text.Info(Text.Int(entry.Value))));
+				sb.Append(Text.Pos(400, Text.Info(Text.Int(entry.Value))));
 				sb.Append($"({percent}%)".PadLeft(10));
 				if (this.outputType.Equals("detail")) sb.Append(Text.Pos(500, $"[{Localizer.DoStr(((Type)entry.Key).Name)}]"));
 				sb.AppendLine();
@@ -115,7 +115,11 @@ namespace Eco.Mods.WorldEdit.Commands
 				//string nameOfBlock = entry.Key[(entry.Key.LastIndexOf(".") + 1)..];
 				//msg += $"<ecoicon name='{nameOfBlock}'></ecoicon>{entry.Value,-6} {percent,-6} {Localizer.DoStr(nameOfBlock)} \n";
 			}
-			if (!string.IsNullOrEmpty(this.fileName)) { this.OutputToFile(sb.ToString()); }
+			if (!string.IsNullOrEmpty(this.fileName))
+			{
+				this.OutputToFile(sb.ToString());
+				this.UserSession.Player.MsgLoc($"Report saved into file with name <{WorldEditManager.SanitizeFileName(this.fileName)}.txt>");
+			}
 			this.UserSession.Player.OpenInfoPanel(Localizer.Do($"WorldEdit Blocks Report"), sb.ToString(), "WorldEditDistr");
 		}
 
@@ -124,6 +128,7 @@ namespace Eco.Mods.WorldEdit.Commands
 			data = data.Replace("<pos=300>", "	");
 			data = Regex.Replace(data, "<.*?>", String.Empty);
 
+			if (!Directory.Exists(EcoWorldEdit.SchematicDirectoryPath)) { Directory.CreateDirectory(EcoWorldEdit.SchematicDirectoryPath); }
 			string file = WorldEditManager.GetSchematicFileName(this.fileName, ".txt");
 			File.WriteAllText(file, data);
 		}
