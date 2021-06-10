@@ -21,13 +21,14 @@ namespace Eco.Mods.WorldEdit.Commands
 			WorldRange range = this.UserSession.Selection;
 			range.Fix(Shared.Voxel.World.VoxelSize);
 
-			range.ForEachInc(pos =>
+			void DoAction(Vector3i pos)
 			{
 				if (WorldEditBlockManager.IsImpenetrable(pos)) return;
 				this.AddBlockChangedEntry(pos);
 				WorldEditBlockManager.SetBlock(blockType, pos);
 				this.BlocksChanged++;
-			});
+			}
+			range.ForEachInc(DoAction);
 		}
 	}
 }

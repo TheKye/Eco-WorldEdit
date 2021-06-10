@@ -26,12 +26,13 @@ namespace Eco.Mods.WorldEdit.Commands
 
 			List<WorldEditBlock> blocks = new List<WorldEditBlock>();
 
-			range.ForEachInc(pos =>
+			void DoAction(Vector3i pos)
 			{
 				if (WorldEditBlockManager.IsImpenetrable(pos)) return;
 				WorldEditBlock sourceBlock = WorldEditBlock.Create(Eco.World.World.GetBlock(pos), pos);
 				blocks.Add(sourceBlock);
-			});
+			}
+			range.ForEachInc(DoAction);
 
 			Vector3i directionOffset = this.direction.ToVec();
 			switch (this.direction)

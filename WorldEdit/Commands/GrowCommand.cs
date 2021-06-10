@@ -3,6 +3,7 @@ using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared.Math;
 using Eco.World;
+using Eco.World.Blocks;
 
 namespace Eco.Mods.WorldEdit.Commands
 {
@@ -18,18 +19,19 @@ namespace Eco.Mods.WorldEdit.Commands
 			WorldRange range = this.UserSession.Selection;
 			range.Fix(Shared.Voxel.World.VoxelSize);
 
-			range.ForEachInc(pos =>
+			void DoAction(Vector3i pos)
 			{
 				Block block = Eco.World.World.GetBlock(pos);
 
-				if (block.GetType() == typeof(PlantBlock))
+				if (block.GetType() == typeof(PlantBlock) || block.GetType() == typeof(TreeBlock))
 				{
 					var pb = PlantBlock.GetPlant(pos);
 					pb.GrowthPercent = 1;
 					pb.Tended = true;
 					pb.Tick();
 				}
-			});
+			}
+			range.ForEachInc(DoAction);
 		}
 	}
 }

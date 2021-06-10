@@ -28,15 +28,12 @@ namespace Eco.Mods.WorldEdit.Commands
 			WorldRange range = this.UserSession.Selection;
 			range.Fix(Shared.Voxel.World.VoxelSize);
 
-			range.ForEachInc(pos =>
-			{
-				if (WorldEditBlockManager.IsImpenetrable(pos)) return;
-				ReplaceBlock(pos);
-			});
+			range.ForEachInc(ReplaceBlock);
 		}
 
 		private void ReplaceBlock(Vector3i pos)
 		{
+			if (WorldEditBlockManager.IsImpenetrable(pos)) return;
 			Block block = Eco.World.World.GetBlock(pos);
 
 			if (block == null) return;

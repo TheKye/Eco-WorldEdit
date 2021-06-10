@@ -20,10 +20,11 @@ namespace Eco.Mods.WorldEdit.Commands
 			Vector3i playerPos = this.UserSession.Player.Position.Round;
 
 			this.UserSession.Clipboard.Clear();
-			range.ForEachInc(pos =>
+			void DoAction(Vector3i pos)
 			{
 				this.UserSession.Clipboard.Add(WorldEditBlock.Create(Eco.World.World.GetBlock(pos), pos, playerPos));
-			});
+			}
+			range.ForEachInc(DoAction);
 			this.UserSession.AuthorInfo.MarkDirty();
 		}
 	}

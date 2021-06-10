@@ -28,14 +28,15 @@ namespace Eco.Mods.WorldEdit.Commands
 			Vector3i offset = this.direction.ToVec() * this.amount;
 			Stack<WorldEditBlock> blocks = new Stack<WorldEditBlock>();
 
-			range.ForEachInc(pos =>
+			void DoAction(Vector3i pos)
 			{
 				if (WorldEditBlockManager.IsImpenetrable(pos)) return;
 				WorldEditBlock sourceBlock = WorldEditBlock.Create(Eco.World.World.GetBlock(pos), pos);
 				blocks.Push(sourceBlock);
 				this.AddBlockChangedEntry(pos);
 				WorldEditBlockManager.SetBlock(typeof(EmptyBlock), pos);
-			});
+			}
+			range.ForEachInc(DoAction);
 
 			while (blocks.TryPop(out WorldEditBlock sourceBlock))
 			{

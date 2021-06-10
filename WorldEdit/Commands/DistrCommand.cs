@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using Eco.Core.IoC;
+using Eco.Gameplay.Blocks;
 using Eco.Gameplay.Items;
 using Eco.Gameplay.Objects;
 using Eco.Gameplay.Plants;
@@ -23,11 +27,13 @@ namespace Eco.Mods.WorldEdit.Commands
 	internal class DistrCommand : WorldEditCommand
 	{
 		private string outputType;
+		private string fileName;
 
-		public DistrCommand(User user, string type) : base(user)
+		public DistrCommand(User user, string type, string fileName) : base(user)
 		{
 			if (!this.UserSession.Selection.IsSet()) throw new WorldEditCommandException("Please set both points first!");
 			this.outputType = type;
+			this.fileName = fileName;
 		}
 
 		protected override void Execute()
@@ -36,6 +42,7 @@ namespace Eco.Mods.WorldEdit.Commands
 			range.Fix(Shared.Voxel.World.VoxelSize);
 
 			Dictionary<object, long> blocks = new Dictionary<object, long>();
+			long emptyBlocks = 0;
 
 			foreach (Vector3i pos in range.XYZIterInc())
 			{
@@ -53,11 +60,20 @@ namespace Eco.Mods.WorldEdit.Commands
 						if (worldObject.Position3i.Equals(pos)) blockType = worldObject.GetType();
 						break;
 					default:
-						blockType = block.GetType();
+						if (BlockContainerManager.Obj.IsBlockContained(pos))
+						{
+							WorldObject obj = ServiceHolder<IWorldObjectManager>.Obj.All.Where(x => x.Position3i.Equals(pos)).FirstOrDefault();
+							if (obj != null) blockType = obj.GetType();
+						}
+						else
+						{
+							blockType = block.GetType();
+						}
 						break;
 				}
 				if (blockType != null)
 				{
+					if (blockType == typeof(EmptyBlock)) { emptyBlocks++; continue; }
 					if (this.outputType.Equals("brief"))
 					{
 						string name = this.GetBlockFancyName(blockType);
@@ -75,21 +91,41 @@ namespace Eco.Mods.WorldEdit.Commands
 			decimal totalBlocks = blocks.Values.Sum(); // (vectors.Higher.X - vectors.Lower.X) * (vectors.Higher.Y - vectors.Lower.Y) * (vectors.Higher.Z - vectors.Lower.Z);
 
 			StringBuilder sb = new StringBuilder();
-			sb.AppendLineLoc($"Total blocks: {totalBlocks}");
+			sb.AppendLine(TextLoc.Header(Localizer.DoStr("Selection Info")));
+			sb.AppendLineLoc($"Region: {Text.Location(this.UserSession.Selection.min)} - {Text.Location(this.UserSession.Selection.max)}");
+			sb.Append(Localizer.DoStr("Width:").ToString().PadRight(8)).AppendLine(Text.PluralLocStr("block", "blocks", range.WidthInc));
+			sb.Append(Localizer.DoStr("Height:").ToString().PadRight(8)).AppendLine(Text.PluralLocStr("block", "blocks", range.HeightInc));
+			sb.Append(Localizer.DoStr("Length:").ToString().PadRight(8)).AppendLine(Text.PluralLocStr("block", "blocks", range.LengthInc));
+			sb.Append(Localizer.DoStr("Volume:").ToString().PadRight(8)).AppendLine(Text.PluralLocStr("block", "blocks", range.VolumeInc));
+			sb.Append(Localizer.DoStr("Area:").ToString().PadRight(8)).AppendLine(Text.PluralLocStr("block", "blocks", range.WidthInc * range.LengthInc));
+			sb.AppendLineLoc($"Empty blocks: {emptyBlocks,8}");
+			sb.AppendLineLoc($"Total blocks: {totalBlocks,8}");
+
+			sb.AppendLine().AppendLine(TextLoc.Header(Localizer.DoStr("Block List")));
 			foreach (KeyValuePair<object, long> entry in blocks)
 			{
 				decimal percent = Math.Round((entry.Value / totalBlocks) * 100, 2);
 
 				sb.Append(this.outputType.Equals("detail") ? this.GetBlockFancyName((Type)entry.Key) : (string)entry.Key);
 				sb.Append(Text.Pos(300, Text.Info(Text.Int(entry.Value))));
-				sb.Append($"({percent}%)".PadLeft(8));
+				sb.Append($"({percent}%)".PadLeft(10));
 				if (this.outputType.Equals("detail")) sb.Append(Text.Pos(500, $"[{Localizer.DoStr(((Type)entry.Key).Name)}]"));
 				sb.AppendLine();
 				//string percent = Math.Round((entry.Value / totalBlocks) * 100, 2).ToString() + "%";
 				//string nameOfBlock = entry.Key[(entry.Key.LastIndexOf(".") + 1)..];
 				//msg += $"<ecoicon name='{nameOfBlock}'></ecoicon>{entry.Value,-6} {percent,-6} {Localizer.DoStr(nameOfBlock)} \n";
 			}
+			if (!string.IsNullOrEmpty(this.fileName)) { this.OutputToFile(sb.ToString()); }
 			this.UserSession.Player.OpenInfoPanel(Localizer.Do($"WorldEdit Blocks Report"), sb.ToString(), "WorldEditDistr");
+		}
+
+		private void OutputToFile(string data)
+		{
+			data = data.Replace("<pos=300>", "	");
+			data = Regex.Replace(data, "<.*?>", String.Empty);
+
+			string file = WorldEditManager.GetSchematicFileName(this.fileName, ".txt");
+			File.WriteAllText(file, data);
 		}
 
 		private LocString GetBlockFancyName(Type blockType)

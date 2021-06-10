@@ -37,10 +37,10 @@ namespace Eco.Mods.WorldEdit
 			return session;
 		}
 
-		public static string GetSchematicFileName(string name)
+		public static string GetSchematicFileName(string name, string extension = ".ecobp")
 		{
 			string fileName = new string(name.Where(x => !Path.GetInvalidFileNameChars().Contains(x)).ToArray());
-			return Path.Combine(EcoWorldEdit.SchematicDirectoryPath, fileName + ".ecobp");
+			return Path.Combine(EcoWorldEdit.SchematicDirectoryPath, fileName + extension);
 		}
 	}
 }
