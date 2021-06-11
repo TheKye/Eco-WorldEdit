@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Eco.Shared.Utils;
 using Newtonsoft.Json;
 
 namespace Eco.Mods.WorldEdit.Serializer
@@ -21,7 +20,6 @@ namespace Eco.Mods.WorldEdit.Serializer
 			FileInfo info = new FileInfo(file);
 
 			if (!info.Exists) { throw new FileNotFoundException("File not found", file); }
-			Log.Debug($"Reading: {file}");
 			using (FileStream stream = File.OpenRead(file))
 			{
 				blueprintInfo = WorldEditSerializer.Deserialize<EcoBlueprintInfo>(stream);
@@ -30,7 +28,6 @@ namespace Eco.Mods.WorldEdit.Serializer
 				blueprintInfo.FileSize = info.Length;
 				blueprintInfo.FileName = info.Name;
 			}
-			Log.Debug($"Done");
 			return blueprintInfo;
 		}
 

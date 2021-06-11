@@ -29,7 +29,7 @@ namespace Eco.Mods.WorldEdit.Commands
 				sb.Append(info.FileName)
 				.Append(Text.Pos(300, $"ECO {info.EcoVersion} ({info.Version.ToString("0.00", CultureInfo.InvariantCulture)})"))
 				.Append(Text.Pos(500, (info.FileSize / 1024).ToString() + " KB"))
-				.Append(Text.Pos(700, info.FileCreatedDate.ToString()))
+				.Append(Text.Pos(700, info.FileChangedDate.ToString()))
 				.AppendLine(Text.Pos(950, info.Author.Name));
 			}
 

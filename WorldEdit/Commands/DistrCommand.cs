@@ -111,9 +111,6 @@ namespace Eco.Mods.WorldEdit.Commands
 				sb.Append($"({percent}%)".PadLeft(10));
 				if (this.outputType.Equals("detail")) sb.Append(Text.Pos(500, $"[{Localizer.DoStr(((Type)entry.Key).Name)}]"));
 				sb.AppendLine();
-				//string percent = Math.Round((entry.Value / totalBlocks) * 100, 2).ToString() + "%";
-				//string nameOfBlock = entry.Key[(entry.Key.LastIndexOf(".") + 1)..];
-				//msg += $"<ecoicon name='{nameOfBlock}'></ecoicon>{entry.Value,-6} {percent,-6} {Localizer.DoStr(nameOfBlock)} \n";
 			}
 			if (!string.IsNullOrEmpty(this.fileName))
 			{

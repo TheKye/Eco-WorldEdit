@@ -48,7 +48,6 @@ namespace Eco.Mods.WorldEdit
 			string[] toRemove = BlueprintList.Keys.Where(k => !list.Contains(k)).ToArray();
 			foreach (string file in toRemove)
 			{
-				Log.Debug($"Removed blueprint {file}");
 				BlueprintList.Remove(file);
 			}
 
@@ -64,7 +63,6 @@ namespace Eco.Mods.WorldEdit
 							existInfo.FileChangedDate != info.LastWriteTime ||
 							existInfo.FileSize != info.Length)
 						{
-							Log.Debug($"Updated blueprint {file}");
 							BlueprintList[file] = EcoBlueprintInfo.FromFile(file);
 						}
 					}
