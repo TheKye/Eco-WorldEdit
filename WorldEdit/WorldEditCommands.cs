@@ -133,11 +133,11 @@ namespace Eco.Mods.WorldEdit
 		}
 
 		[ChatSubCommand("WorldEdit", "/stack", "Stack ", ChatAuthorizationLevel.Admin)]
-		public static void Stack(User user, string directionAndAmount = "1")
+		public static void Stack(User user, string directionAndAmount = "1", int offset = 0)
 		{
 			try
 			{
-				StackCommand command = new StackCommand(user, directionAndAmount);
+				StackCommand command = new StackCommand(user, directionAndAmount, offset);
 				if (command.Invoke())
 				{
 					user.Player.MsgLoc($"{command.BlocksChanged} blocks changed.");

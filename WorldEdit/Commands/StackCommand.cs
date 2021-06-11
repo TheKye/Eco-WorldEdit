@@ -10,13 +10,15 @@ namespace Eco.Mods.WorldEdit.Commands
 	{
 		public readonly Direction direction;
 		public readonly int amount;
+		private readonly int offset;
 
-		public StackCommand(User user, string args) : base(user)
+		public StackCommand(User user, string args, int offset) : base(user)
 		{
 			if (!this.UserSession.Selection.IsSet()) throw new WorldEditCommandException("Please set both points first!");
 
 			this.direction = WorldEditUtils.ParseDirectionAndAmountArgs(user, args, out this.amount);
 			if (this.direction == Direction.Unknown || this.direction == Direction.None) { throw new WorldEditCommandException("Unable to determine direction"); }
+			this.offset = offset;
 		}
 
 		protected override void Execute(WorldRange selection)
@@ -38,15 +40,15 @@ namespace Eco.Mods.WorldEdit.Commands
 			{
 				case Direction.Up:
 				case Direction.Down:
-					directionOffset *= selection.HeightInc;
+					directionOffset *= selection.HeightInc + this.offset;
 					break;
 				case Direction.Left:
 				case Direction.Right:
-					directionOffset *= selection.WidthInc;
+					directionOffset *= selection.WidthInc + this.offset;
 					break;
 				case Direction.Forward:
 				case Direction.Back:
-					directionOffset *= selection.LengthInc;
+					directionOffset *= selection.LengthInc + this.offset;
 					break;
 			}
 
