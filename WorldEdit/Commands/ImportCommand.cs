@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Serializer;
+using Eco.Shared.Math;
 
 namespace Eco.Mods.WorldEdit.Commands
 {
@@ -13,7 +14,7 @@ namespace Eco.Mods.WorldEdit.Commands
 			this.fileName = WorldEditManager.GetSchematicFileName(fileName);
 		}
 
-		protected override void Execute()
+		protected override void Execute(WorldRange selection)
 		{
 			if (!File.Exists(this.fileName)) throw new WorldEditCommandException($"Schematic file {fileName} not found!");
 			using (FileStream stream = File.OpenRead(this.fileName))

@@ -23,12 +23,10 @@ namespace Eco.Mods.WorldEdit.Commands
 			}
 		}
 
-		protected override void Execute()
+		protected override void Execute(WorldRange selection)
 		{
-			WorldRange range = this.UserSession.Selection;
-			range.Fix(Shared.Voxel.World.VoxelSize);
-
-			range.ForEachInc(ReplaceBlock);
+			selection.Fix(Shared.Voxel.World.VoxelSize);
+			selection.ForEachInc(ReplaceBlock);
 		}
 
 		private void ReplaceBlock(Vector3i pos)

@@ -40,14 +40,15 @@ namespace Eco.Mods.WorldEdit.Commands
 			if (this.UserSession.ExecutingCommand != null && this.UserSession.ExecutingCommand.IsRunning) throw new WorldEditCommandException("Another command still executing"); //TODO: Probably need to rework that and impliment aborting
 		}
 
-		public bool Invoke()
+		public bool Invoke() => this.Invoke(this.UserSession.Selection);
+		public bool Invoke(WorldRange selection)
 		{
 			bool result = false;
 			try
 			{
 				this.UserSession.ExecutingCommand = this;
 				this.timer.Start();
-				this.Execute();
+				this.Execute(selection);
 				this.timer.Stop();
 				if (this.affectedBlocks != null)
 				{
@@ -108,6 +109,6 @@ namespace Eco.Mods.WorldEdit.Commands
 			return result;
 		}
 
-		protected abstract void Execute();
+		protected abstract void Execute(WorldRange selection);
 	}
 }

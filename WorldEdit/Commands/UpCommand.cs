@@ -13,7 +13,7 @@ namespace Eco.Mods.WorldEdit.Commands
 			this.count = count;
 		}
 
-		protected override void Execute()
+		protected override void Execute(WorldRange selection)
 		{
 			Vector3 pos = this.UserSession.Player.Position;
 			var newpos = new Vector3i((int)pos.X, (int)pos.Y + this.count, (int)pos.Z);

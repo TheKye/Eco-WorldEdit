@@ -19,10 +19,9 @@ namespace Eco.Mods.WorldEdit.Commands
 			if (this.direction == Direction.Unknown || this.direction == Direction.None) { throw new WorldEditCommandException("Unable to determine direction"); }
 		}
 
-		protected override void Execute()
+		protected override void Execute(WorldRange selection)
 		{
-			WorldRange range = this.UserSession.Selection;
-			range.Fix(Shared.Voxel.World.VoxelSize);
+			selection.Fix(Shared.Voxel.World.VoxelSize);
 
 			List<WorldEditBlock> blocks = new List<WorldEditBlock>();
 
@@ -32,22 +31,22 @@ namespace Eco.Mods.WorldEdit.Commands
 				WorldEditBlock sourceBlock = WorldEditBlock.Create(Eco.World.World.GetBlock(pos), pos);
 				blocks.Add(sourceBlock);
 			}
-			range.ForEachInc(DoAction);
+			selection.ForEachInc(DoAction);
 
 			Vector3i directionOffset = this.direction.ToVec();
 			switch (this.direction)
 			{
 				case Direction.Up:
 				case Direction.Down:
-					directionOffset *= range.HeightInc;
+					directionOffset *= selection.HeightInc;
 					break;
 				case Direction.Left:
 				case Direction.Right:
-					directionOffset *= range.WidthInc;
+					directionOffset *= selection.WidthInc;
 					break;
 				case Direction.Forward:
 				case Direction.Back:
-					directionOffset *= range.LengthInc;
+					directionOffset *= selection.LengthInc;
 					break;
 			}
 

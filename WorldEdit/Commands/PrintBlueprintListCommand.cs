@@ -4,6 +4,7 @@ using System.Text;
 using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Serializer;
 using Eco.Shared.Localization;
+using Eco.Shared.Math;
 using Eco.Shared.Utils;
 
 namespace Eco.Mods.WorldEdit.Commands
@@ -12,7 +13,7 @@ namespace Eco.Mods.WorldEdit.Commands
 	{
 		public PrintBlueprintListCommand(User user) : base(user) { }
 
-		protected override void Execute()
+		protected override void Execute(WorldRange selection)
 		{
 			WorldEditManager.UpdateBlueprintList();
 

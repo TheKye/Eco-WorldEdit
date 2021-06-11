@@ -36,15 +36,14 @@ namespace Eco.Mods.WorldEdit.Commands
 			this.fileName = fileName;
 		}
 
-		protected override void Execute()
+		protected override void Execute(WorldRange selection)
 		{
-			WorldRange range = this.UserSession.Selection;
-			range.Fix(Shared.Voxel.World.VoxelSize);
+			selection.Fix(Shared.Voxel.World.VoxelSize);
 
 			Dictionary<object, long> blocks = new Dictionary<object, long>();
 			long emptyBlocks = 0;
 
-			foreach (Vector3i pos in range.XYZIterInc())
+			foreach (Vector3i pos in selection.XYZIterInc())
 			{
 				Block block = Eco.World.World.GetBlock(pos);
 				Type blockType = null;
@@ -93,11 +92,11 @@ namespace Eco.Mods.WorldEdit.Commands
 			StringBuilder sb = new StringBuilder();
 			sb.AppendLine(TextLoc.Header(Localizer.DoStr("Selection Info")));
 			sb.AppendLineLoc($"Region: {Text.Location(this.UserSession.Selection.min)} - {Text.Location(this.UserSession.Selection.max)}");
-			sb.Append(Localizer.DoStr("Width:").ToString().PadRight(8)).AppendLine(Text.PluralLocStr("block", "blocks", range.WidthInc));
-			sb.Append(Localizer.DoStr("Height:").ToString().PadRight(8)).AppendLine(Text.PluralLocStr("block", "blocks", range.HeightInc));
-			sb.Append(Localizer.DoStr("Length:").ToString().PadRight(8)).AppendLine(Text.PluralLocStr("block", "blocks", range.LengthInc));
-			sb.Append(Localizer.DoStr("Volume:").ToString().PadRight(8)).AppendLine(Text.PluralLocStr("block", "blocks", range.VolumeInc));
-			sb.Append(Localizer.DoStr("Area:").ToString().PadRight(8)).AppendLine(Text.PluralLocStr("block", "blocks", range.WidthInc * range.LengthInc));
+			sb.Append(Localizer.DoStr("Width:").ToString().PadRight(8)).AppendLine(Text.PluralLocStr("block", "blocks", selection.WidthInc));
+			sb.Append(Localizer.DoStr("Height:").ToString().PadRight(8)).AppendLine(Text.PluralLocStr("block", "blocks", selection.HeightInc));
+			sb.Append(Localizer.DoStr("Length:").ToString().PadRight(8)).AppendLine(Text.PluralLocStr("block", "blocks", selection.LengthInc));
+			sb.Append(Localizer.DoStr("Volume:").ToString().PadRight(8)).AppendLine(Text.PluralLocStr("block", "blocks", selection.VolumeInc));
+			sb.Append(Localizer.DoStr("Area:").ToString().PadRight(8)).AppendLine(Text.PluralLocStr("block", "blocks", selection.WidthInc * selection.LengthInc));
 			sb.AppendLineLoc($"Empty blocks: {emptyBlocks,8}");
 			sb.AppendLineLoc($"Total blocks: {totalBlocks,8}");
 

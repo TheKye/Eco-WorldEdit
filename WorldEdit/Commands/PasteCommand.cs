@@ -14,7 +14,7 @@ namespace Eco.Mods.WorldEdit.Commands
 			if (this.UserSession.Clipboard.Count <= 0) throw new WorldEditCommandException($"Please /copy a selection first!");
 		}
 
-		protected override void Execute()
+		protected override void Execute(WorldRange selection)
 		{
 			this.playerPos = this.UserSession.Player.Position.Round;
 

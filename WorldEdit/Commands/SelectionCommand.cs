@@ -35,15 +35,14 @@ namespace Eco.Mods.WorldEdit.Commands
 			if (this.direction == Direction.Unknown || (this._commandType == Command.SHIFT && this.direction == Direction.None)) { throw new WorldEditCommandException("Unable to determine direction"); }
 		}
 
-		protected override void Execute()
+		protected override void Execute(WorldRange selection)
 		{
 			Vector3i vector = this.direction.ToVec() * this.amount;
-			WorldRange range = this.UserSession.Selection;
 			switch (this._commandType)
 			{
 				case Command.SHIFT:
-					range.min += vector;
-					range.max += vector;
+					selection.min += vector;
+					selection.max += vector;
 					break;
 				case Command.EXPAND:
 					switch (this.direction)
@@ -51,48 +50,48 @@ namespace Eco.Mods.WorldEdit.Commands
 						case Direction.Left:
 						case Direction.Back:
 						case Direction.Down:
-							if (range.min.x <= range.max.x) range.min.x += vector.x; else range.max.x += vector.x;
-							if (range.min.y <= range.max.y) range.min.y += vector.y; else range.max.y += vector.y;
-							if (range.min.z <= range.max.z) range.min.z += vector.z; else range.max.z += vector.z;
-							//range.min += vector;
+							if (selection.min.x <= selection.max.x) selection.min.x += vector.x; else selection.max.x += vector.x;
+							if (selection.min.y <= selection.max.y) selection.min.y += vector.y; else selection.max.y += vector.y;
+							if (selection.min.z <= selection.max.z) selection.min.z += vector.z; else selection.max.z += vector.z;
+							//selection.min += vector;
 							break;
 						case Direction.Right:
 						case Direction.Forward:
 						case Direction.Up:
-							if (range.min.x <= range.max.x) range.max.x += vector.x; else range.min.x += vector.x;
-							if (range.min.y <= range.max.y) range.max.y += vector.y; else range.min.y += vector.y;
-							if (range.min.z <= range.max.z) range.max.z += vector.z; else range.min.z += vector.z;
-							//range.max += vector;
+							if (selection.min.x <= selection.max.x) selection.max.x += vector.x; else selection.min.x += vector.x;
+							if (selection.min.y <= selection.max.y) selection.max.y += vector.y; else selection.min.y += vector.y;
+							if (selection.min.z <= selection.max.z) selection.max.z += vector.z; else selection.min.z += vector.z;
+							//selection.max += vector;
 							break;
 						case Direction.None:
-							if (range.min.x <= range.max.x)
+							if (selection.min.x <= selection.max.x)
 							{
-								range.min.x -= amount; range.max.x += amount;
+								selection.min.x -= amount; selection.max.x += amount;
 							}
 							else
 							{
-								range.max.x -= amount; range.min.x += amount;
+								selection.max.x -= amount; selection.min.x += amount;
 							}
 
-							if (range.min.y <= range.max.y)
+							if (selection.min.y <= selection.max.y)
 							{
-								range.min.y -= amount; range.max.y += amount;
+								selection.min.y -= amount; selection.max.y += amount;
 							}
 							else
 							{
-								range.max.y -= amount; range.min.y += amount;
+								selection.max.y -= amount; selection.min.y += amount;
 							}
 
-							if (range.min.z <= range.max.z)
+							if (selection.min.z <= selection.max.z)
 							{
-								range.min.z -= amount; range.max.z += amount;
+								selection.min.z -= amount; selection.max.z += amount;
 							}
 							else
 							{
-								range.max.z -= amount; range.min.z += amount;
+								selection.max.z -= amount; selection.min.z += amount;
 							}
-							//range.min -= amount;
-							//range.max += amount;
+							//selection.min -= amount;
+							//selection.max += amount;
 							break;
 						default:
 							throw new WorldEditCommandException("Unable to determine direction");
@@ -104,55 +103,55 @@ namespace Eco.Mods.WorldEdit.Commands
 						case Direction.Left:
 						case Direction.Back:
 						case Direction.Down:
-							if (range.min.x <= range.max.x) range.max.x += vector.x; else range.min.x += vector.x;
-							if (range.min.y <= range.max.y) range.max.y += vector.y; else range.min.y += vector.y;
-							if (range.min.z <= range.max.z) range.max.z += vector.z; else range.min.z += vector.z;
-							//range.max += vector;
+							if (selection.min.x <= selection.max.x) selection.max.x += vector.x; else selection.min.x += vector.x;
+							if (selection.min.y <= selection.max.y) selection.max.y += vector.y; else selection.min.y += vector.y;
+							if (selection.min.z <= selection.max.z) selection.max.z += vector.z; else selection.min.z += vector.z;
+							//selection.max += vector;
 							break;
 						case Direction.Right:
 						case Direction.Forward:
 						case Direction.Up:
-							if (range.min.x <= range.max.x) range.min.x += vector.x; else range.max.x += vector.x;
-							if (range.min.y <= range.max.y) range.min.y += vector.y; else range.max.y += vector.y;
-							if (range.min.z <= range.max.z) range.min.z += vector.z; else range.max.z += vector.z;
-							//range.min += vector;
+							if (selection.min.x <= selection.max.x) selection.min.x += vector.x; else selection.max.x += vector.x;
+							if (selection.min.y <= selection.max.y) selection.min.y += vector.y; else selection.max.y += vector.y;
+							if (selection.min.z <= selection.max.z) selection.min.z += vector.z; else selection.max.z += vector.z;
+							//selection.min += vector;
 							break;
 						case Direction.None:
-							if (range.min.x <= range.max.x)
+							if (selection.min.x <= selection.max.x)
 							{
-								range.min.x += amount; range.max.x -= amount;
+								selection.min.x += amount; selection.max.x -= amount;
 							}
 							else
 							{
-								range.max.x += amount; range.min.x -= amount;
+								selection.max.x += amount; selection.min.x -= amount;
 							}
 
-							if (range.min.y <= range.max.y)
+							if (selection.min.y <= selection.max.y)
 							{
-								range.min.y += amount; range.max.y -= amount;
+								selection.min.y += amount; selection.max.y -= amount;
 							}
 							else
 							{
-								range.max.y += amount; range.min.y -= amount;
+								selection.max.y += amount; selection.min.y -= amount;
 							}
 
-							if (range.min.z <= range.max.z)
+							if (selection.min.z <= selection.max.z)
 							{
-								range.min.z += amount; range.max.z -= amount;
+								selection.min.z += amount; selection.max.z -= amount;
 							}
 							else
 							{
-								range.max.z += amount; range.min.z -= amount;
+								selection.max.z += amount; selection.min.z -= amount;
 							}
-							//range.min += amount;
-							//range.max -= amount;
+							//selection.min += amount;
+							//selection.max -= amount;
 							break;
 						default:
 							throw new WorldEditCommandException("Unable to determine direction");
 					}
 					break;
 			}
-			this.UserSession.SetSelection(range);
+			this.UserSession.SetSelection(selection);
 		}
 	}
 }

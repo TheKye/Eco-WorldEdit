@@ -12,10 +12,9 @@ namespace Eco.Mods.WorldEdit.Commands
 			if (!this.UserSession.Selection.IsSet()) throw new WorldEditCommandException("Please set both points first!");
 		}
 
-		protected override void Execute()
+		protected override void Execute(WorldRange selection)
 		{
-			WorldRange range = this.UserSession.Selection;
-			range.Fix(Shared.Voxel.World.VoxelSize);
+			selection.Fix(Shared.Voxel.World.VoxelSize);
 
 			Vector3i playerPos = this.UserSession.Player.Position.Round;
 
@@ -24,7 +23,7 @@ namespace Eco.Mods.WorldEdit.Commands
 			{
 				this.UserSession.Clipboard.Add(WorldEditBlock.Create(Eco.World.World.GetBlock(pos), pos, playerPos));
 			}
-			range.ForEachInc(DoAction);
+			selection.ForEachInc(DoAction);
 			this.UserSession.AuthorInfo.MarkDirty();
 		}
 	}

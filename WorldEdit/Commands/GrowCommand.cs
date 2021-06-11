@@ -14,10 +14,9 @@ namespace Eco.Mods.WorldEdit.Commands
 			if (!this.UserSession.Selection.IsSet()) throw new WorldEditCommandException("Please set both points first!");
 		}
 
-		protected override void Execute()
+		protected override void Execute(WorldRange selection)
 		{
-			WorldRange range = this.UserSession.Selection;
-			range.Fix(Shared.Voxel.World.VoxelSize);
+			selection.Fix(Shared.Voxel.World.VoxelSize);
 
 			void DoAction(Vector3i pos)
 			{
@@ -31,7 +30,7 @@ namespace Eco.Mods.WorldEdit.Commands
 					pb.Tick();
 				}
 			}
-			range.ForEachInc(DoAction);
+			selection.ForEachInc(DoAction);
 		}
 	}
 }

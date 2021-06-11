@@ -16,10 +16,9 @@ namespace Eco.Mods.WorldEdit.Commands
 		}
 
 
-		protected override void Execute()
+		protected override void Execute(WorldRange selection)
 		{
-			WorldRange range = this.UserSession.Selection;
-			range.Fix(Shared.Voxel.World.VoxelSize);
+			selection.Fix(Shared.Voxel.World.VoxelSize);
 
 			void DoAction(Vector3i pos)
 			{
@@ -28,7 +27,7 @@ namespace Eco.Mods.WorldEdit.Commands
 				WorldEditBlockManager.SetBlock(blockType, pos);
 				this.BlocksChanged++;
 			}
-			range.ForEachInc(DoAction);
+			selection.ForEachInc(DoAction);
 		}
 	}
 }

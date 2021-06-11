@@ -344,6 +344,35 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
+		[ChatSubCommand("WorldEdit", "Copy and clean selected area", "cut", ChatAuthorizationLevel.Admin)]
+		public static void Cut(User user)
+		{
+			try
+			{
+				UserSession userSession = WorldEditManager.GetUserSession(user);
+				WorldRange region = userSession.Selection;
+
+				WorldEditCommand command = new CopyCommand(user);
+				if (command.Invoke(region))
+				{
+					user.Player.MsgLoc($"Copy done in {command.ElapsedMilliseconds}ms.");
+					command = new SetCommand(user, "Empty");
+					if (command.Invoke(region))
+					{
+						user.Player.MsgLoc($"{command.BlocksChanged} blocks cleared in {command.ElapsedMilliseconds}ms.");
+					}
+				}
+			}
+			catch (WorldEditCommandException e)
+			{
+				user.Player.ErrorLocStr(e.Message);
+			}
+			catch (Exception e)
+			{
+				Log.WriteError(Localizer.Do($"{e}"));
+			}
+		}
+
 		[ChatSubCommand("WorldEdit", "rotate will rotate all blocks and items in your clipboard, usable by degrees IE: 90, 180, 270", "rotate", ChatAuthorizationLevel.Admin)]
 		public static void Rotate(User user, int degrees = 90)
 		{

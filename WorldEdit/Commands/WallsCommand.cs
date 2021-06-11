@@ -15,12 +15,11 @@ namespace Eco.Mods.WorldEdit.Commands
 			this.blockType = BlockUtils.GetBlockType(blockType) ?? throw new WorldEditCommandException($"No BlockType with name {blockType} found!");
 		}
 
-		protected override void Execute()
+		protected override void Execute(WorldRange selection)
 		{
-			WorldRange range = this.UserSession.Selection;
-			range.Fix(Shared.Voxel.World.VoxelSize);
+			selection.Fix(Shared.Voxel.World.VoxelSize);
 
-			foreach (Vector3i pos in range.SidesIterator())
+			foreach (Vector3i pos in selection.SidesIterator())
 			{
 				if (WorldEditBlockManager.IsImpenetrable(pos)) continue;
 				this.AddBlockChangedEntry(pos);
