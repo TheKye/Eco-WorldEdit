@@ -34,6 +34,7 @@ namespace Eco.Mods.WorldEdit
 		}
 		public static void RestoreBlock(WorldEditBlock block, Vector3i position, UserSession session)
 		{
+			if (IsImpenetrable(position)) return;
 			ClearPosition(position);
 			if (block.IsEmptyBlock())
 			{
@@ -55,11 +56,13 @@ namespace Eco.Mods.WorldEdit
 
 		public static void RestoreEmptyBlock(Vector3i position)
 		{
+			if (IsImpenetrable(position)) return;
 			World.DeleteBlock(position);
 		}
 
 		public static void RestoreBlock(Type type, Vector3i position)
 		{
+			if (IsImpenetrable(position)) return;
 			World.SetBlock(type, position);
 		}
 
@@ -146,7 +149,7 @@ namespace Eco.Mods.WorldEdit
 					worldObjectBlock.WorldObjectHandle.Object.Destroy();
 					break;
 				case ImpenetrableStoneBlock _:
-					break;
+					return;
 				case PlantBlock plantBlock:
 				case TreeBlock treeBlock:
 					Plant plant = EcoSim.PlantSim.GetPlant(position);

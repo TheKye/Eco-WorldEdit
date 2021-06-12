@@ -1,6 +1,7 @@
 ﻿using System;
 using Eco.Gameplay.Players;
 using Eco.Shared.Math;
+using Eco.Shared.Voxel;
 
 namespace Eco.Mods.WorldEdit.Utils
 {
@@ -59,6 +60,11 @@ namespace Eco.Mods.WorldEdit.Utils
 		public static int SumAllAxis(Vector3i pVector)
 		{
 			return pVector.X + pVector.Y + pVector.Z;
+		}
+
+		public static Vector2i SecondPlotPos(Vector2i plotPos)
+		{
+			return plotPos + PlotUtil.PropertyPlotLength - 1;
 		}
 	}
 }

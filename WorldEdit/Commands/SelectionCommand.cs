@@ -6,7 +6,7 @@ namespace Eco.Mods.WorldEdit.Commands
 {
 	internal class SelectionCommand : WorldEditCommand
 	{
-		private enum Command { EXPAND, CONTRACT, SHIFT }
+		private enum Command { EXPAND, REDUCE, SHIFT }
 		private readonly Command _commandType;
 		public readonly Direction direction;
 		public readonly int amount;
@@ -21,9 +21,9 @@ namespace Eco.Mods.WorldEdit.Commands
 			return new SelectionCommand(user, Command.EXPAND, args);
 		}
 
-		public static SelectionCommand ContractCommand(User user, string args)
+		public static SelectionCommand ReduceCommand(User user, string args)
 		{
-			return new SelectionCommand(user, Command.CONTRACT, args);
+			return new SelectionCommand(user, Command.REDUCE, args);
 		}
 
 		private SelectionCommand(User user, Command commandType, string args) : base(user)
@@ -97,7 +97,7 @@ namespace Eco.Mods.WorldEdit.Commands
 							throw new WorldEditCommandException("Unable to determine direction");
 					}
 					break;
-				case Command.CONTRACT:
+				case Command.REDUCE:
 					switch (this.direction)
 					{
 						case Direction.Left:

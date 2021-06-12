@@ -14,7 +14,7 @@ namespace Eco.Mods.WorldEdit.Commands
 
 		protected override void Execute(WorldRange selection)
 		{
-			selection.Fix(Shared.Voxel.World.VoxelSize);
+			selection = selection.FixXZ(Shared.Voxel.World.VoxelSize);
 
 			Vector3i playerPos = this.UserSession.Player.Position.Round;
 

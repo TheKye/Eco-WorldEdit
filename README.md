@@ -43,7 +43,7 @@ In 9.0 the block call is AshlarLimestoneWallBlock - We have auto included the Bl
 /replace <desiredBlock> | Replace everything except air with desired block
 /walls <blocktype> | Creates a wall inside the selection.
 /expand <amount> <direction> | Resizes the selection in the <direction> or where you are looking at
-/contract <amount> <direction> | opposite of expand
+/reduce <amount> <direction> | opposite of expand
 /shift <amount> <direction> | move selection
 /move <amount> <direction> | move blocks in selection
 /up <amount> | Teleports you up in the air.
@@ -59,5 +59,8 @@ In 9.0 the block call is AshlarLimestoneWallBlock - We have auto included the Bl
 /setpos1 | Set first position to where you are standing
 /setpos2 | Set second position to where you are standing
 /reset | Resets First and Second positions
+/selclaim | Select current claim where player stands on ground level
+/addclaim | Add current claim where player stands to the selection
+/expclaim <amount> <direction> | Expands selection to include amount of claims in given direction or where player looking
 /we version (/weversion) | for debugging gives you the current version when reporting bugs
 ```

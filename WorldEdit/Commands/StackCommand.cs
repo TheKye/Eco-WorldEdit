@@ -23,7 +23,7 @@ namespace Eco.Mods.WorldEdit.Commands
 
 		protected override void Execute(WorldRange selection)
 		{
-			selection.Fix(Shared.Voxel.World.VoxelSize);
+			selection = selection.FixXZ(Shared.Voxel.World.VoxelSize);
 
 			List<WorldEditBlock> blocks = new List<WorldEditBlock>();
 
@@ -58,7 +58,9 @@ namespace Eco.Mods.WorldEdit.Commands
 
 				foreach (WorldEditBlock sourceBlock in blocks)
 				{
-					this.AddBlockChangedEntry(WorldEditBlockManager.ApplyOffset(sourceBlock.Position, offset));
+					Vector3i finalPos = WorldEditBlockManager.ApplyOffset(sourceBlock.Position, offset);
+					if (finalPos.Y < 0 || finalPos.Y > Shared.Voxel.World.VoxelSize.Y) continue;
+					this.AddBlockChangedEntry(finalPos);
 					WorldEditBlockManager.RestoreBlockOffset(sourceBlock, offset, this.UserSession);
 					this.BlocksChanged++;
 				}

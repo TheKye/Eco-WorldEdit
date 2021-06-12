@@ -2,6 +2,7 @@
 using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared.Math;
+using Eco.Shared.Utils;
 
 namespace Eco.Mods.WorldEdit.Commands
 {
@@ -15,11 +16,9 @@ namespace Eco.Mods.WorldEdit.Commands
 			this.blockType = BlockUtils.GetBlockType(blockType) ?? throw new WorldEditCommandException($"No BlockType with name {blockType} found!");
 		}
 
-
 		protected override void Execute(WorldRange selection)
 		{
-			selection.Fix(Shared.Voxel.World.VoxelSize);
-
+			selection = selection.FixXZ(Shared.Voxel.World.VoxelSize);
 			void DoAction(Vector3i pos)
 			{
 				if (WorldEditBlockManager.IsImpenetrable(pos)) return;

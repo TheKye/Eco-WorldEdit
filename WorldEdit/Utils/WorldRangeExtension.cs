@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Eco.Shared.Math;
+using Eco.Shared.Utils;
 
 namespace Eco.Mods.WorldEdit.Utils
 {
@@ -24,6 +25,19 @@ namespace Eco.Mods.WorldEdit.Utils
 								locPos.x == range.min.x || locPos.z == range.min.z ||
 								locPos.x == range.max.x || locPos.z == range.max.z
 							 ));
+		}
+
+		public static WorldRange FixXZ(this WorldRange range, Vector3i worldSize = default)
+		{
+			Vector3i start = range.min;
+			Vector3i end = range.max;
+			range.Fix(worldSize);
+			if (worldSize != default)
+			{
+				if (MathUtil.Min(start.y, end.y) < 0) range.min.y = 0;
+				if (MathUtil.Max(start.y, end.y) > Shared.Voxel.World.VoxelSize.y) range.max.y = Shared.Voxel.World.VoxelSize.y;
+			}
+			return range;
 		}
 	}
 }
