@@ -7,7 +7,7 @@ using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
-using Eco.World;
+using Eco.World.Blocks;
 
 namespace Eco.Mods.WorldEdit.Commands
 {

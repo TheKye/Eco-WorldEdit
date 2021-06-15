@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Eco.Core.IoC;
 using Eco.Gameplay.Blocks;
 using Eco.Gameplay.Items;
 using Eco.Gameplay.Objects;
@@ -13,13 +12,13 @@ using Eco.Gameplay.Players;
 using Eco.Gameplay.Systems.TextLinks;
 using Eco.Gameplay.Systems.Tooltip;
 using Eco.Mods.WorldEdit.Utils;
+using Eco.Shared.IoC;
 using Eco.Shared.Localization;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
 using Eco.Simulation;
 using Eco.Simulation.Agents;
 using Eco.Simulation.Types;
-using Eco.World;
 using Eco.World.Blocks;
 
 namespace Eco.Mods.WorldEdit.Commands
