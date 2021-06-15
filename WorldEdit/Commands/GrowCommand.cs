@@ -1,8 +1,9 @@
 ﻿using Eco.Gameplay.Plants;
 using Eco.Gameplay.Players;
-using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared.Math;
+using Eco.World;
+using Eco.World.Blocks;
 
 namespace Eco.Mods.WorldEdit.Commands
 {
@@ -10,31 +11,26 @@ namespace Eco.Mods.WorldEdit.Commands
 	{
 		public GrowCommand(User user) : base(user)
 		{
-			if (!this.UserSession.FirstPos.HasValue || !this.UserSession.SecondPos.HasValue) { throw new WorldEditCommandException("Please set both points first!"); }
+			if (!this.UserSession.Selection.IsSet()) throw new WorldEditCommandException("Please set both points first!");
 		}
 
-		protected override void Execute()
+		protected override void Execute(WorldRange selection)
 		{
-			SortedVectorPair vectors = (SortedVectorPair)WorldEditUtils.GetSortedVectors(this.UserSession.FirstPos.Value, this.UserSession.SecondPos.Value);
-			for (int x = vectors.Lower.X; x < vectors.Higher.X; x++)
-			{
-				for (int y = vectors.Lower.Y; y < vectors.Higher.Y; y++)
-				{
-					for (int z = vectors.Lower.Z; z < vectors.Higher.Z; z++)
-					{
-						var pos = new Vector3i(x, y, z);
-						var block = Eco.World.World.GetBlock(pos);
+			selection = selection.FixXZ(Shared.Voxel.World.VoxelSize);
 
-						if (block.GetType() == typeof(PlantBlock))
-						{
-							var pb = PlantBlock.GetPlant(pos);
-							pb.GrowthPercent = 1;
-							pb.Tended = true;
-							pb.Tick();
-						}
-					}
+			void DoAction(Vector3i pos)
+			{
+				Block block = Eco.World.World.GetBlock(pos);
+
+				if (block.GetType() == typeof(PlantBlock) || block.GetType() == typeof(TreeBlock))
+				{
+					var pb = PlantBlock.GetPlant(pos);
+					pb.GrowthPercent = 1;
+					pb.Tended = true;
+					pb.Tick();
 				}
 			}
+			selection.ForEachInc(DoAction);
 		}
 	}
 }

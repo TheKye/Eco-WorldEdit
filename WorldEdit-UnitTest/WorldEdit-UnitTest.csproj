@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WorldEdit\World Edit.csproj" />
+    <ProjectReference Include="..\WorldEdit\WorldEdit.csproj" />
   </ItemGroup>
 
 </Project>

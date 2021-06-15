@@ -3,6 +3,7 @@ using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared;
+using Eco.Shared.Math;
 using Eco.Shared.Utils;
 
 namespace Eco.Mods.WorldEdit.Commands
@@ -17,7 +18,7 @@ namespace Eco.Mods.WorldEdit.Commands
 			if (this.UserSession.Clipboard.Count <= 0) throw new WorldEditCommandException($"Please /copy a selection first!");
 		}
 
-		protected override void Execute()
+		protected override void Execute(WorldRange selection)
 		{
 			AffineTransform transform = new AffineTransform();
 			float radians = Mathf.DegToRad(this.angleDegrees);

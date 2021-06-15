@@ -2,9 +2,11 @@
 using Eco.Gameplay.Players;
 using Eco.Gameplay.Systems.Chat;
 using Eco.Mods.WorldEdit.Commands;
+using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared.Localization;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
+using Eco.Shared.Voxel;
 
 namespace Eco.Mods.WorldEdit
 {
@@ -17,7 +19,7 @@ namespace Eco.Mods.WorldEdit
 		{
 			try
 			{
-				user.Inventory.AddItems(WorldEditManager.getWandItemStack());
+				user.Inventory.AddItems(WorldEditManager.GetWandItemStack());
 			}
 			catch (Exception e)
 			{
@@ -30,7 +32,7 @@ namespace Eco.Mods.WorldEdit
 		{
 			try
 			{
-				user.Inventory.TryRemoveItems(WorldEditManager.getWandItemStack());
+				user.Inventory.TryRemoveItems(WorldEditManager.GetWandItemStack());
 			}
 			catch (Exception e)
 			{
@@ -63,7 +65,22 @@ namespace Eco.Mods.WorldEdit
 		[ChatSubCommand("WorldEdit", "Clears the Selected Area", "del", ChatAuthorizationLevel.Admin)]
 		public static void Delete(User user)
 		{
-			Set(user, "Empty");
+			try
+			{
+				SetCommand command = new SetCommand(user, "Empty");
+				if (command.Invoke())
+				{
+					user.Player.MsgLoc($"{command.BlocksChanged} blocks cleared in {command.ElapsedMilliseconds}ms.");
+				}
+			}
+			catch (WorldEditCommandException e)
+			{
+				user.Player.ErrorLocStr(e.Message);
+			}
+			catch (Exception e)
+			{
+				Log.WriteError(Localizer.Do($"{e}"));
+			}
 		}
 
 		[ChatSubCommand("WorldEdit", "Replace a Specific Block Type with Another Block Example: replace sand, dirt, this will replace sand with dirt", "replace", ChatAuthorizationLevel.Admin)]
@@ -118,11 +135,11 @@ namespace Eco.Mods.WorldEdit
 		}
 
 		[ChatSubCommand("WorldEdit", "/stack", "Stack ", ChatAuthorizationLevel.Admin)]
-		public static void Stack(User user, string directionAndAmount = "1")
+		public static void Stack(User user, string directionAndAmount = "1", int offset = 0)
 		{
 			try
 			{
-				StackCommand command = new StackCommand(user, directionAndAmount);
+				StackCommand command = new StackCommand(user, directionAndAmount, offset);
 				if (command.Invoke())
 				{
 					user.Player.MsgLoc($"{command.BlocksChanged} blocks changed.");
@@ -159,7 +176,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "expand the selected area by the specified amount in the looking direction", "expands", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "expand the selected area by the specified amount in the looking direction", "expand", ChatAuthorizationLevel.Admin)]
 		public static void Expand(User user, string directionAndAmount = "1")
 		{
 			try
@@ -180,12 +197,12 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "contract will lessen the selected area by the specified amount in the looking direction", "contract", ChatAuthorizationLevel.Admin)]
-		public static void Contract(User user, string directionAndAmount = "1")
+		[ChatSubCommand("WorldEdit", "Reduce the selected area by the specified amount in the looking direction if not provided", "reduce", ChatAuthorizationLevel.Admin)]
+		public static void Reduce(User user, string directionAndAmount = "1")
 		{
 			try
 			{
-				SelectionCommand command = SelectionCommand.ContractCommand(user, directionAndAmount);
+				SelectionCommand command = SelectionCommand.ReduceCommand(user, directionAndAmount);
 				if (command.Invoke())
 				{
 					user.Player.MsgLoc($"Contracted selection {command.amount} {command.direction}");
@@ -244,22 +261,37 @@ namespace Eco.Mods.WorldEdit
 		}
 
 		[ChatSubCommand("WorldEdit", "undo will revert the last action done using world edit, up too 10 times", "undo", ChatAuthorizationLevel.Admin)]
-		public static void Undo(User user)
+		public static void Undo(User user, int count = 1)
 		{
 			try
 			{
 				UserSession userSession = WorldEditManager.GetUserSession(user);
-				if (userSession.ExecutedCommands.TryPop(out WorldEditCommand command))
+				if (userSession.ExecutingCommand != null && userSession.ExecutingCommand.IsRunning) throw new WorldEditCommandException("You can't use undo right now!"); //TODO: Probably need to rework that and impliment aborting
+
+				if (count > userSession.ExecutedCommands.Count) count = userSession.ExecutedCommands.Count;
+				if (count.Equals(0)) throw new WorldEditCommandException("Nothing to undo");
+
+				for (int i = 1; i <= count; i++)
 				{
-					if (command.Undo())
+					if (userSession.ExecutedCommands.TryPop(out WorldEditCommand command))
 					{
-						user.Player.MsgLoc($"Undo done.");
+						userSession.ExecutingCommand = command;
+						if (command.Undo())
+						{
+							if (count.Equals(1))
+							{
+								user.Player.MsgLoc($"Undo done.");
+								break;
+							}
+							else
+								user.Player.MsgLoc($"Undo {i}/{count} done.");
+						}
+						userSession.ExecutingCommand = null;
 					}
-				}
-				else
-				{
-					user.Player.ErrorLocStr($"Nothing to undo");
-					//user.Player.ErrorLocStr($"You can't use undo right now!");
+					else
+					{
+						throw new WorldEditCommandException("Nothing to undo");
+					}
 				}
 			}
 			catch (WorldEditCommandException e)
@@ -302,6 +334,35 @@ namespace Eco.Mods.WorldEdit
 				if (command.Invoke())
 				{
 					user.Player.MsgLoc($"Paste done in {command.ElapsedMilliseconds}ms.");
+				}
+			}
+			catch (WorldEditCommandException e)
+			{
+				user.Player.ErrorLocStr(e.Message);
+			}
+			catch (Exception e)
+			{
+				Log.WriteError(Localizer.Do($"{e}"));
+			}
+		}
+
+		[ChatSubCommand("WorldEdit", "Copy and clean selected area", "cut", ChatAuthorizationLevel.Admin)]
+		public static void Cut(User user)
+		{
+			try
+			{
+				UserSession userSession = WorldEditManager.GetUserSession(user);
+				WorldRange region = userSession.Selection;
+
+				WorldEditCommand command = new CopyCommand(user);
+				if (command.Invoke(region))
+				{
+					user.Player.MsgLoc($"Copy done in {command.ElapsedMilliseconds}ms.");
+					command = new SetCommand(user, "Empty");
+					if (command.Invoke(region))
+					{
+						user.Player.MsgLoc($"{command.BlocksChanged} blocks cleared in {command.ElapsedMilliseconds}ms.");
+					}
 				}
 			}
 			catch (WorldEditCommandException e)
@@ -357,32 +418,64 @@ namespace Eco.Mods.WorldEdit
 		}
 
 		[ChatSubCommand("WorldEdit", "import will import a schematic that you or someone else has exported", "import", ChatAuthorizationLevel.Admin)]
-		public static void Import(User user, string fileName)
+		public static void Import(User user, string fileName = null)
 		{
 			try
 			{
-				WorldEditCommand command = new ImportCommand(user, fileName);
-				if (command.Invoke())
+				WorldEditCommand command;
+
+				if (!string.IsNullOrEmpty(fileName))
 				{
-					user.Player.MsgLoc($"Import done in {command.ElapsedMilliseconds}ms. Use /paste");
+					command = new ImportCommand(user, fileName);
+					if (command.Invoke())
+					{
+						user.Player.MsgLoc($"Import done in {command.ElapsedMilliseconds}ms. Use /paste");
+					}
+					else
+					{
+						new PrintBlueprintListCommand(user).Invoke();
+					}
+				}
+				else
+				{
+					new PrintBlueprintListCommand(user).Invoke();
 				}
 			}
 			catch (WorldEditCommandException e)
 			{
 				user.Player.ErrorLocStr(e.Message);
 			}
-			catch (Exception e)
-			{
-				Log.WriteError(Localizer.Do($"{e}"));
-			}
+			catch (Exception e) { Log.WriteException(e); }
 		}
 
 		[ChatSubCommand("WorldEdit", "distr will give you a detailed list of all items in your selected area", "distr", ChatAuthorizationLevel.Admin)]
-		public static void Distr(User user)
+		public static void Distr(User user, string type = "brief", string fileName = null)
 		{
+			type = type.Replace(" ", "").Trim();
+			if (type.Contains("brief")) type = "brief";
+			if (type.Contains("detail")) type = "detail";
+			switch (type)
+			{
+				case "brief":
+				case "b":
+					type = "brief";
+					break;
+				case "detail":
+				case "d":
+					type = "detail";
+					break;
+				default:
+					type = "brief";
+					break;
+			}
+			if (!string.IsNullOrEmpty(fileName))
+			{
+				fileName = fileName.Replace(" ", string.Empty).Trim();
+			}
+
 			try
 			{
-				WorldEditCommand command = new DistrCommand(user);
+				WorldEditCommand command = new DistrCommand(user, type, fileName);
 				if (command.Invoke())
 				{
 					//Output done in he command
@@ -432,9 +525,9 @@ namespace Eco.Mods.WorldEdit
 				pos.Z = pos.Z % Shared.Voxel.World.VoxelSize.Z;
 
 				UserSession session = WorldEditManager.GetUserSession(user);
-				session.SetFirstPosition((Vector3i?)pos);
+				session.SetFirstPosition(pos.Round);
 
-				user.Player.MsgLoc($"First Position set to ({pos.x}, {pos.y}, {pos.z})");
+				user.Player.MsgLoc($"First Position set to {pos}");
 			}
 			catch (Exception e)
 			{
@@ -455,9 +548,9 @@ namespace Eco.Mods.WorldEdit
 				pos.Z = pos.Z % Shared.Voxel.World.VoxelSize.Z;
 
 				UserSession session = WorldEditManager.GetUserSession(user);
-				session.SetSecondPosition((Vector3i?)pos);
+				session.SetSecondPosition(pos.Round);
 
-				user.Player.MsgLoc($"Second Position set to ({pos.x}, {pos.y}, {pos.z})");
+				user.Player.MsgLoc($"Second Position set to {pos}");
 			}
 			catch (Exception e)
 			{
@@ -471,8 +564,7 @@ namespace Eco.Mods.WorldEdit
 			try
 			{
 				UserSession session = WorldEditManager.GetUserSession(user);
-				session.SetFirstPosition(null);
-				session.SetSecondPosition(null);
+				session.ResetSelection();
 
 				user.Player.MsgLoc($"WorldEdit: Positions reset");
 			}
@@ -481,7 +573,98 @@ namespace Eco.Mods.WorldEdit
 				Log.WriteError(Localizer.Do($"{e}"));
 			}
 		}
+		#region Claim related commands
+		[ChatSubCommand("WorldEdit", "Select current claim where player stands on ground level", "selclaim", ChatAuthorizationLevel.Admin)]
+		public static void Selclaim(User user)
+		{
+			try
+			{
+				Vector3i pos = user.Position.Round;
+				Vector2i claimPos = PlotUtil.NearestPlotPosInWorld(pos.XZ);
+				UserSession session = WorldEditManager.GetUserSession(user);
 
+				session.SetFirstPosition(claimPos.X_Z(pos.Y - 1));
+				session.SetSecondPosition(WorldEditUtils.SecondPlotPos(claimPos).X_Z(pos.Y - 1));
+
+				user.Player.MsgLoc($"First Position set to {session.Selection.min}");
+				user.Player.MsgLoc($"Second Position set to {session.Selection.max}");
+			}
+			catch (Exception e)
+			{
+				Log.WriteError(Localizer.Do($"{e}"));
+			}
+		}
+
+		[ChatSubCommand("WorldEdit", "Add current claim where player stands to the selection", "addclaim", ChatAuthorizationLevel.Admin)]
+		public static void Addclaim(User user)
+		{
+			try
+			{
+				Vector3i pos = user.Position.Round;
+				Vector2i claimPos = PlotUtil.NearestPlotPosInWorld(pos.XZ);
+				UserSession session = WorldEditManager.GetUserSession(user);
+
+				WorldRange range = session.Selection;
+				range.ExtendToInclude(claimPos.X_Z(pos.Y - 1));
+				range.ExtendToInclude(WorldEditUtils.SecondPlotPos(claimPos).X_Z(pos.Y - 1));
+				session.SetSelection(range);
+
+				user.Player.MsgLoc($"First Position now at {session.Selection.min}");
+				user.Player.MsgLoc($"Second Position now at {session.Selection.max}");
+			}
+			catch (Exception e)
+			{
+				Log.WriteError(Localizer.Do($"{e}"));
+			}
+		}
+
+		[ChatSubCommand("WorldEdit", "Expands selection to include amount of claims in given direction or where player looking", "expclaim", ChatAuthorizationLevel.Admin)]
+		public static void Expclaim(User user, string args = "1")
+		{
+			try
+			{
+				UserSession session = WorldEditManager.GetUserSession(user);
+				if (!session.Selection.IsSet()) throw new WorldEditCommandException("Please set both points first!");
+				Direction direction = WorldEditUtils.ParseDirectionAndAmountArgs(user, args, out int amount);
+				if (direction == Direction.Unknown ||
+					direction == Direction.None ||
+					direction == Direction.Up ||
+					direction == Direction.Down) { throw new WorldEditCommandException("Unable to determine direction"); }
+				WorldRange range = session.Selection;
+				Vector3i pos = default;
+				if (range.min.y <= range.max.y) pos.y = range.min.y; else pos.y = range.max.y;
+				switch (direction)
+				{
+					case Direction.Left:
+					case Direction.Back:
+						if (range.min.x <= range.max.x) pos.x = range.min.x; else pos.x = range.max.x;
+						if (range.min.z <= range.max.z) pos.z = range.min.z; else pos.z = range.max.z;
+						break;
+					case Direction.Right:
+					case Direction.Forward:
+						if (range.min.x <= range.max.x) pos.x = range.max.x; else pos.x = range.min.x;
+						if (range.min.z <= range.max.z) pos.z = range.max.z; else pos.z = range.min.z;
+						break;
+				}
+				pos += direction.ToVec() * (PlotUtil.PropertyPlotLength - 1) * amount;
+				Vector2i claimPos = PlotUtil.NearestPlotPosInWorld(pos.XZ);
+				range.ExtendToInclude(claimPos.X_Z(pos.Y));
+				range.ExtendToInclude(WorldEditUtils.SecondPlotPos(claimPos).X_Z(pos.Y));
+				session.SetSelection(range);
+
+				user.Player.MsgLoc($"First Position now at {session.Selection.min}");
+				user.Player.MsgLoc($"Second Position now at {session.Selection.max}");
+			}
+			catch (WorldEditCommandException e)
+			{
+				user.Player.ErrorLocStr(e.Message);
+			}
+			catch (Exception e)
+			{
+				Log.WriteError(Localizer.Do($"{e}"));
+			}
+		}
+		#endregion Claim related commands
 		[ChatSubCommand("WorldEdit", "Show World Edit version", "WEversion", ChatAuthorizationLevel.Admin)]
 		public static void Version(User user)
 		{

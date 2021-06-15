@@ -30,8 +30,7 @@ namespace Eco.Mods.WorldEdit.Utils
 		/// </summary>
 		public static Direction GetDirection(string direction)
 		{
-			if (string.IsNullOrWhiteSpace(direction))
-				return Direction.Unknown;
+			if (string.IsNullOrWhiteSpace(direction)) return Direction.Unknown;
 
 			switch (direction.Trim().ToLower())
 			{
@@ -59,6 +58,10 @@ namespace Eco.Mods.WorldEdit.Utils
 				case "f":
 					return Direction.Forward;
 
+				case "all":
+				case "a":
+					return Direction.None;
+
 				default:
 					return Direction.Unknown;
 			}
@@ -66,10 +69,7 @@ namespace Eco.Mods.WorldEdit.Utils
 
 		public static Direction GetDirectionOrLooking(User user, string direction)
 		{
-			if (string.IsNullOrWhiteSpace(direction))
-				return GetLookingDirection(user);
-
-			return GetDirection(direction);
+			return string.IsNullOrWhiteSpace(direction) ? GetLookingDirection(user) : GetDirection(direction);
 		}
 	}
 }

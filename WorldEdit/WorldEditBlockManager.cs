@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Eco.Core.IoC;
+using Eco.Core.Utils;
+using Eco.Gameplay.Blocks;
 using Eco.Gameplay.Components;
 using Eco.Gameplay.Objects;
 using Eco.Gameplay.Plants;
-using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Model;
-using Eco.Shared.Localization;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
 using Eco.Simulation;
@@ -25,26 +26,27 @@ namespace Eco.Mods.WorldEdit
 		public static void SetBlock(Type type, Vector3i position)
 		{
 			ClearPosition(position);
-			RestoreBlock(type, position);
+			if (type != typeof(EmptyBlock)) RestoreBlock(type, position);
 		}
-		public static void RestoreBlockOffset(WorldEditBlock block, Vector3i offsetPos, Player player)
+		public static void RestoreBlockOffset(WorldEditBlock block, Vector3i offsetPos, UserSession session)
 		{
-			RestoreBlock(block, ApplyOffset(block.Position, offsetPos), player);
+			RestoreBlock(block, ApplyOffset(block.Position, offsetPos), session);
 		}
-		public static void RestoreBlock(WorldEditBlock block, Vector3i position, Player player)
+		public static void RestoreBlock(WorldEditBlock block, Vector3i position, UserSession session)
 		{
+			if (IsImpenetrable(position)) return;
 			ClearPosition(position);
-			if (block.BlockType.Equals(typeof(EmptyBlock)))
+			if (block.IsEmptyBlock())
 			{
 				RestoreEmptyBlock(position);
 			}
-			else if (block.BlockType.DerivesFrom<PlantBlock>())
+			else if (block.IsPlantBlock())
 			{
 				RestorePlantBlock(block.BlockType, position, block.BlockData);
 			}
-			else if (block.BlockType.DerivesFrom<WorldObjectBlock>())
+			else if (block.IsWorldObjectBlock())
 			{
-				RestoreWorldObjectBlock(block.BlockType, position, block.BlockData, player);
+				RestoreWorldObjectBlock(block.BlockType, position, block.BlockData, session);
 			}
 			else
 			{
@@ -54,28 +56,31 @@ namespace Eco.Mods.WorldEdit
 
 		public static void RestoreEmptyBlock(Vector3i position)
 		{
+			if (IsImpenetrable(position)) return;
 			World.DeleteBlock(position);
 		}
 
 		public static void RestoreBlock(Type type, Vector3i position)
 		{
+			if (IsImpenetrable(position)) return;
 			World.SetBlock(type, position);
 		}
 
-		public static void RestoreWorldObjectBlock(Type type, Vector3i position, IWorldEditBlockData blockData, Player player)
+		public static void RestoreWorldObjectBlock(Type type, Vector3i position, IWorldEditBlockData blockData, UserSession session)
 		{
+			if (blockData == null) { return; }
 			WorldEditWorldObjectBlockData worldObjectBlockData = (WorldEditWorldObjectBlockData)blockData;
-			ClearWorldObjectPlace(worldObjectBlockData.WorldObjectType, position, worldObjectBlockData.Rotation);
+			ClearWorldObjectPlace(worldObjectBlockData.WorldObjectType, position, worldObjectBlockData.Rotation, session);
 
 			WorldObject worldObject = null;
-			try { worldObject = WorldObjectManager.ForceAdd(worldObjectBlockData.WorldObjectType, player.User, position, worldObjectBlockData.Rotation, true); }
+			try { worldObject = WorldObjectManager.ForceAdd(worldObjectBlockData.WorldObjectType, session.User, position, worldObjectBlockData.Rotation, true); }
 			catch (Exception e)
 			{
-				Log.WriteLine(new LocString(e.ToString()));
+				Log.WriteException(e);
 			}
 			if (worldObject == null)
 			{
-				Log.WriteLine(Localizer.Do($"Unable spawn WorldObject {worldObjectBlockData.WorldObjectType} at {position}"));
+				Log.WriteErrorLineLoc($"Unable spawn WorldObject {worldObjectBlockData.WorldObjectType} at {position}");
 				return;
 			}
 			if (worldObject.HasComponent<StorageComponent>() && worldObjectBlockData.Components.ContainsKey(typeof(StorageComponent)))
@@ -96,7 +101,12 @@ namespace Eco.Mods.WorldEdit
 				foreach (InventoryStack stack in inventoryStacks)
 				{
 					if (stack.ItemType == null) continue;
-					storageComponent.Inventory.AddItems(stack.ItemType, stack.Quantity);
+					Result result = storageComponent.Inventory.TryAddItems(stack.ItemType, stack.Quantity);
+					if (result.Failed)
+					{
+						session.Player.ErrorLocStr(result.Message.Trim());
+						try { storageComponent.Inventory.AddItems(stack.GetItemStack()); } catch (InvalidOperationException) { /*Already show error to user*/ }
+					}
 				}
 			}
 			if (worldObject.HasComponent<CustomTextComponent>() && worldObjectBlockData.Components.ContainsKey(typeof(CustomTextComponent)))
@@ -108,9 +118,17 @@ namespace Eco.Mods.WorldEdit
 
 		public static void RestorePlantBlock(Type type, Vector3i position, IWorldEditBlockData blockData)
 		{
+			if (blockData == null) { return; }
 			WorldEditPlantBlockData plantBlockData = (WorldEditPlantBlockData)blockData;
-			PlantSpecies plantSpecies = EcoSim.AllSpecies.OfType<PlantSpecies>().First(species => species.BlockType == type);
-			Plant plant = EcoSim.PlantSim.SpawnPlant(plantSpecies, position);
+			PlantSpecies plantSpecies = null;
+			try { plantSpecies = EcoSim.AllSpecies.OfType<PlantSpecies>().First(species => species.GetType() == plantBlockData.PlantType); }
+			catch (InvalidOperationException)
+			{
+				//TODO: Temporary support for the old serialized format! Should be done with migration!
+				plantSpecies = EcoSim.AllSpecies.OfType<PlantSpecies>().First(species => species.Name == plantBlockData.PlantType.Name);
+			}
+			if (plantSpecies == null) return;
+			Plant plant = EcoSim.PlantSim.SpawnPlant(plantSpecies, position, true);
 			plant.YieldPercent = plantBlockData.YieldPercent;
 			plant.Dead = plantBlockData.Dead;
 			plant.DeadType = plantBlockData.DeadType;
@@ -131,14 +149,27 @@ namespace Eco.Mods.WorldEdit
 					worldObjectBlock.WorldObjectHandle.Object.Destroy();
 					break;
 				case ImpenetrableStoneBlock _:
+					return;
+				case PlantBlock plantBlock:
+				case TreeBlock treeBlock:
+					Plant plant = EcoSim.PlantSim.GetPlant(position);
+					if (plant != null) { EcoSim.PlantSim.DestroyPlant(plant, DeathType.DivineIntervention, true); }
 					break;
 				default:
-					World.DeleteBlock(position);
+					if (BlockContainerManager.Obj.IsBlockContained(position))
+					{
+						WorldObject worldObject = ServiceHolder<IWorldObjectManager>.Obj.All.Where(x => x.Position3i.Equals(position)).FirstOrDefault();
+						if (worldObject != null) worldObject.Destroy();
+					}
+					else
+					{
+						World.DeleteBlock(position);
+					}
 					break;
 			}
 		}
 
-		private static void ClearWorldObjectPlace(Type worldObjectType, Vector3i position, Quaternion rotation)
+		private static void ClearWorldObjectPlace(Type worldObjectType, Vector3i position, Quaternion rotation, UserSession session)
 		{
 			List<BlockOccupancy> blockOccupancies = WorldObject.GetOccupancy(worldObjectType);
 			if (!blockOccupancies.Any(x => x.BlockType != null)) return;
@@ -147,6 +178,7 @@ namespace Eco.Mods.WorldEdit
 				if (blockOccupancy.BlockType != null)
 				{
 					Vector3i worldPos = position + rotation.RotateVector(blockOccupancy.Offset).XYZi;
+					if (!session.ExecutingCommand.PerformingUndo) session.ExecutingCommand.AddBlockChangedEntry(worldPos); //Do not record changes when doing undo
 					ClearPosition(worldPos);
 				}
 			}

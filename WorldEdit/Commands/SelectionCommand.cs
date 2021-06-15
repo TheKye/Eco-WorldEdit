@@ -6,7 +6,7 @@ namespace Eco.Mods.WorldEdit.Commands
 {
 	internal class SelectionCommand : WorldEditCommand
 	{
-		private enum Command { EXPAND, CONTRACT, SHIFT }
+		private enum Command { EXPAND, REDUCE, SHIFT }
 		private readonly Command _commandType;
 		public readonly Direction direction;
 		public readonly int amount;
@@ -21,70 +21,137 @@ namespace Eco.Mods.WorldEdit.Commands
 			return new SelectionCommand(user, Command.EXPAND, args);
 		}
 
-		public static SelectionCommand ContractCommand(User user, string args)
+		public static SelectionCommand ReduceCommand(User user, string args)
 		{
-			return new SelectionCommand(user, Command.CONTRACT, args);
+			return new SelectionCommand(user, Command.REDUCE, args);
 		}
 
 		private SelectionCommand(User user, Command commandType, string args) : base(user)
 		{
 			this._commandType = commandType;
 
-			if (!this.UserSession.FirstPos.HasValue || !this.UserSession.SecondPos.HasValue) { throw new WorldEditCommandException("Please set both points first!"); }
-
+			if (!this.UserSession.Selection.IsSet()) throw new WorldEditCommandException("Please set both points first!");
 			this.direction = WorldEditUtils.ParseDirectionAndAmountArgs(user, args, out this.amount);
-			if (this.direction == Direction.Unknown) { throw new WorldEditCommandException("Unable to determine direction"); }
+			if (this.direction == Direction.Unknown || (this._commandType == Command.SHIFT && this.direction == Direction.None)) { throw new WorldEditCommandException("Unable to determine direction"); }
 		}
 
-		protected override void Execute()
+		protected override void Execute(WorldRange selection)
 		{
-			Vector3i vector;
-			bool useFirst;
+			Vector3i vector = this.direction.ToVec() * this.amount;
 			switch (this._commandType)
 			{
 				case Command.SHIFT:
-					vector = this.direction.ToVec() * this.amount;
-					this.UserSession.SetFirstPosition(this.UserSession.FirstPos + vector);
-					this.UserSession.SetSecondPosition(this.UserSession.SecondPos + vector);
+					selection.min += vector;
+					selection.max += vector;
 					break;
 				case Command.EXPAND:
-					vector = this.direction.ToVec() * this.amount;
-					useFirst = this.UseFirstPos(this.UserSession.FirstPos.Value, this.UserSession.SecondPos.Value, vector);
-					this.SetPos(useFirst, vector);
+					switch (this.direction)
+					{
+						case Direction.Left:
+						case Direction.Back:
+						case Direction.Down:
+							if (selection.min.x <= selection.max.x) selection.min.x += vector.x; else selection.max.x += vector.x;
+							if (selection.min.y <= selection.max.y) selection.min.y += vector.y; else selection.max.y += vector.y;
+							if (selection.min.z <= selection.max.z) selection.min.z += vector.z; else selection.max.z += vector.z;
+							//selection.min += vector;
+							break;
+						case Direction.Right:
+						case Direction.Forward:
+						case Direction.Up:
+							if (selection.min.x <= selection.max.x) selection.max.x += vector.x; else selection.min.x += vector.x;
+							if (selection.min.y <= selection.max.y) selection.max.y += vector.y; else selection.min.y += vector.y;
+							if (selection.min.z <= selection.max.z) selection.max.z += vector.z; else selection.min.z += vector.z;
+							//selection.max += vector;
+							break;
+						case Direction.None:
+							if (selection.min.x <= selection.max.x)
+							{
+								selection.min.x -= amount; selection.max.x += amount;
+							}
+							else
+							{
+								selection.max.x -= amount; selection.min.x += amount;
+							}
+
+							if (selection.min.y <= selection.max.y)
+							{
+								selection.min.y -= amount; selection.max.y += amount;
+							}
+							else
+							{
+								selection.max.y -= amount; selection.min.y += amount;
+							}
+
+							if (selection.min.z <= selection.max.z)
+							{
+								selection.min.z -= amount; selection.max.z += amount;
+							}
+							else
+							{
+								selection.max.z -= amount; selection.min.z += amount;
+							}
+							//selection.min -= amount;
+							//selection.max += amount;
+							break;
+						default:
+							throw new WorldEditCommandException("Unable to determine direction");
+					}
 					break;
-				case Command.CONTRACT:
-					vector = this.direction.ToVec() * -this.amount;
-					useFirst = this.UseFirstPos(this.UserSession.FirstPos.Value, this.UserSession.SecondPos.Value, vector, true);
-					this.SetPos(useFirst, vector);
+				case Command.REDUCE:
+					switch (this.direction)
+					{
+						case Direction.Left:
+						case Direction.Back:
+						case Direction.Down:
+							if (selection.min.x <= selection.max.x) selection.max.x += vector.x; else selection.min.x += vector.x;
+							if (selection.min.y <= selection.max.y) selection.max.y += vector.y; else selection.min.y += vector.y;
+							if (selection.min.z <= selection.max.z) selection.max.z += vector.z; else selection.min.z += vector.z;
+							//selection.max += vector;
+							break;
+						case Direction.Right:
+						case Direction.Forward:
+						case Direction.Up:
+							if (selection.min.x <= selection.max.x) selection.min.x += vector.x; else selection.max.x += vector.x;
+							if (selection.min.y <= selection.max.y) selection.min.y += vector.y; else selection.max.y += vector.y;
+							if (selection.min.z <= selection.max.z) selection.min.z += vector.z; else selection.max.z += vector.z;
+							//selection.min += vector;
+							break;
+						case Direction.None:
+							if (selection.min.x <= selection.max.x)
+							{
+								selection.min.x += amount; selection.max.x -= amount;
+							}
+							else
+							{
+								selection.max.x += amount; selection.min.x -= amount;
+							}
+
+							if (selection.min.y <= selection.max.y)
+							{
+								selection.min.y += amount; selection.max.y -= amount;
+							}
+							else
+							{
+								selection.max.y += amount; selection.min.y -= amount;
+							}
+
+							if (selection.min.z <= selection.max.z)
+							{
+								selection.min.z += amount; selection.max.z -= amount;
+							}
+							else
+							{
+								selection.max.z += amount; selection.min.z -= amount;
+							}
+							//selection.min += amount;
+							//selection.max -= amount;
+							break;
+						default:
+							throw new WorldEditCommandException("Unable to determine direction");
+					}
 					break;
 			}
-		}
-
-		private void SetPos(bool useFirst, Vector3i vector)
-		{
-			if (useFirst)
-			{
-				this.UserSession.SetFirstPosition(this.UserSession.FirstPos + vector);
-			}
-			else
-			{
-				this.UserSession.SetSecondPosition(this.UserSession.SecondPos + vector);
-			}
-		}
-
-		private bool UseFirstPos(Vector3i firstPos, Vector3i secondPos, Vector3i direction, bool contract = false)
-		{
-			Vector3i pos1 = firstPos;
-			Vector3i pos2 = secondPos;
-			int typeOfVolume = WorldEditUtils.FindTypeOfVolume(ref pos1, ref pos2, out _, out _);
-			var firstResult = WorldEditUtils.SumAllAxis(direction * firstPos);
-			var secondResult = WorldEditUtils.SumAllAxis(direction * secondPos);
-
-			bool useFirst = firstResult > secondResult;
-			if (typeOfVolume == 1) useFirst = !useFirst;
-			if (contract) useFirst = !useFirst;
-
-			return useFirst;
+			this.UserSession.SetSelection(selection);
 		}
 	}
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 using Eco.Gameplay.Players;
-using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared.Math;
+using Eco.Shared.Utils;
 
 namespace Eco.Mods.WorldEdit.Commands
 {
@@ -12,29 +12,21 @@ namespace Eco.Mods.WorldEdit.Commands
 
 		public SetCommand(User user, string blockType) : base(user)
 		{
-			if (!this.UserSession.FirstPos.HasValue || !this.UserSession.SecondPos.HasValue) { throw new WorldEditCommandException("Please set both points first!"); }
+			if (!this.UserSession.Selection.IsSet()) throw new WorldEditCommandException("Please set both points first!");
 			this.blockType = BlockUtils.GetBlockType(blockType) ?? throw new WorldEditCommandException($"No BlockType with name {blockType} found!");
 		}
 
-		protected override void Execute()
+		protected override void Execute(WorldRange selection)
 		{
-			SortedVectorPair vectors = (SortedVectorPair)WorldEditUtils.GetSortedVectors(this.UserSession.FirstPos.Value, this.UserSession.SecondPos.Value);
-			this.BlocksChanged = 0;
-
-			for (int x = vectors.Lower.X; x != vectors.Higher.X; x = (x + 1) % Shared.Voxel.World.VoxelSize.X)
+			selection = selection.FixXZ(Shared.Voxel.World.VoxelSize);
+			void DoAction(Vector3i pos)
 			{
-				for (int y = vectors.Lower.Y; y < vectors.Higher.Y; y++)
-				{
-					for (int z = vectors.Lower.Z; z != vectors.Higher.Z; z = (z + 1) % Shared.Voxel.World.VoxelSize.Z)
-					{
-						Vector3i pos = new Vector3i(x, y, z);
-						if (WorldEditBlockManager.IsImpenetrable(pos)) continue;
-						AddBlockChangedEntry(pos);
-						WorldEditBlockManager.SetBlock(blockType, pos);
-						BlocksChanged++;
-					}
-				}
+				if (WorldEditBlockManager.IsImpenetrable(pos)) return;
+				this.AddBlockChangedEntry(pos);
+				WorldEditBlockManager.SetBlock(blockType, pos);
+				this.BlocksChanged++;
 			}
+			selection.ForEachInc(DoAction);
 		}
 	}
 }

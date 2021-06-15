@@ -19,7 +19,7 @@ namespace Eco.Mods.WorldEdit.Model
 		{
 			WorldEditPlantBlockData plantBlockData = new WorldEditPlantBlockData
 			{
-				PlantType = plant.GetType(),
+				PlantType = plant.Species.GetType(),
 				YieldPercent = plant.YieldPercent,
 				Dead = plant.Dead,
 				DeadType = plant.DeadType,

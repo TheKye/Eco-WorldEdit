@@ -20,6 +20,14 @@ namespace Eco.Mods.WorldEdit.Model
 			return inventoryStack;
 		}
 
+		public ItemStack GetItemStack()
+		{
+			ItemStack itemStack = new ItemStack(this.ItemType, this.Quantity);
+			int maxStack = Item.GetMaxStackSize(itemStack.Item?.Type);
+			if (itemStack.Quantity > maxStack) itemStack.Quantity = maxStack;
+			return itemStack;
+		}
+
 		[JsonConstructor]
 		public InventoryStack(Type itemType, int quantity)
 		{

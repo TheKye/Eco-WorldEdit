@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Serializer;
+using Eco.Shared.Math;
 
 namespace Eco.Mods.WorldEdit.Commands
 {
@@ -11,16 +12,17 @@ namespace Eco.Mods.WorldEdit.Commands
 		public ImportCommand(User user, string fileName) : base(user)
 		{
 			this.fileName = WorldEditManager.GetSchematicFileName(fileName);
-			if (!File.Exists(this.fileName)) throw new WorldEditCommandException($"Schematic file {fileName} not found!");
 		}
 
-		protected override void Execute()
+		protected override void Execute(WorldRange selection)
 		{
+			if (!File.Exists(this.fileName)) throw new WorldEditCommandException($"Schematic file {fileName} not found!");
 			using (FileStream stream = File.OpenRead(this.fileName))
 			{
 				WorldEditSerializer serializer = new WorldEditSerializer();
 				serializer.Deserialize(stream);
 				this.UserSession.Clipboard.Parse(serializer);
+				this.UserSession.SetImportedSchematicAuthor(serializer.AuthorInformation);
 			}
 		}
 	}

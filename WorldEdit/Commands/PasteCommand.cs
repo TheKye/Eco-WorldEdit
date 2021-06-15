@@ -14,7 +14,7 @@ namespace Eco.Mods.WorldEdit.Commands
 			if (this.UserSession.Clipboard.Count <= 0) throw new WorldEditCommandException($"Please /copy a selection first!");
 		}
 
-		protected override void Execute()
+		protected override void Execute(WorldRange selection)
 		{
 			this.playerPos = this.UserSession.Player.Position.Round;
 
@@ -30,7 +30,7 @@ namespace Eco.Mods.WorldEdit.Commands
 				Vector3i pos = WorldEditBlockManager.ApplyOffset(entry.Position, this.playerPos);
 				if (WorldEditBlockManager.IsImpenetrable(pos)) continue;
 				AddBlockChangedEntry(pos);
-				WorldEditBlockManager.RestoreBlockOffset(entry, this.playerPos, this.UserSession.Player);
+				WorldEditBlockManager.RestoreBlockOffset(entry, this.playerPos, this.UserSession);
 			}
 		}
 	}
