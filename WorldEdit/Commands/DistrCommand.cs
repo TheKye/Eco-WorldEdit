@@ -124,7 +124,7 @@ namespace Eco.Mods.WorldEdit.Commands
 			data = data.Replace("<pos=300>", "	");
 			data = Regex.Replace(data, "<.*?>", String.Empty);
 
-			if (!Directory.Exists(EcoWorldEdit.SchematicDirectoryPath)) { Directory.CreateDirectory(EcoWorldEdit.SchematicDirectoryPath); }
+			if (!Directory.Exists(WorldEditManager.GetSchematicDirectory())) { Directory.CreateDirectory(WorldEditManager.GetSchematicDirectory()); }
 			string file = WorldEditManager.GetSchematicFileName(this.fileName, ".txt");
 			File.WriteAllText(file, data);
 		}
