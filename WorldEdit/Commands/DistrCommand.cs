@@ -97,8 +97,8 @@ namespace Eco.Mods.WorldEdit.Commands
 			sb.Append(Localizer.DoStr("Length:").ToString().PadRight(8)).AppendLine(Text.PluralLocStr("block", "blocks", selection.LengthInc));
 			sb.Append(Localizer.DoStr("Volume:").ToString().PadRight(8)).AppendLine(Text.PluralLocStr("block", "blocks", selection.VolumeInc));
 			sb.Append(Localizer.DoStr("Area:").ToString().PadRight(8)).AppendLine(Text.PluralLocStr("block", "blocks", selection.WidthInc * selection.LengthInc));
-			sb.AppendLineLoc($"Empty blocks: {emptyBlocks,8}");
-			sb.AppendLineLoc($"Total blocks: {totalBlocks,8}");
+			sb.AppendLocStr("Empty blocks:"); sb.AppendLine($" {emptyBlocks,8}");
+			sb.AppendLocStr("Total blocks:"); sb.AppendLine($" {totalBlocks,8}");
 
 			sb.AppendLine().AppendLine(TextLoc.Header(Localizer.DoStr("Block List")));
 			foreach (KeyValuePair<object, long> entry in blocks)
