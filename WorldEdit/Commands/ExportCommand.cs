@@ -12,7 +12,7 @@ namespace Eco.Mods.WorldEdit.Commands
 		public ExportCommand(User user, string fileName) : base(user)
 		{
 			this.fileName = WorldEditManager.GetSchematicFileName(fileName);
-			if (!Directory.Exists(EcoWorldEdit.SchematicDirectoryPath)) { Directory.CreateDirectory(EcoWorldEdit.SchematicDirectoryPath); }
+			if (!Directory.Exists(WorldEditManager.GetSchematicDirectory())) { Directory.CreateDirectory(WorldEditManager.GetSchematicDirectory()); }
 			if (this.UserSession.Clipboard.Count <= 0) throw new WorldEditCommandException($"Please /copy a selection first!");
 		}
 

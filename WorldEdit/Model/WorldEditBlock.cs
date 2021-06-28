@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Eco.Core.IoC;
 using Eco.Gameplay.Blocks;
 using Eco.Gameplay.Objects;
 using Eco.Gameplay.Plants;

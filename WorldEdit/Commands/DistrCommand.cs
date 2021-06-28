@@ -19,6 +19,7 @@ using Eco.Shared.Utils;
 using Eco.Simulation;
 using Eco.Simulation.Agents;
 using Eco.Simulation.Types;
+using Eco.World;
 using Eco.World.Blocks;
 
 namespace Eco.Mods.WorldEdit.Commands
@@ -96,8 +97,8 @@ namespace Eco.Mods.WorldEdit.Commands
 			sb.Append(Localizer.DoStr("Length:").ToString().PadRight(8)).AppendLine(Text.PluralLocStr("block", "blocks", selection.LengthInc));
 			sb.Append(Localizer.DoStr("Volume:").ToString().PadRight(8)).AppendLine(Text.PluralLocStr("block", "blocks", selection.VolumeInc));
 			sb.Append(Localizer.DoStr("Area:").ToString().PadRight(8)).AppendLine(Text.PluralLocStr("block", "blocks", selection.WidthInc * selection.LengthInc));
-			sb.AppendLineLoc($"Empty blocks: {emptyBlocks,8}");
-			sb.AppendLineLoc($"Total blocks: {totalBlocks,8}");
+			sb.AppendLocStr("Empty blocks:"); sb.AppendLine($" {emptyBlocks,8}");
+			sb.AppendLocStr("Total blocks:"); sb.AppendLine($" {totalBlocks,8}");
 
 			sb.AppendLine().AppendLine(TextLoc.Header(Localizer.DoStr("Block List")));
 			foreach (KeyValuePair<object, long> entry in blocks)
@@ -123,7 +124,7 @@ namespace Eco.Mods.WorldEdit.Commands
 			data = data.Replace("<pos=300>", "	");
 			data = Regex.Replace(data, "<.*?>", String.Empty);
 
-			if (!Directory.Exists(EcoWorldEdit.SchematicDirectoryPath)) { Directory.CreateDirectory(EcoWorldEdit.SchematicDirectoryPath); }
+			if (!Directory.Exists(WorldEditManager.GetSchematicDirectory())) { Directory.CreateDirectory(WorldEditManager.GetSchematicDirectory()); }
 			string file = WorldEditManager.GetSchematicFileName(this.fileName, ".txt");
 			File.WriteAllText(file, data);
 		}

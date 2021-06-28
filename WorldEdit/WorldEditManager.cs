@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Eco.Core.Plugins;
 using Eco.Gameplay.Items;
 using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Serializer;
@@ -41,7 +42,7 @@ namespace Eco.Mods.WorldEdit
 
 		public static void UpdateBlueprintList()
 		{
-			string schematicsPath = EcoWorldEdit.SchematicDirectoryPath;
+			string schematicsPath = GetSchematicDirectory();
 			if (!Directory.Exists(schematicsPath)) { BlueprintList.Clear(); return; }
 			string[] list = Directory.GetFiles(schematicsPath, $"*{EcoWorldEdit.SchematicDefaultExtension}", SearchOption.AllDirectories);
 
@@ -79,11 +80,15 @@ namespace Eco.Mods.WorldEdit
 		{
 			return new string(name.Where(x => !Path.GetInvalidFileNameChars().Contains(x)).ToArray());
 		}
+		public static string GetSchematicDirectory()
+		{
+			return Path.Combine(StorageManager.Config.StorageDirectory, EcoWorldEdit.SchematicDirectoryName);
+		}
 
 		public static string GetSchematicFileName(string name, string extension = EcoWorldEdit.SchematicDefaultExtension)
 		{
 			string fileName = SanitizeFileName(name);
-			return Path.Combine(EcoWorldEdit.SchematicDirectoryPath, fileName + extension);
+			return Path.Combine(GetSchematicDirectory(), fileName + extension);
 		}
 	}
 }
