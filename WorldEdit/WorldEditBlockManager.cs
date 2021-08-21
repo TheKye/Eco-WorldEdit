@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Eco.Core.IoC;
 using Eco.Core.Utils;
 using Eco.Gameplay.Blocks;
 using Eco.Gameplay.Components;
 using Eco.Gameplay.Objects;
 using Eco.Gameplay.Plants;
 using Eco.Mods.WorldEdit.Model;
+using Eco.Shared.IoC;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
 using Eco.Simulation;
 using Eco.Simulation.Agents;
 using Eco.Simulation.Types;
-using Eco.World;
 using Eco.World.Blocks;
 using Newtonsoft.Json.Linq;
 

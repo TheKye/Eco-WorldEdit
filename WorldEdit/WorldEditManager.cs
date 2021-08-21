@@ -80,7 +80,6 @@ namespace Eco.Mods.WorldEdit
 		{
 			return new string(name.Where(x => !Path.GetInvalidFileNameChars().Contains(x)).ToArray());
 		}
-
 		public static string GetSchematicDirectory()
 		{
 			return Path.Combine(StorageManager.Config.StorageDirectory, EcoWorldEdit.SchematicDirectoryName);

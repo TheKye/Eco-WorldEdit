@@ -580,7 +580,7 @@ namespace Eco.Mods.WorldEdit
 			try
 			{
 				Vector3i pos = user.Position.Round;
-				Vector2i claimPos = PlotUtil.NearestPlotPosInWorld(pos.XZ);
+				Vector2i claimPos = PlotUtil.FromWorldPos.ToCornerWorldPosOfPlotAt(pos);
 				UserSession session = WorldEditManager.GetUserSession(user);
 
 				session.SetFirstPosition(claimPos.X_Z(pos.Y - 1));
@@ -601,7 +601,7 @@ namespace Eco.Mods.WorldEdit
 			try
 			{
 				Vector3i pos = user.Position.Round;
-				Vector2i claimPos = PlotUtil.NearestPlotPosInWorld(pos.XZ);
+				Vector2i claimPos = PlotUtil.FromWorldPos.ToCornerWorldPosOfPlotAt(pos);
 				UserSession session = WorldEditManager.GetUserSession(user);
 
 				WorldRange range = session.Selection;
@@ -647,7 +647,7 @@ namespace Eco.Mods.WorldEdit
 						break;
 				}
 				pos += direction.ToVec() * (PlotUtil.PropertyPlotLength - 1) * amount;
-				Vector2i claimPos = PlotUtil.NearestPlotPosInWorld(pos.XZ);
+				Vector2i claimPos = PlotUtil.FromWorldPos.ToCornerWorldPosOfPlotAt(pos.XZ);
 				range.ExtendToInclude(claimPos.X_Z(pos.Y));
 				range.ExtendToInclude(WorldEditUtils.SecondPlotPos(claimPos).X_Z(pos.Y));
 				session.SetSelection(range);
