@@ -71,8 +71,10 @@ namespace Eco.Mods.WorldEdit.Serializer
 			get
 			{
 				JsonSerializerSettings serializerSettings = new JsonSerializerSettings();
+				serializerSettings.Culture = System.Globalization.CultureInfo.InvariantCulture;
 				serializerSettings.Converters.Add(new JsonQuaternionConverter());
 				serializerSettings.Converters.Add(new JsonVector3iConverter());
+				serializerSettings.Converters.Add(new JsonTypeConverter());
 				return serializerSettings;
 			}
 		}
