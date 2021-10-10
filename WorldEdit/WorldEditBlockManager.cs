@@ -87,9 +87,8 @@ namespace Eco.Mods.WorldEdit
 				StorageComponent storageComponent = worldObject.GetComponent<StorageComponent>();
 				List<InventoryStack> inventoryStacks;
 				object component = worldObjectBlockData.Components[typeof(StorageComponent)];
-				if (component is JArray)
+				if (component is JArray jArray)
 				{
-					JArray jArray = (JArray)component;
 					inventoryStacks = jArray.ToObject<List<InventoryStack>>();
 				}
 				else
@@ -112,6 +111,23 @@ namespace Eco.Mods.WorldEdit
 			{
 				CustomTextComponent textComponent = worldObject.GetComponent<CustomTextComponent>();
 				textComponent.TextData.Text = (string)worldObjectBlockData.Components[typeof(CustomTextComponent)];
+			}
+			if (worldObject.HasComponent<MintComponent>() && worldObjectBlockData.Components.ContainsKey(typeof(MintComponent)))
+			{
+				Log.Debug($"MintComponent");
+				MintComponent mintComponent = worldObject.GetComponent<MintComponent>();
+				object obj = worldObjectBlockData.Components[typeof(MintComponent)];
+				MintDataCurrency mintCurrency;
+				if (obj is JObject jobj)
+				{
+					mintCurrency = jobj.ToObject<MintDataCurrency>();
+				}
+				else
+				{
+					mintCurrency = (MintDataCurrency)obj;
+				}
+				Log.Debug($"{obj} is {obj.GetType()}");
+				mintComponent.InitializeCurrency(mintCurrency.GetCurrency());
 			}
 		}
 

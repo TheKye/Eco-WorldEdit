@@ -43,6 +43,12 @@ namespace Eco.Mods.WorldEdit.Model
 				worldObjectData.Components.Add(typeof(CustomTextComponent), textComponent.TextData.Text);
 			}
 
+			if (worldObject.HasComponent<MintComponent>())
+			{
+				MintComponent mintComponent = worldObject.GetComponent<MintComponent>();
+				worldObjectData.Components.Add(typeof(MintComponent), MintDataCurrency.Create(mintComponent.MintData));
+			}
+
 			return worldObjectData;
 		}
 
