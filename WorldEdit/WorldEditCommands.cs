@@ -1,6 +1,8 @@
 ﻿using System;
 using Eco.Gameplay.Players;
+using Eco.Gameplay.Property;
 using Eco.Gameplay.Systems.Chat;
+using Eco.Gameplay.Systems.Messaging.Chat.Commands;
 using Eco.Mods.WorldEdit.Commands;
 using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared.Localization;
@@ -46,7 +48,7 @@ namespace Eco.Mods.WorldEdit
 			try
 			{
 				pTypeName = pTypeName.Replace(" ", "");
-				SetCommand command = new SetCommand(user, pTypeName);
+				SetCommand command = new(user, pTypeName);
 				if (command.Invoke())
 				{
 					user.Player.MsgLoc($"{command.BlocksChanged} blocks changed in {command.ElapsedMilliseconds}ms.");
@@ -67,7 +69,7 @@ namespace Eco.Mods.WorldEdit
 		{
 			try
 			{
-				SetCommand command = new SetCommand(user, "Empty");
+				SetCommand command = new(user, "Empty");
 				if (command.Invoke())
 				{
 					user.Player.MsgLoc($"{command.BlocksChanged} blocks cleared in {command.ElapsedMilliseconds}ms.");
@@ -96,7 +98,7 @@ namespace Eco.Mods.WorldEdit
 				if (splitted.Length >= 2)
 					toReplace = splitted[1].Trim().ToLower().Replace(" ", "");
 
-				ReplaceCommand command = new ReplaceCommand(user, toFind, toReplace);
+				ReplaceCommand command = new(user, toFind, toReplace);
 				if (command.Invoke())
 				{
 					user.Player.MsgLoc($"{command.BlocksChanged} blocks changed.");
@@ -118,7 +120,7 @@ namespace Eco.Mods.WorldEdit
 			try
 			{
 				typeName = typeName.Replace(" ", "");
-				WallsCommand command = new WallsCommand(user, typeName);
+				WallsCommand command = new(user, typeName);
 				if (command.Invoke())
 				{
 					user.Player.MsgLoc($"{command.BlocksChanged} blocks changed.");
@@ -139,7 +141,7 @@ namespace Eco.Mods.WorldEdit
 		{
 			try
 			{
-				StackCommand command = new StackCommand(user, directionAndAmount, offset);
+				StackCommand command = new(user, directionAndAmount, offset);
 				if (command.Invoke())
 				{
 					user.Player.MsgLoc($"{command.BlocksChanged} blocks changed.");
@@ -160,7 +162,7 @@ namespace Eco.Mods.WorldEdit
 		{
 			try
 			{
-				MoveCommand command = new MoveCommand(user, directionAndAmount);
+				MoveCommand command = new(user, directionAndAmount);
 				if (command.Invoke())
 				{
 					user.Player.MsgLoc($"{command.BlocksChanged} blocks moved.");
@@ -454,21 +456,13 @@ namespace Eco.Mods.WorldEdit
 			type = type.Replace(" ", "").Trim();
 			if (type.Contains("brief")) type = "brief";
 			if (type.Contains("detail")) type = "detail";
-			switch (type)
-			{
-				case "brief":
-				case "b":
-					type = "brief";
-					break;
-				case "detail":
-				case "d":
-					type = "detail";
-					break;
-				default:
-					type = "brief";
-					break;
-			}
-			if (!string.IsNullOrEmpty(fileName))
+            type = type switch
+            {
+                "brief" or "b" => "brief",
+                "detail" or "d" => "detail",
+                _ => "brief",
+            };
+            if (!string.IsNullOrEmpty(fileName))
 			{
 				fileName = fileName.Replace(" ", string.Empty).Trim();
 			}
@@ -521,8 +515,8 @@ namespace Eco.Mods.WorldEdit
 				Vector3 pos = user.Position;
 				pos.X = pos.X < 0 ? pos.X + Shared.Voxel.World.VoxelSize.X : pos.X;
 				pos.Z = pos.Z < 0 ? pos.Z + Shared.Voxel.World.VoxelSize.Z : pos.Z;
-				pos.X = pos.X % Shared.Voxel.World.VoxelSize.X;
-				pos.Z = pos.Z % Shared.Voxel.World.VoxelSize.Z;
+				pos.X %= Shared.Voxel.World.VoxelSize.X;
+				pos.Z %= Shared.Voxel.World.VoxelSize.Z;
 
 				UserSession session = WorldEditManager.GetUserSession(user);
 				session.SetFirstPosition(pos.Round);
@@ -544,8 +538,8 @@ namespace Eco.Mods.WorldEdit
 				Vector3 pos = user.Position;
 				pos.X = pos.X < 0 ? pos.X + Shared.Voxel.World.VoxelSize.X : pos.X;
 				pos.Z = pos.Z < 0 ? pos.Z + Shared.Voxel.World.VoxelSize.Z : pos.Z;
-				pos.X = pos.X % Shared.Voxel.World.VoxelSize.X;
-				pos.Z = pos.Z % Shared.Voxel.World.VoxelSize.Z;
+				pos.X %= Shared.Voxel.World.VoxelSize.X;
+				pos.Z %= Shared.Voxel.World.VoxelSize.Z;
 
 				UserSession session = WorldEditManager.GetUserSession(user);
 				session.SetSecondPosition(pos.Round);
@@ -580,7 +574,7 @@ namespace Eco.Mods.WorldEdit
 			try
 			{
 				Vector3i pos = user.Position.Round;
-				Vector2i claimPos = PlotUtil.FromWorldPos.ToCornerWorldPosOfPlotAt(pos);
+				Vector2i claimPos = PlotUtil.RawPlotPos(pos.XZ).RawXY;
 				UserSession session = WorldEditManager.GetUserSession(user);
 
 				session.SetFirstPosition(claimPos.X_Z(pos.Y - 1));
@@ -601,7 +595,7 @@ namespace Eco.Mods.WorldEdit
 			try
 			{
 				Vector3i pos = user.Position.Round;
-				Vector2i claimPos = PlotUtil.FromWorldPos.ToCornerWorldPosOfPlotAt(pos);
+				Vector2i claimPos = PlotUtil.RawPlotPos(pos.XZ).RawXY;
 				UserSession session = WorldEditManager.GetUserSession(user);
 
 				WorldRange range = session.Selection;
@@ -647,7 +641,7 @@ namespace Eco.Mods.WorldEdit
 						break;
 				}
 				pos += direction.ToVec() * (PlotUtil.PropertyPlotLength - 1) * amount;
-				Vector2i claimPos = PlotUtil.FromWorldPos.ToCornerWorldPosOfPlotAt(pos.XZ);
+				Vector2i claimPos = PlotUtil.RawPlotPos(pos.XZ).RawXY;
 				range.ExtendToInclude(claimPos.X_Z(pos.Y));
 				range.ExtendToInclude(WorldEditUtils.SecondPlotPos(claimPos).X_Z(pos.Y));
 				session.SetSelection(range);
