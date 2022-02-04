@@ -7,6 +7,19 @@ namespace Eco.Mods.WorldEdit.Utils
 {
 	internal static class WorldEditUtils
 	{
+		public static bool ParseCoordinateArgs(User user, string args, out Vector3i pos)
+		{
+			pos = user.Position.Round;
+			args = args.Trim().Replace(" ", ",");
+			string[] coords = args.Split(',', StringSplitOptions.RemoveEmptyEntries);
+			if (coords.Length < 3) { user.Player.ErrorLocStr($"Ivalid coordinates format: [{args}]"); return false; }
+			if (!int.TryParse(coords[0], out int x)) { user.Player.ErrorLocStr($"Ivalid value for coordinate X given: [{coords[0]}]"); return false; }
+			if (!int.TryParse(coords[1], out int y)) { user.Player.ErrorLocStr($"Ivalid value for coordinate Y given: [{coords[1]}]"); return false; }
+			if (!int.TryParse(coords[2], out int z)) { user.Player.ErrorLocStr($"Ivalid value for coordinate Z given: [{coords[2]}]"); return false; }
+			pos = new Vector3i(x, y, z);
+			return true;
+		}
+
 		public static Direction ParseDirectionAndAmountArgs(User user, string args, out int amount)
 		{
 			Direction direction = Direction.Unknown;

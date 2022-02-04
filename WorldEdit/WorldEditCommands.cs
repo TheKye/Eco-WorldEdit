@@ -451,7 +451,7 @@ namespace Eco.Mods.WorldEdit
 		[ChatSubCommand("WorldEdit", "distr will give you a detailed list of all items in your selected area", "distr", ChatAuthorizationLevel.Admin)]
 		public static void Distr(User user, string type = "brief", string fileName = null)
 		{
-			type = type.Replace(" ", "").Trim();
+			type = type.Trim().Replace(" ", "");
 			if (type.Contains("brief")) type = "brief";
 			if (type.Contains("detail")) type = "detail";
 			switch (type)
@@ -513,48 +513,68 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "Set First Position To player position", "setpos1", ChatAuthorizationLevel.Admin)]
-		public static void SetPos1(User user)
+		[ChatSubCommand("WorldEdit", "Set First Position to given coordinate or player position", "setpos1", ChatAuthorizationLevel.Admin)]
+		public static void SetPos1(User user, string coordinate = null)
 		{
 			try
 			{
-				Vector3 pos = user.Position;
+				Vector3i pos;
+
+				if(!String.IsNullOrEmpty(coordinate))
+				{
+					if(!WorldEditUtils.ParseCoordinateArgs(user, coordinate, out pos)) { return; }
+				}
+				else
+				{
+					pos = user.Position.Round;
+				}
+
 				pos.X = pos.X < 0 ? pos.X + Shared.Voxel.World.VoxelSize.X : pos.X;
 				pos.Z = pos.Z < 0 ? pos.Z + Shared.Voxel.World.VoxelSize.Z : pos.Z;
 				pos.X = pos.X % Shared.Voxel.World.VoxelSize.X;
 				pos.Z = pos.Z % Shared.Voxel.World.VoxelSize.Z;
 
 				UserSession session = WorldEditManager.GetUserSession(user);
-				session.SetFirstPosition(pos.Round);
+				session.SetFirstPosition(pos);
 
 				user.Player.MsgLoc($"First Position set to {pos}");
 			}
 			catch (Exception e)
 			{
-				Log.WriteError(Localizer.Do($"{e}"));
+				Log.WriteErrorLineLocStr(e.ToString());
 
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "Set Second Position To player position", "setpos2", ChatAuthorizationLevel.Admin)]
-		public static void SetPos2(User user)
+		[ChatSubCommand("WorldEdit", "Set Second Position to given coordinate or player position", "setpos2", ChatAuthorizationLevel.Admin)]
+		public static void SetPos2(User user, string coordinate = null)
 		{
 			try
 			{
-				Vector3 pos = user.Position;
+				Vector3i pos;
+
+				if (!String.IsNullOrEmpty(coordinate))
+				{
+					if (!WorldEditUtils.ParseCoordinateArgs(user, coordinate, out pos)) { return; }
+				}
+				else
+				{
+					pos = user.Position.Round;
+				}
+
 				pos.X = pos.X < 0 ? pos.X + Shared.Voxel.World.VoxelSize.X : pos.X;
 				pos.Z = pos.Z < 0 ? pos.Z + Shared.Voxel.World.VoxelSize.Z : pos.Z;
 				pos.X = pos.X % Shared.Voxel.World.VoxelSize.X;
 				pos.Z = pos.Z % Shared.Voxel.World.VoxelSize.Z;
 
 				UserSession session = WorldEditManager.GetUserSession(user);
-				session.SetSecondPosition(pos.Round);
+				session.SetSecondPosition(pos);
 
 				user.Player.MsgLoc($"Second Position set to {pos}");
 			}
 			catch (Exception e)
 			{
-				Log.WriteError(Localizer.Do($"{e}"));
+				Log.WriteErrorLineLocStr(e.ToString());
 			}
 		}
 
