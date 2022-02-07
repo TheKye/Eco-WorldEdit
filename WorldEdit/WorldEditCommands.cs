@@ -326,11 +326,11 @@ namespace Eco.Mods.WorldEdit
 		}
 
 		[ChatSubCommand("WorldEdit", "paste will paste the copied selection or imported schematic from where the player is standing", "paste", ChatAuthorizationLevel.Admin)]
-		public static void Paste(User user)
+		public static void Paste(User user, bool skipEmpty = false)
 		{
 			try
 			{
-				WorldEditCommand command = new PasteCommand(user);
+				WorldEditCommand command = new PasteCommand(user, skipEmpty);
 				if (command.Invoke())
 				{
 					user.Player.MsgLoc($"Paste done in {command.ElapsedMilliseconds}ms.");
