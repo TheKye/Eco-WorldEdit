@@ -17,7 +17,7 @@ namespace Eco.Mods.WorldEdit.Commands
 		{
 			Vector3 pos = this.UserSession.Player.Position;
 			var newpos = new Vector3i((int)pos.X, (int)pos.Y + this.count, (int)pos.Z);
-			WorldEditBlockManager.SetBlock(typeof(StoneBlock), newpos);
+			WorldEditBlockManager.RestoreBlock(typeof(StoneBlock), newpos);
 			newpos.Y += 2;
 			this.UserSession.Player.SetPosition(newpos);
 		}

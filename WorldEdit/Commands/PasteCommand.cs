@@ -25,12 +25,13 @@ namespace Eco.Mods.WorldEdit.Commands
 
 		private void Restore(List<WorldEditBlock> list)
 		{
+			WorldEditBlockManager blockManager = new WorldEditBlockManager(this.UserSession);
 			foreach (WorldEditBlock entry in list)
 			{
 				Vector3i pos = WorldEditBlockManager.ApplyOffset(entry.Position, this.playerPos);
 				if (WorldEditBlockManager.IsImpenetrable(pos)) continue;
 				AddBlockChangedEntry(pos);
-				WorldEditBlockManager.RestoreBlockOffset(entry, this.playerPos, this.UserSession);
+				blockManager.RestoreBlockOffset(entry, this.playerPos);
 			}
 		}
 	}

@@ -67,7 +67,7 @@ namespace Eco.Mods.WorldEdit
 		{
 			try
 			{
-				SetCommand command = new SetCommand(user, "Empty");
+				SetCommand command = new SetCommand(user, typeof(World.Blocks.EmptyBlock));
 				if (command.Invoke())
 				{
 					user.Player.MsgLoc($"{command.BlocksChanged} blocks cleared in {command.ElapsedMilliseconds}ms.");

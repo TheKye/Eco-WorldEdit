@@ -17,13 +17,14 @@ namespace Eco.Mods.WorldEdit.Commands
 
 		protected override void Execute(WorldRange selection)
 		{
+			WorldEditBlockManager blockManager = new WorldEditBlockManager(this.UserSession);
 			selection = selection.FixXZ(Shared.Voxel.World.VoxelSize);
 
 			foreach (Vector3i pos in selection.SidesIterator())
 			{
 				if (WorldEditBlockManager.IsImpenetrable(pos)) continue;
 				this.AddBlockChangedEntry(pos);
-				WorldEditBlockManager.SetBlock(blockType, pos);
+				blockManager.SetBlock(blockType, pos);
 				this.BlocksChanged++;
 			}
 		}
