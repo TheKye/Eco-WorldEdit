@@ -4,11 +4,11 @@ using Eco.Shared.Math;
 
 namespace Eco.Mods.WorldEdit.Commands
 {
-	internal class UpCommand : WorldEditCommand
+	internal class UpmeCommand : WorldEditCommand
 	{
 		private readonly int count;
 
-		public UpCommand(User user, int count) : base(user)
+		public UpmeCommand(User user, int count) : base(user)
 		{
 			this.count = count;
 		}

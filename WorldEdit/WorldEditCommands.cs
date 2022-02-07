@@ -239,12 +239,12 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "up will move the player upwards by the specified amount and place a block under the player if needed", "up", ChatAuthorizationLevel.Admin)]
-		public static void Up(User user, int count = 1)
+		[ChatSubCommand("WorldEdit", "Upme will move the player upwards by the specified amount and place a block under the player if needed", "upme", ChatAuthorizationLevel.Admin)]
+		public static void Upme(User user, int count = 1)
 		{
 			try
 			{
-				WorldEditCommand command = new UpCommand(user, count);
+				WorldEditCommand command = new UpmeCommand(user, count);
 				if (command.Invoke())
 				{
 					//Silence?
