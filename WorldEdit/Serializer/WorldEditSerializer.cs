@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Eco.Mods.WorldEdit.Model;
-using Eco.Shared.Utils;
 using K4os.Compression.LZ4.Streams;
 using Newtonsoft.Json;
 
@@ -143,7 +142,6 @@ namespace Eco.Mods.WorldEdit.Serializer
 		{
 			if (IsLZ4Stream(stream))
 			{
-				Log.Debug("Detected compressed LZ4 file"); //TODO: !Remove debug output
 				using (LZ4DecoderStream lZ4DecoderStream = LZ4Stream.Decode(stream, null, true))
 				{
 					return DeserializeJSON<T>(lZ4DecoderStream);
@@ -151,7 +149,6 @@ namespace Eco.Mods.WorldEdit.Serializer
 			}
 			else
 			{
-				Log.Debug("Detected uncompressed JSON file"); //TODO: !Remove debug output
 				return DeserializeJSON<T>(stream);
 			}
 		}
@@ -171,7 +168,6 @@ namespace Eco.Mods.WorldEdit.Serializer
 			byte[] buff = new byte[8];
 			stream.Read(buff, 0, 8);
 			string header = Encoding.ASCII.GetString(buff, 0, LZ4_HEADER.Length);
-			Log.Debug($"BP File Header: {header}"); //TODO: !Remove debug output
 			if (LZ4_HEADER.Equals(header, StringComparison.Ordinal)) { return true; } else { stream.Seek(0, SeekOrigin.Begin); return false; }
 		}
 	}

@@ -124,7 +124,6 @@ namespace Eco.Mods.WorldEdit
 			}
 			if (worldObject.HasComponent<MintComponent>() && worldObjectBlockData.Components.ContainsKey(typeof(MintComponent)))
 			{
-				Log.Debug($"MintComponent"); //TODO: !Remove debug output
 				MintComponent mintComponent = worldObject.GetComponent<MintComponent>();
 				object obj = worldObjectBlockData.Components[typeof(MintComponent)];
 				MintDataCurrency mintCurrency;
@@ -136,7 +135,6 @@ namespace Eco.Mods.WorldEdit
 				{
 					mintCurrency = (MintDataCurrency)obj;
 				}
-				Log.Debug($"{obj} is {obj.GetType()}"); //TODO: !Remove debug output
 				mintComponent.InitializeCurrency(mintCurrency.GetCurrency());
 			}
 			//Handle door opening
@@ -145,7 +143,6 @@ namespace Eco.Mods.WorldEdit
 				System.Reflection.MethodInfo method = typeof(TechTree.DoorObject).GetMethod("WE_SetOpensOut", new Type[] { typeof(bool) });
 				if (method != null)
 				{
-					Log.WriteWarningLineLocStr($"DoorObject: method exist"); //TODO: !Remove debug output
 					object obj = worldObjectBlockData.Components[typeof(TechTree.DoorObject)];
 					DoorComponent doorComponent;
 					if (obj is JObject jobj)
@@ -157,10 +154,6 @@ namespace Eco.Mods.WorldEdit
 						doorComponent = (DoorComponent)obj;
 					}
 					method.Invoke(worldObject, new object[] { doorComponent.OpensOut });
-				}
-				else
-				{
-					Log.WriteWarningLineLocStr($"DoorObject: method NOT exist"); //TODO: !Remove debug output
 				}
 			}
 		}

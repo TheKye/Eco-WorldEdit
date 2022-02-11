@@ -19,7 +19,6 @@ using Eco.Shared.Utils;
 using Eco.Simulation;
 using Eco.Simulation.Agents;
 using Eco.Simulation.Types;
-using Eco.World;
 using Eco.World.Blocks;
 
 namespace Eco.Mods.WorldEdit.Commands

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using Eco.Gameplay.Economy;
-using Eco.Gameplay.Items.PersistentData;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Eco.Mods.WorldEdit.Model.Components
 {
