@@ -4,7 +4,7 @@ using Eco.Gameplay.Economy;
 using Eco.Gameplay.Items.PersistentData;
 using Newtonsoft.Json;
 
-namespace Eco.Mods.WorldEdit.Model
+namespace Eco.Mods.WorldEdit.Model.Components
 {
 	internal struct MintDataCurrency
 	{

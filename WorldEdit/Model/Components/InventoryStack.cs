@@ -2,7 +2,7 @@
 using Eco.Gameplay.Items;
 using Newtonsoft.Json;
 
-namespace Eco.Mods.WorldEdit.Model
+namespace Eco.Mods.WorldEdit.Model.Components
 {
 	internal struct InventoryStack
 	{
