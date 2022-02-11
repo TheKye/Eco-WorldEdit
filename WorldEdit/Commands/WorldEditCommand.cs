@@ -78,6 +78,7 @@ namespace Eco.Mods.WorldEdit.Commands
 
 		public bool Undo()
 		{
+			WorldEditBlockManager blockManager = new WorldEditBlockManager(this.UserSession);
 			bool result = false;
 			try
 			{
@@ -87,11 +88,11 @@ namespace Eco.Mods.WorldEdit.Commands
 				{
 					this.AffectedBlocks.Where(b => !b.IsPlantBlock() || !b.IsWorldObjectBlock()).ForEach(b =>
 					{
-						WorldEditBlockManager.RestoreBlock(b, b.Position, this.UserSession);
+						blockManager.RestoreBlock(b, b.Position);
 					});
 					this.AffectedBlocks.Where(b => b.IsPlantBlock() || b.IsWorldObjectBlock()).ForEach(b =>
 					{
-						WorldEditBlockManager.RestoreBlock(b, b.Position, this.UserSession);
+						blockManager.RestoreBlock(b, b.Position);
 					});
 					result = true;
 				}

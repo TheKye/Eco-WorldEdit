@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Eco.Gameplay.Components;
 using Eco.Gameplay.Items;
 using Eco.Gameplay.Objects;
+using Eco.Mods.WorldEdit.Model.Components;
 using Eco.Mods.WorldEdit.Serializer;
 using Eco.Shared.Math;
 using Newtonsoft.Json;
@@ -41,6 +42,16 @@ namespace Eco.Mods.WorldEdit.Model
 			{
 				CustomTextComponent textComponent = worldObject.GetComponent<CustomTextComponent>();
 				worldObjectData.Components.Add(typeof(CustomTextComponent), textComponent.TextData.Text);
+			}
+
+			if (worldObject.HasComponent<MintComponent>())
+			{
+				MintComponent mintComponent = worldObject.GetComponent<MintComponent>();
+				worldObjectData.Components.Add(typeof(MintComponent), MintDataCurrency.Create(mintComponent.MintData));
+			}
+			if (worldObject is TechTree.DoorObject doorObject)
+			{
+				worldObjectData.Components.Add(typeof(TechTree.DoorObject), DoorComponent.Create(doorObject));
 			}
 
 			return worldObjectData;
