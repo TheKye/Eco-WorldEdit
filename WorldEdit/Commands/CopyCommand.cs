@@ -19,6 +19,7 @@ namespace Eco.Mods.WorldEdit.Commands
 			Vector3i playerPos = this.UserSession.Player.Position.Round;
 
 			this.UserSession.Clipboard.Clear();
+			this.UserSession.Clipboard.Dimension = new Vector3i(selection.WidthInc, selection.HeightInc, selection.LengthInc);
 			void DoAction(Vector3i pos)
 			{
 				this.UserSession.Clipboard.Add(WorldEditBlock.Create(Eco.World.World.GetBlock(pos), pos, playerPos));

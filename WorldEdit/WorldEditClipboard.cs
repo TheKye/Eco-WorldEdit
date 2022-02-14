@@ -17,6 +17,9 @@ namespace Eco.Mods.WorldEdit
 		private Dictionary<Vector3i, WorldEditBlock> WorldObjects { get; }
 
 		public int Count => this.Blocks.Count + this.Plants.Count + this.WorldObjects.Count;
+		/// <summary>Dimension in Width, Height, Length. Zero vector if not provided.</summary>
+		public Vector3i Dimension { get; internal set; }
+
 		public List<WorldEditBlock> GetBlocks() => this.Blocks.Values.ToList();
 		public List<WorldEditBlock> GetPlants() => this.Plants.Values.ToList();
 		public List<WorldEditBlock> GetWorldObjects() => this.WorldObjects.Values.ToList();
@@ -81,6 +84,7 @@ namespace Eco.Mods.WorldEdit
 		public void Parse(WorldEditSerializer serializer)
 		{
 			this.Clear();
+			this.Dimension = serializer.Dimension;
 			this.Parse(serializer.BlockList);
 			this.Parse(serializer.PlantList);
 			this.Parse(serializer.WorldObjectList);

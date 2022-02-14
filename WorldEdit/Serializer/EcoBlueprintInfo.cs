@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using Eco.Shared.Math;
+using Eco.Shared.Utils;
 using Newtonsoft.Json;
 
 namespace Eco.Mods.WorldEdit.Serializer
@@ -9,6 +11,8 @@ namespace Eco.Mods.WorldEdit.Serializer
 		[JsonProperty("Version")] public float Version { get; internal set; }
 		[JsonProperty("EcoVersion")] public string EcoVersion { get; internal set; }
 		[JsonProperty("Author")] public AuthorInformation Author { get; internal set; }
+		/// <summary>Dimension in Width, Height, Length. Zero vector if not provided.</summary>
+		[JsonProperty("Dimension"), JsonConverter(typeof(JsonVector3iConverter))] public Vector3i Dimension { get; internal set; }
 		[JsonIgnore] public DateTime FileCreatedDate { get; private set; }
 		[JsonIgnore] public DateTime FileChangedDate { get; private set; }
 		[JsonIgnore] public long FileSize { get; private set; }
@@ -32,11 +36,14 @@ namespace Eco.Mods.WorldEdit.Serializer
 		}
 
 		[JsonConstructor]
-		public EcoBlueprintInfo(float version, string ecoVersion, AuthorInformation author) : this()
+		public EcoBlueprintInfo(float version, string ecoVersion, AuthorInformation author, Vector3i dimension) : this()
 		{
 			this.Version = version;
 			this.EcoVersion = ecoVersion;
 			this.Author = author ?? AuthorInformation.Unowned();
+			this.Dimension = dimension;
+
+			Log.WriteWarningLineLocStr($"Loaded dimension: {this.Dimension}");
 		}
 	}
 }
