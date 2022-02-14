@@ -358,7 +358,7 @@ namespace Eco.Mods.WorldEdit
 				if (command.Invoke(region))
 				{
 					user.Player.MsgLoc($"Copy done in {command.ElapsedMilliseconds}ms.");
-					command = new SetCommand(user, "Empty");
+					command = new SetCommand(user, typeof(World.Blocks.EmptyBlock));
 					if (command.Invoke(region))
 					{
 						user.Player.MsgLoc($"{command.BlocksChanged} blocks cleared in {command.ElapsedMilliseconds}ms.");

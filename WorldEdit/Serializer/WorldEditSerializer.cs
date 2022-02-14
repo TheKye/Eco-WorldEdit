@@ -94,6 +94,7 @@ namespace Eco.Mods.WorldEdit.Serializer
 			serializer.PlantList = clipboard.GetPlants();
 			serializer.WorldObjectList = clipboard.GetWorldObjects();
 			serializer.Dimension = clipboard.Dimension;
+			serializer.AuthorInformation = clipboard.AuthorInfo;
 			return serializer;
 		}
 

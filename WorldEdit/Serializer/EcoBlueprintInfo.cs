@@ -43,7 +43,7 @@ namespace Eco.Mods.WorldEdit.Serializer
 			this.Author = author ?? AuthorInformation.Unowned();
 			this.Dimension = dimension;
 
-			Log.WriteWarningLineLocStr($"Loaded dimension: {this.Dimension}");
+			Log.WriteWarningLineLocStr($"Loaded dimension: {this.Dimension}"); //TODO: !Remove debug output
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Model;
+using Eco.Mods.WorldEdit.Serializer;
 using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared.Math;
 
@@ -25,7 +26,7 @@ namespace Eco.Mods.WorldEdit.Commands
 				this.UserSession.Clipboard.Add(WorldEditBlock.Create(Eco.World.World.GetBlock(pos), pos, playerPos));
 			}
 			selection.ForEachInc(DoAction);
-			this.UserSession.AuthorInfo.MarkDirty();
+			this.UserSession.Clipboard.SetAuthor(new AuthorInformation(this.UserSession.User));
 		}
 	}
 }
