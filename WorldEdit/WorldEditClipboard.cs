@@ -32,6 +32,13 @@ namespace Eco.Mods.WorldEdit
 			this.WorldObjects = new Dictionary<Vector3i, WorldEditBlock>();
 		}
 
+		public WorldEditClipboard(Dictionary<Vector3i, WorldEditBlock> blocks, Dictionary<Vector3i, WorldEditBlock> plants, Dictionary<Vector3i, WorldEditBlock> objects)
+		{
+			this.Blocks = new Dictionary<Vector3i, WorldEditBlock>(blocks);
+			this.Plants = new Dictionary<Vector3i, WorldEditBlock>(plants);
+			this.WorldObjects = new Dictionary<Vector3i, WorldEditBlock>(objects);
+		}
+
 		public void Add(WorldEditBlock worldEditBlock)
 		{
 			if (worldEditBlock.IsPlantBlock())
@@ -110,6 +117,11 @@ namespace Eco.Mods.WorldEdit
 		public void SetAuthor(AuthorInformation information)
 		{
 			this.AuthorInfo = information;
+		}
+
+		public WorldEditClipboard Copy()
+		{
+			return new WorldEditClipboard(this.Blocks, this.Plants, this.WorldObjects);
 		}
 	}
 }

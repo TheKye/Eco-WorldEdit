@@ -260,7 +260,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "undo will revert the last action done using world edit, up too 10 times", "undo", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "undo will revert the last action done using world edit, up to 10 times", "undo", ChatAuthorizationLevel.Admin)]
 		public static void Undo(User user, int count = 1)
 		{
 			try
@@ -275,24 +275,17 @@ namespace Eco.Mods.WorldEdit
 				{
 					if (userSession.ExecutedCommands.TryPop(out WorldEditCommand command))
 					{
-						userSession.ExecutingCommand = command;
 						if (command.Undo())
 						{
-							if (count.Equals(1))
-							{
-								user.Player.MsgLoc($"Undo done.");
-								break;
-							}
-							else
-								user.Player.MsgLoc($"Undo {i}/{count} done.");
+							if (!count.Equals(1)){ user.Player.MsgLoc($"Undo {i}/{count} done."); }
 						}
-						userSession.ExecutingCommand = null;
 					}
 					else
 					{
 						throw new WorldEditCommandException("Nothing to undo");
 					}
 				}
+				user.Player.MsgLoc($"Undo done.");
 			}
 			catch (WorldEditCommandException e)
 			{
@@ -300,7 +293,44 @@ namespace Eco.Mods.WorldEdit
 			}
 			catch (Exception e)
 			{
-				Log.WriteError(Localizer.Do($"{e}"));
+				Log.WriteErrorLine(Localizer.Do($"{e}"));
+			}
+		}
+
+		[ChatSubCommand("WorldEdit", "Redo will revert the last undo action, up to 10 times", "redo", ChatAuthorizationLevel.Admin)]
+		public static void Redo(User user, int count = 1)
+		{
+			try
+			{
+				UserSession userSession = WorldEditManager.GetUserSession(user);
+				if (userSession.ExecutingCommand != null && userSession.ExecutingCommand.IsRunning) throw new WorldEditCommandException("You can't use redo right now!"); //TODO: Probably need to rework that and impliment aborting
+
+				if (count > userSession.UndoneCommands.Count) count = userSession.UndoneCommands.Count;
+				if (count.Equals(0)) throw new WorldEditCommandException("Nothing to redo");
+
+				for (int i = 1; i <= count; i++)
+				{
+					if (userSession.UndoneCommands.TryPop(out WorldEditCommand command))
+					{
+						if (command.Redo())
+						{
+							if (!count.Equals(1)) { user.Player.MsgLoc($"Redo {i}/{count} done."); }
+						}
+					}
+					else
+					{
+						throw new WorldEditCommandException("Nothing to Redo");
+					}
+				}
+				user.Player.MsgLoc($"Redo done.");
+			}
+			catch (WorldEditCommandException e)
+			{
+				user.Player.ErrorLocStr(e.Message);
+			}
+			catch (Exception e)
+			{
+				Log.WriteErrorLine(Localizer.Do($"{e}"));
 			}
 		}
 
