@@ -2,7 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Eco.Gameplay.Blocks;
+using Eco.Gameplay.Items;
+using Eco.Gameplay.Objects;
+using Eco.Gameplay.Systems.TextLinks;
+using Eco.Gameplay.Systems.Tooltip;
+using Eco.Shared.Localization;
 using Eco.Shared.Utils;
+using Eco.Simulation;
+using Eco.Simulation.Types;
 using Eco.World;
 using Eco.World.Blocks;
 
@@ -69,6 +76,26 @@ namespace Eco.Mods.WorldEdit.Utils
 			BlockRotatedVariants.Add(blockType, possibleVariants); //Cache results for later
 			variants = possibleVariants;
 			return false;
+		}
+
+		public static LocString GetBlockFancyName(Type blockType)
+		{
+			if (blockType.DerivesFrom<PlantSpecies>())
+			{
+				Species species = EcoSim.AllSpecies.OfType<PlantSpecies>().First(species => species.GetType() == blockType);
+				if (species != null) return species.UILink();
+			}
+			Item item = blockType.TryGetAttribute<Ramp>(false, out var rampAttr) ? Item.Get(rampAttr.RampType) : BlockItem.GetBlockItem(blockType) ?? BlockItem.CreatingItem(blockType);
+			if (item == null && blockType.DerivesFrom<WorldObject>())
+			{
+				item = WorldObjectItem.GetCreatingItemTemplateFromType(blockType);
+			}
+			if (item != null) return item.UILink();
+			if (blockType.BaseType != null && blockType.BaseType != typeof(Block))
+			{
+				return GetBlockFancyName(blockType.BaseType);
+			}
+			return Localizer.DoStr(blockType.Name); //Not fancy at all :(
 		}
 	}
 }

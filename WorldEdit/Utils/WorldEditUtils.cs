@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Text.RegularExpressions;
 using Eco.Gameplay.Players;
 using Eco.Shared.Math;
 using Eco.Shared.Voxel;
@@ -78,6 +80,16 @@ namespace Eco.Mods.WorldEdit.Utils
 		public static Vector2i SecondPlotPos(Vector2i plotPos)
 		{
 			return plotPos + PlotUtil.PropertyPlotLength - 1;
+		}
+
+		public static void OutputToTxtFile(string data, string fileName)
+		{
+			data = data.Replace("<pos=300>", "\t");
+			data = Regex.Replace(data, "<.*?>", String.Empty);
+
+			if (!Directory.Exists(WorldEditManager.GetSchematicDirectory())) { Directory.CreateDirectory(WorldEditManager.GetSchematicDirectory()); }
+			string file = WorldEditManager.GetSchematicFileName(fileName, ".txt");
+			File.WriteAllText(file, data);
 		}
 	}
 }

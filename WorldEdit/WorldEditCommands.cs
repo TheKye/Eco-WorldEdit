@@ -500,7 +500,7 @@ namespace Eco.Mods.WorldEdit
 			}
 			if (!string.IsNullOrEmpty(fileName))
 			{
-				fileName = fileName.Replace(" ", string.Empty).Trim();
+				fileName = fileName.Trim().Replace(" ", string.Empty);
 			}
 
 			try
@@ -510,6 +510,40 @@ namespace Eco.Mods.WorldEdit
 				{
 					//Output done in he command
 				}
+			}
+			catch (WorldEditCommandException e)
+			{
+				user.Player.ErrorLocStr(e.Message);
+			}
+			catch (Exception e)
+			{
+				Log.WriteError(Localizer.Do($"{e}"));
+			}
+		}
+
+		[ChatSubCommand("WorldEdit", "BInfo will give you a information about blueprint", "binfo", ChatAuthorizationLevel.Admin)]
+		public static void BInfo(User user, string fileName, string outFileName = null)
+		{
+			if (!string.IsNullOrEmpty(outFileName))
+			{
+				outFileName = outFileName.Trim().Replace(" ", string.Empty);
+			}
+
+			try
+			{
+				if (!string.IsNullOrEmpty(fileName))
+				{
+					WorldEditCommand command = new BlueprintInfoCommand(user, fileName, outFileName);
+					if (command.Invoke())
+					{
+						//Output done in he command
+					}
+				}
+				else
+				{
+					throw new WorldEditCommandException("Blueprint file name not provided");
+				}
+				
 			}
 			catch (WorldEditCommandException e)
 			{
