@@ -1,12 +1,12 @@
-﻿using System;
-using Eco.Gameplay.Players;
-using Eco.Gameplay.Systems.Chat;
+﻿using Eco.Gameplay.Players;
+using Eco.Gameplay.Systems.Messaging.Chat.Commands;
 using Eco.Mods.WorldEdit.Commands;
 using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared.Localization;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
 using Eco.Shared.Voxel;
+using System;
 
 namespace Eco.Mods.WorldEdit
 {
@@ -277,7 +277,7 @@ namespace Eco.Mods.WorldEdit
 					{
 						if (command.Undo())
 						{
-							if (!count.Equals(1)){ user.Player.MsgLoc($"Undo {i}/{count} done."); }
+							if (!count.Equals(1)) { user.Player.MsgLoc($"Undo {i}/{count} done."); }
 						}
 					}
 					else
@@ -543,7 +543,7 @@ namespace Eco.Mods.WorldEdit
 				{
 					throw new WorldEditCommandException("Blueprint file name not provided");
 				}
-				
+
 			}
 			catch (WorldEditCommandException e)
 			{
@@ -584,9 +584,9 @@ namespace Eco.Mods.WorldEdit
 			{
 				Vector3i pos;
 
-				if(!String.IsNullOrEmpty(coordinate))
+				if (!String.IsNullOrEmpty(coordinate))
 				{
-					if(!WorldEditUtils.ParseCoordinateArgs(user, coordinate, out pos)) { return; }
+					if (!WorldEditUtils.ParseCoordinateArgs(user, coordinate, out pos)) { return; }
 				}
 				else
 				{
@@ -595,8 +595,8 @@ namespace Eco.Mods.WorldEdit
 
 				pos.X = pos.X < 0 ? pos.X + Shared.Voxel.World.VoxelSize.X : pos.X;
 				pos.Z = pos.Z < 0 ? pos.Z + Shared.Voxel.World.VoxelSize.Z : pos.Z;
-				pos.X = pos.X % Shared.Voxel.World.VoxelSize.X;
-				pos.Z = pos.Z % Shared.Voxel.World.VoxelSize.Z;
+				pos.X %= Shared.Voxel.World.VoxelSize.X;
+				pos.Z %= Shared.Voxel.World.VoxelSize.Z;
 
 				UserSession session = WorldEditManager.GetUserSession(user);
 				session.SetFirstPosition(pos);
@@ -628,8 +628,8 @@ namespace Eco.Mods.WorldEdit
 
 				pos.X = pos.X < 0 ? pos.X + Shared.Voxel.World.VoxelSize.X : pos.X;
 				pos.Z = pos.Z < 0 ? pos.Z + Shared.Voxel.World.VoxelSize.Z : pos.Z;
-				pos.X = pos.X % Shared.Voxel.World.VoxelSize.X;
-				pos.Z = pos.Z % Shared.Voxel.World.VoxelSize.Z;
+				pos.X %= Shared.Voxel.World.VoxelSize.X;
+				pos.Z %= Shared.Voxel.World.VoxelSize.Z;
 
 				UserSession session = WorldEditManager.GetUserSession(user);
 				session.SetSecondPosition(pos);
@@ -664,7 +664,7 @@ namespace Eco.Mods.WorldEdit
 			try
 			{
 				Vector3i pos = user.Position.Round;
-				Vector2i claimPos = PlotUtil.FromWorldPos.ToCornerWorldPosOfPlotAt(pos);
+				Vector2i claimPos = PlotUtil.RawPlotPos(pos.XZ).RawXY;
 				UserSession session = WorldEditManager.GetUserSession(user);
 
 				session.SetFirstPosition(claimPos.X_Z(pos.Y - 1));
@@ -685,7 +685,7 @@ namespace Eco.Mods.WorldEdit
 			try
 			{
 				Vector3i pos = user.Position.Round;
-				Vector2i claimPos = PlotUtil.FromWorldPos.ToCornerWorldPosOfPlotAt(pos);
+				Vector2i claimPos = PlotUtil.RawPlotPos(pos.XZ).RawXY;
 				UserSession session = WorldEditManager.GetUserSession(user);
 
 				WorldRange range = session.Selection;
@@ -731,7 +731,7 @@ namespace Eco.Mods.WorldEdit
 						break;
 				}
 				pos += direction.ToVec() * (PlotUtil.PropertyPlotLength - 1) * amount;
-				Vector2i claimPos = PlotUtil.FromWorldPos.ToCornerWorldPosOfPlotAt(pos.XZ);
+				Vector2i claimPos = PlotUtil.RawPlotPos(pos.XZ).RawXY;
 				range.ExtendToInclude(claimPos.X_Z(pos.Y));
 				range.ExtendToInclude(WorldEditUtils.SecondPlotPos(claimPos).X_Z(pos.Y));
 				session.SetSelection(range);
