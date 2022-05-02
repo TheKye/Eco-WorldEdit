@@ -1,19 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Eco.Mods.WorldEdit.Model;
+using Eco.Shared.Math;
+using K4os.Compression.LZ4.Streams;
 using Newtonsoft.Json;
 
 namespace Eco.Mods.WorldEdit.Serializer
 {
 	internal class WorldEditSerializer
 	{
-		public const float CurrentVersion = 1.2f;
+		public const float CurrentVersion = 1.3f;
 		/* Version History:
 		 * 1.0 - Old and unused format, supported blocks only.
 		 * 1.1 - Support plants, objects, blocks at separate layers
 		 * TODO: Write migration for this! 1.2 - Changed WorldEditPlantBlockData.PlantType form plant.GetType() to plant.Species.GetType()
 		 *	added AuthorInformation
+		 * 1.3 - Added Dimension information
 		 * */
+
+		private const string LZ4_HEADER = "LZ4";
 
 		public string CurrentEcoVersion => Shared.EcoVersion.VersionNumber;
 		private readonly List<WorldEditBlock> blockList = new List<WorldEditBlock>();
@@ -60,6 +67,7 @@ namespace Eco.Mods.WorldEdit.Serializer
 		}
 
 		public AuthorInformation AuthorInformation { get; set; }
+		public Vector3i Dimension { get; private set; }
 
 		public WorldEditSerializer()
 		{
@@ -85,18 +93,25 @@ namespace Eco.Mods.WorldEdit.Serializer
 			serializer.BlockList = clipboard.GetBlocks();
 			serializer.PlantList = clipboard.GetPlants();
 			serializer.WorldObjectList = clipboard.GetWorldObjects();
+			serializer.Dimension = clipboard.Dimension;
+			serializer.AuthorInformation = clipboard.AuthorInfo;
 			return serializer;
 		}
 
 		public void Serialize(Stream stream)
 		{
-			EcoBlueprint schematic = EcoBlueprint.Create(this.blockList, this.plantList, this.worldObjectList, this.AuthorInformation);
+			EcoBlueprint schematic = EcoBlueprint.Create(this.blockList, this.plantList, this.worldObjectList, this.AuthorInformation, this.Dimension);
 			Serialize(stream, schematic);
 		}
 
 		public void Serialize(Stream stream, object obj)
 		{
-			using (StreamWriter sw = new StreamWriter(stream, System.Text.Encoding.UTF8, 1024, true))
+			byte[] header = new byte[8];
+			Array.Copy(Encoding.ASCII.GetBytes(LZ4_HEADER), header, System.Math.Min(8, LZ4_HEADER.Length));
+			stream.Write(header, 0, 8);
+
+			using (LZ4EncoderStream lZ4EncoderStream = LZ4Stream.Encode(stream, null, true))
+			using (StreamWriter sw = new StreamWriter(lZ4EncoderStream, System.Text.Encoding.UTF8, 1024, true))
 			using (JsonWriter writer = new JsonTextWriter(sw))
 			{
 				writer.Formatting = Formatting.None;
@@ -130,12 +145,35 @@ namespace Eco.Mods.WorldEdit.Serializer
 
 		public static T Deserialize<T>(Stream stream)
 		{
+			if (IsLZ4Stream(stream))
+			{
+				using (LZ4DecoderStream lZ4DecoderStream = LZ4Stream.Decode(stream, null, true))
+				{
+					return DeserializeJSON<T>(lZ4DecoderStream);
+				}
+			}
+			else
+			{
+				return DeserializeJSON<T>(stream);
+			}
+		}
+
+		private static T DeserializeJSON<T>(Stream stream)
+		{
 			using (StreamReader sr = new StreamReader(stream, System.Text.Encoding.UTF8, false, 1024, true))
 			using (JsonReader reader = new JsonTextReader(sr))
 			{
 				JsonSerializer serializer = JsonSerializer.CreateDefault(SerializerSettings);
 				return serializer.Deserialize<T>(reader);
 			}
+		}
+
+		private static bool IsLZ4Stream(Stream stream)
+		{
+			byte[] buff = new byte[8];
+			stream.Read(buff, 0, 8);
+			string header = Encoding.ASCII.GetString(buff, 0, LZ4_HEADER.Length);
+			if (LZ4_HEADER.Equals(header, StringComparison.Ordinal)) { return true; } else { stream.Seek(0, SeekOrigin.Begin); return false; }
 		}
 	}
 }

@@ -19,7 +19,6 @@ using Eco.Shared.Utils;
 using Eco.Simulation;
 using Eco.Simulation.Agents;
 using Eco.Simulation.Types;
-using Eco.World;
 using Eco.World.Blocks;
 
 namespace Eco.Mods.WorldEdit.Commands
@@ -75,7 +74,7 @@ namespace Eco.Mods.WorldEdit.Commands
 					if (blockType == typeof(EmptyBlock)) { emptyBlocks++; continue; }
 					if (this.outputType.Equals("brief"))
 					{
-						string name = this.GetBlockFancyName(blockType);
+						string name = BlockUtils.GetBlockFancyName(blockType);
 						blocks.TryGetValue(name, out long count);
 						blocks[name] = count + 1;
 					}
@@ -105,7 +104,7 @@ namespace Eco.Mods.WorldEdit.Commands
 			{
 				decimal percent = Math.Round((entry.Value / totalBlocks) * 100, 2);
 
-				sb.Append(this.outputType.Equals("detail") ? this.GetBlockFancyName((Type)entry.Key) : (string)entry.Key);
+				sb.Append(this.outputType.Equals("detail") ? BlockUtils.GetBlockFancyName((Type)entry.Key) : (string)entry.Key);
 				sb.Append(Text.Pos(400, Text.Info(Text.Int(entry.Value))));
 				sb.Append($"({percent}%)".PadLeft(10));
 				if (this.outputType.Equals("detail")) sb.Append(Text.Pos(500, $"[{Localizer.DoStr(((Type)entry.Key).Name)}]"));
@@ -113,40 +112,10 @@ namespace Eco.Mods.WorldEdit.Commands
 			}
 			if (!string.IsNullOrEmpty(this.fileName))
 			{
-				this.OutputToFile(sb.ToString());
+				WorldEditUtils.OutputToTxtFile(sb.ToString(), this.fileName);
 				this.UserSession.Player.MsgLoc($"Report saved into file with name <{WorldEditManager.SanitizeFileName(this.fileName)}.txt>");
 			}
 			this.UserSession.Player.OpenInfoPanel(Localizer.Do($"WorldEdit Blocks Report"), sb.ToString(), "WorldEditDistr");
-		}
-
-		private void OutputToFile(string data)
-		{
-			data = data.Replace("<pos=300>", "	");
-			data = Regex.Replace(data, "<.*?>", String.Empty);
-
-			if (!Directory.Exists(WorldEditManager.GetSchematicDirectory())) { Directory.CreateDirectory(WorldEditManager.GetSchematicDirectory()); }
-			string file = WorldEditManager.GetSchematicFileName(this.fileName, ".txt");
-			File.WriteAllText(file, data);
-		}
-
-		private LocString GetBlockFancyName(Type blockType)
-		{
-			if (blockType.DerivesFrom<PlantSpecies>())
-			{
-				Species species = EcoSim.AllSpecies.OfType<PlantSpecies>().First(species => species.GetType() == blockType);
-				if (species != null) return species.UILink();
-			}
-			Item item = blockType.TryGetAttribute<Ramp>(false, out var rampAttr) ? Item.Get(rampAttr.RampType) : BlockItem.GetBlockItem(blockType) ?? BlockItem.CreatingItem(blockType);
-			if (item == null && blockType.DerivesFrom<WorldObject>())
-			{
-				item = WorldObjectItem.GetCreatingItemTemplateFromType(blockType);
-			}
-			if (item != null) return item.UILink();
-			if (blockType.BaseType != null && blockType.BaseType != typeof(Block))
-			{
-				return this.GetBlockFancyName(blockType.BaseType);
-			}
-			return Localizer.DoStr(blockType.Name); //Not fancy at all :(
 		}
 	}
 }

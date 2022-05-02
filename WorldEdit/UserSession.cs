@@ -15,16 +15,18 @@ namespace Eco.Mods.WorldEdit
 		public WorldRange Selection { get; private set; } = WorldRange.Invalid;
 
 		public WorldEditClipboard Clipboard { get; } = new WorldEditClipboard();
-		public AuthorInformation AuthorInfo { get; private set; }
+
 		public LimitedStack<WorldEditCommand> ExecutedCommands { get => this.executedCommands; }
 		private LimitedStack<WorldEditCommand> executedCommands = new LimitedStack<WorldEditCommand>(10);
+
+		public LimitedStack<WorldEditCommand> UndoneCommands { get => this.undoneCommands; }
+		private LimitedStack<WorldEditCommand> undoneCommands = new LimitedStack<WorldEditCommand>(10);
 		public WorldEditCommand ExecutingCommand { get => this.executingCommand; internal set => this.executingCommand = value; }
 		private volatile WorldEditCommand executingCommand = null;
 
 		public UserSession(User user)
 		{
 			this.User = user ?? throw new ArgumentNullException(nameof(user));
-			this.AuthorInfo = new AuthorInformation(this.User);
 		}
 
 		public void SetFirstPosition(Vector3i pos)
@@ -48,11 +50,6 @@ namespace Eco.Mods.WorldEdit
 		public void SetSelection(WorldRange range)
 		{
 			this.Selection = range;
-		}
-
-		public void SetImportedSchematicAuthor(AuthorInformation information)
-		{
-			this.AuthorInfo = information;
 		}
 	}
 }

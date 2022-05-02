@@ -4,11 +4,11 @@ using Eco.Shared.Math;
 
 namespace Eco.Mods.WorldEdit.Commands
 {
-	internal class UpCommand : WorldEditCommand
+	internal class UpmeCommand : WorldEditCommand
 	{
 		private readonly int count;
 
-		public UpCommand(User user, int count) : base(user)
+		public UpmeCommand(User user, int count) : base(user)
 		{
 			this.count = count;
 		}
@@ -17,7 +17,7 @@ namespace Eco.Mods.WorldEdit.Commands
 		{
 			Vector3 pos = this.UserSession.Player.Position;
 			var newpos = new Vector3i((int)pos.X, (int)pos.Y + this.count, (int)pos.Z);
-			WorldEditBlockManager.SetBlock(typeof(StoneBlock), newpos);
+			WorldEditBlockManager.RestoreBlock(typeof(StoneBlock), newpos);
 			newpos.Y += 2;
 			this.UserSession.Player.SetPosition(newpos);
 		}

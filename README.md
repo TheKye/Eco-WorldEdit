@@ -15,6 +15,9 @@ You can find a guide on Installation, Compatibility, Quick start and Commands in
 * [Official Eco Forum](https://forum.play.eco/filebase/file/352/ "Official Eco Forums")
 * [Eco.mod.io](https://eco.mod.io/ecoworldedit/ "Eco.mod.io")
 
+## Translation
+You can help us translate WorldEdit into your language on [Crowdin](https://crowdin.com/project/EcoWorldEdit "Crowdin").
+
 ## Issues and Suggestions
 If you find a bug or have a suggestion to improve the plugin, let us know [Here](https://github.com/TheKye/Eco-WorldEdit/issues/ "Github").
 

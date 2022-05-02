@@ -7,6 +7,7 @@ using Eco.Gameplay.Components;
 using Eco.Gameplay.Objects;
 using Eco.Gameplay.Plants;
 using Eco.Mods.WorldEdit.Model;
+using Eco.Mods.WorldEdit.Model.Components;
 using Eco.Shared.IoC;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
@@ -20,24 +21,32 @@ namespace Eco.Mods.WorldEdit
 {
 	using World = Eco.World.World;
 
-	internal static class WorldEditBlockManager
+	internal class WorldEditBlockManager
 	{
-		public static void SetBlock(Type type, Vector3i position)
+		private readonly UserSession _userSession;
+
+		public WorldEditBlockManager(UserSession userSession)
 		{
+			_userSession = userSession ?? throw new ArgumentNullException(nameof(userSession));
+		}
+
+		public void SetBlock(Type type, Vector3i position)
+		{
+			if (IsImpenetrable(position)) return;
 			ClearPosition(position);
-			if (type != typeof(EmptyBlock)) RestoreBlock(type, position);
+			SetBlockInternal(type, position);
 		}
-		public static void RestoreBlockOffset(WorldEditBlock block, Vector3i offsetPos, UserSession session)
+		public void RestoreBlockOffset(WorldEditBlock block, Vector3i offsetPos)
 		{
-			RestoreBlock(block, ApplyOffset(block.Position, offsetPos), session);
+			RestoreBlock(block, ApplyOffset(block.Position, offsetPos));
 		}
-		public static void RestoreBlock(WorldEditBlock block, Vector3i position, UserSession session)
+		public void RestoreBlock(WorldEditBlock block, Vector3i position)
 		{
 			if (IsImpenetrable(position)) return;
 			ClearPosition(position);
 			if (block.IsEmptyBlock())
 			{
-				RestoreEmptyBlock(position);
+				SetBlockInternal(typeof(EmptyBlock), position);
 			}
 			else if (block.IsPlantBlock())
 			{
@@ -45,34 +54,34 @@ namespace Eco.Mods.WorldEdit
 			}
 			else if (block.IsWorldObjectBlock())
 			{
-				RestoreWorldObjectBlock(block.BlockType, position, block.BlockData, session);
+				RestoreWorldObjectBlock(block.BlockType, position, block.BlockData);
 			}
 			else
 			{
-				RestoreBlock(block.BlockType, position);
+				SetBlockInternal(block.BlockType, position);
 			}
-		}
-
-		public static void RestoreEmptyBlock(Vector3i position)
-		{
-			if (IsImpenetrable(position)) return;
-			World.DeleteBlock(position);
 		}
 
 		public static void RestoreBlock(Type type, Vector3i position)
 		{
 			if (IsImpenetrable(position)) return;
-			World.SetBlock(type, position);
+			SetBlockInternal(type, position);
 		}
 
-		public static void RestoreWorldObjectBlock(Type type, Vector3i position, IWorldEditBlockData blockData, UserSession session)
+		public static void RestoreEmptyBlock(Vector3i position)
+		{
+			if (IsImpenetrable(position)) return;
+			SetBlockInternal(typeof(EmptyBlock), position);
+		}
+
+		public void RestoreWorldObjectBlock(Type type, Vector3i position, IWorldEditBlockData blockData)
 		{
 			if (blockData == null) { return; }
 			WorldEditWorldObjectBlockData worldObjectBlockData = (WorldEditWorldObjectBlockData)blockData;
-			ClearWorldObjectPlace(worldObjectBlockData.WorldObjectType, position, worldObjectBlockData.Rotation, session);
+			ClearWorldObjectPlace(worldObjectBlockData.WorldObjectType, position, worldObjectBlockData.Rotation);
 
 			WorldObject worldObject = null;
-			try { worldObject = WorldObjectManager.ForceAdd(worldObjectBlockData.WorldObjectType, session.User, position, worldObjectBlockData.Rotation, true); }
+			try { worldObject = WorldObjectManager.ForceAdd(worldObjectBlockData.WorldObjectType, _userSession.User, position, worldObjectBlockData.Rotation, true); }
 			catch (Exception e)
 			{
 				Log.WriteException(e);
@@ -102,7 +111,8 @@ namespace Eco.Mods.WorldEdit
 					Result result = storageComponent.Inventory.TryAddItems(stack.ItemType, stack.Quantity);
 					if (result.Failed)
 					{
-						session.Player.ErrorLocStr(result.Message.Trim());
+						_userSession.Player.ErrorLocStr(result.Message.Trim());
+						Log.WriteWarningLineLoc($"Unable restore inventory for WorldObject {worldObjectBlockData.WorldObjectType} at {position}: {result.Message.Trim()}");
 						try { storageComponent.Inventory.AddItems(stack.GetItemStack()); } catch (InvalidOperationException) { /*Already show error to user*/ }
 					}
 				}
@@ -114,7 +124,6 @@ namespace Eco.Mods.WorldEdit
 			}
 			if (worldObject.HasComponent<MintComponent>() && worldObjectBlockData.Components.ContainsKey(typeof(MintComponent)))
 			{
-				Log.Debug($"MintComponent");
 				MintComponent mintComponent = worldObject.GetComponent<MintComponent>();
 				object obj = worldObjectBlockData.Components[typeof(MintComponent)];
 				MintDataCurrency mintCurrency;
@@ -126,8 +135,26 @@ namespace Eco.Mods.WorldEdit
 				{
 					mintCurrency = (MintDataCurrency)obj;
 				}
-				Log.Debug($"{obj} is {obj.GetType()}");
 				mintComponent.InitializeCurrency(mintCurrency.GetCurrency());
+			}
+			//Handle door opening
+			if(worldObject is TechTree.DoorObject && worldObjectBlockData.Components.ContainsKey(typeof(TechTree.DoorObject)))
+			{
+				System.Reflection.MethodInfo method = typeof(TechTree.DoorObject).GetMethod("WE_SetOpensOut", new Type[] { typeof(bool) });
+				if (method != null)
+				{
+					object obj = worldObjectBlockData.Components[typeof(TechTree.DoorObject)];
+					DoorComponent doorComponent;
+					if (obj is JObject jobj)
+					{
+						doorComponent = jobj.ToObject<DoorComponent>();
+					}
+					else
+					{
+						doorComponent = (DoorComponent)obj;
+					}
+					method.Invoke(worldObject, new object[] { doorComponent.OpensOut });
+				}
 			}
 		}
 
@@ -152,7 +179,14 @@ namespace Eco.Mods.WorldEdit
 			plant.Tended = plantBlockData.Tended;
 		}
 
-		private static void ClearPosition(Vector3i position)
+		/// <summary>Directly delete or set block WITHOUT safety checks.</summary>
+		protected static void SetBlockInternal(Type type, Vector3i position)
+		{
+			if (type == null) { World.DeleteBlock(position); } else { World.SetBlock(type, position); }
+		}
+
+		/// <summary>Clears given position from water, plants, trees and objects. Optionally delete block</summary>
+		private void ClearPosition(Vector3i position, bool delete = false)
 		{
 			Block block = World.GetBlock(position);
 
@@ -160,6 +194,14 @@ namespace Eco.Mods.WorldEdit
 
 			switch (block)
 			{
+				case IWaterBlock waterBlock:
+					//Log.WriteWarningLineLocStr($"Block type: {block.GetType()} {position}");
+					//Vector3i above = position + Vector3i.Up;
+					//Block aboveBlock = World.GetBlock(above);
+					//if (aboveBlock is IWaterBlock) { /*Log.Debug($"Upper block type: {block.GetType()} {above}");*/ ClearPosition(above); }
+					//World.SetBlock<EmptyBlock>(position);
+					World.DeleteBlock(position, false);
+					break;
 				case WorldObjectBlock worldObjectBlock:
 					worldObjectBlock.WorldObjectHandle.Object.Destroy();
 					break;
@@ -176,15 +218,12 @@ namespace Eco.Mods.WorldEdit
 						WorldObject worldObject = ServiceHolder<IWorldObjectManager>.Obj.All.Where(x => x.Position3i.Equals(position)).FirstOrDefault();
 						if (worldObject != null) worldObject.Destroy();
 					}
-					else
-					{
-						World.DeleteBlock(position);
-					}
+					else if (delete) { World.DeleteBlock(position); }
 					break;
 			}
 		}
 
-		private static void ClearWorldObjectPlace(Type worldObjectType, Vector3i position, Quaternion rotation, UserSession session)
+		private void ClearWorldObjectPlace(Type worldObjectType, Vector3i position, Quaternion rotation)
 		{
 			List<BlockOccupancy> blockOccupancies = WorldObject.GetOccupancy(worldObjectType);
 			if (!blockOccupancies.Any(x => x.BlockType != null)) return;
@@ -193,8 +232,8 @@ namespace Eco.Mods.WorldEdit
 				if (blockOccupancy.BlockType != null)
 				{
 					Vector3i worldPos = position + rotation.RotateVector(blockOccupancy.Offset).XYZi;
-					if (!session.ExecutingCommand.PerformingUndo) session.ExecutingCommand.AddBlockChangedEntry(worldPos); //Do not record changes when doing undo
-					ClearPosition(worldPos);
+					if (!_userSession.ExecutingCommand.PerformingUndo) _userSession.ExecutingCommand.AddBlockChangedEntry(worldPos); //Do not record changes when doing undo
+					ClearPosition(worldPos, true);
 				}
 			}
 		}

@@ -28,15 +28,11 @@ namespace Eco.Mods.WorldEdit
 		public static UserSession GetUserSession(User user)
 		{
 			UserSession session;
-
-			//Log.Debug($"GetUserSession UserID: {user.Id}");
-
 			if (!UserSessions.TryGetValue(user.Id, out session))
 			{
 				session = new UserSession(user);
 				UserSessions.Add(user.Id, session);
 			}
-
 			return session;
 		}
 
