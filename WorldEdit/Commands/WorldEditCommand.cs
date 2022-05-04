@@ -16,6 +16,7 @@ namespace Eco.Mods.WorldEdit.Commands
 	internal abstract class WorldEditCommand : IWorldEditCommand
 	{
 		protected UserSession UserSession { get; private set; }
+		protected WorldRange Selection { get; private set; }
 		public long BlocksChanged { get; protected set; }
 		protected Stack<WorldEditBlock> AffectedBlocks
 		{
@@ -43,12 +44,13 @@ namespace Eco.Mods.WorldEdit.Commands
 		public bool Invoke() => this.Invoke(this.UserSession.Selection);
 		public bool Invoke(WorldRange selection)
 		{
+			this.Selection = selection;
 			bool result = false;
 			try
 			{
 				this.UserSession.ExecutingCommand = this;
 				this.timer.Start();
-				this.Execute(selection);
+				this.Execute();
 				this.timer.Stop();
 				if (this.affectedBlocks != null)
 				{
@@ -82,6 +84,7 @@ namespace Eco.Mods.WorldEdit.Commands
 			bool result = false;
 			try
 			{
+				this.UserSession.ExecutingCommand = this;
 				this.PerformingUndo = true;
 				this.timer.Restart();
 				if (this.affectedBlocks != null)
@@ -97,6 +100,7 @@ namespace Eco.Mods.WorldEdit.Commands
 					result = true;
 				}
 				this.timer.Stop();
+				this.UserSession.UndoneCommands.Push(this);
 			}
 			catch (WorldEditCommandException e)
 			{
@@ -106,10 +110,14 @@ namespace Eco.Mods.WorldEdit.Commands
 			{
 				if (this.timer.IsRunning) this.timer.Stop();
 				this.PerformingUndo = false;
+				this.UserSession.ExecutingCommand = null;
 			}
 			return result;
 		}
 
+		public bool Redo() => this.Invoke(this.Selection);
+
 		protected abstract void Execute(WorldRange selection);
+		protected void Execute() => Execute(this.Selection);
 	}
 }

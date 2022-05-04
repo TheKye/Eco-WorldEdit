@@ -19,8 +19,6 @@ namespace Eco.Mods.WorldEdit.Commands
 		protected override void Execute(WorldRange selection)
 		{
 			WorldEditSerializer serializer = WorldEditSerializer.FromClipboard(this.UserSession.Clipboard);
-			if (this.UserSession.AuthorInfo.IsDirty()) this.UserSession.SetImportedSchematicAuthor(new AuthorInformation(this.UserSession.User));
-			serializer.AuthorInformation = this.UserSession.AuthorInfo;
 			using (FileStream stream = File.Create(this.fileName))
 			{
 				serializer.Serialize(stream);

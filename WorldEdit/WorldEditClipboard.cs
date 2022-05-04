@@ -17,6 +17,10 @@ namespace Eco.Mods.WorldEdit
 		private Dictionary<Vector3i, WorldEditBlock> WorldObjects { get; }
 
 		public int Count => this.Blocks.Count + this.Plants.Count + this.WorldObjects.Count;
+		/// <summary>Dimension in Width, Height, Length. Zero vector if not provided.</summary>
+		public Vector3i Dimension { get; internal set; }
+		public AuthorInformation AuthorInfo { get; private set; }
+
 		public List<WorldEditBlock> GetBlocks() => this.Blocks.Values.ToList();
 		public List<WorldEditBlock> GetPlants() => this.Plants.Values.ToList();
 		public List<WorldEditBlock> GetWorldObjects() => this.WorldObjects.Values.ToList();
@@ -26,6 +30,13 @@ namespace Eco.Mods.WorldEdit
 			this.Blocks = new Dictionary<Vector3i, WorldEditBlock>();
 			this.Plants = new Dictionary<Vector3i, WorldEditBlock>();
 			this.WorldObjects = new Dictionary<Vector3i, WorldEditBlock>();
+		}
+
+		public WorldEditClipboard(Dictionary<Vector3i, WorldEditBlock> blocks, Dictionary<Vector3i, WorldEditBlock> plants, Dictionary<Vector3i, WorldEditBlock> objects)
+		{
+			this.Blocks = new Dictionary<Vector3i, WorldEditBlock>(blocks);
+			this.Plants = new Dictionary<Vector3i, WorldEditBlock>(plants);
+			this.WorldObjects = new Dictionary<Vector3i, WorldEditBlock>(objects);
 		}
 
 		public void Add(WorldEditBlock worldEditBlock)
@@ -81,6 +92,8 @@ namespace Eco.Mods.WorldEdit
 		public void Parse(WorldEditSerializer serializer)
 		{
 			this.Clear();
+			this.Dimension = serializer.Dimension;
+			this.AuthorInfo = serializer.AuthorInformation;
 			this.Parse(serializer.BlockList);
 			this.Parse(serializer.PlantList);
 			this.Parse(serializer.WorldObjectList);
@@ -99,6 +112,16 @@ namespace Eco.Mods.WorldEdit
 			this.Blocks.Clear();
 			this.Plants.Clear();
 			this.WorldObjects.Clear();
+		}
+
+		public void SetAuthor(AuthorInformation information)
+		{
+			this.AuthorInfo = information;
+		}
+
+		public WorldEditClipboard Copy()
+		{
+			return new WorldEditClipboard(this.Blocks, this.Plants, this.WorldObjects);
 		}
 	}
 }

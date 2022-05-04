@@ -1,12 +1,12 @@
-﻿using System;
-using Eco.Gameplay.Players;
-using Eco.Gameplay.Systems.Chat;
+﻿using Eco.Gameplay.Players;
+using Eco.Gameplay.Systems.Messaging.Chat.Commands;
 using Eco.Mods.WorldEdit.Commands;
 using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared.Localization;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
 using Eco.Shared.Voxel;
+using System;
 
 namespace Eco.Mods.WorldEdit
 {
@@ -260,7 +260,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "undo will revert the last action done using world edit, up too 10 times", "undo", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "undo will revert the last action done using world edit, up to 10 times", "undo", ChatAuthorizationLevel.Admin)]
 		public static void Undo(User user, int count = 1)
 		{
 			try
@@ -275,24 +275,17 @@ namespace Eco.Mods.WorldEdit
 				{
 					if (userSession.ExecutedCommands.TryPop(out WorldEditCommand command))
 					{
-						userSession.ExecutingCommand = command;
 						if (command.Undo())
 						{
-							if (count.Equals(1))
-							{
-								user.Player.MsgLoc($"Undo done.");
-								break;
-							}
-							else
-								user.Player.MsgLoc($"Undo {i}/{count} done.");
+							if (!count.Equals(1)) { user.Player.MsgLoc($"Undo {i}/{count} done."); }
 						}
-						userSession.ExecutingCommand = null;
 					}
 					else
 					{
 						throw new WorldEditCommandException("Nothing to undo");
 					}
 				}
+				user.Player.MsgLoc($"Undo done.");
 			}
 			catch (WorldEditCommandException e)
 			{
@@ -300,7 +293,44 @@ namespace Eco.Mods.WorldEdit
 			}
 			catch (Exception e)
 			{
-				Log.WriteError(Localizer.Do($"{e}"));
+				Log.WriteErrorLine(Localizer.Do($"{e}"));
+			}
+		}
+
+		[ChatSubCommand("WorldEdit", "Redo will revert the last undo action, up to 10 times", "redo", ChatAuthorizationLevel.Admin)]
+		public static void Redo(User user, int count = 1)
+		{
+			try
+			{
+				UserSession userSession = WorldEditManager.GetUserSession(user);
+				if (userSession.ExecutingCommand != null && userSession.ExecutingCommand.IsRunning) throw new WorldEditCommandException("You can't use redo right now!"); //TODO: Probably need to rework that and impliment aborting
+
+				if (count > userSession.UndoneCommands.Count) count = userSession.UndoneCommands.Count;
+				if (count.Equals(0)) throw new WorldEditCommandException("Nothing to redo");
+
+				for (int i = 1; i <= count; i++)
+				{
+					if (userSession.UndoneCommands.TryPop(out WorldEditCommand command))
+					{
+						if (command.Redo())
+						{
+							if (!count.Equals(1)) { user.Player.MsgLoc($"Redo {i}/{count} done."); }
+						}
+					}
+					else
+					{
+						throw new WorldEditCommandException("Nothing to Redo");
+					}
+				}
+				user.Player.MsgLoc($"Redo done.");
+			}
+			catch (WorldEditCommandException e)
+			{
+				user.Player.ErrorLocStr(e.Message);
+			}
+			catch (Exception e)
+			{
+				Log.WriteErrorLine(Localizer.Do($"{e}"));
 			}
 		}
 
@@ -358,7 +388,7 @@ namespace Eco.Mods.WorldEdit
 				if (command.Invoke(region))
 				{
 					user.Player.MsgLoc($"Copy done in {command.ElapsedMilliseconds}ms.");
-					command = new SetCommand(user, "Empty");
+					command = new SetCommand(user, typeof(World.Blocks.EmptyBlock));
 					if (command.Invoke(region))
 					{
 						user.Player.MsgLoc($"{command.BlocksChanged} blocks cleared in {command.ElapsedMilliseconds}ms.");
@@ -470,7 +500,7 @@ namespace Eco.Mods.WorldEdit
 			}
 			if (!string.IsNullOrEmpty(fileName))
 			{
-				fileName = fileName.Replace(" ", string.Empty).Trim();
+				fileName = fileName.Trim().Replace(" ", string.Empty);
 			}
 
 			try
@@ -480,6 +510,40 @@ namespace Eco.Mods.WorldEdit
 				{
 					//Output done in he command
 				}
+			}
+			catch (WorldEditCommandException e)
+			{
+				user.Player.ErrorLocStr(e.Message);
+			}
+			catch (Exception e)
+			{
+				Log.WriteError(Localizer.Do($"{e}"));
+			}
+		}
+
+		[ChatSubCommand("WorldEdit", "BInfo will give you a information about blueprint", "binfo", ChatAuthorizationLevel.Admin)]
+		public static void BInfo(User user, string fileName, string outFileName = null)
+		{
+			if (!string.IsNullOrEmpty(outFileName))
+			{
+				outFileName = outFileName.Trim().Replace(" ", string.Empty);
+			}
+
+			try
+			{
+				if (!string.IsNullOrEmpty(fileName))
+				{
+					WorldEditCommand command = new BlueprintInfoCommand(user, fileName, outFileName);
+					if (command.Invoke())
+					{
+						//Output done in he command
+					}
+				}
+				else
+				{
+					throw new WorldEditCommandException("Blueprint file name not provided");
+				}
+
 			}
 			catch (WorldEditCommandException e)
 			{
@@ -520,9 +584,9 @@ namespace Eco.Mods.WorldEdit
 			{
 				Vector3i pos;
 
-				if(!String.IsNullOrEmpty(coordinate))
+				if (!String.IsNullOrEmpty(coordinate))
 				{
-					if(!WorldEditUtils.ParseCoordinateArgs(user, coordinate, out pos)) { return; }
+					if (!WorldEditUtils.ParseCoordinateArgs(user, coordinate, out pos)) { return; }
 				}
 				else
 				{
@@ -531,8 +595,8 @@ namespace Eco.Mods.WorldEdit
 
 				pos.X = pos.X < 0 ? pos.X + Shared.Voxel.World.VoxelSize.X : pos.X;
 				pos.Z = pos.Z < 0 ? pos.Z + Shared.Voxel.World.VoxelSize.Z : pos.Z;
-				pos.X = pos.X % Shared.Voxel.World.VoxelSize.X;
-				pos.Z = pos.Z % Shared.Voxel.World.VoxelSize.Z;
+				pos.X %= Shared.Voxel.World.VoxelSize.X;
+				pos.Z %= Shared.Voxel.World.VoxelSize.Z;
 
 				UserSession session = WorldEditManager.GetUserSession(user);
 				session.SetFirstPosition(pos);
@@ -564,8 +628,8 @@ namespace Eco.Mods.WorldEdit
 
 				pos.X = pos.X < 0 ? pos.X + Shared.Voxel.World.VoxelSize.X : pos.X;
 				pos.Z = pos.Z < 0 ? pos.Z + Shared.Voxel.World.VoxelSize.Z : pos.Z;
-				pos.X = pos.X % Shared.Voxel.World.VoxelSize.X;
-				pos.Z = pos.Z % Shared.Voxel.World.VoxelSize.Z;
+				pos.X %= Shared.Voxel.World.VoxelSize.X;
+				pos.Z %= Shared.Voxel.World.VoxelSize.Z;
 
 				UserSession session = WorldEditManager.GetUserSession(user);
 				session.SetSecondPosition(pos);
@@ -600,7 +664,7 @@ namespace Eco.Mods.WorldEdit
 			try
 			{
 				Vector3i pos = user.Position.Round;
-				Vector2i claimPos = PlotUtil.FromWorldPos.ToCornerWorldPosOfPlotAt(pos);
+				Vector2i claimPos = PlotUtil.RawPlotPos(pos.XZ).RawXY;
 				UserSession session = WorldEditManager.GetUserSession(user);
 
 				session.SetFirstPosition(claimPos.X_Z(pos.Y - 1));
@@ -621,7 +685,7 @@ namespace Eco.Mods.WorldEdit
 			try
 			{
 				Vector3i pos = user.Position.Round;
-				Vector2i claimPos = PlotUtil.FromWorldPos.ToCornerWorldPosOfPlotAt(pos);
+				Vector2i claimPos = PlotUtil.RawPlotPos(pos.XZ).RawXY;
 				UserSession session = WorldEditManager.GetUserSession(user);
 
 				WorldRange range = session.Selection;
@@ -667,7 +731,7 @@ namespace Eco.Mods.WorldEdit
 						break;
 				}
 				pos += direction.ToVec() * (PlotUtil.PropertyPlotLength - 1) * amount;
-				Vector2i claimPos = PlotUtil.FromWorldPos.ToCornerWorldPosOfPlotAt(pos.XZ);
+				Vector2i claimPos = PlotUtil.RawPlotPos(pos.XZ).RawXY;
 				range.ExtendToInclude(claimPos.X_Z(pos.Y));
 				range.ExtendToInclude(WorldEditUtils.SecondPlotPos(claimPos).X_Z(pos.Y));
 				session.SetSelection(range);

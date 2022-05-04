@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Eco.Mods.WorldEdit.Model;
+using Eco.Shared.Math;
 using K4os.Compression.LZ4.Streams;
 using Newtonsoft.Json;
 
@@ -10,12 +11,13 @@ namespace Eco.Mods.WorldEdit.Serializer
 {
 	internal class WorldEditSerializer
 	{
-		public const float CurrentVersion = 1.2f;
+		public const float CurrentVersion = 1.3f;
 		/* Version History:
 		 * 1.0 - Old and unused format, supported blocks only.
 		 * 1.1 - Support plants, objects, blocks at separate layers
 		 * TODO: Write migration for this! 1.2 - Changed WorldEditPlantBlockData.PlantType form plant.GetType() to plant.Species.GetType()
 		 *	added AuthorInformation
+		 * 1.3 - Added Dimension information
 		 * */
 
 		private const string LZ4_HEADER = "LZ4";
@@ -65,6 +67,7 @@ namespace Eco.Mods.WorldEdit.Serializer
 		}
 
 		public AuthorInformation AuthorInformation { get; set; }
+		public Vector3i Dimension { get; private set; }
 
 		public WorldEditSerializer()
 		{
@@ -90,12 +93,14 @@ namespace Eco.Mods.WorldEdit.Serializer
 			serializer.BlockList = clipboard.GetBlocks();
 			serializer.PlantList = clipboard.GetPlants();
 			serializer.WorldObjectList = clipboard.GetWorldObjects();
+			serializer.Dimension = clipboard.Dimension;
+			serializer.AuthorInformation = clipboard.AuthorInfo;
 			return serializer;
 		}
 
 		public void Serialize(Stream stream)
 		{
-			EcoBlueprint schematic = EcoBlueprint.Create(this.blockList, this.plantList, this.worldObjectList, this.AuthorInformation);
+			EcoBlueprint schematic = EcoBlueprint.Create(this.blockList, this.plantList, this.worldObjectList, this.AuthorInformation, this.Dimension);
 			Serialize(stream, schematic);
 		}
 
