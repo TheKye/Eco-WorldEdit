@@ -15,7 +15,7 @@ namespace Eco.Mods.WorldEdit.Commands
 		{
 			if (this.UserSession.Clipboard.Count <= 0) throw new WorldEditCommandException($"Please /copy a selection first!");
 			this.skipEmpty = skipEmpty;
-			this.playerPos = this.UserSession.Player.Position.Round;
+			this.playerPos = this.UserSession.Player.Position.Round();
 			this.clipboard = this.UserSession.Clipboard.Copy();
 		}
 

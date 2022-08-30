@@ -1,5 +1,7 @@
 ﻿using Eco.Shared;
 using Eco.Shared.Math;
+using System.Numerics;
+using Quaternion = Eco.Shared.Math.Quaternion;
 
 namespace Eco.Mods.WorldEdit.Utils
 {
@@ -8,7 +10,7 @@ namespace Eco.Mods.WorldEdit.Utils
 		public static Quaternion FromAxisAngle(Vector3 axis, float angleRadian)
 		{
 			Quaternion q = new Quaternion();
-			float m = axis.Magnitude;
+			float m = axis.Magnitude();
 			if (m > 0.0001)
 			{
 				float ca = Mathf.Cos(angleRadian / 2);

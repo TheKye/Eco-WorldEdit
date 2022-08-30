@@ -10,7 +10,8 @@ using System;
 
 namespace Eco.Mods.WorldEdit
 {
-	public class WorldEditCommands : IChatCommandHandler
+	[ChatCommandHandler]
+	public class WorldEditCommands
 	{
 		[ChatCommand("Lists of world edit commands", "we", ChatAuthorizationLevel.Admin)] public static void WorldEdit(User user) { }
 
@@ -590,7 +591,7 @@ namespace Eco.Mods.WorldEdit
 				}
 				else
 				{
-					pos = user.Position.Round;
+					pos = user.Position.Round();
 				}
 
 				pos.X = pos.X < 0 ? pos.X + Shared.Voxel.World.VoxelSize.X : pos.X;
@@ -623,7 +624,7 @@ namespace Eco.Mods.WorldEdit
 				}
 				else
 				{
-					pos = user.Position.Round;
+					pos = user.Position.Round();
 				}
 
 				pos.X = pos.X < 0 ? pos.X + Shared.Voxel.World.VoxelSize.X : pos.X;
@@ -663,7 +664,7 @@ namespace Eco.Mods.WorldEdit
 		{
 			try
 			{
-				Vector3i pos = user.Position.Round;
+				Vector3i pos = user.Position.Round();
 				Vector2i claimPos = PlotUtil.RawPlotPos(pos.XZ).RawXY;
 				UserSession session = WorldEditManager.GetUserSession(user);
 
@@ -684,7 +685,7 @@ namespace Eco.Mods.WorldEdit
 		{
 			try
 			{
-				Vector3i pos = user.Position.Round;
+				Vector3i pos = user.Position.Round();
 				Vector2i claimPos = PlotUtil.RawPlotPos(pos.XZ).RawXY;
 				UserSession session = WorldEditManager.GetUserSession(user);
 

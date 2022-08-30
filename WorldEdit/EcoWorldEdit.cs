@@ -5,18 +5,23 @@ namespace Eco.Mods.WorldEdit
 {
 	public class EcoWorldEdit : IModKitPlugin, IServerPlugin, IInitializablePlugin
 	{
-		public const string Version = "2.2.0";
+		public const string Version = "2.3.0";
 		public const string SchematicDirectoryName = "Blueprints";
 		public const string SchematicDefaultExtension = ".ecobp";
-
-		public string GetStatus()
-		{
-			return string.Empty;
-		}
 
 		public void Initialize(TimedTask timer)
 		{
 			WorldEditManager.UpdateBlueprintList();
+		}
+
+		public string GetCategory()
+		{
+			return string.Empty;
+		}
+
+		public string GetStatus()
+		{
+			return string.Empty;
 		}
 
 		public override string ToString()

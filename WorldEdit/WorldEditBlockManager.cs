@@ -231,7 +231,7 @@ namespace Eco.Mods.WorldEdit
 			{
 				if (blockOccupancy.BlockType != null)
 				{
-					Vector3i worldPos = position + rotation.RotateVector(blockOccupancy.Offset).XYZi;
+					Vector3i worldPos = position + rotation.RotateVector(blockOccupancy.Offset).XYZi();
 					if (!_userSession.ExecutingCommand.PerformingUndo) _userSession.ExecutingCommand.AddBlockChangedEntry(worldPos); //Do not record changes when doing undo
 					ClearPosition(worldPos, true);
 				}
