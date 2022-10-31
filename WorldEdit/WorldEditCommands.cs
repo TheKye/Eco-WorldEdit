@@ -83,6 +83,26 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
+		[ChatSubCommand("WorldEdit", "Drain water in Selected Area", "drain", ChatAuthorizationLevel.Admin)]
+		public static void Drain(User user)
+		{
+			try
+			{
+				ReplaceCommand command = new ReplaceCommand(user, "Water", "Empty");
+				if (command.Invoke())
+				{
+					user.Player.MsgLoc($"{command.BlocksChanged} water blocks drained in {command.ElapsedMilliseconds}ms.");
+				}
+			}
+			catch (WorldEditCommandException e)
+			{
+				user.Player.ErrorLocStr(e.Message);
+			}
+			catch (Exception e)
+			{
+				Log.WriteError(Localizer.Do($"{e}"));
+			}
+		}
 		[ChatSubCommand("WorldEdit", "Replace a Specific Block Type with Another Block Example: replace sand, dirt, this will replace sand with dirt", "replace", ChatAuthorizationLevel.Admin)]
 		public static void Replace(User user, string pTypeNames)
 		{
@@ -134,7 +154,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "/stack", "Stack ", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "/stack", "Duplicate the Selected Area based on repeating amounts to a direction", ChatAuthorizationLevel.Admin)]
 		public static void Stack(User user, string directionAndAmount = "1", int offset = 0)
 		{
 			try
@@ -155,7 +175,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "/move", "move", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "/move", "Move blocks in the Selected Area to a direction", ChatAuthorizationLevel.Admin)]
 		public static void Move(User user, string directionAndAmount = "1")
 		{
 			try
@@ -555,7 +575,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "/grow", "grow", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "/grow", "Set max growth for Plants and Trees in Selected Area", ChatAuthorizationLevel.Admin)]
 		public static void Grow(User user)
 		{
 			try
