@@ -1,6 +1,7 @@
 ﻿using Eco.Gameplay.Players;
 using Eco.Mods.TechTree;
 using Eco.Shared.Math;
+using System.Numerics;
 
 namespace Eco.Mods.WorldEdit.Commands
 {

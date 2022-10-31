@@ -11,7 +11,7 @@ namespace Eco.Mods.WorldEdit.Utils
 	{
 		public static bool ParseCoordinateArgs(User user, string args, out Vector3i pos)
 		{
-			pos = user.Position.Round;
+			pos = user.Position.Round();
 			args = args.Trim().Replace(" ", ",");
 			string[] coords = args.Split(',', StringSplitOptions.RemoveEmptyEntries);
 			if (coords.Length < 3) { user.Player.ErrorLocStr($"Ivalid coordinates format: [{args}]"); return false; }

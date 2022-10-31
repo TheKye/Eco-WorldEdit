@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Numerics;
 using System.Text.RegularExpressions;
 using Eco.Gameplay.Blocks;
 using Eco.Gameplay.Objects;
@@ -44,7 +45,7 @@ namespace Eco.Mods.WorldEdit.Model
 					Plant plant = EcoSim.PlantSim.GetPlant(originalPosition);
 					if (plant != null)
 					{
-						worldEditBlock.Position = plant.Position.XYZi - offsetPosition;
+						worldEditBlock.Position = plant.Position.XYZi() - offsetPosition;
 						worldEditBlock.BlockData = WorldEditPlantBlockData.From(plant);
 					}
 					else { worldEditBlock.BlockType = typeof(EmptyBlock); }
@@ -119,7 +120,7 @@ namespace Eco.Mods.WorldEdit.Model
 			if (this.IsWorldObjectBlock())
 			{
 				WorldEditWorldObjectBlockData worldObjectBlockData = (WorldEditWorldObjectBlockData)this.BlockData;
-				worldObjectBlockData.SetRotation(worldObjectBlockData.Rotation * QuaternionUtils.FromAxisAngle(Vector3.Up, radians));
+				worldObjectBlockData.SetRotation(worldObjectBlockData.Rotation * QuaternionUtils.FromAxisAngle(Vector3.UnitY, radians));
 				this.BlockData = worldObjectBlockData;
 			}
 			else if (!this.IsPlantBlock() && !this.BlockType.Equals(typeof(EmptyBlock)))

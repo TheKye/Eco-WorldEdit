@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<RootNamespace>Eco.Mods.WorldEdit</RootNamespace>
 		<AssemblyName>WorldEdit</AssemblyName>
 		<PackageId>WorldEdit</PackageId>
-		<Version>2.1.2</Version>
+		<Version>2.3.0</Version>
 		<Authors>Elixr Mods</Authors>
 		<Company>Elixr Solutions</Company>
 		<Product>EM WorldEdit</Product>
@@ -21,15 +21,6 @@
 		<PackageReference Include="K4os.Compression.LZ4.Legacy" Version="1.2.6" />
 		<PackageReference Include="K4os.Compression.LZ4.Streams" Version="1.2.6" />
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Compile Remove="Dependencies\**" />
-		<Compile Remove="WorldEdit-UnitTest\**" />
-		<EmbeddedResource Remove="Dependencies\**" />
-		<EmbeddedResource Remove="WorldEdit-UnitTest\**" />
-		<None Remove="Dependencies\**" />
-		<None Remove="WorldEdit-UnitTest\**" />
 	</ItemGroup>
 
 	<ItemGroup>
