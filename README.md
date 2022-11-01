@@ -16,7 +16,7 @@ You can find a guide on Installation, Compatibility, Quick start and Commands in
 * [Eco.mod.io](https://eco.mod.io/ecoworldedit/ "Eco.mod.io")
 
 ## Translation
-You can help us translate WorldEdit into your language on [Crowdin](https://crowdin.com/project/EcoWorldEdit "Crowdin").
+You can help us translate WorldEdit into your language on [Crowdin](https://crowdin.com/project/EcoWorldEdit "Crowdin"). Сurrent progress [![Crowdin](https://badges.crowdin.net/EcoWorldEdit/localized.svg)](https://crowdin.com/project/EcoWorldEdit)
 
 ## Issues and Suggestions
 If you find a bug or have a suggestion to improve the plugin, let us know [Here](https://github.com/TheKye/Eco-WorldEdit/issues/ "Github").
