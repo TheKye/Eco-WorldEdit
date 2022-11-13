@@ -155,7 +155,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "/stack", "Duplicate the Selected Area based on repeating amounts to a direction", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "Duplicate the Selected Area based on repeating amounts to a direction", "/stack", ChatAuthorizationLevel.Admin)]
 		public static void Stack(User user, string directionAndAmount = "1", int offset = 0)
 		{
 			try
@@ -176,7 +176,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "/move", "Move blocks in the Selected Area to a direction", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "Move blocks in the Selected Area to a direction", "/move", ChatAuthorizationLevel.Admin)]
 		public static void Move(User user, string directionAndAmount = "1")
 		{
 			try
@@ -576,7 +576,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "/grow", "Set max growth for Plants and Trees in Selected Area", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "Set max growth for Plants and Trees in Selected Area", "/grow", ChatAuthorizationLevel.Admin)]
 		public static void Grow(User user)
 		{
 			try
