@@ -1,7 +1,10 @@
-﻿using Eco.Gameplay.Plants;
+﻿using Eco.Core.PropertyHandling;
+using Eco.Gameplay.Plants;
 using Eco.Gameplay.Players;
+using Eco.Mods.Organisms;
 using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared.Math;
+using Eco.Shared.Utils;
 using Eco.World.Blocks;
 
 namespace Eco.Mods.WorldEdit.Commands
@@ -15,18 +18,26 @@ namespace Eco.Mods.WorldEdit.Commands
 
 		protected override void Execute(WorldRange selection)
 		{
-			selection = selection.FixXZ(Shared.Voxel.World.VoxelSize);
+			selection = UserSession.Selection;
 
 			void DoAction(Vector3i pos)
 			{
 				Block block = Eco.World.World.GetBlock(pos);
-
-				if (block.GetType() == typeof(PlantBlock) || block.GetType() == typeof(TreeBlock))
+				Log.WriteErrorLineLocStr($"{block.GetType().Name}");
+				if (block.GetType() == typeof(PlantBlock) || block.GetType() == typeof(TreeBlock) || block.GetType() == typeof(InteractablePlantBlock))
 				{
 					var pb = PlantBlock.GetPlant(pos);
-					pb.GrowthPercent = 1;
+					var sp = pb.Species;
+					var gr = sp.MaxGrowthRate;
+					var mad = sp.MaturityAgeDays;
+                    sp.MaxGrowthRate = 100000f;
+                    sp.MaturityAgeDays = 0.000001f;
+					pb.GrowthPercent = 1f;
 					pb.Tended = true;
 					pb.Tick();
+					Log.WriteErrorLineLocStr($"Block Found: {pb.Species.Name}");
+                    sp.MaxGrowthRate = gr;
+                    sp.MaturityAgeDays = mad;
 				}
 			}
 			selection.ForEachInc(DoAction);

@@ -1,5 +1,6 @@
 ﻿using Eco.Shared;
 using Eco.Shared.Math;
+using System;
 using System.Numerics;
 using Quaternion = Eco.Shared.Math.Quaternion;
 
@@ -13,8 +14,8 @@ namespace Eco.Mods.WorldEdit.Utils
 			float m = axis.Magnitude();
 			if (m > 0.0001)
 			{
-				float ca = Mathf.Cos(angleRadian / 2);
-				float sa = Mathf.Sin(angleRadian / 2);
+				float ca = MathF.Cos(angleRadian / 2);
+				float sa = MathF.Sin(angleRadian / 2);
 				q.X = axis.X / m * sa;
 				q.Y = axis.Y / m * sa;
 				q.Z = axis.Z / m * sa;

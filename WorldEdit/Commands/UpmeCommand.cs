@@ -16,7 +16,7 @@ namespace Eco.Mods.WorldEdit.Commands
 
 		protected override void Execute(WorldRange selection)
 		{
-			Vector3 pos = this.UserSession.Player.Position;
+			Vector3 pos = this.UserSession.Player.User.Position;
 			var newpos = new Vector3i((int)pos.X, (int)pos.Y + this.count, (int)pos.Z);
 			WorldEditBlockManager.RestoreBlock(typeof(StoneBlock), newpos);
 			newpos.Y += 2;

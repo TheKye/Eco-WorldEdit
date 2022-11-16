@@ -17,7 +17,7 @@ namespace Eco.Mods.WorldEdit.Commands
 		{
 			selection = selection.FixXZ(Shared.Voxel.World.VoxelSize);
 
-			Vector3i playerPos = this.UserSession.Player.Position.Round();
+			Vector3i playerPos = this.UserSession.Player.User.Position.Round();
 
 			this.UserSession.Clipboard.Clear();
 			this.UserSession.Clipboard.Dimension = new Vector3i(selection.WidthInc, selection.HeightInc, selection.LengthInc);

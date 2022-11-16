@@ -131,7 +131,7 @@ namespace Eco.Mods.WorldEdit.Model
 					string angleStr = Regex.Match(this.BlockType.Name, @"\d+").Value;
 					if (!string.IsNullOrEmpty(angleStr)) { currentAngle = int.Parse(angleStr); }
 
-					float newAngle = Mathf.Round((currentAngle + degrees) / 90) * 90;
+					float newAngle = MathF.Round((currentAngle + degrees) / 90) * 90;
 					newAngle = MathUtil.NormalizeAngle0to360(newAngle);
 
 					Type type = variants.Single(variant =>

@@ -247,8 +247,8 @@ namespace Eco.Mods.WorldEdit.Utils
 
 		public AffineTransform RotateX(float theta)
 		{
-			float cot = Mathf.Cos(theta);
-			float sit = Mathf.Sin(theta);
+			float cot = MathF.Cos(theta);
+			float sit = MathF.Sin(theta);
 			return this.Concatenate(
 					new AffineTransform(
 							1, 0, 0, 0,
@@ -264,8 +264,8 @@ namespace Eco.Mods.WorldEdit.Utils
 
 		public AffineTransform RotateY(float theta)
 		{
-			float cot = Mathf.Cos(theta);
-			float sit = Mathf.Sin(theta);
+			float cot = MathF.Cos(theta);
+			float sit = MathF.Sin(theta);
 			return this.Concatenate(
 					new AffineTransform(
 							cot, 0, sit, 0,
@@ -281,8 +281,8 @@ namespace Eco.Mods.WorldEdit.Utils
 
 		public AffineTransform RotateZ(float theta)
 		{
-			float cot = Mathf.Cos(theta);
-			float sit = Mathf.Sin(theta);
+			float cot = MathF.Cos(theta);
+			float sit = MathF.Sin(theta);
 			return this.Concatenate(
 					new AffineTransform(
 							cot, -sit, 0, 0,
