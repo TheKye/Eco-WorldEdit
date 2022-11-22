@@ -23,58 +23,11 @@
 	-->
 	
 	<ItemGroup>
+		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.9.7.1-beta-release-376" />
 		<PackageReference Include="K4os.Compression.LZ4" Version="1.2.6" />
 		<PackageReference Include="K4os.Compression.LZ4.Legacy" Version="1.2.6" />
 		<PackageReference Include="K4os.Compression.LZ4.Streams" Version="1.2.6" />
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Reference Include="Eco.Core">
-	    <HintPath>..\dlls\Eco.Core.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.Gameplay">
-	    <HintPath>..\dlls\Eco.Gameplay.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.ModKit">
-	    <HintPath>..\dlls\Eco.ModKit.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.Mods">
-	    <HintPath>..\dlls\Eco.Mods.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.Networking.ENet">
-	    <HintPath>..\dlls\Eco.Networking.ENet.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.Plugins">
-	    <HintPath>..\dlls\Eco.Plugins.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.Shared">
-	    <HintPath>..\dlls\Eco.Shared.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.Simulation">
-	    <HintPath>..\dlls\Eco.Simulation.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.Stats">
-	    <HintPath>..\dlls\Eco.Stats.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.WebServer">
-	    <HintPath>..\dlls\Eco.WebServer.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.WindowsForms">
-	    <HintPath>..\dlls\Eco.WindowsForms.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.World">
-	    <HintPath>..\dlls\Eco.World.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.WorldGenerator">
-	    <HintPath>..\dlls\Eco.WorldGenerator.dll</HintPath>
-	  </Reference>
-	  <Reference Include="EcoServer">
-	    <HintPath>..\dlls\EcoServer.dll</HintPath>
-	  </Reference>
-	  <Reference Include="NodeGraphControl">
-	    <HintPath>..\dlls\NodeGraphControl.dll</HintPath>
-	  </Reference>
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
