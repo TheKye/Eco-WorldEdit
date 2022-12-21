@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<RootNamespace>Eco.Mods.WorldEdit</RootNamespace>
 		<AssemblyName>WorldEdit</AssemblyName>
 		<PackageId>WorldEdit</PackageId>
-		<Version>2.4.0</Version>
+		<Version>2.5.0</Version>
 		<Authors>Elixr Mods</Authors>
 		<Company>Elixr Solutions</Company>
 		<Product>EM WorldEdit</Product>
@@ -19,11 +19,12 @@
 	<!--
 	<ItemGroup>
 		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.9.6.6-beta-release-357" />
+		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.9.7.1-beta-release-376" />
 	</ItemGroup>
 	-->
 	
 	<ItemGroup>
-		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.9.7.1-beta-release-376" />
+		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.9.7.5-beta-release-416" />
 		<PackageReference Include="K4os.Compression.LZ4" Version="1.2.6" />
 		<PackageReference Include="K4os.Compression.LZ4.Legacy" Version="1.2.6" />
 		<PackageReference Include="K4os.Compression.LZ4.Streams" Version="1.2.6" />
