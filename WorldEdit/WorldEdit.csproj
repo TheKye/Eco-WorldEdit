@@ -24,11 +24,11 @@
 	-->
 	
 	<ItemGroup>
-		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.9.7.5-beta-release-416" />
-		<PackageReference Include="K4os.Compression.LZ4" Version="1.2.6" />
-		<PackageReference Include="K4os.Compression.LZ4.Legacy" Version="1.2.6" />
-		<PackageReference Include="K4os.Compression.LZ4.Streams" Version="1.2.6" />
-		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.9.7.8-beta-release-442" />
+		<PackageReference Include="K4os.Compression.LZ4" Version="1.2.16" />
+		<PackageReference Include="K4os.Compression.LZ4.Legacy" Version="1.2.16" />
+		<PackageReference Include="K4os.Compression.LZ4.Streams" Version="1.2.16" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
