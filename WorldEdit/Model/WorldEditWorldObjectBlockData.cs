@@ -14,6 +14,7 @@ namespace Eco.Mods.WorldEdit.Model
 	{
 		public Type WorldObjectType { get; private set; }
 		[JsonConverter(typeof(JsonQuaternionConverter))] public Quaternion Rotation { get; private set; }
+		public string Name { get; private set; }
 		public Dictionary<Type, Object> Components { get; private set; }
 
 		public static WorldEditWorldObjectBlockData From(WorldObject worldObject)
@@ -22,6 +23,7 @@ namespace Eco.Mods.WorldEdit.Model
 
 			worldObjectData.WorldObjectType = worldObject.GetType();
 			worldObjectData.Rotation = worldObject.Rotation;
+			worldObjectData.Name = worldObject.Name;
 
 			worldObjectData.Components = new Dictionary<Type, Object>();
 			if (worldObject.HasComponent<StorageComponent>())
@@ -58,11 +60,12 @@ namespace Eco.Mods.WorldEdit.Model
 		}
 
 		[JsonConstructor]
-		public WorldEditWorldObjectBlockData(Type worldObjectType, Quaternion rotation, Dictionary<Type, Object> components)
+		public WorldEditWorldObjectBlockData(Type worldObjectType, Quaternion rotation, string name, Dictionary<Type, Object> components)
 		{
 			this.WorldObjectType = worldObjectType ?? throw new ArgumentNullException(nameof(worldObjectType));
 			this.Rotation = rotation;
 			this.Components = components;
+			this.Name= name;
 		}
 
 		public void SetRotation(Quaternion rot)
@@ -72,7 +75,7 @@ namespace Eco.Mods.WorldEdit.Model
 
 		public IWorldEditBlockData Clone()
 		{
-			return new WorldEditWorldObjectBlockData(this.WorldObjectType, this.Rotation, new Dictionary<Type, Object>(this.Components));
+			return new WorldEditWorldObjectBlockData(this.WorldObjectType, this.Rotation, this.Name, new Dictionary<Type, Object>(this.Components));
 		}
 	}
 }

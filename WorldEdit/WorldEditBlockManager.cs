@@ -91,6 +91,7 @@ namespace Eco.Mods.WorldEdit
 				Log.WriteErrorLineLoc($"Unable spawn WorldObject {worldObjectBlockData.WorldObjectType} at {position}");
 				return;
 			}
+			if(!string.IsNullOrEmpty(worldObjectBlockData.Name)) { worldObject.SetName(worldObjectBlockData.Name); }
 			if (worldObject.HasComponent<StorageComponent>() && worldObjectBlockData.Components.ContainsKey(typeof(StorageComponent)))
 			{
 				StorageComponent storageComponent = worldObject.GetComponent<StorageComponent>();
