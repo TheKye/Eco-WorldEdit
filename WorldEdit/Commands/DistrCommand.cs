@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using Eco.Gameplay.Blocks;
-using Eco.Gameplay.Items;
 using Eco.Gameplay.Objects;
 using Eco.Gameplay.Plants;
 using Eco.Gameplay.Players;
-using Eco.Gameplay.Systems.TextLinks;
-using Eco.Gameplay.Systems.Tooltip;
 using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared.IoC;
 using Eco.Shared.Localization;
@@ -18,7 +13,6 @@ using Eco.Shared.Math;
 using Eco.Shared.Utils;
 using Eco.Simulation;
 using Eco.Simulation.Agents;
-using Eco.Simulation.Types;
 using Eco.World.Blocks;
 
 namespace Eco.Mods.WorldEdit.Commands
@@ -100,15 +94,17 @@ namespace Eco.Mods.WorldEdit.Commands
 			sb.AppendLocStr("Total blocks:"); sb.AppendLine($" {totalBlocks,8}");
 
 			sb.AppendLine().AppendLine(TextLoc.Header(Localizer.DoStr("Block List")));
+			sb.AppendLine(this.MakeRow("Block", "Count", "Percent", "Block Type"));
 			foreach (KeyValuePair<object, long> entry in blocks)
 			{
 				decimal percent = Math.Round((entry.Value / totalBlocks) * 100, 2);
-
-				sb.Append(this.outputType.Equals("detail") ? BlockUtils.GetBlockFancyName((Type)entry.Key) : (string)entry.Key);
-				sb.Append(Text.Pos(400, Text.Info(Text.Int(entry.Value))));
-				sb.Append($"({percent}%)".PadLeft(10));
-				if (this.outputType.Equals("detail")) sb.Append(Text.Pos(500, $"[{Localizer.DoStr(((Type)entry.Key).Name)}]"));
-				sb.AppendLine();
+				string blockName = this.outputType.Equals("detail") ? BlockUtils.GetBlockFancyName((Type)entry.Key) : (string)entry.Key;
+				sb.AppendLine(this.MakeRow(
+					blockName,
+					Text.Info(Text.Int(entry.Value)),
+					$"{percent}%",
+					this.outputType.Equals("detail") ? $"[{Localizer.DoStr(((Type)entry.Key).Name)}]" : string.Empty
+				));
 			}
 			if (!string.IsNullOrEmpty(this.fileName))
 			{
@@ -116,6 +112,18 @@ namespace Eco.Mods.WorldEdit.Commands
 				this.UserSession.Player.MsgLoc($"Report saved into file with name <{WorldEditManager.SanitizeFileName(this.fileName)}.txt>");
 			}
 			this.UserSession.Player.OpenInfoPanel(Localizer.Do($"WorldEdit Blocks Report"), sb.ToString(), "WorldEditDistr");
+		}
+
+		private string MakeRow(string block, string count, string percent, string blockType)
+		{
+			List<(string, int)> row = new List<(string, int)>()
+			{
+				(block, 20),
+				(count, 8),
+				(percent, 6)
+			};
+			if (this.outputType.Equals("detail")) { row.Add((blockType, 22)); }
+			return Text.Columns(2, 18, row.ToArray());
 		}
 	}
 }

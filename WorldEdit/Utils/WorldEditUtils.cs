@@ -84,7 +84,7 @@ namespace Eco.Mods.WorldEdit.Utils
 
 		public static void OutputToTxtFile(string data, string fileName)
 		{
-			data = data.Replace("<pos=300>", "\t");
+			data = Regex.Replace(data, "<pos=[1-9][0-9]*em>", "\t");
 			data = Regex.Replace(data, "<.*?>", String.Empty);
 
 			if (!Directory.Exists(WorldEditManager.GetSchematicDirectory())) { Directory.CreateDirectory(WorldEditManager.GetSchematicDirectory()); }
