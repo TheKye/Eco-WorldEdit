@@ -94,7 +94,7 @@ namespace Eco.Mods.WorldEdit.Commands
 			sb.AppendLocStr("Total blocks:"); sb.AppendLine($" {totalBlocks,8}");
 
 			sb.AppendLine().AppendLine(TextLoc.Header(Localizer.DoStr("Block List")));
-			sb.AppendLine(this.MakeRow("Block", "Count", "Percent", "Block Type"));
+			sb.AppendLine(this.MakeRow(Localizer.DoStr("Block"), Localizer.DoStr("Count"), Localizer.DoStr("Percent"), Localizer.DoStr("Block Type")));
 			foreach (KeyValuePair<object, long> entry in blocks)
 			{
 				decimal percent = Math.Round((entry.Value / totalBlocks) * 100, 2);
