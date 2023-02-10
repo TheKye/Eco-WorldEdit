@@ -5,7 +5,7 @@ namespace Eco.Mods.WorldEdit
 {
 	public class EcoWorldEdit : IModKitPlugin, IServerPlugin, IInitializablePlugin
 	{
-		public const string Version = "2.5.1";
+		public const string Version = "2.5.2";
 		public const string SchematicDirectoryName = "Blueprints";
 		public const string SchematicDefaultExtension = ".ecobp";
 

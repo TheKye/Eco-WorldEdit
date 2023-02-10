@@ -5,7 +5,7 @@
 		<RootNamespace>Eco.Mods.WorldEdit</RootNamespace>
 		<AssemblyName>WorldEdit</AssemblyName>
 		<PackageId>WorldEdit</PackageId>
-		<Version>2.5.1</Version>
+		<Version>2.5.2</Version>
 		<Authors>Elixr Mods</Authors>
 		<Company>Elixr Solutions</Company>
 		<Product>EM WorldEdit</Product>
