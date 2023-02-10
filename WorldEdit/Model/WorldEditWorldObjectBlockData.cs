@@ -55,6 +55,11 @@ namespace Eco.Mods.WorldEdit.Model
 			{
 				worldObjectData.Components.Add(typeof(TechTree.DoorObject), DoorComponent.Create(doorObject));
 			}
+			if (worldObject.HasComponent<StoreComponent>())
+			{
+				StoreComponent storeComponent = worldObject.GetComponent<StoreComponent>();
+				worldObjectData.Components.Add(typeof(StoreComponent), StoreComponentData.Create(storeComponent));
+			}
 
 			return worldObjectData;
 		}

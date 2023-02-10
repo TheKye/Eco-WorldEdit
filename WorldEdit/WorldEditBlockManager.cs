@@ -157,6 +157,14 @@ namespace Eco.Mods.WorldEdit
 					method.Invoke(worldObject, new object[] { doorComponent.OpensOut });
 				}
 			}
+			if (worldObject.HasComponent<StoreComponent>() && worldObjectBlockData.Components.ContainsKey(typeof(StoreComponent)))
+			{
+				StoreComponent storeComponent = worldObject.GetComponent<StoreComponent>();
+				object obj = worldObjectBlockData.Components[typeof(StoreComponent)];
+				StoreComponentData componentData = obj is JObject jobj ? jobj.ToObject<StoreComponentData>() : (StoreComponentData)obj;
+				componentData.Buy.ForEach(c => storeComponent.StoreData.BuyCategories.Add(c.GetStoreCategory(storeComponent)));
+				componentData.Sell.ForEach(c => storeComponent.StoreData.SellCategories.Add(c.GetStoreCategory(storeComponent)));
+			}
 		}
 
 		public static void RestorePlantBlock(Type type, Vector3i position, IWorldEditBlockData blockData)
