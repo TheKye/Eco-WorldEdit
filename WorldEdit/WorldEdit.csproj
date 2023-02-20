@@ -16,6 +16,14 @@
 		<RepositoryType>Github</RepositoryType>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <DebugType>embedded</DebugType>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <DebugType>none</DebugType>
+	</PropertyGroup>
+
 	<!--
 	<ItemGroup>
 		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.9.6.6-beta-release-357" />

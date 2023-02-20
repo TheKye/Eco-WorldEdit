@@ -134,15 +134,19 @@ namespace Eco.Mods.WorldEdit.Model
 					float newAngle = MathF.Round((currentAngle + degrees) / 90) * 90;
 					newAngle = MathUtil.NormalizeAngle0to360(newAngle);
 
-					Type type = variants.Single(variant =>
+					Type type = null;
+					try
 					{
-						string angleStr = Regex.Match(variant.Name, @"\d+").Value;
-						if (string.IsNullOrEmpty(angleStr) && newAngle == 0) return true;
-						if (!string.IsNullOrEmpty(angleStr) && newAngle == int.Parse(angleStr)) return true;
-						return false;
-					});
-
-					if (type == null) { Log.Debug($"{this.BlockType.Name} new form: {type.Name}"); return; }
+						type = variants.Single(variant =>
+						{
+							string angleStr = Regex.Match(variant.Name, @"\d+").Value;
+							if (string.IsNullOrEmpty(angleStr) && newAngle == 0) return true;
+							if (!string.IsNullOrEmpty(angleStr) && newAngle == int.Parse(angleStr)) return true;
+							return false;
+						});
+					}
+					catch(InvalidOperationException) { Log.WriteWarningLineLoc($"{this.BlockType.Name} have no rotation variant for angle {newAngle}!"); return; }
+					if (type == null) { return; }
 					this.BlockType = type;
 				}
 			}
