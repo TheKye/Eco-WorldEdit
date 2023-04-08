@@ -32,7 +32,7 @@
 	-->
 	
 	<ItemGroup>
-		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.9.7.8-beta-release-442" />
+		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.9.7.10-beta-release-474" />
 		<PackageReference Include="K4os.Compression.LZ4" Version="1.2.16" />
 		<PackageReference Include="K4os.Compression.LZ4.Legacy" Version="1.2.16" />
 		<PackageReference Include="K4os.Compression.LZ4.Streams" Version="1.2.16" />
