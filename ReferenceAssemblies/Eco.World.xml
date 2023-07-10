@@ -1,0 +1,349 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Eco.World</name>
+    </assembly>
+    <members>
+        <member name="M:Eco.World.BlockManager.AddBlockMapping(System.Type,System.UInt16)">
+            <summary>Fills block mappings for <paramref name="blockType"/>.</summary>
+        </member>
+        <member name="T:Eco.World.Blocks.Block">
+            <summary> Base type for all block world blocks. </summary>
+        </member>
+        <member name="M:Eco.World.Blocks.Block.IsAny``2">
+            <summary>Checks if <see cref="T:Eco.World.Blocks.Block"/> is either <typeparamref name="T1"/> or <typeparamref name="T2"/>. More efficient than <c>block.Is&lt;T1&gt;() || block.Is&lt;T2&gt;()</c>.</summary>
+        </member>
+        <member name="T:Eco.World.Blocks.Fertile">
+            <summary> Can support plant-life. </summary>
+        </member>
+        <member name="F:Eco.World.Blocks.Fertile.Fertility">
+            <summary> Coefficient of fertility for this block (0.0-1.0). In example for desert biome blocks it will have lesser fertility per block to prevent to make it best place for plant growth. </summary>
+        </member>
+        <member name="P:Eco.World.Blocks.IsFormAttribute.FormType">
+            <summary> FormType for form, eg typeof(WallFormType), typeof(FloorFormType), typeof(RoofFormType). </summary>
+        </member>
+        <member name="P:Eco.World.Blocks.IsFormAttribute.MaterialType">
+            <summary> The item type this form can be created from. </summary>
+        </member>
+        <member name="T:Eco.World.Blocks.BiomeDestructible">
+            <summary> This block type may be destructed by Biome block. If no <see cref="P:Eco.World.Blocks.BiomeDestructible.DestructedBy"/> blocks specified then may be destructed by any biome block. </summary>
+        </member>
+        <member name="P:Eco.World.Blocks.BiomeDestructible.DestructedBy">
+            <summary> Block types by which this block may be destructed. </summary>
+        </member>
+        <member name="T:Eco.World.Blocks.LookAtTooltip">
+            <summary> Look at tooltip for a block (in case if you need to override or don't have creating item). </summary>
+        </member>
+        <member name="T:Eco.World.Blocks.EncasedWaterBlock">
+            <summary>
+            Water that is under other water or solid blocks, at maximum level. Does no processing of it's own.
+            </summary>
+        </member>
+        <member name="T:Eco.World.Blocks.ITickableBlock">
+            <summary> Wakes up when a nearby block changes, and ticked while not asleep. </summary>
+        </member>
+        <member name="T:Eco.World.Blocks.WaterBlock">
+            <summary>
+            Water block that is that top level of a body of water, usually exposed to air and can flow sideways and down.
+            </summary>
+        </member>
+        <member name="T:Eco.World.Internal.ChunkUpdater">
+            <summary>
+            <see cref="T:Eco.World.Internal.ChunkUpdater"/> is central place for all chunk synchronization logic.
+            It manages clients subscribe/unsubscribe chunks logic and then ensures clients receives subscribed chunks and all updates for subscribed chunks.
+            Updates grouped by clients and will broadcast if possible.
+            It uses two main collection for chunk updates processing:
+            - <see cref="F:Eco.World.Internal.ChunkUpdater.chunkQueues"/> contains per-client
+            </summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.SubscribeChunkColumns(Eco.Shared.Networking.INetClient,System.Collections.Generic.List{Eco.Shared.Math.Vector2i})">
+            <summary>Subscribe client for <paramref name="chunkColumns"/>.</summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.UnsubscribeChunkColumns(Eco.Shared.Networking.INetClient,System.Collections.Generic.HashSet{Eco.Shared.Math.Vector2i})">
+            <summary>Unsubscribe client from <paramref name="chunkColumns"/>.</summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.Service">
+            <summary>Main loop method which should be called regular to deliver chunk changes and subscribed/unsubscribed chunks.</summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.RemoveDisconnectedClients">
+            <summary>Removes <see cref="F:Eco.World.Internal.ChunkUpdater.disconnectedClients"/> from queues and subscriptions.</summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.ExecutePendingCommands">
+            <summary>Executes <see cref="F:Eco.World.Internal.ChunkUpdater.pendingCommands"/> to apply subscribed/unsubscribed chunks in service thread (without potential concurrent access issues).</summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.HandleSubscribeCommand(Eco.World.Internal.ChunkUpdater.Command)">
+            <summary>Handle subscribe chunk columns command.</summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.HandleUnsubscribeCommand(Eco.World.Internal.ChunkUpdater.Command)">
+            <summary>Handle unsubscribe chunk columns command.</summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.RemoveDeliveriesFromQueues``1(System.Collections.Generic.Dictionary{Eco.Shared.Networking.INetClient,Eco.Shared.Collections.RandomAccessQueue{``0}},Eco.Shared.Networking.INetClient,System.Collections.Generic.HashSet{Eco.Shared.Math.Vector2i})">
+            <summary>Removes deliveries (matching <paramref name="chunkColumns"/>) from <paramref name="queues"/> (either columns queues or modified chunks queues).</summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.RemoveClientForSyncedChunks(Eco.Shared.Networking.INetClient,System.Collections.Generic.HashSet{Eco.Shared.Math.Vector2i},Eco.Shared.Serialization.BSONArray)">
+            <summary>Removes client from all <paramref name="chunkColumns"/> and adds removed chunk positions to <paramref name="toRemove"/>.</summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.NotifyChunkChanged(Eco.World.WorldChunk)">
+            <summary>Notify chunk changed for updates scheduling.</summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.NotifyClientDisconnected(Eco.Shared.Networking.INetClient)">
+            <summary>Notify client disconnected for cleanup.</summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.ScheduleChunkUpdates">
+            <summary>Schedules chunk updates for synced chunks.</summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.QueueChunkUpdates(Eco.World.WorldChunk,Eco.World.Internal.ChunkUpdater.ChunkColumnSynchronizationInfo,System.Double)">
+            <summary>Queues chunk update for all clients in <paramref name="syncInfo"/> if chunk outdated.</summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.SyncQueues``1(System.Collections.Generic.Dictionary{Eco.Shared.Networking.INetClient,Eco.Shared.Collections.RandomAccessQueue{``0}})">
+            <summary>Syncs subscribed chunk columns to clients.</summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.SyncChunkRemovals">
+            <summary>Syncs removed chunks to clients.</summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.CollectChunkUpdates``1(System.Collections.Generic.Dictionary{Eco.Shared.Networking.INetClient,Eco.Shared.Collections.RandomAccessQueue{``0}},System.Collections.Generic.List{Eco.Shared.Networking.INetClient}@)">
+            <summary>Collects chunk updates grouped by chunk for broadcasting, also outputs disconnected clients and clients with empty queues for removal post processing.</summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.DrainChunkUpdates``1(Eco.Shared.Networking.INetClient,Eco.Shared.Collections.RandomAccessQueue{``0},System.Collections.Generic.Dictionary{``0,System.Collections.Generic.List{Eco.Shared.Networking.INetClient}})">
+            <summary>Drain chunk updates from <paramref name="queue"/> and adds them to <paramref name="chunkUpdates"/>.</summary>
+        </member>
+        <member name="T:Eco.World.Internal.ChunkUpdater.IDelivery">
+            <summary><see cref="T:Eco.World.Internal.ChunkUpdater.IDelivery"/> is a common interface for modified chunk and subscribed chunk column to be processed in generic way.</summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.IDelivery.Send(Eco.World.Internal.ChunkUpdater,Eco.Shared.Collections.UnscopedEnumerable{Eco.Shared.Networking.INetClient})">
+            <summary>Send delivery using <paramref name="chunkUpdater"/> to <paramref name="clients"/>.</summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.IDelivery.GetCapacity(Eco.Shared.Networking.IWorldObserver)">
+            <summary>Get deliveries capacity for <paramref name="observer"/>.</summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.IDelivery.SetCapacity(Eco.Shared.Networking.IWorldObserver,System.Int32)">
+            <summary>Sets deliveries capacity for <paramref name="observer"/>.</summary>
+        </member>
+        <member name="T:Eco.World.Internal.ChunkUpdater.ChunkColumnSynchronizationInfo">
+            <summary><see cref="T:Eco.World.Internal.ChunkUpdater.ChunkColumnSynchronizationInfo"/> contains per-chunk column info for chunk updates tracking.</summary>
+        </member>
+        <member name="T:Eco.World.Internal.ChunkUpdater.Command">
+            <summary>Represents asynchronously added command which then should be executed with <see cref="M:Eco.World.Internal.ChunkUpdater.ExecutePendingCommands"/>. We don't apply it immediately to avoid concurrency.</summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.Command.#ctor(System.Collections.Generic.IReadOnlyCollection{Eco.Shared.Math.Vector2i},Eco.Shared.Networking.INetClient,System.Boolean)">
+            <summary>Represents asynchronously added command which then should be executed with <see cref="M:Eco.World.Internal.ChunkUpdater.ExecutePendingCommands"/>. We don't apply it immediately to avoid concurrency.</summary>
+        </member>
+        <member name="T:Eco.World.Internal.ChunkUpdater.ChunkColumnDelivery">
+            <summary>Delivery for chunk column. Uses for newly subscribed chunk columns.</summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.ChunkColumnDelivery.UpdateSortKey(Eco.Shared.Math.Vector2)">
+            <summary>Update sort key for prioritized chunks delivery based on distance to player.</summary>
+        </member>
+        <member name="T:Eco.World.Internal.ChunkUpdater.ChunkDelivery">
+            <summary>Single chunk delivery for already delivered chunk change.</summary>
+        </member>
+        <member name="M:Eco.World.Internal.ChunkUpdater.ChunkDelivery.#ctor(Eco.World.WorldChunk)">
+            <summary>Single chunk delivery for already delivered chunk change.</summary>
+        </member>
+        <member name="M:Eco.World.PersistentChunk.RemoveTransientBlocks(Eco.World.Blocks.Block[])">
+            <summary>Removes all transient blocks for <paramref name="blocks"/> array.</summary>
+        </member>
+        <member name="M:Eco.World.PersistentChunk.UpdateBlockCaches(Eco.World.Blocks.Block[])">
+            <summary>
+            Updates following block caches:
+            - maxYCache      - max solid block Y for X,Z coordinate
+            - topBlockCache  - top non-empty block for X,Z coordinate
+            - maxWaterHeight - max underwater block Y which is a top block for X,Z coordinate
+            It assumed to be called only internally from <see cref="M:Eco.World.PersistentChunk.Convert(Eco.Core.Serialization.Migrations.MigrationManager,System.Boolean)"/> method and also assumed to
+            be called for chunks in same column from top chunk to bottom chunk. It ensures valid results and
+            allows to make significant optimization by skipping X,Z coordinates for X,Z positions if chunk is below maxY.
+            </summary>
+            <param name="blocks"></param>
+        </member>
+        <member name="M:Eco.World.PersistentChunk.Convert(Eco.Core.Serialization.Migrations.MigrationManager,System.Boolean)">
+            <summary>
+            Converts chunk from old format to new chunk format using <paramref name="migrationManager"/>.
+            It is required, because for optimization purposes chunk contains serialized blocks data, but when
+            schema changes block ids may be changed as well.
+            </summary>
+            <param name="migrationManager">Migration manager containing information about old and new schemas.</param>
+            <param name="legacy">this flag used only for backward compatibility with 8.3, may be removed in 10.0.</param>
+        </member>
+        <member name="M:Eco.World.PersistentChunk.Thaw(System.Boolean)">
+            <summary> It may not invalidate cache in case if it was thawed just for readonly access. Readonly access means that it have to make again array of blocks, but it doesnt changed anything, so cached bson bytes are still valid for sending to clients.  </summary>
+        </member>
+        <member name="M:Eco.World.PersistentChunk.UpdateHasTransientBlocks">
+            <summary>Recalculates if chunk has <see cref="T:Eco.World.Blocks.Transient"/> blocks, updates <see cref="P:Eco.World.PersistentChunk.HasTransientBlocks"/> property and returns new value. If the chunk is frozen then just returns current value or <c>false</c> if undefined.</summary>
+        </member>
+        <member name="M:Eco.World.PersistentChunkGrid.ValidateCaches">
+            <summary>Validates all caches if they are not out of sync with <see cref="T:Eco.Shared.Voxel.ChunkGrid`1"/> blocks.</summary>
+        </member>
+        <member name="M:Eco.World.WorldExtensions.IsValidPathPos(Eco.Shared.Math.WorldPosition3i)">
+            <summary> Check that a position is a valid position for an animal to path through. </summary>
+        </member>
+        <member name="M:Eco.World.WorldExtensions.GetTopEmptyBlockPos(Eco.Shared.Math.Vector2i)">
+            <summary>Returns the position of the top empty block at the given x/z pos.</summary>
+        </member>
+        <member name="M:Eco.World.WorldExtensions.IsJustAboveGround(Eco.Shared.Math.WorldPosition3i)">
+            <summary> Return true if the block pos is just above solid ground but is not itself solid. </summary>
+        </member>
+        <member name="M:Eco.World.WorldExtensions.IsTopGround(Eco.Shared.Math.WorldPosition3i)">
+            <summary> Return true if the block pos is solid and above is not. </summary>
+        </member>
+        <member name="M:Eco.World.WorldExtensions.Describe(Eco.Shared.Math.WorldPosition3i)">
+            <summary> Description of a position based on what's going on in the world there. </summary>
+        </member>
+        <member name="M:Eco.World.World.GetBlock(Eco.Shared.Math.Vector3i)">
+            <summary>Returns the block at the location or Block.Empty. Returns <see cref="P:Eco.World.Blocks.Block.Empty"/> for invalid <paramref name="worldPos"/> (i.e. Y negative or Z above top block).</summary>
+        </member>
+        <member name="M:Eco.World.World.GetBlock(Eco.Shared.Math.WrappedPosition3i)">
+            <summary>Returns the block at the location or Block.Empty.</summary>
+        </member>
+        <member name="M:Eco.World.World.GetBlock(Eco.Shared.Math.WrappedWorldPosition3i)">
+            <summary>Returns the block at the location or Block.Empty.</summary>
+        </member>
+        <member name="M:Eco.World.World.GetBlockType(Eco.Shared.Math.Vector3i)">
+            <summary>Returns type of the block located at given position.</summary>
+        </member>
+        <member name="M:Eco.World.World.GetBlockType(Eco.Shared.Math.WrappedPosition3i)">
+            <summary>Returns type of the block located at given position.</summary>
+        </member>
+        <member name="M:Eco.World.World.GetBlockType(Eco.Shared.Math.WrappedWorldPosition3i)">
+            <summary>Returns type of the block located at given position.</summary>
+        </member>
+        <member name="M:Eco.World.World.GetTopSolidNonConstructedPos(Eco.Shared.Math.Vector2i)">
+            <summary>Returns the position of the topmost solid, non-constructed block in a world column.</summary>
+        </member>
+        <member name="M:Eco.World.World.ClampToWaterHeight(Eco.Shared.Math.Vector3i)">
+            <summary> Clamps Y coordinate of <paramref name="pos"/> to water height </summary>
+        </member>
+        <member name="M:Eco.World.World.SetBlock``1(Eco.Shared.Math.WrappedWorldPosition3i,Eco.World.PersistentChunk,System.Object[])">
+            <summary> If you know the chunk you can pass it to avoid lookup for better performance </summary>
+        </member>
+        <member name="M:Eco.World.World.SetBlock(System.Type,Eco.Shared.Math.WrappedWorldPosition3i,Eco.World.PersistentChunk,System.Object[])">
+            <summary> If you know the chunk you can pass it to avoid lookup for better performance </summary>
+        </member>
+        <member name="M:Eco.World.World.DeleteBlock(Eco.Shared.Math.WrappedWorldPosition3i,System.Boolean)">
+            <summary>Deletes the block at from the world at worldPos.</summary>
+            <param name="worldPos">The world position of the block to be deleted.</param>
+            <param name="checkForWaterFlow">Set to true to replace the block with Block.Empty. Ie. Crater should force delete the terrain. Handles removing blocks underwater.</param>
+        </member>
+        <member name="M:Eco.World.World.WorldWrapChunkPos(Eco.Shared.Math.Vector3i)">
+            <summary> Ensures the given ChunkPos is world-wrapped. </summary>
+        </member>
+        <member name="M:Eco.World.World.GetChunkColumn(Eco.Shared.Math.Vector2i)">
+            <summary> Returns all the current chunks at the given XZ chunkPos coordinate organized from lowest to highest. </summary>
+        </member>
+        <member name="M:Eco.World.World.GetChunkColumnAscendingFrom(Eco.Shared.Math.Vector3i)">
+            <summary> Returns all the current chunks starting (inclusively) at the given chunkPos coordinate extending to the top of the column in ascending order. </summary>
+        </member>
+        <member name="M:Eco.World.World.GetChunkColumnFromTop(Eco.Shared.Math.Vector2i)">
+            <summary> Returns all the current chunks at the given XZ chunkPos coordinate organized from highest to lowest. </summary>
+        </member>
+        <member name="M:Eco.World.World.AwakePointsNearChunk(System.Collections.Generic.IEnumerable{Eco.Shared.Math.WrappedWorldPosition3i},Eco.Shared.Math.WrappedWorldPosition3i,Eco.World.PersistentChunk)">
+            <summary> Awakes list of points. Most of them should belong to center chunk, but it's acceptable to have some few fallbacks. For fallbacks it will go to chunk grid, which is slower.</summary>
+        </member>
+        <member name="M:Eco.World.World.AwakeNear(Eco.Shared.Math.WrappedWorldPosition3i,Eco.World.PersistentChunk)">
+            <summary> Pass chunk of world pos so it dont have to go to chunk table which is slow </summary>
+        </member>
+        <member name="M:Eco.World.World.ReCacheAllData(System.Boolean)">
+            <summary> Invalidates top block and underwater block caches for every X,Z in the world. It will only trigger cache update events if <paramref name="notify"/> set to <c>true</c>. </summary>
+        </member>
+        <member name="M:Eco.World.World.ReCacheColumns(System.Collections.Generic.IEnumerable{Eco.Shared.Math.Vector2i},System.Int32,System.Boolean)">
+            <summary>Invalidates all block caches for requested set of chunk column positions (as 2D chunk positions).</summary>
+        </member>
+        <member name="M:Eco.World.World.ReCacheChunkColumnData(Eco.Shared.Math.Vector2i,System.Boolean)">
+            <summary> Invalidates world caches for all blocks in the chunk column at <paramref name="chunkPosXZ"/>. </summary>
+        </member>
+        <member name="M:Eco.World.World.InitializeWaterCache(Eco.Shared.Math.Vector2i)">
+            <summary> Invalidates and recalculates world cache values at <paramref name="worldPosXZ"/>. Doesn't trigger any cache update events. </summary>
+        </member>
+        <member name="M:Eco.World.World.ReCacheWithNotify(Eco.Shared.Math.Vector2i)">
+            <summary> Invalidates and recalculates world cache values at <paramref name="worldPosXZ"/>. Triggers cache update events if cache value changes. </summary>
+        </member>
+        <member name="M:Eco.World.World.GetTopEmptyBlock(Eco.Shared.Math.Vector2i)">
+            <summary>The y position above the top solid block</summary>
+        </member>
+        <member name="M:Eco.World.World.GetTopSolidBlockY(Eco.Shared.Math.Vector2i)">
+            <summary>The y position of the top solid block</summary>
+        </member>
+        <member name="M:Eco.World.World.GetTopSolidBlockYRaw(Eco.Shared.Math.Vector2i)">
+            <summary>Faster than GetTopBlockY but don't performs wrapping </summary>
+        </member>
+        <member name="M:Eco.World.World.GetTopSolidBlockYRaw(System.Int32,System.Int32)">
+            <summary>Faster than GetTopBlockY but don't performs wrapping </summary>
+        </member>
+        <member name="M:Eco.World.World.WaterAtTop(Eco.Shared.Math.Vector2i)">
+            <summary>Check the cached water and block heights to see if this position is water at the top block.</summary>
+        </member>
+        <member name="M:Eco.World.World.GetTopSolidBlockUnderwater(Eco.Shared.Math.Vector2i,System.Int32)">
+            <summary>Y position of the top solid block underwater.</summary>
+        </member>
+        <member name="M:Eco.World.World.GetTopBlockPos(Eco.Shared.Math.Vector2i)">
+            <summary>Return the highest position occupied by a block (land or water) at the position that is passed in the parameter.</summary>
+            <param name="pos">Position to check. Doesn't have to be wrapped.</param>
+            <returns>Unwrapped position, unless passed argument was already wrapped.</returns>
+        </member>
+        <member name="M:Eco.World.World.GetTopBlockY(Eco.Shared.Math.Vector2i)">
+            <summary>Return the highest Y position occupied by a block (land or water) at the position that is passed in the parameter.</summary>
+            <param name="pos">Position to check. Doesn't have to be wrapped.</param>
+        </member>
+        <member name="M:Eco.World.World.IsLegalVerticalPosition(System.Numerics.Vector3)">
+            <summary> Checks if position is inside vertical world bounds </summary>
+        </member>
+        <member name="M:Eco.World.WorldChunkGrid.FillCache(Eco.Shared.Math.Vector2i,Eco.Shared.Utils.Array2D{System.Int32},Eco.Shared.Utils.Array2D{Eco.World.Blocks.Block})">
+            <summary> Completes arrays of top block position and top solid block type into arrays. It's faster than go column by column since it re-uses same chunk for all positions (and chunk look up is slow) </summary>
+        </member>
+        <member name="M:Eco.World.WorldChunkGrid.SendRemovedChunkColumns(Eco.Shared.Serialization.BSONArray,Eco.Shared.Networking.INetClient)">
+            <summary>Sends removed chunk positions to <paramref name="client"/>.</summary>
+        </member>
+        <member name="M:Eco.World.WorldChunkGrid.SendChunkColumn``1(Eco.Shared.Math.Vector2i,``0)">
+            <summary>Broadcast chunk column to <paramref name="clients"/>.</summary>
+        </member>
+        <member name="M:Eco.World.WorldChunkGrid.SendChunk``1(Eco.World.WorldChunk,``0)">
+            <summary>Broadcast new or updated chunk to <paramref name="clients"/>.</summary>
+        </member>
+        <member name="M:Eco.World.WorldChunkGrid.PrepareBsonUpdate(Eco.Shared.Serialization.BSONObject@)">
+            <summary>Prepares BSON update for <see cref="T:Eco.World.WorldChunkGrid"/>. It may be used for chunks updates or chunk removals or both.</summary>
+        </member>
+        <member name="M:Eco.World.WorldChunkGrid.SetBlock(System.Type,Eco.Shared.Math.WrappedWorldPosition3i,Eco.World.PersistentChunk,System.Object[])">
+            <summary> If you know the chunk you can pass it to avoid lookup for better performance </summary>
+        </member>
+        <member name="M:Eco.World.WorldChunkGrid.SetBlock``1(Eco.Shared.Math.WrappedWorldPosition3i,Eco.World.PersistentChunk,System.Object[])">
+            <summary> If you know the chunk you can pass it to avoid lookup for better performance </summary>
+        </member>
+        <member name="M:Eco.World.WorldChunkGrid.DeleteBlock(Eco.Shared.Math.WrappedWorldPosition3i,System.Boolean)">
+            <summary>See <see cref="M:Eco.World.World.DeleteBlock(Eco.Shared.Math.WrappedWorldPosition3i,System.Boolean)"/></summary>
+        </member>
+        <member name="M:Eco.World.WorldChunkGrid.HandleWaterBlock(Eco.Shared.Math.WrappedWorldPosition3i,System.Type@)">
+            <summary>Handle placing a water block instead of an empty block. I.E. Replaces blockResult with a water block if under water.</summary>
+        </member>
+        <member name="M:Eco.World.WorldChunkGrid.UpdateChunkSubscriptions(Eco.World.Internal.ChunkUpdater,Eco.Shared.Networking.INetClient)">
+            <summary>Update client subscriptions based on observer position and view distance.</summary>
+        </member>
+        <member name="M:Eco.World.WorldChunkGrid.GetColumnsInViewRange(System.Numerics.Vector3,System.Single)">
+            <summary>Returns all columns in <paramref name="viewDistance"/> from <paramref name="observerPosition"/>.</summary>
+        </member>
+        <member name="M:Eco.World.WorldChunkGridBuilder.BuildFromImportString(Eco.Shared.Math.WrappedWorldPosition3i,System.String)">
+            <summary>
+            Let you make building by description string which may be easily copy-pasted.
+            Following commands supported:
+            - room:dx:dy:dz:width:height:depth - makes a room with offset from current position (dx, dy, dz) and interior size (width, height, depth)
+            - hplane:dx:dy:dz:width:depth - makes a side plane with offset from current position (dx, dy, dz) and provided width and depth
+            - splane:dx:dy:dz:height:depth - makes a vertical plane with offset from current position (dx, dy, dz) and provided height and depth
+            - fplane:dx:dy:dz:width:height - makes a horizontal plane with offset from current position (dx, dy, dz) and provided width and height
+            - cube:dx:dy:dz:width:height:depth - makes a room cube offset from current position (dx, dy, dz) and size (width, height, depth)
+            - b:dx:dy:dz - single block with offset from current position (dx, dy, dz)
+            - bt:BlockType - set building block type
+            Commands should be separated with ';'.
+            Sample (room with door):
+             bt:HewnLogCube;room:0:-1:0:3:4:3;bt:Empty;fplane:2:0:0:1:2
+            .
+            </summary>
+        </member>
+        <member name="M:Eco.World.WorldPlugin.DoChunkUpdates">
+            <summary>Performs chunk updates for all client subscribed chunks.</summary>
+        </member>
+        <member name="M:Eco.World.WorldPlugin.OnChunkChanged(Eco.World.WorldChunk)">
+            <summary>Callback for block change event.</summary>
+        </member>
+        <member name="M:Eco.World.WorldPlugin.OnClientDisconnected(Eco.Shared.Networking.INetClient)">
+            <summary>Callback for client disconnect event.</summary>
+        </member>
+    </members>
+</doc>

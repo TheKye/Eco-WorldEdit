@@ -1,0 +1,255 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Eco.ModKit</name>
+    </assembly>
+    <members>
+        <member name="T:Eco.ModKit.Internal.Cecil.AssemblyConversionChecker">
+            <summary>Checks if a generated assembly from runtime Assembly matches an assembly loaded by Mono.Cecil from file.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.AssemblyConversionChecker.CheckGeneratedAssembly(Mono.Cecil.AssemblyDefinition,System.Reflection.Assembly)">
+            <summary>Main method for checker which loads <paramref name="assembly"/> from it's location and compares with <paramref name="generatedAssembly"/>.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.AssemblyConversionChecker.CompareTypes(Mono.Cecil.TypeDefinition,Mono.Cecil.TypeDefinition)">
+            <summary>Compares types.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.AssemblyConversionChecker.CompareFields(Mono.Cecil.FieldDefinition,Mono.Cecil.FieldDefinition)">
+            <summary>Compares fields.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.AssemblyConversionChecker.CompareProperties(Mono.Cecil.PropertyDefinition,Mono.Cecil.PropertyDefinition)">
+            <summary>Compares properties.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.AssemblyConversionChecker.CompareEvents(Mono.Cecil.EventDefinition,Mono.Cecil.EventDefinition)">
+            <summary>Compares events.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.AssemblyConversionChecker.CompareMethods(Mono.Cecil.MethodDefinition,Mono.Cecil.MethodDefinition)">
+            <summary>Compares methods.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.AssemblyConversionChecker.CompareParameters(Mono.Cecil.ParameterDefinition,Mono.Cecil.ParameterDefinition)">
+            <summary>Compares parameters.</summary>
+        </member>
+        <member name="T:Eco.ModKit.Internal.Cecil.AssemblyConverter">
+            <summary>
+            Converter from runtime <see cref="T:System.Reflection.Assembly"/> to <see cref="T:Mono.Cecil.AssemblyDefinition"/>. We need this converter because for single-file executable there only in-memory assembly, but <see cref="M:Mono.Cecil.AssemblyDefinition.ReadAssembly(System.String)"/> requires a file on disk.
+            So instead of reading it with standard reader we generate new assembly using meta info of in-memory assembly.
+            </summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.AssemblyConverter.Convert(System.Reflection.Assembly)">
+            <summary>Converts runtime <paramref name="assembly"/> to <see cref="T:Mono.Cecil.AssemblyDefinition"/>.</summary>
+        </member>
+        <member name="T:Eco.ModKit.Internal.Cecil.AssemblyReferenceConverter">
+            <summary>Converter from <see cref="T:System.Reflection.Metadata.AssemblyReferenceHandle"/> to <see cref="T:Mono.Cecil.AssemblyNameReference"/>.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.AssemblyReferenceConverter.Convert(System.Reflection.Metadata.AssemblyReferenceHandle)">
+            <summary>Converts <paramref name="handle"/> to <see cref="T:Mono.Cecil.AssemblyNameReference"/>.</summary>
+        </member>
+        <member name="T:Eco.ModKit.Internal.Cecil.ConverterContext">
+            <summary><see cref="T:Eco.ModKit.Internal.Cecil.ConverterContext"/> contains all defined types and type references for lookups. It also implements <see cref="T:System.Reflection.Metadata.ISignatureTypeProvider`2"/> for signature parsing by <see cref="T:System.Reflection.Metadata.MetadataReader"/>.</summary>
+            <inheritdoc cref="T:System.Reflection.Metadata.ISignatureTypeProvider`2"/>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.ConverterContext.ScanPrimitiveTypes">
+            <summary>Scans all type definitions and type references for primitive types. Fills <see cref="F:Eco.ModKit.Internal.Cecil.ConverterContext.primitiveTypes"/> with detected type references.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.ConverterContext.GetTypeDefinition(System.Reflection.Metadata.TypeDefinitionHandle)">
+            <summary>Returns <see cref="T:Mono.Cecil.TypeDefinition"/> for <paramref name="handle"/>. Fails if type definition doesn't exists.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.ConverterContext.GetOrCreateTypeReference(System.Reflection.Metadata.EntityHandle,Mono.Cecil.IGenericParameterProvider)">
+            <summary>Gets existing <see cref="T:Mono.Cecil.TypeDefinition"/> or <see cref="T:Mono.Cecil.TypeReference"/> or creates new <see cref="T:Mono.Cecil.TypeSpecification"/> depending of <paramref name="handle"/> type.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.ConverterContext.CreateTypeSpecification(System.Reflection.Metadata.TypeSpecificationHandle,Mono.Cecil.IGenericParameterProvider)">
+            <summary>Creates new <see cref="T:Mono.Cecil.TypeSpecification"/> from <paramref name="handle"/>.</summary>
+        </member>
+        <member name="T:Eco.ModKit.Internal.Cecil.ConverterUtils">
+            <summary>Utility and extension methods for converters.</summary>
+        </member>
+        <member name="F:Eco.ModKit.Internal.Cecil.ConverterUtils.ReferencePrimitiveTypes">
+            <summary>Mapping between <see cref="T:System.Reflection.Metadata.PrimitiveTypeCode"/> and runtime type which then may be used as reference type for metadata retrieval.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.ConverterUtils.AddGenericParameters(Mono.Cecil.IGenericParameterProvider,System.Reflection.Metadata.EntityHandle,System.Reflection.Metadata.GenericParameterHandleCollection,Mono.Cecil.IGenericParameterProvider,Eco.ModKit.Internal.Cecil.ConverterContext)">
+            <summary>Adds generic parameters to <paramref name="target"/>. Used by <see cref="T:Eco.ModKit.Internal.Cecil.MethodConverter"/> and <see cref="T:Eco.ModKit.Internal.Cecil.TypeConverter"/>.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.ConverterUtils.IsNested(Mono.Cecil.TypeAttributes)">
+            <summary>Checks if <paramref name="attributes"/> are for nested type.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.ConverterUtils.GetReferenceType(System.Reflection.Metadata.PrimitiveTypeCode)">
+            <summary>Returns reference type for metadata retrieval for <paramref name="primitiveTypeCode"/>.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.ConverterUtils.TryGetPrimitiveType(Mono.Cecil.TypeReference,System.Reflection.Metadata.PrimitiveTypeCode@,System.Type@)">
+            <summary>Tries to get primitive type for <paramref name="typeReference"/> (based on name).</summary>
+        </member>
+        <member name="T:Eco.ModKit.Internal.Cecil.EventConverter">
+            <summary>Converter from <see cref="T:System.Reflection.Metadata.EventDefinitionHandle"/> to <see cref="T:Mono.Cecil.EventDefinition"/>.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.EventConverter.Convert(System.Reflection.Metadata.EventDefinitionHandle,Mono.Cecil.TypeDefinition,System.Collections.Generic.Dictionary{System.Reflection.Metadata.MethodDefinitionHandle,Mono.Cecil.MethodDefinition})">
+            <summary>Converts <paramref name="handle"/> to <see cref="T:Mono.Cecil.EventDefinition"/>. Uses <paramref name="owner"/> as generic context and <paramref name="methods"/> for add/remove methods lookup.</summary>
+        </member>
+        <member name="T:Eco.ModKit.Internal.Cecil.FieldConverter">
+            <summary>Converter from <see cref="T:System.Reflection.Metadata.FieldDefinitionHandle"/> to <see cref="T:Mono.Cecil.FieldDefinition"/>.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.FieldConverter.Convert(System.Reflection.Metadata.FieldDefinitionHandle,Mono.Cecil.TypeDefinition)">
+            <summary>Converts <paramref name="handle"/> to <see cref="T:Mono.Cecil.FieldDefinition"/>.  Uses <paramref name="owner"/> as generic context.</summary>
+        </member>
+        <member name="T:Eco.ModKit.Internal.Cecil.MethodConverter">
+            <summary>Converter from <see cref="T:System.Reflection.Metadata.MethodDefinitionHandle"/> to <see cref="T:Mono.Cecil.MethodDefinition"/>.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.MethodConverter.Convert(System.Reflection.Metadata.MethodDefinitionHandle,Mono.Cecil.TypeDefinition)">
+            <summary>Converts <paramref name="handle"/> to <see cref="T:Mono.Cecil.MethodDefinition"/>.  Uses <paramref name="declaringType"/> as generic context.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.MethodConverter.ConvertSignature(System.Reflection.Metadata.MethodDefinition,Mono.Cecil.MethodDefinition)">
+            <summary>Converts signature from method <paramref name="meta"/> to <see cref="T:Mono.Cecil.MethodDefinition"/> return type and parameters.</summary>
+        </member>
+        <member name="T:Eco.ModKit.Internal.Cecil.ModuleConverter">
+            <summary>Converts metadata obtained wirth <see cref="F:Eco.ModKit.Internal.Cecil.ModuleConverter.reader"/> to <see cref="T:Mono.Cecil.ModuleDefinition"/>.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.ModuleConverter.CreateContext(Mono.Cecil.ModuleDefinition)">
+            <summary>Creates context containing all defined and reference types. It will be then used by all converters for type info lookups and signature resolving.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.ModuleConverter.Convert(System.Reflection.AssemblyName)">
+            <summary>Converts metadata obtained with <see cref="F:Eco.ModKit.Internal.Cecil.ModuleConverter.reader"/> (set in constructor) to <see cref="T:Mono.Cecil.ModuleDefinition"/>.</summary>
+        </member>
+        <member name="T:Eco.ModKit.Internal.Cecil.PropertyConverter">
+            <summary>Converter from <see cref="T:System.Reflection.Metadata.PropertyDefinitionHandle"/> to <see cref="T:Mono.Cecil.PropertyDefinition"/>.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.PropertyConverter.Convert(System.Reflection.Metadata.PropertyDefinitionHandle,Mono.Cecil.TypeDefinition,System.Collections.Generic.Dictionary{System.Reflection.Metadata.MethodDefinitionHandle,Mono.Cecil.MethodDefinition})">
+            <summary>Converts <paramref name="handle"/> to <see cref="T:Mono.Cecil.PropertyDefinition"/>. Uses <paramref name="owner"/> as generic context and <paramref name="methods"/> for getter/setter methods lookup.</summary>
+        </member>
+        <member name="T:Eco.ModKit.Internal.Cecil.TypeConverter">
+            <summary>Converter from <see cref="T:System.Reflection.Metadata.TypeDefinitionHandle"/> to <see cref="T:Mono.Cecil.TypeDefinition"/> and from <see cref="T:System.Reflection.Metadata.TypeReferenceHandle"/> to <see cref="T:Mono.Cecil.TypeReference"/>.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.TypeConverter.ConvertAsReference(System.Reflection.Metadata.MetadataReader,System.Reflection.Metadata.TypeReferenceHandle,System.Collections.Generic.IDictionary{System.Reflection.Metadata.AssemblyReferenceHandle,Mono.Cecil.AssemblyNameReference})">
+            <summary>Converts <paramref name="handle"/> to <see cref="T:Mono.Cecil.TypeReference"/>. Uses <paramref name="assemblyReferences"/> for scope lookup.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.TypeConverter.ResolveScope(System.Reflection.Metadata.MetadataReader,System.Reflection.Metadata.EntityHandle,System.Collections.Generic.IDictionary{System.Reflection.Metadata.AssemblyReferenceHandle,Mono.Cecil.AssemblyNameReference})">
+            <summary>Resolves <see cref="T:Mono.Cecil.IMetadataScope"/> from entity handle <paramref name="scope"/> (it may have different types). Uses <paramref name="assemblyReferences"/> for assembly scope lookup. When scope is type then uses it's resolution scope.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.TypeConverter.ConvertAsReference(System.Reflection.Metadata.MetadataReader,System.Reflection.Metadata.TypeDefinitionHandle)">
+            <summary>Converts <paramref name="handle"/> to <see cref="T:Mono.Cecil.TypeDefinition"/>. This doesn't make full conversion (should be done with <see cref="M:Eco.ModKit.Internal.Cecil.TypeConverter.ConvertAsDefinition(System.Reflection.Metadata.TypeDefinitionHandle)"/>) later, but instead creates it as a type reference for type lookups.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.TypeConverter.ConvertAsDefinition(System.Reflection.Metadata.TypeDefinitionHandle)">
+            <summary>Converts <paramref name="handle"/> to <see cref="T:Mono.Cecil.TypeDefinition"/>. Makes full conversion. Initial conversion with <see cref="M:Eco.ModKit.Internal.Cecil.TypeConverter.ConvertAsReference(System.Reflection.Metadata.MetadataReader,System.Reflection.Metadata.TypeReferenceHandle,System.Collections.Generic.IDictionary{System.Reflection.Metadata.AssemblyReferenceHandle,Mono.Cecil.AssemblyNameReference})"/> should be done before that and converted type added to <see cref="F:Eco.ModKit.Internal.Cecil.TypeConverter.context"/>. Converts base type, generic parameters, interfaces and members.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.TypeConverter.ConvertInterfaces(System.Reflection.Metadata.TypeDefinition,Mono.Cecil.TypeDefinition)">
+            <summary>Converts interface implementations.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Cecil.TypeConverter.ConvertMembers(System.Reflection.Metadata.TypeDefinition,Mono.Cecil.TypeDefinition)">
+            <summary>Converts type members (fields, methods, properties, events).</summary>
+        </member>
+        <member name="T:Eco.ModKit.Internal.Weaving.AppDomainAssemblyResolver">
+            <summary><see cref="T:Eco.ModKit.Internal.Weaving.AppDomainAssemblyResolver"/> implements Fody <see cref="T:Mono.Cecil.IAssemblyResolver"/> interface for already loaded assemblies in app domain.</summary>
+            <inheritdoc />
+        </member>
+        <member name="M:Eco.ModKit.Internal.Weaving.AppDomainAssemblyResolver.Resolve(Mono.Cecil.AssemblyNameReference)">
+            <summary>Resolves <see cref="T:Mono.Cecil.AssemblyDefinition"/> for <paramref name="name"/>.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Weaving.AppDomainAssemblyResolver.Resolve(Mono.Cecil.AssemblyNameReference,Mono.Cecil.ReaderParameters)">
+            <summary>Resolves <see cref="T:Mono.Cecil.AssemblyDefinition"/> for <paramref name="name"/>.</summary>
+        </member>
+        <member name="T:Eco.ModKit.Internal.Weaving.EcoLogger">
+            <summary><see cref="T:Eco.ModKit.Internal.Weaving.EcoLogger"/> implements Fody <see cref="T:ILogger"/> interface for Eco standard logger.</summary>
+            <inheritdoc />
+        </member>
+        <member name="M:Eco.ModKit.Internal.Weaving.EcoLogger.FormatMessage(System.String)">
+            <summary>Formats message to <see cref="T:Eco.Shared.Localization.LocString"/> using current logger state.</summary>
+        </member>
+        <member name="T:Eco.ModKit.Internal.Weaving.Extensions.LoggerExtensions">
+            <summary>Extension methods for Fody <see cref="T:ILogger"/>.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Weaving.Extensions.LoggerExtensions.LogWarningPoint(ILogger,System.String,Mono.Cecil.Cil.SequencePoint)">
+            <summary>Logs warning for optional code <paramref name="point"/>.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Weaving.Extensions.LoggerExtensions.LogErrorPoint(ILogger,System.String,Mono.Cecil.Cil.SequencePoint)">
+            <summary>Logs error for optional code <paramref name="point"/>.</summary>
+        </member>
+        <member name="T:Eco.ModKit.Internal.Weaving.RuntimeWeaver">
+            <summary><see cref="T:Eco.ModKit.Internal.Weaving.RuntimeWeaver"/> adds support for Fody weaving in runtime.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Weaving.RuntimeWeaver.Weave(System.IO.Stream,System.IO.Stream,System.String)">
+            <summary>Weaves assembly defined by <paramref name="assemblyStream"/> and <paramref name="symbolsStream"/>. It applies all weavers from provided config file.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Weaving.RuntimeWeaver.Read(System.IO.Stream,System.IO.Stream)">
+            <summary>Reads module from <paramref name="assemblyStream"/>. Uses <paramref name="symbolsStream"/> for symbols.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Weaving.RuntimeWeaver.Write(Mono.Cecil.ModuleDefinition,System.IO.Stream)">
+            <summary>Writes <paramref name="module"/> to streams. Assembly stream reused, but symbols can't be reused so we reset and truncate it.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Weaving.RuntimeWeaver.ExecuteWeavers(System.Xml.Linq.XElement)">
+            <summary>Executes weavers from XML config.</summary>
+        </member>
+        <member name="M:Eco.ModKit.Internal.Weaving.RuntimeWeaver.CreateWeaverInstance(System.Xml.Linq.XElement)">
+            <summary>Creates <see cref="T:Fody.BaseModuleWeaver"/> by XML config entry.</summary>
+        </member>
+        <member name="F:Eco.ModKit.ModEntryControl.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Eco.ModKit.ModEntryControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Eco.ModKit.ModEntryControl.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Eco.ModKit.ModsDownloadManager.GetModInfosAsync(System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary>
+            Get a list of mods from mod.io
+            </summary>
+            <param name="token"></param>
+            <param name="offset"></param>
+            <param name="pageSize">max number of results to return, can be a max of 100</param>
+            <returns></returns>
+        </member>
+        <member name="T:Eco.ModKit.ModContentUploadController">
+            <summary> Responsible for controlling upload requests to avoid overwhelming network, the way it does it now is that it assumes that each client can have only 1 mod to download at a time. </summary>
+        </member>
+        <member name="M:Eco.ModKit.ModContentUploadController.WaitForSemaphoreAsync">
+            <summary> Wait for the upload semaphore if needed. </summary>
+        </member>
+        <member name="M:Eco.ModKit.ModContentUploadController.SendRpcAndWaitUpload(System.Int32,Eco.Shared.Networking.RPCEvent)">
+            <summary> Send the given rpc for uploading the file and the bytes length is used to calculate the correct time out. </summary>
+        </member>
+        <member name="M:Eco.ModKit.ModContentUploadController.WaitForTaskOrTimeOut(System.Int32,System.Threading.Tasks.Task)">
+            <summary> Wait for upload or timeout if needed, returns true if the file is uploaded. </summary>
+        </member>
+        <member name="M:Eco.ModKit.ModKitPlugin.LoadModsDataAsync">
+            <summary>Loads mods data.</summary>
+        </member>
+        <member name="M:Eco.ModKit.ModKitPlugin.LiveUpdateAsync">
+            <summary>If <see cref="P:Eco.ModKit.ModKitConfig.LiveUpdateUnityFiles"/> enabled then it will refresh content every second.</summary>
+        </member>
+        <member name="M:Eco.ModKit.ModKitPlugin.AppDomain_AssemblyResolve(System.Object,System.ResolveEventArgs)">
+            <summary> Function to resolve mod dll dependencies. </summary>
+        </member>
+        <member name="M:Eco.ModKit.ModKitPlugin.GetComment(System.Type,System.Object)">
+            <summary>Get a comment for an Icon. It can be from IHasIcon, or simple LocDescription. Also fill up a default empty description so it will properly indicate missed comment.</summary>
+        </member>
+        <member name="M:Eco.ModKit.RoslynCompiler.GenerateAssemblyInfo(System.Version)">
+            <summary>Generate AssemblyInfo.cs-like C# code and parse syntax tree.</summary>
+        </member>
+        <member name="M:Eco.ModKit.RoslynCompiler.Weave(System.IO.Stream,System.IO.Stream)">
+            <summary>Applies Fody weaving to compiled streams.</summary>
+        </member>
+        <member name="M:Eco.ModKit.RoslynCompiler.GetTypes">
+            <summary> Get all class types that are not compiler generated. </summary>
+        </member>
+        <member name="M:Eco.ModKit.RoslynCompiler.CollectModSourceFiles">
+            <summary>
+            <p>Returns all source files from `__core__` directory and files from `UserCode` directory.
+            If `UserCode` contains file with same path as in `__core__` directory, but with .override suffix in name (before .cs) then it will replace file from `__core__`.</p>
+            <p><b>Example:</b> <c>__core__\AutoGen\Blocks\AsphaltBlock.cs</c> and <c>UserCode\AutoGen\Blocks\AsphaltBlock.override.cs</c></p>
+            <p>Otherwise both files will be loaded and file from <c>UserCode</c> should extend existing class with partial methods or add new class.</p>
+            </summary>
+        </member>
+        <member name="M:Eco.ModKit.RoslynCompiler.GetMetadataReference(System.String)">
+            <summary>Returns <see cref="T:Microsoft.CodeAnalysis.MetadataReference"/> for <paramref name="assemblyLocation"/>. If it fails to find an assembly at location then it loads it tries to load it from current domain.</summary>
+        </member>
+        <member name="M:Eco.ModKit.RoslynCompiler.GetDependentAssemblyReferences">
+            <summary>Returns list of references for dependent assemblies.</summary>
+        </member>
+    </members>
+</doc>

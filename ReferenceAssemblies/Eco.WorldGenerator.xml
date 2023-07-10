@@ -1,0 +1,323 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Eco.WorldGenerator</name>
+    </assembly>
+    <members>
+        <member name="T:Eco.WorldGenerator.BiomePolygon">
+            <summary>Represents <see cref="P:Eco.WorldGenerator.BiomePolygon.Biome"/> polygon with associated temperature, moisture and elevation. One biome may have multiple polygons with slightly different characteristics.</summary>
+        </member>
+        <member name="T:Eco.WorldGenerator.BiomePolygonCollectionExtensions">
+            <summary>Extension methods for array of <see cref="T:Eco.WorldGenerator.BiomePolygon"/> objets.</summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.BiomePolygonCollectionExtensions.LandFloodFill(Eco.WorldGenerator.BiomePolygon[],Eco.WorldGenerator.BiomePolygon)">
+            <summary>Returns set of connected land polygons.</summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.BiomePolygonCollectionExtensions.AdjacentPolygons(Eco.WorldGenerator.BiomePolygon[],System.Int32,System.Int32)">
+            <summary>
+            Collects indices of all adjacent polygons for startPoly. 
+            <paramref name="range"/> defines max rank of neighborhood. For range = 1 it will return only direct adjacent, for range = 2 it will also return adjacent of adjacent etc.
+            </summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.BiomePolygonCollectionExtensions.DistanceToOcean(Eco.WorldGenerator.BiomePolygon[],System.Int32)">
+            <summary>Calculates minimal distance to closest non-land biome.</summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.BiomePolygonCollectionExtensions.DistanceTo(Eco.WorldGenerator.BiomePolygon[],System.Int32,System.Func{Eco.WorldGenerator.BiomePolygon,System.Boolean})">
+            <summary>Calculates distance from <paramref name="startPoly"/> to first polygon not matching <paramref name="predicate"/>.</summary>
+            todo: this methods looks confusing, it probably should be named differently or calculate distance to first polygon MATCHING predicate
+        </member>
+        <member name="M:Eco.WorldGenerator.BiomePolygonCollectionExtensions.GenerateDataByPolygons(Eco.WorldGenerator.BiomePolygon[],System.Int32,System.Func{Eco.WorldGenerator.BiomePolygon,System.Single})">
+            <summary>Generates layer data from <paramref name="polygons"/> using <paramref name="valueGetter"/> to obtain polygon value. The value should be within range 0-1. Produced value error less than 1e-7.</summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.CliffExtruder.TryExtrude(System.Int32,System.Int32,System.Collections.Generic.Dictionary{Eco.Shared.Math.Vector2i,Eco.WorldGenerator.CliffNotes},System.Int32)">
+            <summary> Tries to extrude specific point (add to extrudePositions dictionary) </summary>
+        </member>
+        <member name="T:Eco.WorldGenerator.VoronoiWorldGeneratorConfig">
+            <summary>
+            The world settings used in the heightmap module in the WorldGenerator.eco config.
+            <para>Also see <see cref="T:Eco.WorldGenerator.UI.TerrainEditorPanel"/></para>
+            </summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.VoronoiWorldGeneratorConfig.GenerateWorld(System.Boolean,System.Boolean)">
+            <summary>Main method to generate a world based on the current configuration settings. Thread safe.</summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.VoronoiWorldGeneratorConfig.SetPreset(Eco.Shared.Settings.WorldDimensions.WorldDimensionsPreset)">
+            <summary> Update properties with <see cref="T:Eco.WorldGenerator.WorldPresetsValue"/> attribute based on corresponding <paramref name="preset"/> value </summary>
+        </member>
+        <member name="T:Eco.WorldGenerator.WorldPresetsValue">
+            <summary> Specify a correspondence between a property value and the selected <see cref="T:Eco.Shared.Settings.WorldDimensions.WorldDimensionsPreset"/>. The value of properties with this attribute is updated when the selected preset (<see cref="P:Eco.WorldGenerator.WorldSettings.MapSizePreset"/>) is changed. </summary>
+        </member>
+        <member name="T:Eco.WorldGenerator.WorldPresetsRange">
+            <summary> Specify a correspondence between a property pair of values as ranges and the selected <see cref="T:Eco.Shared.Settings.WorldDimensions.WorldDimensionsPreset"/>. The <see cref="T:Eco.Shared.Math.Range"/> of properties with this attribute is updated when the selected preset (<see cref="P:Eco.WorldGenerator.WorldSettings.MapSizePreset"/>) is changed. </summary>
+        </member>
+        <member name="T:Eco.WorldGenerator.WorldSettings">
+            <summary>
+            The world settings used to generate the world.
+            <para>Config file can be found at Config/WorldGenerator.eco</para>
+            <para>Also see <see cref="P:Eco.WorldGenerator.WorldSettings.VoronoiWorldGeneratorConfig"/> for the rest of the world settings.</para>
+            </summary>
+        </member>
+        <member name="T:Eco.WorldGenerator.DepositTerrainModule">
+            <summary>
+            DepositTerrainModule allows to create deposit using random spawn point with configurable spawn percent chance, depth range and blocks count range.
+            You can specify own weight for every direction (X, Y, Z) and variance for every direction (to add a bit of noise in generation).
+            It also may be setup to generate at least one deposit.
+            May be used instead of <see cref="T:Eco.WorldGenerator.StandardTerrainModule"/> to spawn less random deposits. Deposit spawns all blocks around a spawn point using set of direction weights.
+            It also ensures that all blocks in the deposit are connected.
+            </summary>
+        </member>
+        <member name="F:Eco.WorldGenerator.DepositTerrainModule.spawnPoints">
+            <summary> All initial spawn points for deposits. </summary>
+        </member>
+        <member name="F:Eco.WorldGenerator.DepositTerrainModule.fallbackPoints">
+            <summary> Fallback points randomly chosen from all candidate points in case if <see cref="P:Eco.WorldGenerator.DepositTerrainModule.SpawnAtLeastOne"/> set. It has one fallback point per chunk column to ensure stable multi-thread generation. </summary>
+        </member>
+        <member name="P:Eco.WorldGenerator.DepositTerrainModule.SpawnAtLeastOne">
+            <summary> If set to true then ensures at least one deposit will be spawn (if possible). </summary>
+        </member>
+        <member name="P:Eco.WorldGenerator.DepositTerrainModule.SpawnPercentChance">
+            <summary> Defines chance to start spawn from the position. For 0.01 chance it will be in average one deposit per 100 blocks. </summary>
+        </member>
+        <member name="P:Eco.WorldGenerator.DepositTerrainModule.BlocksCountRange">
+            <summary> Defines range for blocks count in deposit. </summary>
+        </member>
+        <member name="P:Eco.WorldGenerator.DepositTerrainModule.BlockType">
+            <summary> Defines block type for deposit. </summary>
+        </member>
+        <member name="P:Eco.WorldGenerator.DepositTerrainModule.DirectionWeights">
+            <summary> Weights for different directions. For higher weight it will prefer to move in this direction. </summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.DepositTerrainModule.Eco#WorldGenerator#ITerrainModule#CollectSpawners(System.Collections.Generic.Queue{Eco.WorldGenerator.IBlocksSpawner},System.Collections.Generic.IDictionary{Eco.Shared.Math.Vector3i,System.Type})">
+            <inheritdoc cref="M:Eco.WorldGenerator.ITerrainModule.CollectSpawners(System.Collections.Generic.Queue{Eco.WorldGenerator.IBlocksSpawner},System.Collections.Generic.IDictionary{Eco.Shared.Math.Vector3i,System.Type})"/>.
+        </member>
+        <member name="M:Eco.WorldGenerator.DepositTerrainModule.CollectSpawners(System.Collections.Generic.Queue{Eco.WorldGenerator.IBlocksSpawner},System.Collections.Generic.IDictionary{Eco.Shared.Math.Vector3i,System.Type},Eco.Shared.Math.Vector3i)">
+            <inheritdoc cref="M:Eco.WorldGenerator.ITerrainModule.CollectSpawners(System.Collections.Generic.Queue{Eco.WorldGenerator.IBlocksSpawner},System.Collections.Generic.IDictionary{Eco.Shared.Math.Vector3i,System.Type})"/>.
+        </member>
+        <member name="M:Eco.WorldGenerator.DepositTerrainModule.TrySpawnBlock(Eco.WorldGenerator.TerrainGeneratorPosition@,System.Double,System.Int32,System.Random,System.Type,System.Type@)">
+            <summary> It won't actually spawn any block, but instead will remember spawn position and will use it in spawner later. </summary>
+        </member>
+        <member name="T:Eco.WorldGenerator.DepositTerrainModule.DepositSpawner">
+            <summary>
+            Implements <see cref="T:Eco.WorldGenerator.IBlocksSpawner"/> for Deposit Spawning.
+            Deposit differs from random spawn because it spawns all blocks around spawn point using set of direction weights.
+            It also ensures that all blocks in the deposit are connected.
+            </summary>
+        </member>
+        <member name="P:Eco.WorldGenerator.DepositTerrainModule.DepositSpawner.NumberToSpawn">
+            <inheritdoc cref="P:Eco.WorldGenerator.IBlocksSpawner.NumberToSpawn"/>
+        </member>
+        <member name="M:Eco.WorldGenerator.DepositTerrainModule.DepositSpawner.TrySpawn(Eco.Shared.Math.Vector3i,System.Collections.Generic.IDictionary{Eco.Shared.Math.Vector3i,System.Type},System.Single)">
+            <summary>
+            Tries to spawn block at specified point. It will add all out coming directions to candidates queue.
+            For every direction it also will calculate priority - directions with lower priority value will be preferred.
+            Priority calculated based on direction weights. Higher weight will result in lower priority value.
+            Variance may randomly increase priority (by reducing priority value).
+            For every direction it will use following formula:
+            <code>
+            directionPriority = currentBlockPriority + inverseDirectionWeight - random(0, inverseDirectionVariance)
+            </code>
+            For Y-direction it will check for world bounds and also will reduce priority if they're going out of height range.
+            </summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.DepositTerrainModule.DepositSpawner.GetPriority(System.Single,System.Single,System.Single)">
+            <summary> Calculates priority based on current <paramref name="priority"/>, <paramref name="inverseWeight"/> and <paramref name="inverseWeight"/>. See <see cref="M:Eco.WorldGenerator.DepositTerrainModule.DepositSpawner.TrySpawn(Eco.Shared.Math.Vector3i,System.Collections.Generic.IDictionary{Eco.Shared.Math.Vector3i,System.Type},System.Single)"/> for more details. </summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.DepositTerrainModule.DepositSpawner.EnqueueCandidate(Eco.Shared.Math.Vector3i,System.Single)">
+            <summary> Enqueues candidate to the priority queue with specified priority. </summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.DepositTerrainModule.DepositSpawner.TrySpawnNext(System.Collections.Generic.IDictionary{Eco.Shared.Math.Vector3i,System.Type})">
+            <summary> Tries to spawn next candidate using <see cref="M:Eco.WorldGenerator.DepositTerrainModule.DepositSpawner.TrySpawn(Eco.Shared.Math.Vector3i,System.Collections.Generic.IDictionary{Eco.Shared.Math.Vector3i,System.Type},System.Single)"/> method. </summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.DepositTerrainModule.DepositSpawner.InverseVariance(System.Single,System.Single)">
+            <summary>
+            Calculates inverse variance for inverse weight for priority calculation.
+            If variance specified then weight selected from random range [weight; weight + variance).
+            Then inverse weight should be from range (1 / (weight + variance); 1 / weight] or (1 / weight - inverseVariance; 1 / weight].
+            Math behind it:
+            <code>
+            1 / weight - inverseVariance = 1 / (weight + variance)
+            inverseVariance = 1 / weight - 1 / (weight + variance)
+            inverseVariance = ((weight + variance) - weight) / (weight * (weight + variance))
+            inverseVariance = variance / (weight * (weight + variance))
+            </code>
+            </summary>
+        </member>
+        <member name="T:Eco.WorldGenerator.IBlocksSpawner">
+            <summary> Interface which implemented by custom blocks spawners which invoked after main terrain generation finished. </summary>
+        </member>
+        <member name="P:Eco.WorldGenerator.IBlocksSpawner.NumberToSpawn">
+            <summary> Number of blocks left to be created by the spawner. May be used for progress tracking. </summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.IBlocksSpawner.TrySpawnNext(System.Collections.Generic.IDictionary{Eco.Shared.Math.Vector3i,System.Type})">
+            <summary> Tries to spawn next block. If returns <c>false</c> then it won't spawn anymore blocks. </summary>
+        </member>
+        <member name="T:Eco.WorldGenerator.EcoTerraceNode">
+            <summary>Similar to the terrace module, except with additional control over the quadratic power (res^pow). Holds the VoronoiModule in WorldGenerator.eco. Also see <see cref="T:Eco.WorldGenerator.FlatTerraceModule"/></summary>
+        </member>
+        <member name="F:Eco.WorldGenerator.EcoTerraceNode.controlPoints">
+            <summary>The array of each terrace point in the gradient.</summary>
+        </member>
+        <member name="P:Eco.WorldGenerator.EcoTerraceNode.Power">
+            <summary>Scales the final result exponentially.</summary>
+        </member>
+        <member name="F:Eco.WorldGenerator.EcoTerraceNode.terracePoints">
+            <summary>
+            The amount of divisions to make in the terrace. The amount of rings created are affected by this value. Also the amount of <see cref="F:Eco.WorldGenerator.EcoTerraceNode.controlPoints"/> to create.
+            <para>Google "terraces" or "posterize gradient" for a great visual example of what the result looks like.</para>
+            <para>Equation: rings = <see cref="F:Eco.WorldGenerator.EcoTerraceNode.terracePoints"/> - 1</para>
+            </summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.EcoTerraceNode.MakeControlPoints">
+            <summary>
+            Calculate all of the individual points that the terrace creates. These are the division points that create the rings.
+            <para>Equation: control points = <see cref="F:Eco.WorldGenerator.EcoTerraceNode.terracePoints"/> - 1</para>
+            </summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.EcoTerraceNode.GetValue(System.Double,System.Double,System.Double)">
+            <summary>
+            Returns the cell result of the terrace at the x, y, z (position).
+            <para>Uses the cached control points and a quadratic curve to calculate where the x, y, z cell would be in the 3D terrace.</para>
+            </summary>
+        </member>
+        <member name="T:Eco.WorldGenerator.FlatTerraceModule">
+            <summary>
+            Creates a terrace like gradient (also called posterize) rounding to the nearest whole number.
+            <para>Google "terraces" or "posterize gradient" for a great visual example of what the result looks like.</para>
+            </summary>
+        </member>
+        <member name="T:Eco.WorldGenerator.VoronoiModule">
+            <summary>
+            Creates a voronoi map using the <see cref="T:Eco.WorldGenerator.VoronoiWorldGeneratorConfig"/> settings.
+            <para>Google "voronoi" for a great visual example of what the result looks like.</para>
+            </summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.VoronoiModule.GetValue(System.Double,System.Double,System.Double)">
+            <summary>
+            Returns the cell result of the voronoi map at the x, y, z (position).
+            <para>Uses <see cref="P:Eco.WorldGenerator.VoronoiModule.OutputIndex"/> to pick which map to sample from. (3D Space)</para>
+            </summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.TerrainGenerator.SpawnBlocks(System.Action{System.Single})">
+            <summary> Spawns blocks using <see cref="T:Eco.WorldGenerator.IBlocksSpawner"/> collection. Should be called after <see cref="M:Eco.WorldGenerator.TerrainGenerator.Generate(System.Int32,System.Int32)"/>. </summary>
+        </member>
+        <member name="T:Eco.WorldGenerator.TerrainGeneratorPosition">
+            <summary> Structure for passing generator position between generator classes. It is optimized for non-copy passing. </summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.TerrainGeneratorUtils.CreateChunkColumnRandom(System.Int32,System.Int32,System.Int32)">
+            <summary> Creates <see cref="T:System.Random"/> scoped to chunk column (all chunks with same x and z coordinates). </summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.ITerrainModule.CollectSpawners(System.Collections.Generic.Queue{Eco.WorldGenerator.IBlocksSpawner},System.Collections.Generic.IDictionary{Eco.Shared.Math.Vector3i,System.Type})">
+            <summary> Collects additional blocks spawners after initial module generation finished. Block spawners then may generate additional blocks using own custom algorithm (like <see cref="T:Eco.WorldGenerator.DepositTerrainModule.DepositSpawner"/>). </summary>
+            <param name="spawners">Current queue of spawners (new spawners should be added to end of the queue).</param>
+            <param name="spawnedPoints">Already spawned points (to prevent concurrency between spawners). </param>
+        </member>
+        <member name="M:Eco.WorldGenerator.ITerrainModule.TrySpawnBlock(Eco.WorldGenerator.TerrainGeneratorPosition@,System.Double,System.Int32,System.Random,System.Type,System.Type@)">
+            <summary> Tries to spawn block at specific terrain position. In case of success it returns <paramref name="blockType"/> in output parameter. </summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.TerrainModule.Eco#WorldGenerator#ITerrainModule#CollectSpawners(System.Collections.Generic.Queue{Eco.WorldGenerator.IBlocksSpawner},System.Collections.Generic.IDictionary{Eco.Shared.Math.Vector3i,System.Type})">
+            <inheritdoc cref="M:Eco.WorldGenerator.ITerrainModule.CollectSpawners(System.Collections.Generic.Queue{Eco.WorldGenerator.IBlocksSpawner},System.Collections.Generic.IDictionary{Eco.Shared.Math.Vector3i,System.Type})"/>.
+        </member>
+        <member name="M:Eco.WorldGenerator.TerrainModule.TrySpawnBlock(Eco.WorldGenerator.TerrainGeneratorPosition@,System.Double,System.Int32,System.Random,System.Type,System.Type@)">
+            <inheritdoc cref="M:Eco.WorldGenerator.ITerrainModule.CollectSpawners(System.Collections.Generic.Queue{Eco.WorldGenerator.IBlocksSpawner},System.Collections.Generic.IDictionary{Eco.Shared.Math.Vector3i,System.Type})"/>.
+        </member>
+        <member name="M:Eco.WorldGenerator.StandardTerrainModule.CollectSpawners(System.Collections.Generic.Queue{Eco.WorldGenerator.IBlocksSpawner},System.Collections.Generic.IDictionary{Eco.Shared.Math.Vector3i,System.Type})">
+            <inheritdoc cref="M:Eco.WorldGenerator.ITerrainModule.CollectSpawners(System.Collections.Generic.Queue{Eco.WorldGenerator.IBlocksSpawner},System.Collections.Generic.IDictionary{Eco.Shared.Math.Vector3i,System.Type})"/>.
+        </member>
+        <member name="M:Eco.WorldGenerator.StandardTerrainModule.TrySpawnBlock(Eco.WorldGenerator.TerrainGeneratorPosition@,System.Double,System.Int32,System.Random,System.Type,System.Type@)">
+            <inheritdoc cref="M:Eco.WorldGenerator.ITerrainModule.CollectSpawners(System.Collections.Generic.Queue{Eco.WorldGenerator.IBlocksSpawner},System.Collections.Generic.IDictionary{Eco.Shared.Math.Vector3i,System.Type})"/>.
+        </member>
+        <member name="M:Eco.WorldGenerator.BiomeTerrainModule.CollectSpawners(System.Collections.Generic.Queue{Eco.WorldGenerator.IBlocksSpawner},System.Collections.Generic.IDictionary{Eco.Shared.Math.Vector3i,System.Type})">
+            <inheritdoc cref="M:Eco.WorldGenerator.ITerrainModule.CollectSpawners(System.Collections.Generic.Queue{Eco.WorldGenerator.IBlocksSpawner},System.Collections.Generic.IDictionary{Eco.Shared.Math.Vector3i,System.Type})"/>.
+        </member>
+        <member name="M:Eco.WorldGenerator.BiomeTerrainModule.TrySpawnBlock(Eco.WorldGenerator.TerrainGeneratorPosition@,System.Double,System.Int32,System.Random,System.Type,System.Type@)">
+            <inheritdoc cref="M:Eco.WorldGenerator.ITerrainModule.CollectSpawners(System.Collections.Generic.Queue{Eco.WorldGenerator.IBlocksSpawner},System.Collections.Generic.IDictionary{Eco.Shared.Math.Vector3i,System.Type})"/>.
+        </member>
+        <member name="M:Eco.WorldGenerator.TerrainDepthModule.CollectSpawners(System.Collections.Generic.Queue{Eco.WorldGenerator.IBlocksSpawner},System.Collections.Generic.IDictionary{Eco.Shared.Math.Vector3i,System.Type})">
+            <inheritdoc cref="M:Eco.WorldGenerator.ITerrainModule.CollectSpawners(System.Collections.Generic.Queue{Eco.WorldGenerator.IBlocksSpawner},System.Collections.Generic.IDictionary{Eco.Shared.Math.Vector3i,System.Type})"/>.
+        </member>
+        <member name="M:Eco.WorldGenerator.TerrainDepthModule.TrySpawnBlock(Eco.WorldGenerator.TerrainGeneratorPosition@,System.Double,System.Int32,System.Random,System.Type,System.Type@)">
+            <inheritdoc cref="M:Eco.WorldGenerator.ITerrainModule.CollectSpawners(System.Collections.Generic.Queue{Eco.WorldGenerator.IBlocksSpawner},System.Collections.Generic.IDictionary{Eco.Shared.Math.Vector3i,System.Type})"/>.
+        </member>
+        <member name="T:Eco.WorldGenerator.UI.TerrainEditorContainer">
+            <summary>
+            The terrain editor is made up of two separate controls.
+            <para></para>
+            <para><see cref="T:Eco.WorldGenerator.UI.TerrainEditorPanel"/>: This is the main panel used to interact with the terrain editor.</para>
+            PropertyGrid: This panel hosts all of the properties relating to the terrain editor.
+            </summary>
+        </member>
+        <member name="T:Eco.WorldGenerator.UI.TerrainEditorPanel">
+            <summary>The WinForm control for the Terrain Editor. WinForm control functionality is implemented here. Also see the parent UI class <see cref="T:Eco.WorldGenerator.WorldGeneratorPlugin"/></summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.UI.TerrainEditorPanel.OnBtnGenerate_OnClick(System.Object,System.EventArgs)">
+            <summary>Fires when the update preview button it clicked.</summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.UI.TerrainEditorPanel.ResetGenerator">
+            <summary>Resets the generator and config. This is required before generating a new world.</summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.UI.TerrainEditorPanel.UpdatePictures">
+            <summary>Updates each PictureBox image to show the latest generated map.</summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.UI.TerrainEditorPanel.SaveFileDialog(System.String,System.Action{System.String})">
+            <summary>Opens up a save file dialog prompt. Used to save the bitmap images for each terrain map.</summary>
+        </member>
+        <member name="F:Eco.WorldGenerator.UI.TerrainEditorPanel.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.UI.TerrainEditorPanel.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Eco.WorldGenerator.UI.TerrainEditorPanel.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Eco.WorldGenerator.WorldGeneratorPlugin">
+            <summary>
+            This is the world generator page that is in charge of any function or configuration regarding the world.
+            <para></para>
+            <para>Information on the Terrain Editor's UI can be found in <see cref="T:Eco.WorldGenerator.UI.TerrainEditorContainer"/>.</para>
+            </summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.Utils.BitmapExtensions.FlipHorizontal(System.Drawing.Bitmap,System.Drawing.RotateFlipType)">
+            <summary>Returns a new instance of <paramref name="bitmap"/> and flips using the <paramref name="rotateFlipType"/>.</summary>
+        </member>
+        <member name="T:Eco.WorldGenerator.VoronoiWorldGeneratorExtensions">
+            <summary>Extension methods used in the voronoi world generator class. Lerps between two colors and</summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.PoissonDiscSampler.#ctor(System.Int32,System.Int32,System.Single,System.Random)">
+             Create a sampler with the following parameters:
+            
+             width:  each sample's x coordinate will be between [0, width]
+             height: each sample's y coordinate will be between [0, height]
+             radius: each sample will be at least `radius` units away from any other sample, and at most 2 * `radius`.
+        </member>
+        <member name="M:Eco.WorldGenerator.PoissonDiscSampler.AddSample(System.Drawing.PointF)">
+            Adds the sample to the active samples queue and the grid before returning it
+        </member>
+        <member name="T:Eco.WorldGenerator.PoissonDiscSampler.GridPos">
+            Helper struct to calculate the x and y indices of a sample in the grid
+        </member>
+        <member name="T:Eco.WorldGenerator.Voronoi">
+            <summary>
+            Description of Voronoi.
+            </summary>
+        </member>
+        <member name="M:Eco.WorldGenerator.Voronoi.GenerateVoronoi(System.Double[],System.Double[],System.Double,System.Double,System.Double,System.Double)">
+            
+             @param xValuesIn Array of X values for each site.
+             @param yValuesIn Array of Y values for each site. Must be identical length to yValuesIn
+             @param minX The minimum X of the bounding box around the voronoi
+             @param maxX The maximum X of the bounding box around the voronoi
+             @param minY The minimum Y of the bounding box around the voronoi
+             @param maxY The maximum Y of the bounding box around the voronoi
+             @return
+        </member>
+    </members>
+</doc>
