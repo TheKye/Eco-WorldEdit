@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Linq;
 using System.Text;
 using Eco.Gameplay.Players;
@@ -7,11 +6,10 @@ using Eco.Mods.WorldEdit.Serializer;
 using Eco.Shared.Localization;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
-using Eco.World.Blocks;
 
 namespace Eco.Mods.WorldEdit.Commands
 {
-	internal class PrintBlueprintListCommand : WorldEditCommand
+    internal class PrintBlueprintListCommand : WorldEditCommand
 	{
 		public PrintBlueprintListCommand(User user) : base(user) { }
 

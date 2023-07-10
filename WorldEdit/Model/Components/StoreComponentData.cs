@@ -1,18 +1,13 @@
 ﻿using Eco.Gameplay.Components;
-using Eco.Gameplay.Items;
-using Eco.Shared.Localization;
-using Eco.Shared.Utils;
+using Eco.Gameplay.Components.Store;
+using Eco.Gameplay.Components.Store.Internal;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Eco.Mods.WorldEdit.Model.Components.StoreComponentData;
 
 namespace Eco.Mods.WorldEdit.Model.Components
 {
-	internal struct StoreComponentData
+    internal struct StoreComponentData
 	{
 		public List<Category> Sell { get; private set; }
 		public List<Category> Buy { get; private set; }
@@ -21,7 +16,7 @@ namespace Eco.Mods.WorldEdit.Model.Components
 		{
 			StoreComponentData data = new StoreComponentData
 			{
-				Sell = storeComponent.StoreData.SellCategories.Select(c => Category.Create(c)).ToList(),
+                Sell = storeComponent.StoreData.SellCategories.Select(c => Category.Create(c)).ToList(),
 				Buy = storeComponent.StoreData.BuyCategories.Select(c => Category.Create(c)).ToList()
 			};
 			return data;

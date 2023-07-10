@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Shared.Math;
-using Eco.Shared.Utils;
 using Newtonsoft.Json;
 
 namespace Eco.Mods.WorldEdit.Serializer
 {
-	internal struct EcoBlueprint
+    internal struct EcoBlueprint
 	{
 		public float Version { get; private set; }
 		public string EcoVersion { get; private set; }

@@ -11,7 +11,7 @@ namespace Eco.Mods.WorldEdit.Model.Components
 			DoorComponent component = new DoorComponent();
 			if (door != null)
 			{
-				component.OpensOut = door.OpensOut;
+				component.OpensOut = door.GetComponent<Gameplay.Components.DoorComponent>().OpensOutwards;
 			}
 			return component;
 		}

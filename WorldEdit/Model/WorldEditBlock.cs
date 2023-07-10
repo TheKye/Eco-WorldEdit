@@ -7,9 +7,7 @@ using Eco.Gameplay.Objects;
 using Eco.Gameplay.Plants;
 using Eco.Mods.WorldEdit.Serializer;
 using Eco.Mods.WorldEdit.Utils;
-using Eco.Shared;
 using Eco.Shared.IoC;
-using Eco.Shared.Localization;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
 using Eco.Simulation;
@@ -19,7 +17,7 @@ using Newtonsoft.Json;
 
 namespace Eco.Mods.WorldEdit.Model
 {
-	internal struct WorldEditBlock
+    internal struct WorldEditBlock
 	{
 		public Type BlockType { get; private set; }
 		[JsonConverter(typeof(JsonVector3iConverter))] public Vector3i Position { get; private set; }

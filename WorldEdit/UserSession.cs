@@ -1,13 +1,12 @@
 ﻿using System;
 using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Commands;
-using Eco.Mods.WorldEdit.Serializer;
 using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared.Math;
 
 namespace Eco.Mods.WorldEdit
 {
-	internal class UserSession
+    internal class UserSession
 	{
 		public User User { get; private set; }
 		public Player Player => this.User.Player;

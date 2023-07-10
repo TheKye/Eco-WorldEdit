@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Eco.Gameplay.Components;
+using Eco.Gameplay.Components.Store;
 using Eco.Gameplay.Items;
 using Eco.Gameplay.Objects;
 using Eco.Mods.WorldEdit.Model.Components;
@@ -53,7 +54,7 @@ namespace Eco.Mods.WorldEdit.Model
 			}
 			if (worldObject is TechTree.DoorObject doorObject)
 			{
-				worldObjectData.Components.Add(typeof(TechTree.DoorObject), DoorComponent.Create(doorObject));
+				worldObjectData.Components.Add(typeof(TechTree.DoorObject), Model.Components.DoorComponent.Create(doorObject));
 			}
 			if (worldObject.HasComponent<StoreComponent>())
 			{

@@ -1,12 +1,11 @@
-﻿using Eco.Shared;
-using Eco.Shared.Math;
+﻿using Eco.Shared.Math;
 using System;
 using System.Numerics;
 using Quaternion = Eco.Shared.Math.Quaternion;
 
 namespace Eco.Mods.WorldEdit.Utils
 {
-	internal static class QuaternionUtils
+    internal static class QuaternionUtils
 	{
 		public static Quaternion FromAxisAngle(Vector3 axis, float angleRadian)
 		{

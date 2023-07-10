@@ -4,8 +4,11 @@ using System.Linq;
 using Eco.Core.Utils;
 using Eco.Gameplay.Blocks;
 using Eco.Gameplay.Components;
+using Eco.Gameplay.Components.Store;
 using Eco.Gameplay.Objects;
+using Eco.Gameplay.Occupancy;
 using Eco.Gameplay.Plants;
+using Eco.Mods.TechTree;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Model.Components;
 using Eco.Shared.IoC;
@@ -138,26 +141,24 @@ namespace Eco.Mods.WorldEdit
 				}
 				mintComponent.InitializeCurrency(mintCurrency.GetCurrency());
 			}
-			//Handle door opening
-			if(worldObject is TechTree.DoorObject && worldObjectBlockData.Components.ContainsKey(typeof(TechTree.DoorObject)))
-			{
-				System.Reflection.MethodInfo method = typeof(TechTree.DoorObject).GetMethod("WE_SetOpensOut", new Type[] { typeof(bool) });
-				if (method != null)
-				{
-					object obj = worldObjectBlockData.Components[typeof(TechTree.DoorObject)];
-					DoorComponent doorComponent;
-					if (obj is JObject jobj)
-					{
-						doorComponent = jobj.ToObject<DoorComponent>();
-					}
-					else
-					{
-						doorComponent = (DoorComponent)obj;
-					}
-					method.Invoke(worldObject, new object[] { doorComponent.OpensOut });
-				}
-			}
-			if (worldObject.HasComponent<StoreComponent>() && worldObjectBlockData.Components.ContainsKey(typeof(StoreComponent)))
+            //Handle door opening
+            //TODO: Make it work when SLG opens or give ability to set OpensOutwards inside DoorComponent
+            //if(worldObject is TechTree.DoorObject && worldObject.HasComponent<Gameplay.Components.DoorComponent>() && worldObjectBlockData.Components.ContainsKey(typeof(TechTree.DoorObject)))
+            //{
+            //             Gameplay.Components.DoorComponent doorComponent = worldObject.GetComponent<Gameplay.Components.DoorComponent>();
+            //             object obj = worldObjectBlockData.Components[typeof(TechTree.DoorObject)];
+            //             Model.Components.DoorComponent doorData;
+            //             if (obj is JObject jobj)
+            //             {
+            //                 doorData = jobj.ToObject<Model.Components.DoorComponent>();
+            //             }
+            //             else
+            //             {
+            //                 doorData = (Model.Components.DoorComponent)obj;
+            //             }
+            //	doorComponent?.OpensOutwards = doorData.OpensOut;
+            //         }
+            if (worldObject.HasComponent<StoreComponent>() && worldObjectBlockData.Components.ContainsKey(typeof(StoreComponent)))
 			{
 				StoreComponent storeComponent = worldObject.GetComponent<StoreComponent>();
 				object obj = worldObjectBlockData.Components[typeof(StoreComponent)];
@@ -179,7 +180,7 @@ namespace Eco.Mods.WorldEdit
 				plantSpecies = EcoSim.AllSpecies.OfType<PlantSpecies>().First(species => species.Name == plantBlockData.PlantType.Name);
 			}
 			if (plantSpecies == null) return;
-			Plant plant = EcoSim.PlantSim.SpawnPlant(plantSpecies, position, true);
+			Plant plant = EcoSim.PlantSim.SpawnPlant(plantSpecies, position.WorldPosition3iOrInvalid(), true);
 			plant.YieldPercent = plantBlockData.YieldPercent;
 			plant.Dead = plantBlockData.Dead;
 			plant.DeadType = plantBlockData.DeadType;

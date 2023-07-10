@@ -1,7 +1,5 @@
-﻿using Eco.Core.PropertyHandling;
-using Eco.Gameplay.Plants;
+﻿using Eco.Gameplay.Plants;
 using Eco.Gameplay.Players;
-using Eco.Mods.Organisms;
 using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
@@ -9,7 +7,7 @@ using Eco.World.Blocks;
 
 namespace Eco.Mods.WorldEdit.Commands
 {
-	internal class GrowCommand : WorldEditCommand
+    internal class GrowCommand : WorldEditCommand
 	{
 		public GrowCommand(User user) : base(user)
 		{
