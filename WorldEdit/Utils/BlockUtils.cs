@@ -5,7 +5,6 @@ using Eco.Gameplay.Blocks;
 using Eco.Gameplay.Items;
 using Eco.Gameplay.Objects;
 using Eco.Gameplay.Systems.TextLinks;
-using Eco.Gameplay.Systems.Tooltip;
 using Eco.Shared.Localization;
 using Eco.Shared.Utils;
 using Eco.Simulation;
@@ -83,7 +82,7 @@ namespace Eco.Mods.WorldEdit.Utils
 			if (blockType.DerivesFrom<PlantSpecies>())
 			{
 				Species species = EcoSim.AllSpecies.OfType<PlantSpecies>().First(species => species.GetType() == blockType);
-				if (species != null) return species.UILink();
+				if (species != null) return species.UILinkGeneric();
 			}
 			Item item = blockType.TryGetAttribute<Ramp>(false, out var rampAttr) ? Item.Get(rampAttr.RampType) : BlockItem.GetBlockItem(blockType) ?? BlockItem.CreatingItem(blockType);
 			if (item == null && blockType.DerivesFrom<WorldObject>())
