@@ -5,38 +5,34 @@
 	using Eco.Core.Utils;
 	using Eco.Core.Utils.AtomicAction;
 	using Eco.Gameplay.DynamicValues;
-	using Eco.Gameplay.Interactions;
+	using Eco.Gameplay.Interactions.Interactors;
 	using Eco.Gameplay.Items;
 	using Eco.Gameplay.Players;
-	using Eco.Shared.Items;
 	using Eco.Shared.Localization;
 	using Eco.Shared.Math;
 	using Eco.Shared.Serialization;
-	using Eco.Shared.Utils;
+    using Eco.Shared.SharedTypes;
+    using Eco.Shared.Utils;
 
-	[Serialized]
+    [Serialized]
 	[LocDisplayName("Wand Tool")]
 	[Category("Hidden")]
-	public partial class WandAxeItem : ToolItem
+	public class WandAxeItem : ToolItem, IInteractor
 	{
-		private static IDynamicValue skilledRepairCost = new ConstantValue(1);
-
 		public override LocString DisplayDescription { get { return Localizer.DoStr("Does magical World Edit things"); } }
 
-		public override LocString LeftActionDescription { get { return Localizer.DoStr(""); } }
-
-		public override ClientPredictedBlockAction LeftAction { get { return ClientPredictedBlockAction.None; } }
-
 		public override IDynamicValue SkilledRepairCost => skilledRepairCost;
+		private static IDynamicValue skilledRepairCost = new ConstantValue(1);
 
-		public override InteractResult OnActLeft(InteractionContext context)
+        [Interaction(InteractionTrigger.LeftClick, overrideDescription: "Set First Position", tags: BlockTags.Block)]
+        public bool OnActLeft(Player player, InteractionTriggerInfo triggerInfo, InteractionTarget target)
 		{
 			try
 			{
-				if (context.BlockPosition == null || !context.BlockPosition.HasValue)
-					return InteractResult.Success;
+				if (!target.IsBlock) { return false; }
+				if (target.BlockPosition is null || !target.BlockPosition.HasValue) { return false; }
 
-				Vector3i pos = context.BlockPosition.Value;
+				Vector3i pos = target.BlockPosition.Value;
 
 				pos.X = pos.X < 0 ? pos.X + Shared.Voxel.World.VoxelSize.X : pos.X;
 				pos.Z = pos.Z < 0 ? pos.Z + Shared.Voxel.World.VoxelSize.Z : pos.Z;
@@ -44,27 +40,28 @@
 				pos.X = pos.X % Shared.Voxel.World.VoxelSize.X;
 				pos.Z = pos.Z % Shared.Voxel.World.VoxelSize.Z;
 
-				UserSession userSession = WorldEditManager.GetUserSession(context.Player.User);
+				UserSession userSession = WorldEditManager.GetUserSession(player.User);
 				userSession.SetFirstPosition(pos);
 
-				context.Player.MsgLoc($"First Position set to ({pos.x}, {pos.y}, {pos.z})");
+                player.MsgLoc($"First Position set to ({pos.x}, {pos.y}, {pos.z})");
+				return true;
 			}
 			catch (Exception e)
 			{
 				Log.WriteError(Localizer.Do($"{e}"));
-
 			}
-			return InteractResult.Success;
+			return false;
 		}
 
-		public override InteractResult OnActRight(InteractionContext context)
+        [Interaction(InteractionTrigger.RightClick, overrideDescription: "Set Second Position", tags: BlockTags.Block)]
+        public bool OnActRight(Player player, InteractionTriggerInfo triggerInfo, InteractionTarget target)
 		{
 			try
 			{
-				if (context.BlockPosition == null || !context.BlockPosition.HasValue)
-					return InteractResult.Success;
+                if (!target.IsBlock) { return false; }
+                if (target.BlockPosition is null || !target.BlockPosition.HasValue) { return false; }
 
-				Vector3i pos = context.BlockPosition.Value;
+                Vector3i pos = target.BlockPosition.Value;
 
 				pos.X = pos.X < 0 ? pos.X + Shared.Voxel.World.VoxelSize.X : pos.X;
 				pos.Z = pos.Z < 0 ? pos.Z + Shared.Voxel.World.VoxelSize.Z : pos.Z;
@@ -72,21 +69,17 @@
 				pos.X = pos.X % Shared.Voxel.World.VoxelSize.X;
 				pos.Z = pos.Z % Shared.Voxel.World.VoxelSize.Z;
 
-				UserSession userSession = WorldEditManager.GetUserSession(context.Player.User);
+				UserSession userSession = WorldEditManager.GetUserSession(player.User);
 				userSession.SetSecondPosition(pos);
 
-				context.Player.MsgLoc($"Second Position set to ({pos.x}, {pos.y}, {pos.z})");
-			}
+                player.MsgLoc($"Second Position set to ({pos.x}, {pos.y}, {pos.z})");
+                return true;
+            }
 			catch (Exception e)
 			{
 				Log.WriteError(Localizer.Do($"{e}"));
 			}
-			return InteractResult.NoOp;
-		}
-
-		public override bool ShouldHighlight(Type block)
-		{
-			return true;
+			return false;
 		}
 
 		protected Result PlayerPlaceBlock(Type blockType, Vector3i blockPosition, Player player, bool replaceBlock, float calorieMultiplier = 1, params IAtomicAction[] additionalActions)
