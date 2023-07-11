@@ -166,8 +166,7 @@
             <summary> Helper function to call the correct auth check given a context. </summary>
         </member>
         <member name="M:Eco.Gameplay.Auth.AuthManager.GetAuthorizationLevel(Eco.Gameplay.Aliases.IAlias,Eco.Gameplay.Property.IOwned,Eco.Gameplay.GameActions.GameAction)">
-            <summary> Gets the level of authorization a user has over the specified property. <para> Internally checks for GameAction auth overrides. </para> 
-            Ignores the special result returned from overload.</summary>
+            <summary> Gets the level of authorization a user has over the specified property. <para> Internally checks for GameAction auth overrides. </para> </summary>
         </member>
         <member name="M:Eco.Gameplay.Auth.AuthManager.ShouldOverrideAuth(Eco.Gameplay.Aliases.IAlias,Eco.Gameplay.Property.IOwned,Eco.Gameplay.GameActions.GameAction)">
             <summary> Checks if auth should be overriden for target GameAction. <para> e.g.: Auth should be overriden for a GameAction that affects a WorldObject authorized by a Contract. </para> </summary>
@@ -933,15 +932,6 @@
             will get events from the parent <see cref="T:Eco.Gameplay.Objects.WorldObject" /> about auth ownership changes.
             </summary>
         </member>
-        <member name="M:Eco.Gameplay.Components.Auth.PropertyAuthComponent.UpdatePlot">
-            <summary>We update the plot that's the property is currently on.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Components.BankComponent.CreateBankAccount(Eco.Gameplay.Players.Player)">
-            <summary>Add ban account though DualPermission logic and set a Host Object.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Components.BankComponent.UpdateBankAccounts">
-            <summary>Track changes in accounts and update cache for this component. Notify client to update a list./// </summary>
-        </member>
         <member name="T:Eco.Gameplay.Components.BedComponent">
             <summary>Handles sleep for player through bed objects with <see cref="P:Eco.Gameplay.Components.BedComponent.MountComponent" /> and <see cref="T:Eco.Gameplay.Systems.SleepManager" />
              and has a button to open the sleep manager.</summary>
@@ -966,7 +956,7 @@
             <summary>To avoid awkward behaviour wakes all users in current bed on pickup. </summary>
             <param name="player"></param>
         </member>
-        <member name="M:Eco.Gameplay.Components.BedComponent.GetComponentPickupConfirmation">
+        <member name="M:Eco.Gameplay.Components.BedComponent.BedPickupConfirmation">
             <summary>Returns confirmation popup text for player that want to pickup bed with sleeping players. </summary>
         </member>
         <member name="M:Eco.Gameplay.Components.BedComponent.Destroy">
@@ -1736,53 +1726,11 @@
         <member name="M:Eco.Gameplay.Economy.BankAccount.TryRemoveManagerOrUser(Eco.Gameplay.Players.Player,Eco.Gameplay.Aliases.IAlias,Eco.Shared.Items.PermissionsType)">
             <summary>Check if we're able to remove an old manager or user.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Economy.BankAccount.CanAccess(Eco.Gameplay.Aliases.IAlias,Eco.Shared.Items.AccountAccess,System.Boolean)">
-            <summary>Check if IAlias has an access to use this account./// </summary>
-        </member>
-        <member name="M:Eco.Gameplay.Economy.BankAccount.GetResponsibleUser(System.Boolean)">
-            <summary>Returns first found manager of the account</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Economy.BankAccount.GetCurrencyHoldingVal(Eco.Gameplay.Economy.Currency)">
-            <summary>Return total amount of a currency for this account.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Economy.BankAccount.GetCurrencyHoldingVal(Eco.Gameplay.Economy.Currency,Eco.Gameplay.Players.User)">
-            <summary>Returns amount of a currency for this account owned by a user by percent ownership.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Economy.BankAccount.DisplayAmount(Eco.Gameplay.Economy.Currency)">
-            <summary>Returns string with description of currency amount on this account.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Economy.BankAccount.CanAnyAccess(Eco.Gameplay.Aliases.IAlias,Eco.Shared.Items.AccountAccess,System.Boolean)">
-            <summary>Check if IAlias or any user of this IAlias can use this account.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Economy.BankAccount.AddCurrency(Eco.Gameplay.Economy.Currency,System.Single,System.Boolean)">
-            <summary>Adds amount of currency to this account. Will fallback to zero if holdings become negative (set assertNegativeAmount if that was intended, otherwise an error will be logged).</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Economy.BankAccount.RemoveCurrency(Eco.Gameplay.Economy.Currency)">
-            <summary>Reduces holdings to zero (by removing an infinite amount).</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Economy.BankAccount.SetAccountName(Eco.Gameplay.Players.Player,System.String)">
-            <summary>Change an account name, will be validated at the same time.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Economy.BankAccount.PercentOwnership(Eco.Gameplay.Players.User)">
-            <summary>Returns user's percent ownership of this account for wealth calculation purposes.</summary>
-        </member>
         <member name="M:Eco.Gameplay.Economy.BankAccount.DescribeWealth(Eco.Gameplay.Players.User)">
             <summary> Returns a string with user's percent ownership of this account. </summary>
         </member>
         <member name="M:Eco.Gameplay.Economy.BankAccount.DescribeHoldings">
             <summary> Returns an entitled text block with this account's holdings. </summary>
-        </member>
-        <member name="M:Eco.Gameplay.Economy.BankAccount.Validate">
-            <summary>With each tick we need to check if account still has a host. If a host is needed but it is missed - account should be removed.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Economy.BankAccount.DisableHostedObject">
-            <summary> If disable timer has gone off we need to remove bank account as it was not fixes. Remove all currencies from an account first, so there will be no unreachable money.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Economy.BankAccount.AssignHostObject(Eco.Gameplay.Objects.WorldObject)">
-            <summary>WHen bank account is created remember the Bank object as a Host for it and also cache it's Settlement, </summary>
-        </member>
-        <member name="M:Eco.Gameplay.Economy.BankAccount.CanBeAssignedTo(Eco.Gameplay.Placement.IOrphanAssignment)">
-            <summary> For assignment we want to take a bank object that is in a accounts settlement influence but we will assign only account we can manage and require a host. A player should not see an non-managed account.</summary>
         </member>
         <member name="M:Eco.Gameplay.Economy.BankAccountManager.GetAccountsOfBackedCurrency">
             <summary>Return a tuple of accounts and holdings for all backed currencies.</summary>
@@ -2023,7 +1971,7 @@
         <member name="M:Eco.Gameplay.GameActions.AtomicActions.DropRubble(Eco.Gameplay.GameActions.GameActionPack,Eco.Gameplay.Players.Player,Eco.Gameplay.Items.BlockItem,Eco.Gameplay.Items.Inventory,System.Numerics.Vector3,System.Single)">
             <summary> Tries to remove block item from the inventory to spawn it as a loose rubble. Burns player's calories if needed. </summary>
         </member>
-        <member name="M:Eco.Gameplay.GameActions.AtomicActions.BurnCaloriesAndCheckExhaustion(Eco.Gameplay.GameActions.GameActionPack,Eco.Gameplay.Players.User,System.Boolean,System.Single,System.Boolean)">
+        <member name="M:Eco.Gameplay.GameActions.AtomicActions.BurnCalories(Eco.Gameplay.GameActions.GameActionPack,Eco.Gameplay.Players.User,System.Single,System.Boolean)">
             <summary> Burn calories or fail if not enough available. </summary>
         </member>
         <member name="M:Eco.Gameplay.GameActions.AtomicActions.BurnFuel(Eco.Gameplay.GameActions.GameActionPack,Eco.Gameplay.Components.FuelSupplyComponent,System.Single)">
@@ -2043,9 +1991,6 @@
         <member name="M:Eco.Gameplay.GameActions.AtomicActions.DeleteBlock(Eco.Gameplay.GameActions.GameActionPack,Eco.Gameplay.GameActions.MultiblockActionContext,Eco.Gameplay.Items.Inventory,Eco.Gameplay.Items.Item,System.Boolean,System.Boolean,System.Boolean)">
             <summary> Add the deletion of blocks to the passed action pack and use tool, if able. </summary>
         </member>
-        <member name="M:Eco.Gameplay.GameActions.AtomicActions.DeleteBlock(Eco.Gameplay.GameActions.GameActionPack,Eco.Gameplay.GameActions.MultiblockActionContext,System.Func{Eco.Shared.Math.WrappedWorldPosition3i,System.Boolean},Eco.Gameplay.Items.Inventory,Eco.Gameplay.Items.Item,System.Boolean,System.Boolean)">
-            <summary> Add the deletion of blocks to the passed action pack and use tool, if able. </summary>
-        </member>
         <member name="M:Eco.Gameplay.GameActions.AtomicActions.ChangeBlock(Eco.Gameplay.GameActions.GameActionPack,Eco.Gameplay.GameActions.MultiblockActionContext,System.Type)">
             <summary> Uses tool to change type of blocks in the area. </summary>
         </member>
@@ -2063,6 +2008,10 @@
         </member>
         <member name="M:Eco.Gameplay.GameActions.AtomicActions.PerformMultiblockToolAction(Eco.Gameplay.GameActions.GameActionPack,Eco.Gameplay.GameActions.MultiblockActionContext,System.Func{Eco.Shared.Math.WrappedWorldPosition3i,System.Type,Eco.Core.Utils.Result})">
             <summary> Executes provided actions for each position and counts successful to invoke UseTool with that value as a multiplier. Fails only if nothing was performed. </summary>
+        </member>
+        <member name="T:Eco.Gameplay.GameActions.MultiblockActionContext">
+            <summary> Parameters, the presence of which will determine behavior of multi-block atomic action.
+            Default values will be ignored, i.e. if there is no fuel component provided, then nothing will be burned. </summary>
         </member>
         <member name="T:Eco.Gameplay.GameActions.ISyncedAction">
             <summary> An action that should be run in synced way. Both with "IPretestAction" works to avoid bugs with simultaneous running of two actions, like pick up same item twice by different users. Pair of (syncObject, GameActionType) will be locked while action is running.</summary>
@@ -2142,32 +2091,6 @@
         </member>
         <member name="T:Eco.Gameplay.GameActions.IGameActionPackChangeSet">
             <summary>Objects with this interface will be used in GameActionPack to do PreTest, PostEffect or GameActionPack Dispose callback.</summary>
-        </member>
-        <member name="T:Eco.Gameplay.GameActions.MultiblockActionContext">
-            <summary> Parameters, the presence of which will determine behavior of multi-block atomic action.
-            Default values will be ignored, i.e. if there is no fuel component provided, then nothing will be burned. </summary>
-        </member>
-        <member name="M:Eco.Gameplay.GameActions.MultiblockContextHelpers.CreateMultiblockContext(Eco.Gameplay.Items.ToolItem,Eco.Gameplay.Players.Player,System.Boolean,Eco.Shared.Math.Vector3i,System.Collections.Generic.IEnumerable{System.Type},System.Func{Eco.Gameplay.GameActions.GameAction})">
-            <inheritdoc cref="M:Eco.Gameplay.GameActions.MultiblockContextHelpers.CreateMultiblockContext(Eco.Gameplay.Items.ToolItem,Eco.Gameplay.Players.Player,System.Boolean,System.Collections.Generic.IEnumerable{Eco.Shared.Math.Vector3i},System.Collections.Generic.IEnumerable{System.Type},System.Func{Eco.Gameplay.GameActions.GameAction})" />
-        </member>
-        <member name="M:Eco.Gameplay.GameActions.MultiblockContextHelpers.CreateMultiblockContext(Eco.Gameplay.Items.ToolItem,Eco.Gameplay.Players.Player,System.Boolean,System.Collections.Generic.IEnumerable{Eco.Shared.Math.Vector3i},System.Collections.Generic.IEnumerable{System.Type},System.Func{Eco.Gameplay.GameActions.GameAction})">
-            <summary>Builds a MultiblockActionContext based on the player's data.</summary>
-            <param name="applyXPSkill">If FALSE, this sets the ExperienceSkill to NULL which results in no AddExperience() post effect being added to the action.</param>
-            <param name="area">Positions of blocks to be included in this context.</param>
-            <remarks>Returned MultiblockActionContext doesn't have to contain multiple blocks. It contains all blocks specified in <paramref name="area" />.</remarks>
-        </member>
-        <member name="M:Eco.Gameplay.GameActions.MultiblockContextHelpers.TryCreateMultiblockContext(Eco.Gameplay.Items.ToolItem,Eco.Gameplay.GameActions.MultiblockActionContext@,Eco.Shared.SharedTypes.InteractionTarget,Eco.Gameplay.Players.Player,System.Boolean,System.Collections.Generic.IEnumerable{System.Type},System.Func{Eco.Gameplay.GameActions.GameAction},System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String},System.String[])">
-            <inheritdoc cref="M:Eco.Gameplay.GameActions.MultiblockContextHelpers.TryCreateMultiblockContext(Eco.Gameplay.Items.ToolItem,Eco.Gameplay.GameActions.MultiblockActionContext@,Eco.Shared.SharedTypes.InteractionTarget,Eco.Gameplay.Players.Player,System.Collections.Generic.IEnumerable{Eco.Gameplay.Items.Tag},System.Boolean,System.Collections.Generic.IEnumerable{System.Type},System.Func{Eco.Gameplay.GameActions.GameAction},System.Collections.Generic.IEnumerable{Eco.Gameplay.Items.Tag},System.Collections.Generic.IEnumerable{Eco.Gameplay.Items.Tag})" />
-        </member>
-        <member name="M:Eco.Gameplay.GameActions.MultiblockContextHelpers.TryCreateMultiblockContext(Eco.Gameplay.Items.ToolItem,Eco.Gameplay.GameActions.MultiblockActionContext@,Eco.Shared.SharedTypes.InteractionTarget,Eco.Gameplay.Players.Player,System.Collections.Generic.IEnumerable{Eco.Gameplay.Items.Tag},System.Boolean,System.Collections.Generic.IEnumerable{System.Type},System.Func{Eco.Gameplay.GameActions.GameAction},System.Collections.Generic.IEnumerable{Eco.Gameplay.Items.Tag},System.Collections.Generic.IEnumerable{Eco.Gameplay.Items.Tag})">
-            <summary>
-            Builds a context that's ready to be used by the AtomicActions, including all necessary info for the action 
-            to be performed with the appropriate target block(s), and handle XP, durability, and calories consumption.
-            </summary>
-            <param name="tagsTargetable">Only blocks that have any of these tags can be affected by this interaction.</param>
-            <param name="mustHaveTags">Only blocks that have all of these tags can be affected by this interaction.</param>
-            <param name="mustNotHaveTags">Only blocks that don't have any of these tags can be affected by this interaction.</param>
-            <returns>True if at least one block valid for this tool was found and context was successfully created.</returns>
         </member>
         <member name="M:Eco.Gameplay.GameActions.TriggerConfigManager.IsValidConfig(System.Reflection.PropertyInfo,System.Type)">
             <summary> Checks if property is a valid property to appear on the Trigger section.</summary>
@@ -2376,7 +2299,7 @@
             <summary>Defines a type that has Interaction defined on it via InteractionAttribute.</summary>
         </member>
         <member name="T:Eco.Gameplay.Interactions.Interactors.InteractionAttribute">
-            <summary> Block of data sent to the client that defines how a general interactor works. Method applied to must have signature: void X(Player player, InteractionTriggerInfo trigger, InteractionTarget target, List{Tag} tagsTargetable) </summary>
+            <summary> Block of data sent to the client that defines how a general interactor works.  Method applied to must have signature: void X(Player player, InteractionTriggerInfo trigger, InteractionTarget target) </summary>
             <remarks> NOTE: This attribute inherits directly from <see cref="T:Eco.Shared.Networking.RPCAttribute" />, so an RPC will be created for every method this is defined on. </remarks>
         </member>
         <member name="P:Eco.Gameplay.Interactions.Interactors.InteractionAttribute.Description">
@@ -2389,23 +2312,11 @@
             <summary>If set, means that the RPC is called on the given subcomponent of a world object.</summary>
         </member>
         <member name="P:Eco.Gameplay.Interactions.Interactors.InteractionAttribute.TagsTargetable">
-            <summary>Blocks, NetObjects, and Items that have ANY of these tags can trigger this interaction.</summary>
+            <summary> Blocks, NetObjects, and Items that have ANY of these tags can trigger this interaction. </summary>
         </member>
         <member name="P:Eco.Gameplay.Interactions.Interactors.InteractionAttribute.RequiredParameters">
             <summary> Parameters that would allow this interaction to trigger (if a tag also matches). Exists to allow state-based definitions for WorldObjects (--e.g.: 'Turn on' vs 'Turn off', etc) </summary>
             <remarks> This is applied on top of tags. If this is null or empty, the interaction can be triggered. </remarks>
-        </member>
-        <member name="P:Eco.Gameplay.Interactions.Interactors.InteractionAttribute.InteractionDistance">
-            <summary>Max distance allowed to interact, 0 means default distance.</summary>
-        </member>
-        <member name="P:Eco.Gameplay.Interactions.Interactors.InteractionAttribute.Priority">
-            <summary>When two interactions are set on the same trigger, priority determines which is displayed and avaialble.</summary>
-        </member>
-        <member name="P:Eco.Gameplay.Interactions.Interactors.InteractionAttribute.PredictedBlockAction">
-            <summary>Define an action that can happen instantly on the client when the interaction takes place, and can be rewound if the server doesnt accept it.</summary>
-        </member>
-        <member name="P:Eco.Gameplay.Interactions.Interactors.InteractionAttribute.MinCaloriesRequired">
-            <summary>Min calories required to perform the action. The ingteraction may still consume more than this.  And the consumption doesnt happen automatically, the interaction func must do it.</summary>
         </member>
         <member name="M:Eco.Gameplay.Interactions.Interactors.InteractionAttribute.Init(System.Type,System.String)">
             <summary>Init an interaction definition defined on an interactor. </summary>
@@ -2441,41 +2352,8 @@
         <member name="M:Eco.Gameplay.Interactions.Interactors.InteractionTargetServerExtensions.TryCast``1(Eco.Shared.SharedTypes.InteractionTarget,``0@)">
             <summary>If a block is selected, try casting to the given interface. If an object is selcted, try casting that.</summary>
         </member>
-        <member name="T:Eco.Gameplay.Interactions.Interactors.IAoeToolItem">
-            <summary>Interface for tools that can affect multiple blocks with a single interaction.</summary>
-        </member>
-        <member name="P:Eco.Gameplay.Interactions.Interactors.IAoeToolItem.AreaOfEffectMode">
-            <summary>Used to find all blocks this tool will affect when it's used.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Interactions.InteractUtils.TooFarWithFudge(Eco.Gameplay.Players.Player,Eco.Shared.Math.Vector3i,System.Single)">
-            <summary>Return true if the player is too far for the interaction, and notify the player and server. Gives 1 meter of 'fudge'
-            since this is primarily used to detect hacking.</summary>
-        </member>
-        <member name="T:Eco.Gameplay.Items.AreaOfEffectMode">
-            <summary>Base class for all AOE modes.</summary>
-        </member>
-        <member name="F:Eco.Gameplay.Items.AreaOfEffectMode.requireCentralBlock">
-            <summary>Set to true to ignore all blocks if central block doesn't meet the condition.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Items.AreaOfEffectMode.#ctor(System.Boolean)">
-            <param name="requireCentralBlock">Set to true to ignore all blocks if central block doesn't meet the condition.</param>
-        </member>
-        <member name="M:Eco.Gameplay.Items.AreaOfEffectMode.GetAffectedBlocks(Eco.Gameplay.Players.Player,Eco.Shared.Math.Vector3i,System.Collections.Generic.IEnumerable{Eco.Gameplay.Items.Tag},System.Collections.Generic.IEnumerable{Eco.Gameplay.Items.Tag},System.Collections.Generic.IEnumerable{Eco.Gameplay.Items.Tag})">
-            <summary>Gets positions of all blocks affected by a tool during an interaction or an empty enumerable if no blocks are affected.</summary>
-            <param name="player">Player who is using the tool.</param>
-            <param name="centerPos">Position of the block player interacted with.</param>
-            <param name="tagsTargetable">Only blocks that have any of these tags can be affected by this interaction.</param>
-            <param name="mustHaveTags">Only blocks that have all of these tags can be affected by this interaction.</param>
-            <param name="mustNotHaveTags">Only blocks that don't have any of these tags can be affected by this interaction.</param>
-        </member>
-        <member name="T:Eco.Gameplay.Items.SingleBlock">
-            <summary>Makes tool affect only one block, effectively disabling AOE.</summary>
-        </member>
-        <member name="T:Eco.Gameplay.Items.MultiBlock">
-            <summary>Simple mode that can affect several blocks given their offset from the block targetted by interaction and condition they have to meet.</summary>
-        </member>
-        <member name="T:Eco.Gameplay.Items.Cone">
-            <summary>Affects all blocks inside a cone that meet a specified condition.</summary>
+        <member name="M:Eco.Gameplay.Interactions.InteractUtils.TooFar(Eco.Gameplay.Players.Player,Eco.Shared.Math.Vector3i,System.Int32)">
+            <summary>Return true if the player is too far for the interaction, and notify the player and server.</summary>
         </member>
         <member name="T:Eco.Gameplay.Items.AuthorizationInventory">
             <summary> Inventories of this type should be used when they can be accessed by other players.
@@ -2850,9 +2728,6 @@
         <member name="P:Eco.Gameplay.Items.Item.HasWeight">
             <summary>Flag determining if this item instance has associated weight.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Items.Item.Destroy(System.Int32)">
-            <param name="quantity">The quantity of the stack that's related to this item.</param>
-        </member>
         <member name="M:Eco.Gameplay.Items.Item.UnsubscribeUnique">
             <summary>This get called whenever a unique item is destroyed. This method will make sure that if the item is unique and has some subscriptions it will unsubscribe from them all.</summary>
         </member>
@@ -2948,9 +2823,6 @@
         </member>
         <member name="M:Eco.Gameplay.Items.ItemPersistentData.RemoveEntries(System.Func{System.Object,System.Boolean})">
             <summary>Removes all entries matching <paramref name="filter" />. It also will call <see cref="M:Eco.Gameplay.Items.IPermanentDestroyHandler.OnPermanentDestroy" /> for all such entries which implements <see cref="T:Eco.Gameplay.Items.IPermanentDestroyHandler" /> interface.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Items.ItemPersistentData.ShowResetDialog(Eco.Shared.Items.TooltipOrigin,Eco.Gameplay.Players.User)">
-            <summary>A dialog to be shown when the reset button is clicked.</summary>
         </member>
         <member name="M:Eco.Gameplay.Items.EnumerableItemExtensions.MakeSafe``1(System.Collections.Generic.IEnumerable{``0},System.Boolean)">
             <param name="allowEmptyStack">Sometimes we still want to return the stacks that are empty (quantity == 0).</param>
@@ -3105,6 +2977,19 @@
             Mostly should be not-displayed to the user (crafting elements are used for that).
             </summary>
         </member>
+        <member name="M:Eco.Gameplay.Items.ToolItem.CreateMultiblockContext(Eco.Gameplay.Players.Player,Eco.Shared.Math.Vector3i,System.Boolean,System.Func{Eco.Gameplay.GameActions.GameAction},System.Boolean)">
+            <summary> Builds a MultiblockActionContext based on this item's data. </summary>
+            <param name="applyXPSkill"> If FALSE, this sets the ExperienceSkill to NULL which results in no AddExperience() post effect being added to the action. </param>
+            <param name="gameActionConstructor"></param>
+            <param name="highlightCenter"> If FALSE, will apply center position but ignore if it's not highlightable </param>
+        </member>
+        <member name="M:Eco.Gameplay.Items.ToolItem.CreateMultiblockContext(Eco.Gameplay.Players.Player,System.Boolean,System.Collections.Generic.IEnumerable{Eco.Shared.Math.Vector3i},System.Collections.Generic.IEnumerable{System.Type},System.Func{Eco.Gameplay.GameActions.GameAction})">
+            <summary> Builds a MultiblockActionContext based on the player's data. </summary>
+            <param name="player"></param>
+            <param name="applyXPSkill"> If FALSE, this sets the ExperienceSkill to NULL which results in no AddExperience() post effect being added to the action. </param>
+            <param name="area"></param>
+            <param name="gameActionConstructor"></param>
+        </member>
         <member name="M:Eco.Gameplay.Items.GarbageBagBlock.UpdateByInventory(Eco.Gameplay.Items.DecayingInventory)">
             <summary> Updates world with <see cref="T:Eco.Gameplay.Items.GarbageBagBlock" /> corresponding to <paramref name="inventory" /> and returns synced block. </summary>
         </member>
@@ -3214,13 +3099,10 @@
         <member name="P:Eco.Gameplay.Items.WorldObjectItem.GetOccupancyContext">
             <summary> Default occupancy config set to SideAttached </summary>
         </member>
-        <member name="M:Eco.Gameplay.Items.TagUtils.MeetsTagRequirements(System.Type,System.Collections.Generic.IEnumerable{Eco.Gameplay.Items.Tag},System.Collections.Generic.IEnumerable{Eco.Gameplay.Items.Tag},System.Collections.Generic.IEnumerable{Eco.Gameplay.Items.Tag})">
-            <summary>Checks if given type meets all tag requirements. Pass null to requirement to ignore it.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Items.TagUtils.TagNames(System.Object,System.Boolean)">
+        <member name="M:Eco.Gameplay.Items.TagExtensions.TagNames(System.Object,System.Boolean)">
             <summary> Returns string collection of object's tags. </summary>
         </member>
-        <member name="M:Eco.Gameplay.Items.TagUtils.GetBestTag(System.Collections.Generic.IEnumerable{System.Object})">
+        <member name="M:Eco.Gameplay.Items.TagExtensions.GetBestTag(System.Collections.Generic.IEnumerable{System.Object})">
             <summary> Collects tags of entries and tries to find the best match that is present in each of them. </summary>
         </member>
         <member name="T:Eco.Gameplay.Localization.LocalizationAssemblyParser">
@@ -3668,10 +3550,7 @@
             <summary> Declare this objects that may or may not have a given component. This is needed because any component that is not [Required] or [MayRequire] will be removed on server load, as a way of migrating away old component. </summary>
         </member>
         <member name="M:Eco.Gameplay.Objects.WorldObjectUtil.CheckForPickUpAsync(Eco.Gameplay.Objects.WorldObject,Eco.Gameplay.Players.Player)">
-            <summary> Confirms with the player pick up decision based on <see cref="M:Eco.Gameplay.Objects.WorldObjectUtil.PickupConfirmation(Eco.Gameplay.Objects.WorldObject)" /> and <see cref="T:Eco.Gameplay.Economy.Contracts.Contract" />s that depend on it. </summary>
-        </member>
-        <member name="M:Eco.Gameplay.Objects.WorldObjectUtil.PickupConfirmation(Eco.Gameplay.Objects.WorldObject)">
-            <summary>Queries all the components on the object being picked up, asks for their pickupconfirmation strings and assembles the message. </summary>
+            <summary> Confirms with the player pick up decision based on <see cref="P:Eco.Gameplay.Objects.WorldObject.PickupConfirmation" /> and <see cref="T:Eco.Gameplay.Economy.Contracts.Contract" />s that depend on it. </summary>
         </member>
         <member name="M:Eco.Gameplay.Objects.WorldObjectUtil.SelfAndComponentsWithInterface``1(Eco.Gameplay.Objects.WorldObject)">
             <summary>Return ourselves and any component that derives from the given interface.</summary>
@@ -4202,7 +4081,7 @@
             Returns true if the placement is valid, false otherwise. Also returns the blocks that are blocking the object placement position, if any.
             </summary>
         </member>
-        <member name="M:Eco.Gameplay.Players.Player.QueryAuthStatus(Eco.Gameplay.Players.Player,Eco.Gameplay.Property.Deed,Eco.Shared.Math.Vector3i,Eco.Shared.Networking.INetObject,Eco.Shared.Items.AccessType)">
+        <member name="M:Eco.Gameplay.Players.Player.QueryAuthStatus(System.Int32,Eco.Shared.Networking.INetObject,Eco.Shared.Items.AccessType)">
             <summary> Single access point to get the auth status on a deed or WorldObject from client. </summary>
         </member>
         <member name="M:Eco.Gameplay.Players.PlayerExtensions.MsgOrMailLoc(Eco.Gameplay.Players.User,System.FormattableString,Eco.Shared.Services.NotificationCategory,Eco.Shared.Services.NotificationStyle)">
@@ -4992,6 +4871,9 @@
         <member name="M:Eco.Gameplay.Settlements.SettlementProperty.SettlementParentChanged(System.Object,Eco.Core.PropertyHandling.MemberChangedBeforeAfterEventArgs)">
             <summary>Get called whenever this settlement parent changes.</summary>
         </member>
+        <member name="M:Eco.Gameplay.Settlements.SettlementProperty.ApplyClaimsModifications(System.Int32,System.Int32)">
+            <summary>We change the number of claims and stakes spawned using the specified properties and then we apply in case this leads to a property crisis.</summary>
+        </member>
         <member name="M:Eco.Gameplay.Settlements.SettlementProperty.UpdateStakesAndClaims(System.Collections.Generic.IEnumerable{Eco.Gameplay.Players.User})">
             <summary>This version of UpdateStakesAndClaims is only used to subscribe to abandoned demographic when the users changes.</summary>
         </member>
@@ -5295,7 +5177,7 @@
         <member name="M:Eco.Gameplay.Systems.Messaging.Chat.Channels.Channel.GetLinkableName">
             <summary>Define a string that will be parsed as a link for the Channel, so we do not overlap custom names of channels and simple words or names of other objects.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Systems.Messaging.Chat.Channels.Channel.OnLinkClicked(Eco.Shared.Items.TooltipOrigin,Eco.Gameplay.Systems.NewTooltip.TooltipClickContext,Eco.Gameplay.Players.User)">
+        <member name="M:Eco.Gameplay.Systems.Messaging.Chat.Channels.Channel.OnLinkClicked(Eco.Gameplay.Systems.Tooltip.TooltipContext,Eco.Gameplay.Systems.Tooltip.TooltipClickContext)">
             <summary>Set this channel as a receiver (change output tag) with clicking on it's name in the Chat Log.</summary>
         </member>
         <member name="M:Eco.Gameplay.Systems.Messaging.Chat.Channels.Channel.SetChannelName(Eco.Gameplay.Players.Player,System.String)">
@@ -5840,15 +5722,6 @@
         <member name="M:Eco.Gameplay.Systems.NewTooltip.OldTooltipSubscriptions.ClearCache">
             <summary>Clear the cache and list of dirty things.</summary>
         </member>
-        <member name="T:Eco.Gameplay.Systems.NewTooltip.ParamExplanation">
-            <summary>Lists params relevant to the player, optionally showing currently assigned values of passed in instances, along with descriptions of each.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Systems.NewTooltip.ParamExplanation.GetDescriptionRowForProperty(System.Type,System.Reflection.PropertyInfo,System.Object[])">
-            <summary> Forms the list containing the display text of a row that describes a type's property. <para> Currently holds 'Icon + Name' on first index, and 'Description' (if any) on second index. </para> </summary>
-        </member>
-        <member name="M:Eco.Gameplay.Systems.NewTooltip.ParamExplanation.DescribeObject(System.Object)">
-            <summary> Determines the type of the object passed as parameter and describes it. </summary>
-        </member>
         <member name="T:Eco.Gameplay.Systems.NewTooltip.NewTooltipAttribute">
             <summary>Marks a method, property, or field as a 'TooltipPart'. Tooltip parts will be composed to form the tooltip for a type.</summary>
             <remarks>See tootlip.md for the full picture.</remarks>
@@ -6022,15 +5895,6 @@
         </member>
         <member name="M:Eco.Gameplay.Systems.NewTooltip.TooltipPartBase.ClearCache">
             <summary>Clear the cache of all tooltip parts and children parts.</summary>
-        </member>
-        <member name="T:Eco.Gameplay.Systems.NewTooltip.TooltipSection">
-            <summary>A single section for a tooltip that contains a title and some content, can be wrapped by line or foldable.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Systems.NewTooltip.TooltipSection.Cast(System.Object)">
-            <summary>Casts <paramref name="value" /> to <see cref="T:Eco.Gameplay.Systems.NewTooltip.TooltipSection" /> (if possible).</summary>
-        </member>
-        <member name="T:Eco.Gameplay.Systems.NewTooltip.TooltipClickContext">
-            <summary>Tracks the context of how the tooltip was clicked.</summary>
         </member>
         <member name="T:Eco.Gameplay.Systems.NewTooltip.TooltipSubscriptions">
             <summary>
@@ -6248,6 +6112,55 @@
         </member>
         <member name="T:Eco.Gameplay.Systems.TextLinks.Vector3Tooltip">
             <summary>Used as link target for Vector3 links. Tooltips for this class are contained in <see cref="T:Eco.Gameplay.Systems.NewTooltip.TooltipLibraryFiles.VectorTooltipLibrary" /></summary>
+        </member>
+        <member name="T:Eco.Gameplay.Systems.Tooltip.ParamExplanation">
+            <summary>Lists params relevant to the player, optionally showing currently assigned values of passed in instances, along with descriptions of each.</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Systems.Tooltip.ParamExplanation.GetDescriptionRowForProperty(System.Type,System.Reflection.PropertyInfo,System.Object[])">
+            <summary> Forms the list containing the display text of a row that describes a type's property. <para> Currently holds 'Icon + Name' on first index, and 'Description' (if any) on second index. </para> </summary>
+        </member>
+        <member name="M:Eco.Gameplay.Systems.Tooltip.ParamExplanation.DescribeObject(System.Object)">
+            <summary> Determines the type of the object passed as parameter and describes it. </summary>
+        </member>
+        <member name="T:Eco.Gameplay.Systems.Tooltip.Excludable">
+            <summary> A category that can be excluded from tooltop generation. </summary>
+        </member>
+        <member name="T:Eco.Gameplay.Systems.Tooltip.Includable">
+            <summary> A category that can be included in tooltop generation. </summary>
+        </member>
+        <member name="T:Eco.Gameplay.Systems.Tooltip.Controls">
+            <summary> Tooltips that display controlls to the user. </summary>
+        </member>
+        <member name="T:Eco.Gameplay.Systems.Tooltip.TooltipContext">
+            <summary>Context from the client used by tooltips</summary>
+            <remarks>DEPRECATED in new tooltip system. Use User and TooltipOrigin instead.</remarks>
+        </member>
+        <member name="M:Eco.Gameplay.Systems.Tooltip.TooltipSection.Cast(System.Object)">
+            <summary> Casts <paramref name="value" /> to <see cref="T:Eco.Gameplay.Systems.Tooltip.TooltipSection" /> (if possible). </summary>
+        </member>
+        <member name="T:Eco.Gameplay.Systems.Tooltip.TooltipAttribute">
+            <summary>
+            DEPRECATED use <see cref="T:Eco.Gameplay.Systems.NewTooltip.NewTooltipAttribute" /> instead.
+            Use on members of an <see cref="T:Eco.Core.Controller.IController" />.  Members with this attribute should return either a string or a <see cref="T:Eco.Gameplay.Systems.Tooltip.TooltipSection" />.
+            Adds a section with the given content to this object's tooltip.  Sections will be displayed sorted by priority.
+            </summary>
+        </member>
+        <member name="T:Eco.Gameplay.Systems.Tooltip.TooltipTitleAttribute">
+            <summary>
+            DEPRECATED use <see cref="T:Eco.Gameplay.Systems.NewTooltip.NewTooltipTitle" /> instead.
+            Use on members of an <see cref="T:Eco.Core.Controller.IController" />.  Members with this attribute should return a string.
+            Sets the title of this object's tooltip.  If multiple tooltip titles are found, only the one with the highest
+            priority will be used.
+            </summary>
+        </member>
+        <member name="T:Eco.Gameplay.Systems.Tooltip.TooltipChildrenAttribute">
+            <summary>
+            DEPRECATED use <see cref="T:Eco.Gameplay.Systems.NewTooltip.NewTooltipChildrenAttribute" /> instead.
+            Use on members of an <see cref="T:Eco.Core.Controller.IController" />. Members with this attribute should return one or
+            more <see cref="T:Eco.Core.Controller.IController" />s.  <see cref="T:Eco.Core.Controller.IController" />s returned by this member will have their
+            tooltip members included along with this object's tooltip.  Adding a <see cref="P:Eco.Gameplay.Systems.Tooltip.TooltipChildrenAttribute.CategoriesToExclude" /> as a parameter
+            to the attribute will filter tooltips of that type from the child(ren) for this object's tooltip.
+            </summary>
         </member>
         <member name="T:Eco.Gameplay.Systems.UserTextures.UserTexture">
             <summary>Holds the texture bytes for saving and displaying user textures, used by ViewTextureToImage on the client to display texture on UI.</summary>

@@ -47,6 +47,9 @@
   <member name="T:Eco.Gameplay.Systems.Messaging.Chat.Commands.ChatSubCommandAttribute">
     <attribute ctor="M:JetBrains.Annotations.MeansImplicitUseAttribute.#ctor" />
   </member>
+  <member name="T:Eco.Gameplay.Systems.Tooltip.TooltipAttribute">
+    <attribute ctor="M:JetBrains.Annotations.MeansImplicitUseAttribute.#ctor(JetBrains.Annotations.ImplicitUseTargetFlags)" />
+  </member>
   <member name="M:Eco.Gameplay.Tutorial.UserTask.#ctor">
     <attribute ctor="M:JetBrains.Annotations.UsedImplicitlyAttribute.#ctor" />
   </member>

@@ -670,9 +670,6 @@
         <member name="M:Eco.Shared.IoC.ServiceHolder`1.SetOrReplace``1(``0)">
             <summary>Sets or replaces an existing instance of service with a new value.</summary>
         </member>
-        <member name="T:Eco.Shared.Items.AuthStatusAndResult">
-            <summary>Attaches a string to the auth result.</summary>
-        </member>
         <member name="T:Eco.Shared.Items.InteractionInfo">
             <summary> Information about an interaction, calculated on the client. </summary>
         </member>
@@ -3470,16 +3467,6 @@
         <member name="M:Eco.Shared.Utils.GeneralUtils.TypeGenericDefinitionIs(System.Type,System.Type)">
             <summary>Check whether the current type has the specified generic type definition or not.</summary>
         </member>
-        <member name="M:Eco.Shared.Utils.GeometryUtils.GetBlocksInConeCheck2D(Eco.Shared.Math.Vector3i,System.Numerics.Vector3,System.Single,System.Single,System.Single)">
-            <summary>
-            Return every block which is inside a 2D cone area, considering that the cone starts at "originBlock" and has a direction "forwardDirection".
-            This function was created to have a way to check which blocks the player is looking at up to a maximum distance, using a cone to check for the blocks.
-            </summary>
-            <remarks>The Y axis of the direction is ignored, so it doesn't matter if the player is looking up or down.</remarks>
-            <param name="initialRadius">The initial radius of the cone check (i.e. from the "originBlock" position).</param>
-            <param name="finalRadius">The final radius of the cone check. Should be bigger than "initialRadius".</param>
-            <param name="length">Length of the cone check.</param>
-        </member>
         <member name="T:Eco.Shared.Utils.GlobalRandom">
             <remarks>
             Exposed implementation of Global Random from MoreLinq to be publicly available.
@@ -4324,9 +4311,6 @@
             <summary>Returns default value for <paramref name="type"/>.</summary>
             <returns>Same as default(T) via reflection.</returns>
         </member>
-        <member name="M:Eco.Shared.Utils.ReflectionUtils.ReflectionToString(System.Text.StringBuilder,System.Object)">
-            <summary>Add details on each of the properties and fields of the passed object.</summary>
-        </member>
         <member name="M:Eco.Shared.Utils.Text.SignedNum(System.Single,System.Boolean,System.Boolean)">
             <summary> Returns styled number with forded sign ('+' - for positive, '-' - for negative, no sign for zero). If <paramref name="invertHighlight"/> set then it will use negative highlight for positive value. </summary>
         </member>
@@ -4363,12 +4347,6 @@
         </member>
         <member name="M:Eco.Shared.Utils.Text.Font(System.String,System.String,System.String)">
             <inheritdoc cref="M:Eco.Shared.Utils.Text.Font(System.String,System.String)"/>
-        </member>
-        <member name="M:Eco.Shared.Utils.Text.GradientColoredPercent(System.Single)">
-            <summary>Transitions the percent color from red to yellow to green based on percent.</summary>
-        </member>
-        <member name="M:Eco.Shared.Utils.Text.GradientColoredPercent(System.Single,Eco.Shared.Math.Range)">
-            <summary>Transitions the percent color from red to yellow to green based on percent.</summary>
         </member>
         <member name="M:Eco.Shared.Utils.Text.Truncate(System.String,System.Int32)">
             <summary> Cuts visible part of the content after provided width and replaces it with a hoverable link to see the origin. </summary>
@@ -5090,13 +5068,10 @@
         <member name="F:Eco.Shared.SharedTypes.InteractionTarget.HitPos">
             These aren't used for equality checks, make sure these are excluded from .Equals()
         </member>
-        <member name="T:Eco.Shared.SharedTypes.InteractionTargetCacheComparer">
-            <summary>A custom comparer that ignores differences in HitPos, HitNormal and UncachedParams.</summary>
-        </member>
-        <member name="M:Eco.Shared.SharedTypes.InteractionTargetCacheComparer.EqualsTest(Eco.Shared.SharedTypes.InteractionTarget,Eco.Shared.SharedTypes.InteractionTarget,System.Boolean)">
+        <member name="M:Eco.Shared.SharedTypes.InteractionTargetComparer.Equals(Eco.Shared.SharedTypes.InteractionTarget,Eco.Shared.SharedTypes.InteractionTarget)">
             <summary> Excluded HitPos and HitNormal so targets can be considered same even if pointer is pointing at a different spot </summary>
         </member>
-        <member name="M:Eco.Shared.SharedTypes.InteractionTargetCacheComparer.GetHashCode(Eco.Shared.SharedTypes.InteractionTarget)">
+        <member name="M:Eco.Shared.SharedTypes.InteractionTargetComparer.GetHashCode(Eco.Shared.SharedTypes.InteractionTarget)">
             <summary>Excluded hitpos and hitnormal from hashcode generation, hit information is not relevant to target comparison</summary>
         </member>
         <member name="T:Eco.Shared.SharedTypes.InteractionConstants">

@@ -28058,9 +28058,6 @@
         <member name="M:Eco.Mods.TechTree.TagDefinitions.Initialize">
             <summary> Called on Mods initialization for the marker interface <see cref="T:Eco.Core.Plugins.Interfaces.IModInit"/>. Registers all <see cref="T:Eco.Gameplay.Items.TagDefinition"/> from <see cref="F:Eco.Mods.TechTree.TagDefinitions.Definitions"/>. </summary>
         </member>
-        <member name="T:Eco.Mods.TechTree.BlockHarvestItem">
-            <summary>Wrapper for tools like sickle and scythe, contains same code.</summary>
-        </member>
         <member name="M:Eco.Mods.TechTree.FishingPoleItem.CastLure(Eco.Gameplay.Players.Player,System.Numerics.Vector3,System.Numerics.Vector3)">
             <summary> Creates the LureEntity from a Client-command, assigning its controller, position, and the force to apply at spawn. </summary>
         </member>

@@ -158,6 +158,10 @@
         <member name="M:Eco.Core.Controller.ViewCodeGenerator.GenerateViewProperties(System.Text.StringBuilder,System.Collections.Generic.IEnumerable{Eco.Shared.View.ViewMemberInfo},Eco.Core.Controller.ControllerMarshalerService)">
             <summary>Generates view properties for SyncToView properties and methods from <paramref name="members"/>.</summary>
         </member>
+        <member name="T:Eco.Core.Controller.BlobController">
+            <summary> The whole point of this class is to avoid sending same heavy data. Currently its used to avoid sending repeated strings and LocStrings that are ofter sent several times.
+            Instead of sending same string again and again, it will save it as a byte[] and send just an id of that byte array. This way there are will be no need to send same data twice. </summary>
+        </member>
         <member name="T:Eco.Core.Controller.BsonCachedPropertyAttribute">
             <summary>
             Should be used with property having <see cref="F:Eco.Shared.View.SyncFlags.Cached"/>, specifies which property used as a cached counterpart of the attributed property. May be set manually or will be automatically added by <c>Eco.Fody.SyncToViewCacheWeaving</c> for every property with the flag.
@@ -660,8 +664,8 @@
         <member name="T:Eco.Core.Controller.ImmutablePropertySubscription">
             <summary>Immutable implementation of <see cref="T:Eco.Shared.View.IPropertySubscription"/> used by controller to prevent concurrent modifications (i.e. <see cref="T:Eco.Shared.View.PropertySubscription"/> may be recycled and destroy it's state).</summary>
         </member>
-        <member name="P:Eco.Core.Controller.IMvcNetClient.PendingViews">
-            <summary>Packaged views which should be delivered to client before any other data containing reference to one of these views.</summary>
+        <member name="P:Eco.Core.Controller.IMvcNetClient.PendingMessages">
+            <summary>Packaged messages which should be delivered to client before any other message. Used for views and data blobs.</summary>
         </member>
         <member name="T:Eco.Core.Controller.Internal.ControllerBoundingLevel">
             <summary>Level of controller bounding to client. Each next level includes all previous levels and can be used in comparison.</summary>
