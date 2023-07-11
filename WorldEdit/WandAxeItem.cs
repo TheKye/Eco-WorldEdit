@@ -8,8 +8,9 @@
 	using Eco.Gameplay.Interactions.Interactors;
 	using Eco.Gameplay.Items;
 	using Eco.Gameplay.Players;
-	using Eco.Shared.Localization;
-	using Eco.Shared.Math;
+    using Eco.Shared.Items;
+    using Eco.Shared.Localization;
+    using Eco.Shared.Math;
 	using Eco.Shared.Serialization;
     using Eco.Shared.SharedTypes;
     using Eco.Shared.Utils;
@@ -18,15 +19,20 @@
 	[LocDisplayName("Wand Tool")]
 	[Category("Hidden")]
 	public class WandAxeItem : ToolItem, IInteractor
-	{
+    {
 		public override LocString DisplayDescription { get { return Localizer.DoStr("Does magical World Edit things"); } }
 
-		public override IDynamicValue SkilledRepairCost => skilledRepairCost;
+        public override float DurabilityRate { get { return 0; } }
+        public override IDynamicValue SkilledRepairCost => skilledRepairCost;
 		private static IDynamicValue skilledRepairCost = new ConstantValue(1);
 
-        [Interaction(InteractionTrigger.LeftClick, overrideDescription: "Set First Position", tags: BlockTags.Block)]
-        public bool OnActLeft(Player player, InteractionTriggerInfo triggerInfo, InteractionTarget target)
+        public override bool IsValidForInteraction(Type block) => true;
+        public override ClientPredictedBlockAction LeftAction => ClientPredictedBlockAction.None;
+
+        [Interaction(InteractionTrigger.LeftClick, overrideDescription: "Set First Position", tags: BlockTags.NonPlant, animationDriven: false, interactionDistance: 15)]
+        public bool SetFirstPos(Player player, InteractionTriggerInfo triggerInfo, InteractionTarget target)
 		{
+			Log.WriteWarningLineLocStr("WandAxeItem: SetFirstPos");
 			try
 			{
 				if (!target.IsBlock) { return false; }
@@ -53,10 +59,11 @@
 			return false;
 		}
 
-        [Interaction(InteractionTrigger.RightClick, overrideDescription: "Set Second Position", tags: BlockTags.Block)]
-        public bool OnActRight(Player player, InteractionTriggerInfo triggerInfo, InteractionTarget target)
+        [Interaction(InteractionTrigger.RightClick, overrideDescription: "Set Second Position", tags: BlockTags.NonPlant, animationDriven: false, interactionDistance: 15)]
+        public bool SetSecondPos(Player player, InteractionTriggerInfo triggerInfo, InteractionTarget target)
 		{
-			try
+            Log.WriteWarningLineLocStr("WandAxeItem: SetSecondPos");
+            try
 			{
                 if (!target.IsBlock) { return false; }
                 if (target.BlockPosition is null || !target.BlockPosition.HasValue) { return false; }
@@ -80,25 +87,6 @@
 				Log.WriteError(Localizer.Do($"{e}"));
 			}
 			return false;
-		}
-
-		protected Result PlayerPlaceBlock(Type blockType, Vector3i blockPosition, Player player, bool replaceBlock, float calorieMultiplier = 1, params IAtomicAction[] additionalActions)
-		{
-			return Result.Succeeded;
-		}
-
-		protected Result PlayerPlaceBlock<T>(Vector3i blockPosition, Player player, bool replaceBlock, float calorieMultiplier = 1, params IAtomicAction[] additionalActions)
-		{
-			return Result.Succeeded;
-		}
-
-		protected Result PlayerDeleteBlock(Vector3i blockPosition, Player player, bool addToInventory, float calorieMultiplier = 1, BlockItem fallbackGiveItem = null, params IAtomicAction[] additionalActions)
-		{
-			return Result.Succeeded;
-		}
-
-		protected void BurnCalories(Player player, float calorieMultiplier = 1)
-		{
 		}
 	}
 }
