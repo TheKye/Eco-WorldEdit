@@ -2912,7 +2912,7 @@
         <member name="P:Eco.Gameplay.Items.RepairableItem.SkilledRepairCost">
             <summary> The amount needed for to fully repair a broken item.</summary>
         </member>
-        <member name="F:Eco.Gameplay.Items.RepairableItem.DurabilityChangedEvent">
+        <member name="P:Eco.Gameplay.Items.RepairableItem.DurabilityChangedEvent">
             <summary> An event invoked on server side, used to update shown tooltips on client side for the given item. </summary>
         </member>
         <member name="P:Eco.Gameplay.Items.RepairableItem.RepairItem">

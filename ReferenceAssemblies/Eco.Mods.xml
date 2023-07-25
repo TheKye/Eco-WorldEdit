@@ -16861,6 +16861,29 @@
         <member name="P:Eco.Mods.TechTree.ValveItem.DisplayDescription">
             <summary>The tooltip description for the item.</summary>
         </member>
+        <member name="T:Eco.Mods.TechTree.WetBrickRecipe">
+            <summary>
+            <para>Server side recipe definition for "WetBrick".</para>
+            <para>More information about RecipeFamily objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Items.RecipeFamily.html</para>
+            </summary>
+            <remarks>
+            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
+            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
+            </remarks>
+        </member>
+        <member name="T:Eco.Mods.TechTree.WetBrickItem">
+            <summary>
+            <para>Server side item definition for the "WetBrick" item.</para>
+            <para>More information about Item objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Items.Item.html</para>
+            </summary>
+            <remarks>
+            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
+            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
+            </remarks>
+        </member>
+        <member name="P:Eco.Mods.TechTree.WetBrickItem.DisplayDescription">
+            <summary>The tooltip description for the item.</summary>
+        </member>
         <member name="T:Eco.Mods.TechTree.WolfCarcassItem">
             <summary>
             <para>Server side item definition for the "WolfCarcass" item.</para>
@@ -16918,6 +16941,29 @@
             </remarks>
         </member>
         <member name="P:Eco.Mods.TechTree.WoodenKeelItem.DisplayDescription">
+            <summary>The tooltip description for the item.</summary>
+        </member>
+        <member name="T:Eco.Mods.TechTree.WoodenMoldRecipe">
+            <summary>
+            <para>Server side recipe definition for "WoodenMold".</para>
+            <para>More information about RecipeFamily objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Items.RecipeFamily.html</para>
+            </summary>
+            <remarks>
+            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
+            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
+            </remarks>
+        </member>
+        <member name="T:Eco.Mods.TechTree.WoodenMoldItem">
+            <summary>
+            <para>Server side item definition for the "WoodenMold" item.</para>
+            <para>More information about Item objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Items.Item.html</para>
+            </summary>
+            <remarks>
+            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
+            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
+            </remarks>
+        </member>
+        <member name="P:Eco.Mods.TechTree.WoodenMoldItem.DisplayDescription">
             <summary>The tooltip description for the item.</summary>
         </member>
         <member name="T:Eco.Mods.TechTree.WoodenOarRecipe">
@@ -20103,7 +20149,6 @@
             Server side seed item definition for the "FlaxSeed" item. 
             This object inherits the SeedIem base class to allow for planting/consumption mechanics.
             </para>
-            <para>This item is currently hidden from the player. It is either an internal use item or not ready for public release. Removing the hidden tag is not recommended.</para>
             <para>More information about SeedIem objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Items.SeedItem.html</para>
             </summary>
             <remarks>

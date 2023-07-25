@@ -162,9 +162,12 @@
             <summary> The whole point of this class is to avoid sending same heavy data. Currently its used to avoid sending repeated strings and LocStrings that are ofter sent several times.
             Instead of sending same string again and again, it will save it as a byte[] and send just an id of that byte array. This way there are will be no need to send same data twice. </summary>
         </member>
+        <member name="M:Eco.Core.Controller.BlobController.PackageValue(Eco.Shared.Serialization.BsonSerializationContext@,System.Object,System.Int32,System.Boolean,Eco.Core.Controller.ControllerPacker.ControllerPackingPendingViews)">
+            <summary> Creates a pair (NameId,Value) </summary>
+        </member>
         <member name="T:Eco.Core.Controller.BsonCachedPropertyAttribute">
             <summary>
-            Should be used with property having <see cref="F:Eco.Shared.View.SyncFlags.Cached"/>, specifies which property used as a cached counterpart of the attributed property. May be set manually or will be automatically added by <c>Eco.Fody.SyncToViewCacheWeaving</c> for every property with the flag.
+            Should be used with property having <see cref="F:Eco.Shared.View.SyncFlags.ServerRAMCached"/>, specifies which property used as a cached counterpart of the attributed property. May be set manually or will be automatically added by <c>Eco.Fody.SyncToViewCacheWeaving</c> for every property with the flag.
             Then the getter of the cached property will be used by <see cref="T:Eco.Core.Controller.SyncPropertyInfo"/> instead of the property getter.
             When added manually then user code is responsible for cached value invalidation. May be preferred over auto-weaving when cached value is immutable or class doesn't match auto-weaving conditions.
             <example><code><![CDATA[
@@ -442,9 +445,6 @@
         </member>
         <member name="M:Eco.Core.Controller.ControllerPacker.BuildSyncedPropertiesArray(System.Type,System.String)">
             <summary>Builds array of synced properties (marked as Eco or SyncToView) notified by change of <paramref name="memberName"/> on <paramref name="controllerType"/> including dependencies.</summary>
-        </member>
-        <member name="M:Eco.Core.Controller.ControllerPacker.PackageValue(Eco.Shared.Serialization.BsonSerializationContext@,System.Object,System.Int32)">
-            <summary> Creates a pair (NameId,Value) </summary>
         </member>
         <member name="M:Eco.Core.Controller.ControllerPacker.PackageControllerAndGetPendingViews(Eco.Core.Controller.IController,Eco.Shared.Serialization.BsonSerializationContext@,Eco.Core.Controller.PackageFlags)">
             <summary> Entry point into packing. It collects all views related to packing and sends them at once to pending views of client. It won't be called recursively. </summary>
