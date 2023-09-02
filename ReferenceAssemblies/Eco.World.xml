@@ -173,29 +173,43 @@
         <member name="M:Eco.World.PersistentChunkGrid.ValidateCaches">
             <summary>Validates all caches if they are not out of sync with <see cref="T:Eco.Shared.Voxel.ChunkGrid`1"/> blocks.</summary>
         </member>
-        <member name="M:Eco.World.WorldExtensions.IsValidPathPos(Eco.Shared.Math.WorldPosition3i)">
+        <member name="M:Eco.World.WorldUtils.IsValidPathPos(Eco.Shared.Math.WorldPosition3i)">
             <summary> Check that a position is a valid position for an animal to path through. </summary>
         </member>
-        <member name="M:Eco.World.WorldExtensions.GetTopEmptyBlockPos(Eco.Shared.Math.Vector2i)">
+        <member name="M:Eco.World.WorldUtils.GetTopEmptyBlockPos(Eco.Shared.Math.Vector2i)">
             <summary>Returns the position of the top empty block at the given x/z pos.</summary>
         </member>
-        <member name="M:Eco.World.WorldExtensions.IsJustAboveGround(Eco.Shared.Math.WorldPosition3i)">
+        <member name="M:Eco.World.WorldUtils.IsJustAboveGround(Eco.Shared.Math.WorldPosition3i)">
             <summary> Return true if the block pos is just above solid ground but is not itself solid. </summary>
         </member>
-        <member name="M:Eco.World.WorldExtensions.IsTopGround(Eco.Shared.Math.WorldPosition3i)">
+        <member name="M:Eco.World.WorldUtils.IsTopGround(Eco.Shared.Math.WorldPosition3i)">
             <summary> Return true if the block pos is solid and above is not. </summary>
         </member>
-        <member name="M:Eco.World.WorldExtensions.Describe(Eco.Shared.Math.WorldPosition3i)">
+        <member name="M:Eco.World.WorldUtils.Describe(Eco.Shared.Math.WorldPosition3i)">
             <summary> Description of a position based on what's going on in the world there. </summary>
         </member>
+        <member name="T:Eco.World.Water.WaterManager">
+            <summary> The main purpose of this class is to be able to send the byte data describing water level with blocks that are partially covered by water. 
+            One sample of these blocks is pipes. They dont cover 100% of volume of the block. 
+            The water level information is needed for the client so it can render water level properly. There are no water block here, but still it should render the water surrounding the object. </summary>
+        </member>
         <member name="M:Eco.World.World.GetBlock(Eco.Shared.Math.Vector3i)">
-            <summary> Returns the block at the location or Block.Empty. Returns <see cref="P:Eco.World.Blocks.Block.Empty"/> for invalid <paramref name="worldPos"/> (i.e. Y negative or Z above top block).</summary>
+            <summary>Returns the block at the location or Block.Empty. Returns <see cref="P:Eco.World.Blocks.Block.Empty"/> for invalid <paramref name="worldPos"/> (i.e. Y negative or Z above top block).</summary>
         </member>
         <member name="M:Eco.World.World.GetBlock(Eco.Shared.Math.WrappedPosition3i)">
-            <summary> Returns the block at the location or Block.Empty. </summary>
+            <summary>Returns the block at the location or Block.Empty.</summary>
         </member>
         <member name="M:Eco.World.World.GetBlock(Eco.Shared.Math.WrappedWorldPosition3i)">
-            <summary> Returns the block at the location or Block.Empty. </summary>
+            <summary>Returns the block at the location or Block.Empty.</summary>
+        </member>
+        <member name="M:Eco.World.World.GetBlockType(Eco.Shared.Math.Vector3i)">
+            <summary>Returns type of the block located at given position.</summary>
+        </member>
+        <member name="M:Eco.World.World.GetBlockType(Eco.Shared.Math.WrappedPosition3i)">
+            <summary>Returns type of the block located at given position.</summary>
+        </member>
+        <member name="M:Eco.World.World.GetBlockType(Eco.Shared.Math.WrappedWorldPosition3i)">
+            <summary>Returns type of the block located at given position.</summary>
         </member>
         <member name="M:Eco.World.World.GetTopSolidNonConstructedPos(Eco.Shared.Math.Vector2i)">
             <summary>Returns the position of the topmost solid, non-constructed block in a world column.</summary>

@@ -2003,6 +2003,13 @@
         <member name="M:Eco.Shared.Networking.IWorldObserverAuthorizer.IsAuthorized(Eco.Shared.Networking.IWorldObserver,Eco.Shared.Items.AccessType)">
             <summary>Checks if <paramref name="observer"/> authorized for access of type <paramref name="accessType"/> on an object implementing the interface.</summary>
         </member>
+        <member name="T:Eco.Shared.Networking.Internal.INetObjectDebugDescriber">
+            <summary> simple interface used by <see cref="T:Eco.Shared.Networking.NetPhysicsEntity"/> to allow more detail in Physics log descriptions </summary>
+        </member>
+        <member name="M:Eco.Shared.Networking.Internal.NetPhysicsTeleportLogging.LogPhysicsFailData(System.String,Eco.Shared.Networking.NetPhysicsEntity,Eco.Shared.Networking.NetObject)">
+            <summary> Logs Physics data failure, tries to print needed data for debugging purposes. </summary>
+            <param name="message"> The message to show before pushing the physics data details.</param>
+        </member>
         <member name="M:Eco.Shared.Networking.NetObject.InstantiateAndCreate(Eco.Shared.Networking.INetObject,System.Boolean)">
             <summary>Makes new instance of <see cref="T:Eco.Shared.Networking.NetObject"/> for <paramref name="controller"/> with <see cref="P:Eco.Shared.Networking.NetObject.Active"/> set to <paramref name="active"/> value and then <see cref="M:Eco.Shared.Networking.NetObject.Create"/> it.</summary>
         </member>
@@ -2039,6 +2046,9 @@
         <member name="M:Eco.Shared.Networking.NetObjectManager.CollectObjectStats">
             <summary> Collect stats about existing network objects in <see cref="T:Eco.Shared.Networking.NetObjectManager"/>. May be used for statistic and leaks detection. </summary>
         </member>
+        <member name="M:Eco.Shared.Networking.NetPhysicsEntity.IsTeleportingToZeroOrPositionNotValid(Eco.Shared.Serialization.BSONObject)">
+            <summary> Checks for invalid vector and resetting position cases. </summary>
+        </member>
         <member name="P:Eco.Shared.Networking.NetworkClient.RemoteEndPoint">
             <summary> Actual remote end-point for the <see cref="F:Eco.Shared.Networking.NetworkClient.peer"/>. </summary>
         </member>
@@ -2047,6 +2057,9 @@
         </member>
         <member name="M:Eco.Shared.Networking.NetworkClient.TryConnectDirectly(Eco.Shared.Networking.ExtendedServerInfo)">
             <summary>Tries to connect directly to <paramref name="server"/> using external and internal endpoints (if available).</summary>
+        </member>
+        <member name="M:Eco.Shared.Networking.NetworkClient.HandleChannelDataReceive(System.Byte,System.Int32)">
+            <summary> Calculates how many bytes are pending and invokes the notification of message in progress. </summary>
         </member>
         <member name="M:Eco.Shared.Networking.NetworkClient.EnqueueReceivedPacket(Eco.Shared.Networking.ReceivedNetworkPacket)">
             <summary>Enqueues received packet to the queue based on network event.</summary>
@@ -3085,7 +3098,7 @@
         <member name="M:Eco.Shared.Utils.ListExtensions.AddNonNullKey``2(System.Collections.Generic.IDictionary{``0,``1},``0,``1)">
             <summary>Add to the dictionary if the key is not null.</summary>
         </member>
-        <member name="M:Eco.Shared.Utils.ListExtensions.RandomWeighted``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Int32})">
+        <member name="M:Eco.Shared.Utils.ListExtensions.RandomWeighted``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Single})">
             <summary>Picks random element from list based on weights</summary>
             <param name="weightSelector"> weight to be evaluated </param>
             e.g.: [(Salmon, 50), (Crab, 10)] salmon has bigger chance than crab
@@ -3306,7 +3319,7 @@
         <member name="M:Eco.Shared.Utils.EnumerableExtensions.MinObj``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Single})">
             <summary>Returns first item with minimal value of <paramref name="distanceFunc"/>.</summary>
         </member>
-        <member name="M:Eco.Shared.Utils.EnumerableExtensions.TryGetMinBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},``0@)">
+        <member name="M:Eco.Shared.Utils.EnumerableExtensions.TryGetMinBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.ValueTuple{``0,``1}@)">
             <summary>Tries to get minimal element from <paramref name="enumerable"/> if it has elements. Returns <c>false</c> otherwise.</summary>
         </member>
         <member name="M:Eco.Shared.Utils.EnumerableExtensions.MinRange``1(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Collections.Generic.IComparer{``0})">
@@ -3467,6 +3480,16 @@
         <member name="M:Eco.Shared.Utils.GeneralUtils.TypeGenericDefinitionIs(System.Type,System.Type)">
             <summary>Check whether the current type has the specified generic type definition or not.</summary>
         </member>
+        <member name="M:Eco.Shared.Utils.GeometryUtils.GetBlocksInConeCheck2D(Eco.Shared.Math.Vector3i,System.Numerics.Vector3,System.Single,System.Single,System.Single)">
+            <summary>
+            Return every block which is inside a 2D cone area, considering that the cone starts at "originBlock" and has a direction "forwardDirection".
+            This function was created to have a way to check which blocks the player is looking at up to a maximum distance, using a cone to check for the blocks.
+            </summary>
+            <remarks>The Y axis of the direction is ignored, so it doesn't matter if the player is looking up or down.</remarks>
+            <param name="initialRadius">The initial radius of the cone check (i.e. from the "originBlock" position).</param>
+            <param name="finalRadius">The final radius of the cone check. Should be bigger than "initialRadius".</param>
+            <param name="length">Length of the cone check.</param>
+        </member>
         <member name="T:Eco.Shared.Utils.GlobalRandom">
             <remarks>
             Exposed implementation of Global Random from MoreLinq to be publicly available.
@@ -3607,11 +3630,10 @@
         <member name="M:Eco.Shared.Utils.LimitMapper.Map(System.Single,Eco.Shared.Utils.LimitMapper.Config)">
             <summary>Maps an input to an output, such that as the input reaches infinity, the output will approach (but never reach) a hard cap.</summary>
         </member>
-        <member name="M:Eco.Shared.Utils.LimitMapper.MapAndDescribe(System.Single,Eco.Shared.Utils.LimitMapper.Config,Eco.Shared.Localization.LocString,Eco.Shared.Localization.LocString,System.Func{System.Single,Eco.Shared.Localization.LocString},System.Func{System.Single,Eco.Shared.Localization.LocString},Eco.Shared.Localization.LocString)">
+        <member name="M:Eco.Shared.Utils.LimitMapper.MapAndDescribe(System.Single,Eco.Shared.Utils.LimitMapper.Config,Eco.Shared.Localization.LocString,System.Func{System.Single,Eco.Shared.Localization.LocString},System.Func{System.Single,Eco.Shared.Localization.LocString},Eco.Shared.Localization.LocString)">
             <summary>Maps the given input value to an output value, using the limits defined in 'values'.</summary>
             <param name="val">The value to map to an output</param>
             <param name="config">The config values for how the mapping occurs</param>
-            <param name="inputName">What is the name of the value being mapped</param>
             <param name="outputName">What is the name of the resulting value type.</param>
             <param name="inputValDescription">A function that renders an input value (incase you want special colors/icons)</param>
             <param name="outputValDescription">A function that renders an output value (incase you want special colors/icons)</param>
@@ -4311,6 +4333,9 @@
             <summary>Returns default value for <paramref name="type"/>.</summary>
             <returns>Same as default(T) via reflection.</returns>
         </member>
+        <member name="M:Eco.Shared.Utils.ReflectionUtils.ReflectionToString(System.Text.StringBuilder,System.Object)">
+            <summary>Add details on each of the properties and fields of the passed object.</summary>
+        </member>
         <member name="M:Eco.Shared.Utils.Text.SignedNum(System.Single,System.Boolean,System.Boolean)">
             <summary> Returns styled number with forded sign ('+' - for positive, '-' - for negative, no sign for zero). If <paramref name="invertHighlight"/> set then it will use negative highlight for positive value. </summary>
         </member>
@@ -4347,6 +4372,12 @@
         </member>
         <member name="M:Eco.Shared.Utils.Text.Font(System.String,System.String,System.String)">
             <inheritdoc cref="M:Eco.Shared.Utils.Text.Font(System.String,System.String)"/>
+        </member>
+        <member name="M:Eco.Shared.Utils.Text.GradientColoredPercent(System.Single)">
+            <summary>Transitions the percent color from red to yellow to green based on percent.</summary>
+        </member>
+        <member name="M:Eco.Shared.Utils.Text.GradientColoredPercent(System.Single,Eco.Shared.Math.Range)">
+            <summary>Transitions the percent color from red to yellow to green based on percent.</summary>
         </member>
         <member name="M:Eco.Shared.Utils.Text.Truncate(System.String,System.Int32)">
             <summary> Cuts visible part of the content after provided width and replaces it with a hoverable link to see the origin. </summary>
@@ -5023,15 +5054,13 @@
             <summary>Stores shortcuts to Block Tags</summary>
             <remarks>Shortcuts from this class should be used instead of directly typing a string in TagAttribute</remarks>
         </member>
-        <member name="T:Eco.Shared.SharedTypes.NameAndDescription">
-            <summary>General struct for passing a name and description around.</summary>
+        <member name="T:Eco.Shared.SharedTypes.EnvVar">
+            <summary>An on-demand variable queried and cached by the client, while the server notifies on cache invalidate.
+            Cannot be null.</summary>
         </member>
-        <member name="P:Eco.Shared.SharedTypes.NameAndDescription.Valid">
-            <summary>Valid is determined by non-null (empty strings are ok)</summary>
-        </member>
-        <member name="T:Eco.Shared.SharedTypes.ComponentInteractionParameterNames">
-            <summary> Parameters that are associated with WorldObjectComponents and affect interactions. These are sent to the client from server. </summary>
-            <remarks> Typically these exist per-(WorldObject, User) combo, so different Users may have see parameters on the same WorldObject. </remarks>
+        <member name="T:Eco.Shared.SharedTypes.ClientSideEnvVars">
+            <summary> Client side environment variables guaranteed to be on client at all times. </summary>
+            <remarks> Can be used in a string with the %VARNAME% syntax to get replaced with the respective text in client. </remarks>
         </member>
         <member name="T:Eco.Shared.SharedTypes.VehicleInteractionParameterNames">
             <summary> Vehicle Interactions parameters shared between client and server </summary>
@@ -5041,26 +5070,23 @@
             <summary> These parameters ONLY exist on the client and are NEVER sent to the server. The server can and should still use them though (read below). </summary>
             <remarks> Any of these keys can be added as a required parameter on the interaction definitions sent by the server, so the client can decide whether an interaction should be displayed or not. </remarks>
         </member>
-        <member name="T:Eco.Shared.SharedTypes.InteractionTriggerInfo">
-            <summary> Wrapper struct for a Trigger (LMB/RMB/Interact) + a Modifier (Ctrl/Alt/Shift). </summary>
-            <remarks> Used to define the input needed to trigger an interaction. </remarks>
+        <member name="T:Eco.Shared.SharedTypes.NameAndDescription">
+            <summary>General struct for passing a name and description around.</summary>
         </member>
-        <member name="T:Eco.Shared.SharedTypes.InteractionParameters">
-            <summary> Contains various extra parameters that can be passed from InteractionTarget to get details on the specific part of the object being targeted (e.g branch/trunk/leaf on a tree) or its state (alive/dead animal, pickupable, ..). </summary>
+        <member name="P:Eco.Shared.SharedTypes.NameAndDescription.Valid">
+            <summary>Valid is determined by non-null (empty strings are ok)</summary>
         </member>
-        <member name="F:Eco.Shared.SharedTypes.InteractionParameters.CachedParams">
-            <summary>
-            <para> Changes to these cause the interaction display to rebuild, even if the target 'NetObject'/'WorldObject' is the same. </para>
-            <para> This needs to happen because different parameters can indicate different interactions on the same target. </para>
-            </summary>
-            <remarks> Includes things like LeafID/BranchID when targeting trees or elevator buttons Up/Down/Stop. </remarks>
+        <member name="M:Eco.Shared.SharedTypes.EnvVarUtils.CompareEnvVarLists(System.Collections.Generic.List{Eco.Shared.SharedTypes.EnvVar},System.Collections.Generic.List{Eco.Shared.SharedTypes.EnvVar})">
+            <summary>Returns true if cached params are all the same.</summary>
         </member>
-        <member name="F:Eco.Shared.SharedTypes.InteractionParameters.UncachedParams">
-            <summary> Changes to these won't cause the interaction display to rebuild, unlike the <see cref="F:Eco.Shared.SharedTypes.InteractionParameters.CachedParams"/>. </summary>
-            <remarks> Includes parameters that can be used from the server to resolve the interaction (e.g.: slice point when targeting a trunk). </remarks>
+        <member name="T:Eco.Shared.SharedTypes.InteractionConstants">
+            <summary>Shared class that contains constants used in the interaction system</summary>
         </member>
-        <member name="M:Eco.Shared.SharedTypes.InteractionParameters.op_Addition(Eco.Shared.SharedTypes.InteractionParameters,Eco.Shared.SharedTypes.InteractionParameters)">
-            <summary> returns new <see cref="T:Eco.Shared.SharedTypes.InteractionParameters"/> with all <paramref name="left"/> values and adds uniques from <paramref name="right"/> </summary>
+        <member name="T:Eco.Shared.SharedTypes.MoveWorldObjectActionInfo">
+            <summary> Server returns this struct as a response to a MoveWorldObject action request, when Ctrl+Clicking with the hammer. </summary>
+        </member>
+        <member name="T:Eco.Shared.SharedTypes.InteractionLiveUpdate">
+            <summary>Data sent about interactions that get queried.</summary>
         </member>
         <member name="T:Eco.Shared.SharedTypes.InteractionTarget">
             <summary>Struct that defines something the player is looking at.  Can be a block or object.</summary>
@@ -5068,24 +5094,32 @@
         <member name="F:Eco.Shared.SharedTypes.InteractionTarget.HitPos">
             These aren't used for equality checks, make sure these are excluded from .Equals()
         </member>
-        <member name="M:Eco.Shared.SharedTypes.InteractionTargetComparer.Equals(Eco.Shared.SharedTypes.InteractionTarget,Eco.Shared.SharedTypes.InteractionTarget)">
-            <summary> Excluded HitPos and HitNormal so targets can be considered same even if pointer is pointing at a different spot </summary>
+        <member name="T:Eco.Shared.SharedTypes.InteractionTargetCacheComparer">
+            <summary>A custom comparer that ignores differences in HitPos, HitNormal and UncachedParams.</summary>
         </member>
-        <member name="M:Eco.Shared.SharedTypes.InteractionTargetComparer.GetHashCode(Eco.Shared.SharedTypes.InteractionTarget)">
+        <member name="M:Eco.Shared.SharedTypes.InteractionTargetCacheComparer.EqualsTest(Eco.Shared.SharedTypes.InteractionTarget,Eco.Shared.SharedTypes.InteractionTarget,System.Boolean)">
+            <summary> Excluded HitPos, HitNormal, and uncahced params, so targets can be considered same even if pointer is pointing at a different spot </summary>
+        </member>
+        <member name="M:Eco.Shared.SharedTypes.InteractionTargetCacheComparer.GetHashCode(Eco.Shared.SharedTypes.InteractionTarget)">
             <summary>Excluded hitpos and hitnormal from hashcode generation, hit information is not relevant to target comparison</summary>
         </member>
-        <member name="T:Eco.Shared.SharedTypes.InteractionConstants">
-            <summary>Shared class that contains constants used in the interaction system</summary>
+        <member name="T:Eco.Shared.SharedTypes.InteractionTriggerInfo">
+            <summary> Wrapper struct for a Trigger (LMB/RMB/Interact) + a Modifier (Ctrl/Alt/Shift). </summary>
+            <remarks> Used to define the input needed to trigger an interaction. </remarks>
         </member>
-        <member name="T:Eco.Shared.SharedTypes.ClientSideEnvironmentVariables">
-            <summary> Client side environment variables guaranteed to be on client at all times. </summary>
-            <remarks> Can be used in a string with the %VARNAME% syntax to get replaced with the respective text in client. </remarks>
-        </member>
-        <member name="T:Eco.Shared.SharedTypes.MoveWorldObjectActionInfo">
-            <summary> Server returns this struct as a response to a MoveWorldObject action request, when Ctrl+Clicking with the hammer. </summary>
+        <member name="M:Eco.Shared.SharedTypes.InteractionTriggerInfo.GetPriority">
+            <summary>Interactions with more resrictions are high priority. Count the modifiers and that's our priority.</summary>
         </member>
         <member name="T:Eco.Shared.SharedTypes.SelectionMode">
             <summary> The selection mode of a target BlockFillView. The hammer will adjust its behaviour based the Selection Mode that it uses. </summary>
+        </member>
+        <member name="T:Eco.Shared.SharedTypes.WorldObjectPlacementRequirements">
+            <summary> Contains all placement requirements that should be met for a WorldObject to be placed. </summary>
+            <remarks> Can be used from the client to make pre-emptive validations and render helpful stuff (e.g.: occupancy box). </remarks>
+        </member>
+        <member name="T:Eco.Shared.SharedTypes.PositionRequirementType">
+            <summary> Occupancy Requirements can vary per position. These are all the used types so far. </summary>
+            <remarks> Used by both server and client to validate the position of a WorldObject's placement. </remarks>
         </member>
         <member name="T:Eco.Shared.States.ExpressionEmote">
             <summary> Stores the various player (facial) expression emote states. </summary>
@@ -5785,6 +5819,9 @@
         </member>
         <member name="P:Eco.Shared.Voxel.PlotUtil.WorldPlotDims">
             <summary> Returns many plots exist in the x and z dimensions of the world. </summary>
+        </member>
+        <member name="M:Eco.Shared.Voxel.PlotUtil.CornerOfCurrentPlot(Eco.Shared.Math.Vector3i)">
+            <summary>Return the corner of whatever plot the position currently is in.</summary>
         </member>
         <member name="M:Eco.Shared.Voxel.PlotUtil.ToPlotPos(Eco.Shared.Math.Vector3i)">
             <summary>Converts a position in world space to a position in plot space. Performs the wrap. Ignores 'y' value.</summary>

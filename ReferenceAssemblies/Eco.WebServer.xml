@@ -338,6 +338,11 @@
             <summary>Streams a log file over HTTP/HTTPS to a client.</summary>
             <param name="filepath">Filepath of the log file to stream.</param>
         </member>
+        <member name="T:Eco.WebServer.Web.Controllers.PerformanceController">
+            <summary>
+            The API controller in charge of the plugins and config.
+            </summary>
+        </member>
         <member name="T:Eco.WebServer.Web.Controllers.PluginsController">
             <summary>
             The API controller in charge of the plugins and config.

@@ -664,7 +664,7 @@
         <member name="T:Eco.Core.Controller.ImmutablePropertySubscription">
             <summary>Immutable implementation of <see cref="T:Eco.Shared.View.IPropertySubscription"/> used by controller to prevent concurrent modifications (i.e. <see cref="T:Eco.Shared.View.PropertySubscription"/> may be recycled and destroy it's state).</summary>
         </member>
-        <member name="P:Eco.Core.Controller.IMvcNetClient.PendingMessages">
+        <member name="P:Eco.Core.Controller.IMvcNetClient.Views">
             <summary>Packaged messages which should be delivered to client before any other message. Used for views and data blobs.</summary>
         </member>
         <member name="T:Eco.Core.Controller.Internal.ControllerBoundingLevel">
@@ -775,6 +775,24 @@
         <member name="M:Eco.Core.DebugStatistic.Collectors.IMetricCollector.Shutdown">
             <summary>Performs shutdown operations on the metric collector instance.</summary>
         </member>
+        <member name="T:Eco.Core.DebugStatistic.NetworkStabilityStatistics">
+            <summary> This class is in charge of generating performance reports that will be exposed via API. 
+            The main purpose of it is to give an opportunity for admins/devs to see how well server performs without having to log in or asking players.
+            The metric that is used for evaluate performance based on time between user sends an RPC and receives a updated property changed inside of that RPC.
+            It should simulate "how fast user will see result of his actions". The value is similar to ping but also considers the internal queues of the server/client, such as queue of network events, queue of properties to notify.
+            </summary>
+        </member>
+        <member name="M:Eco.Core.DebugStatistic.NetworkStabilityStatistics.GetCurrentNetworkScore">
+            <summary> Returns how stable server performs according last MinsToConsider.
+            The formula is Max(average - 0.3, 0) + (variance * 2). The goal is to give some space for high ping based on the distance (up to 300 ms) and to penalize harder for higher variance of values (since the variance means that server responds with unpredictable delay). 
+            This suppose to be used as basic information of how well server performs, some </summary>
+        </member>
+        <member name="T:Eco.Core.DebugStatistic.PingData">
+            <summary> Used to track how ping and time together. Time is used to check for relevancy, i.e. look up only for last N minutes. </summary>
+        </member>
+        <member name="T:Eco.Core.DebugStatistic.NetworkStabilityMetrics">
+            <summary> This class provides a RPC for client so it can add ping data to network stability manager. It will 1 per user, so users will have its own Pong subscription.  </summary>
+        </member>
         <member name="T:Eco.Core.DebugStatistic.PerformanceIntervalStat">
             <summary>Custom interval stat counter used by <seealso cref="T:Eco.Core.DebugStatistic.PerformancePlugin"/> for generating reports.</summary>
         </member>
@@ -822,7 +840,10 @@
         <member name="M:Eco.Core.DebugStatistic.PerformancePlugin.Run">
             <summary>Starts our <seealso cref="T:Eco.Core.Utils.Threading.IWorker"/> instance for generating performance reports.</summary>
         </member>
-        <member name="M:Eco.Core.DebugStatistic.PerformancePlugin.GenerateIntervalsReport">
+        <member name="M:Eco.Core.DebugStatistic.PerformancePlugin.GetStoredMetrics">
+            <summary> This one is exposed via API to provide the historical data of metrics.</summary>
+        </member>
+        <member name="M:Eco.Core.DebugStatistic.PerformancePlugin.Update">
             <summary>Generates a report of the currently tracked intervals for displaying on the "Controller Stats" GUI tab.</summary>
         </member>
         <member name="M:Eco.Core.DebugStatistic.PerformancePlugin.GetControllerMetricsReport">

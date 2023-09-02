@@ -116,8 +116,8 @@
             See Networking.md for additional details.
             </summary>
         </member>
-        <member name="M:Eco.Plugins.Networking.NetworkServer.SendPendingMessages(Eco.Core.Controller.IMvcNetClient)">
-            <summary> Sends <see cref="P:Eco.Core.Controller.IMvcNetClient.PendingMessages"/> to the client. </summary>
+        <member name="M:Eco.Plugins.Networking.NetworkServer.SendBinaryArrays(Eco.Core.Controller.IMvcNetClient,Eco.Shared.Networking.NetworkEvent,Eco.Shared.Pools.Collections.PoolableListWrapper{System.Byte[]})">
+            <summary> Sends <see cref="P:Eco.Core.Controller.IMvcNetClient.Views"/> and <see cref="P:Eco.Core.Controller.IMvcNetClient.Blobs"/> to the client. </summary>
         </member>
         <member name="M:Eco.Plugins.Networking.NetworkServer.FillClientsOfMessage(Eco.Plugins.Networking.NetworkMessage)">
             <summary> Determines all clients who will get the message based on Target/Tagrets/Object properties </summary>
