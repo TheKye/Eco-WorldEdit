@@ -784,8 +784,8 @@
         </member>
         <member name="M:Eco.Core.DebugStatistic.NetworkStabilityStatistics.GetCurrentNetworkScore">
             <summary> Returns how stable server performs according last MinsToConsider.
-            The formula is Max(average - 0.3, 0) + (variance * 2). The goal is to give some space for high ping based on the distance (up to 300 ms) and to penalize harder for higher variance of values (since the variance means that server responds with unpredictable delay). 
-            This suppose to be used as basic information of how well server performs, some </summary>
+            The formula is Meidan for all players highest ping value in last minute. It wont be affected if 1-2 users have bad network connection or something but it do will be affected if for most of the users it works slowly.
+            This suppose to be used as basic information of how well server performs. </summary>
         </member>
         <member name="T:Eco.Core.DebugStatistic.PingData">
             <summary> Used to track how ping and time together. Time is used to check for relevancy, i.e. look up only for last N minutes. </summary>

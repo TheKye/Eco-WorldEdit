@@ -2046,7 +2046,7 @@
         <member name="M:Eco.Shared.Networking.NetObjectManager.CollectObjectStats">
             <summary> Collect stats about existing network objects in <see cref="T:Eco.Shared.Networking.NetObjectManager"/>. May be used for statistic and leaks detection. </summary>
         </member>
-        <member name="M:Eco.Shared.Networking.NetPhysicsEntity.IsTeleportingToZeroOrPositionNotValid(Eco.Shared.Serialization.BSONObject)">
+        <member name="M:Eco.Shared.Networking.NetPhysicsEntity.IsTeleportingOrPositionNotValid(Eco.Shared.Serialization.BSONObject,System.Single)">
             <summary> Checks for invalid vector and resetting position cases. </summary>
         </member>
         <member name="P:Eco.Shared.Networking.NetworkClient.RemoteEndPoint">
@@ -4538,7 +4538,7 @@
         <member name="M:Eco.Shared.Utils.StringExtensions.AppendToBuilder(Eco.Shared.Localization.LocString,Eco.Shared.Localization.LocStringBuilder@)">
             <summary> Avoid creating new builder if not needed </summary>
         </member>
-        <member name="M:Eco.Shared.Utils.StringExtensions.ReplaceFirst(System.String,System.String,System.String,System.Int32)">
+        <member name="M:Eco.Shared.Utils.StringExtensions.ReplaceFirst(System.String,System.String,System.String,System.Int32,System.StringComparison)">
             <summary>Replaces the first string found.</summary>
             <param name="text">String instance to operate on.</param>
             <param name="search">String to search for.</param>
@@ -4548,7 +4548,7 @@
         </member>
         <member name="M:Eco.Shared.Utils.StringExtensions.ReplaceFirstAfter(System.String,System.String,System.String,System.String)">
             <summary>Replaces first occurence of <paramref name="search"/> with <paramref name="replace"/> after first occurence of <paramref name="after"/>.</summary>
-            <seealso cref="M:Eco.Shared.Utils.StringExtensions.ReplaceFirst(System.String,System.String,System.String,System.Int32)"/>
+            <seealso cref="M:Eco.Shared.Utils.StringExtensions.ReplaceFirst(System.String,System.String,System.String,System.Int32,System.StringComparison)"/>
         </member>
         <member name="M:Eco.Shared.Utils.StringExtensions.FastSplit2(System.ReadOnlySpan{System.Char},System.Char)">
             <summary>Helper to split a span into two parts. Fast split call.</summary>
