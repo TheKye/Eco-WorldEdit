@@ -155,12 +155,6 @@
         <member name="P:Eco.Twitch.Shared.Models.Datasets.GameServerDetailsV1.SecondsUntilImpact">
             <summary>The remaining seconds until metwor impact. A value less then or equal to zero indicates either the meteor's destruction or a failure.</summary>
         </member>
-        <member name="P:Eco.Twitch.Shared.Models.Datasets.GameServerDetailsV1.TimeSinceStart">
-            <summary>Total number of seconds that have elasped since the server started.</summary>
-        </member>
-        <member name="P:Eco.Twitch.Shared.Models.Datasets.GameServerDetailsV1.DaysPassed">
-            <summary>Total number of days that have elapsed since the start of the server</summary>
-        </member>
         <member name="P:Eco.Twitch.Shared.Models.Datasets.GameServerDetailsV1.ActiveAndOnlinePlayers">
             <summary>Number of active and online players.</summary>
         </member>

@@ -20,9 +20,6 @@
             <summary>An individual achievement earned or in progress of being earned by a user.</summary>
             <remarks>Contains details about where it was earned and the specifics of it.</remarks>
         </member>
-        <member name="M:Eco.Gameplay.Achievements.AchievementInstance.Initialize">
-            <summary>We initialize the achievement instances on server restart so that we can get the display names.</summary>
-        </member>
         <member name="T:Eco.Gameplay.Achievements.IContainsAchievements">
             <summary>Define on a class that has a static function</summary>
             <remarks>This must return all the achievements that are to be made.</remarks> 
@@ -339,9 +336,10 @@
         <member name="F:Eco.Gameplay.Civics.Constitutional.CivicPowersManager.CivicPowersChangedEvent">
             <summary>Called when powers change for a user for a given settlement.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Civics.Constitutional.CivicPowersManager.GetPowersDesc(Eco.Gameplay.Settlements.Settlement,Eco.Gameplay.Players.User,System.Collections.Generic.IEnumerable{System.Type})">
+        <member name="M:Eco.Gameplay.Civics.Constitutional.CivicPowersManager.GetPowersDesc(Eco.Gameplay.Settlements.Settlement,Eco.Gameplay.Players.User,System.Collections.Generic.IEnumerable{System.Type},System.Boolean)">
             Civic Powers
             <summary>Returns a multiline description for a list of types, ignoring non-constitutional types.</summary>
+            <param name="isSettlementFromJurisdiction">True if settlement was selected using jurisdiction component. False if it was selected based on position.</param>
         </member>
         <member name="M:Eco.Gameplay.Civics.Constitutional.CivicPowersManager.GetPowers(Eco.Gameplay.Settlements.Settlement,Eco.Gameplay.Players.User,System.Collections.Generic.IEnumerable{System.Type})">
             <summary>Returns an enumerable corresponding to the passed types, listing the powers the given user has in the given settlement for each action in that list.</summary>
@@ -378,6 +376,9 @@
         </member>
         <member name="M:Eco.Gameplay.Civics.ConstitutionManager.SetConstitution(Eco.Gameplay.Civics.Constitution,Eco.Gameplay.Settlements.Settlement)">
             <summary>Set the constitution for a given settlement</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Civics.Demographics.Demographic.SetWhitelist(Eco.Gameplay.Players.User,System.Boolean)">
+            <summary>Force a user to be a permanent member of this demographic, regardless of whether they meet the conditions (can removed from whitelist also).</summary>
         </member>
         <member name="T:Eco.Gameplay.Civics.Economy.AggregateUserAmountManager">
             <summary> Aggregates given amounts and gets ticked using <see cref="T:Eco.Gameplay.Civics.CivicsPlugin" /> through <see cref="M:Eco.Gameplay.Civics.Economy.IHasUserAggregatedAmount.OnUserAggregateAmountDue(Eco.Gameplay.Players.User,System.Single)" /> </summary>
@@ -464,7 +465,7 @@
         <member name="M:Eco.Gameplay.Civics.Elections.Election.ShowAllVotes(Eco.Gameplay.Players.Player)">
             <summary>Display a large text of all the votes.</summary>
         </member>
-        <member name="P:Eco.Gameplay.Civics.Elections.CivicAction_StartElection.NotifyOnPerform">
+        <member name="P:Eco.Gameplay.Civics.Elections.CivicAction_StartCandidateElection.NotifyOnPerform">
             <summary>This is overriden to false for this action because this action invokes another global <see cref="M:Eco.Gameplay.Players.Player.OkBox(Eco.Shared.Localization.LocString)" /> that is tailored for elections.</summary>
         </member>
         <member name="P:Eco.Gameplay.Civics.Elections.ElectionResult.RoundResultsForEachChoice">
@@ -476,6 +477,9 @@
         <member name="T:Eco.Gameplay.Civics.Elections.VoteCounts">
             <summary>Stores all the types of votes allowed. </summary>
         </member>
+        <member name="M:Eco.Gameplay.Civics.Elections.ElectionUtils.RemoveElectionsConcerningProposables(Eco.Gameplay.Civics.Misc.IProposable[])">
+            <summary>We make sure to remove all proposables that are related to the specified proposables.</summary>
+        </member>
         <member name="T:Eco.Gameplay.Civics.Elections.Internal.ElectionPoll">
             <summary>Funcs for creating a poll election.</summary>
         </member>
@@ -485,7 +489,7 @@
         <member name="M:Eco.Gameplay.Civics.Elections.Internal.ElectionPoll.CivicAction_StartPoll.Perform(Eco.Gameplay.Players.User,Eco.Gameplay.Civics.Elections.Election)">
             <summary>Start an election with the given properties.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Civics.Elections.Internal.ElectionResultBuilder.GetWinnersAndLosers(Eco.Gameplay.Civics.Elections.RoundsForChoice[],Eco.Gameplay.Civics.ElectionChoiceID[],System.Boolean,System.Func{Eco.Gameplay.Civics.ElectionChoiceID,Eco.Gameplay.Civics.ElectionChoice},System.Int32,System.Double,System.Boolean,System.Boolean,Eco.Gameplay.Players.User[]@,Eco.Gameplay.Players.User[]@,System.Boolean@)">
+        <member name="M:Eco.Gameplay.Civics.Elections.Internal.ElectionResultBuilder.GetWinnersAndLosers(Eco.Gameplay.Civics.Elections.RoundsForChoice[],Eco.Gameplay.Civics.ElectionChoiceID[],System.Boolean,System.Func{Eco.Gameplay.Civics.ElectionChoiceID,Eco.Gameplay.Civics.ElectionChoice},System.Double,System.Boolean,System.Boolean,Eco.Gameplay.Players.User[]@,Eco.Gameplay.Players.User[]@,System.Boolean@)">
             <summary>Determine data about final completion for the results.</summary>
         </member>
         <member name="M:Eco.Gameplay.Civics.Elections.Internal.ElectionResultBuilder.GetVotesPerRound(System.Collections.Generic.IDictionary{Eco.Gameplay.Players.User,Eco.Gameplay.Civics.Elections.UserRunoffVote},System.Collections.Generic.IDictionary{System.String,Eco.Gameplay.Civics.Elections.TwitchVote},System.Collections.Generic.IList{Eco.Gameplay.Civics.ElectionChoice},System.Int32,System.Single,System.Func{Eco.Gameplay.Civics.ElectionChoiceID,Eco.Shared.Localization.LocString},System.Func{Eco.Gameplay.Civics.ElectionChoiceID,System.String},Eco.Core.Systems.IHasSerializableID,System.Boolean,Eco.Shared.Localization.LocString@)">
@@ -537,6 +541,32 @@
         </member>
         <member name="M:Eco.Gameplay.Civics.Laws.LawUtil.CountActiveLawsAtPosition(Eco.Shared.Math.Vector2i)">
             <summary>Counts the active laws of all settlements at this position.</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Civics.Laws.LegalActions.Money.AliasMoneyTransfer_LegalAction.GetAllowedUsersFromTarget(Eco.Core.Utils.PropertyScanning.IContextObject,Eco.Gameplay.Settlements.Settlement,Eco.Gameplay.Civics.Laws.LegalActions.Money.MoneyTransferBase_LegalAction.TransferInfo)">
+            <summary>
+            From the specified target, we get all the users that this legal action can interact with.
+            If the settlement feature is enabled and the context is depended on the settlement then we only get the users that are part of the context settlement.
+            </summary>
+        </member>
+        <member name="T:Eco.Gameplay.Civics.Laws.LegalActions.Money.MoneyTransferBase_LegalAction.TransferInfo">
+            <summary> <see cref="M:Eco.Gameplay.Civics.Laws.LegalActions.Money.MoneyTransferBase_LegalAction.GetAndCheckValues(Eco.Core.Utils.PropertyScanning.IContextObject,Eco.Gameplay.Settlements.Settlement)" /> converts and checks game values using provided context and fills this container with the data. </summary>
+        </member>
+        <member name="M:Eco.Gameplay.Civics.Laws.LegalActions.Money.MoneyTransferBase_LegalAction.ComposeTransfers(Eco.Gameplay.Civics.Laws.LegalActions.Money.MoneyTransferBase_LegalAction.TransferInfo)">
+            <summary>
+            Using the passed TransferInfo values, we compose the transfers that we want to perform and then return a PostResult that will either inform us that it failed or it will have all the actions
+            that we will need to perform if it succeeded.
+            </summary>
+        </member>
+        <member name="M:Eco.Gameplay.Civics.Laws.LegalActions.Money.MoneyTransferBase_LegalAction.ComposeDefaultData(Eco.Gameplay.Civics.Laws.LegalActions.Money.MoneyTransferBase_LegalAction.TransferInfo,Eco.Gameplay.Economy.BankAccount,Eco.Gameplay.Economy.BankAccount,Eco.Gameplay.Players.User)">
+            <summary> Creates an instance of <see cref="T:Eco.Gameplay.Economy.Transfer.TransferData" /> and fills it with default values based on the provided params. </summary>
+        </member>
+        <member name="M:Eco.Gameplay.Civics.Laws.LegalActions.Money.MoneyTransferBase_LegalAction.DescribeAmount(System.Nullable{System.Single},System.String)">
+            <summary> Uses provided value to compose a message in a format "X currency name (description of X)" or some variants if something is not provided or the game value is a constant. </summary>
+        </member>
+        <member name="M:Eco.Gameplay.Civics.Laws.LegalActions.Money.MoneyTransferBase_LegalAction.AccountCanBeUsedInGovernmentTaxOrPayAction(Eco.Gameplay.Economy.BankAccount,Eco.Gameplay.Settlements.Settlement,Eco.Shared.Localization.LocString@)">
+            <summary>
+            We check whether the specified account can be used with the specified context and if not we return false and an error message.
+            </summary>
         </member>
         <member name="T:Eco.Gameplay.Civics.GameValues.GamePickerList`1">
             <summary>
@@ -712,33 +742,6 @@
         <member name="M:Eco.Gameplay.Civics.Internal.ElectionChatCommands.SendVote(Eco.Gameplay.Systems.Chat.IChatClient,Eco.Gameplay.Civics.Elections.Election,Eco.Gameplay.Civics.ElectionChoiceID[],Eco.Gameplay.Players.User)">
             <summary>Vote in the given election. Pass a user or a bool and whichever type of election it will use the given value.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Civics.LegalActions.AliasMoneyTransfer_LegalAction.GetAllowedUsersFromTarget(Eco.Core.Utils.PropertyScanning.IContextObject,Eco.Gameplay.Civics.LegalActions.MoneyTransfer_LegalAction.TransferInfo)">
-            <summary>From the specified target, we get all the users that this legal action can interact with.</summary>
-        </member>
-        <member name="T:Eco.Gameplay.Civics.LegalActions.MoneyTransfer_LegalAction.TransferInfo">
-            <summary> <see cref="M:Eco.Gameplay.Civics.LegalActions.MoneyTransfer_LegalAction.GetAndCheckValues(Eco.Core.Utils.PropertyScanning.IContextObject,Eco.Gameplay.Civics.Laws.Law)" /> converts and checks game values using provided context and fills this container with the data. </summary>
-        </member>
-        <member name="M:Eco.Gameplay.Civics.LegalActions.MoneyTransfer_LegalAction.ComposeTransfers(Eco.Gameplay.Civics.LegalActions.MoneyTransfer_LegalAction.TransferInfo)">
-            <summary>
-            Using the passed TransferInfo values, we compose the transfers that we want to perform and then return a PostResult that will either inform us that it failed or it will have all the actions
-            that we will need to perform if it succeeded.
-            </summary>
-        </member>
-        <member name="M:Eco.Gameplay.Civics.LegalActions.MoneyTransfer_LegalAction.ComposeDefaultData(Eco.Gameplay.Civics.LegalActions.MoneyTransfer_LegalAction.TransferInfo,Eco.Gameplay.Economy.BankAccount,Eco.Gameplay.Economy.BankAccount,System.Boolean,Eco.Gameplay.Players.User)">
-            <summary> Creates an instance of <see cref="T:Eco.Gameplay.Economy.Transfer.TransferData" /> and fills it with default values based on the provided params. </summary>
-        </member>
-        <member name="M:Eco.Gameplay.Civics.LegalActions.MoneyTransfer_LegalAction.DescribeAmount(System.Nullable{System.Single},System.String)">
-            <summary> Uses provided value to compose a message in a format "X currency name (description of X)" or some variants if something is not provided or the game value is a constant. </summary>
-        </member>
-        <member name="M:Eco.Gameplay.Civics.LegalActions.MoneyTransfer_LegalAction.AccountCanBeUsed(Eco.Gameplay.Economy.BankAccount,Eco.Core.Utils.PropertyScanning.IContextObject,Eco.Shared.Localization.LocString@)">
-            <summary>
-            We check whether the specified account can be used with the specified context and if not we return false and an error message.
-            Note : this will be changed soon when bank accounts will start having jurisdictions themselves.
-            </summary>
-        </member>
-        <member name="M:Eco.Gameplay.Civics.LegalActions.Tax_LegalAction.GetAllowedUsersFromTarget(Eco.Core.Utils.PropertyScanning.IContextObject,Eco.Gameplay.Civics.LegalActions.MoneyTransfer_LegalAction.TransferInfo)">
-            <summary>If the settlement feature is enabled and the context is depended on the settlement then we only get the users that are part of the context settlement.</summary>
-        </member>
         <member name="T:Eco.Gameplay.Civics.Misc.CivicsTooltip">
             <summary>
             Tooltip handler for Civics tooltips.
@@ -859,8 +862,8 @@
         <member name="M:Eco.Gameplay.Components.Auth.PropertyAuthComponent.UpdatePlot">
             <summary>We update the plot that's the property is currently on.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Components.BankComponent.CreateBankAccount(Eco.Gameplay.Players.Player)">
-            <summary>Add ban account though DualPermission logic and set a Host Object.</summary>
+        <member name="M:Eco.Gameplay.Components.BankComponent.CreateBankAccount(Eco.Gameplay.Players.Player,System.Boolean)">
+            <summary>Add a bank account through DualPermission logic and set a Host Object.</summary>
         </member>
         <member name="M:Eco.Gameplay.Components.BankComponent.UpdateBankAccounts">
             <summary>Track changes in accounts and update cache for this component. Notify client to update a list./// </summary>
@@ -981,6 +984,9 @@
         <member name="M:Eco.Gameplay.Components.ChunkSubscriberComponent.UnSubscribe(Eco.Gameplay.Components.IChunkSubscriber)">
             <summary> Unsubscribes the given subscriber from all chunks. </summary>
         </member>
+        <member name="M:Eco.Gameplay.Components.CivicObjectComponent.DisableProposables">
+            <summary>We make disable all proposables, meaning we make all the active ones as drafts again, we remove the draft ones and delete all elections currently in progress for them.</summary>
+        </member>
         <member name="M:Eco.Gameplay.Components.CivicObjectComponent.OnCloseEdit(Eco.Gameplay.Civics.Misc.IProposable,Eco.Gameplay.Civics.Misc.IProposable)">
             <summary>Whenever the player stop editing a proposal, this method gets called.</summary>
         </member>
@@ -1094,6 +1100,13 @@
         <member name="E:Eco.Gameplay.Components.JurisdictionComponent.CanChangeAssociatedSettlement">
             <summary>Callback that checks if changing the settlement is allowed.  Callback is expected to do the error notification to the user.</summary>
         </member>
+        <member name="P:Eco.Gameplay.Components.JurisdictionComponent.IsValid">
+            <summary>Does this world object have a jurisdiction selected?</summary>
+        </member>
+        <member name="F:Eco.Gameplay.Components.JurisdictionComponent.DisableWhenInvalid">
+            <summary>Set to false to prevent world object from being treated as disabled when no jurisdiction is selected.</summary>
+            <remarks>This can be used for things like allowing crafting settlement foundation items on ballot box before jurisdiction is selected.</remarks>
+        </member>
         <member name="M:Eco.Gameplay.Components.JurisdictionComponent.SetSettlementOfJurisdiction(Eco.Gameplay.Players.Player,Eco.Gameplay.Settlements.Settlement)">
             <summary>Trys to assigns a settlement upon which the objects in this civic object will apply. Validates it to make sure its
             influencing us, and prevents changes if there are active or proposed ones.</summary>
@@ -1122,7 +1135,8 @@
         </member>
         <member name="M:Eco.Gameplay.Components.LinkComponent.GetSortedLinkedComponents(Eco.Gameplay.Aliases.IAlias,System.Boolean,System.Boolean)">
             <summary>
-            Get Sorted linked storages which are able to take/put items </summary>
+            Get Sorted linked storages which are able to take/put items. NOTE: will not omit
+            storages with disabled link settings.</summary>
             <param name="alias"></param>
             <param name="source">is able to take items</param>
             <param name="target">is able to put items</param>
@@ -1207,6 +1221,13 @@
         </member>
         <member name="M:Eco.Gameplay.Components.OnOffComponent.SetOnOff(Eco.Gameplay.Players.User,System.Boolean)">
             <summary>Check user's auth and tries to set the on-off state of the component. Can contain additional checks and feedbacks. See how <see cref="T:Eco.Gameplay.Components.Store.StoreComponent" /> changes behaviour of this component. Null user bypasses auth check.</summary>
+        </member>
+        <member name="P:Eco.Gameplay.Components.PerformCivicActionComponent.Settlement">
+            <summary>Settlement used to perform civic actions.</summary>
+            <remarks>
+            Returned settlement is based on value from jurisdiction component or based on world object's position if no jurisdiction component is attached.
+            In both cases it can be null.
+            </remarks>
         </member>
         <member name="M:Eco.Gameplay.Components.PerformCivicActionComponent.Select(Eco.Gameplay.Players.Player,System.Type)">
             <summary></summary>
@@ -1323,7 +1344,7 @@
         <member name="T:Eco.Gameplay.Components.Store.Internal.StoreCategory">
             <summary> Subgroup of offers at the store. Each group will be showed and handled separated by UI, allowing users to group similar elements as they want.  </summary>
         </member>
-        <member name="M:Eco.Gameplay.Components.Store.Internal.StoreCategory.SetTrades(System.Collections.Generic.List{System.Int32})">
+        <member name="M:Eco.Gameplay.Components.Store.Internal.StoreCategory.SetTrades(Eco.Gameplay.Players.Player,System.Collections.Generic.List{System.Int32})">
             <summary> It updates offers list to match item ids, creating or deleting offers as necesary. </summary>
         </member>
         <member name="M:Eco.Gameplay.Components.Store.Internal.StoreCategory.GetBestName(System.Collections.Generic.List{System.Int32})">
@@ -1332,7 +1353,7 @@
         <member name="T:Eco.Gameplay.Components.Store.Internal.StoreItemData">
             <summary> This class contains stores data: all offers and currency. It handles callbacks for offer changes.  </summary>
         </member>
-        <member name="M:Eco.Gameplay.Components.Store.StoreComponent.CreateCategoryWithOffers(System.Collections.Generic.List{System.Int32},System.Boolean)">
+        <member name="M:Eco.Gameplay.Components.Store.StoreComponent.CreateCategoryWithOffers(Eco.Gameplay.Players.Player,System.Collections.Generic.List{System.Int32},System.Boolean)">
             <summary>
             Creates new category and tries to pick best name based on tags
             </summary>
@@ -1661,7 +1682,7 @@
             <summary> Usually initialization is called when recurring transfer is created and its a moment when all data is setted.
             Some transfers are preserved over sessions and they have to be initializated only by setting service. It's a workaround for hotfix, should be refactored to have better archetecture. </summary>
         </member>
-        <member name="M:Eco.Gameplay.Economy.Jobs.RecurringTransfer.UpdateValues(Eco.Gameplay.Economy.Jobs.IRecurringTransferService,System.Boolean)">
+        <member name="M:Eco.Gameplay.Economy.Jobs.RecurringTransfer.UpdateValues(Eco.Gameplay.Economy.Jobs.IRecurringTransferService,System.Boolean,System.Boolean)">
             <summary>Calculate the values desired for the transfer and update them. Don't notify update during init, but if they're changed later do notify.</summary>
         </member>
         <member name="M:Eco.Gameplay.Economy.Jobs.RecurringTransferManager.OnTransferPropertiesUpdated(Eco.Gameplay.Economy.Jobs.IRecurringTransferService)">
@@ -1715,18 +1736,6 @@
         <member name="M:Eco.Gameplay.Economy.BankAccount.DescribeHoldings">
             <summary> Returns an entitled text block with this account's holdings. </summary>
         </member>
-        <member name="M:Eco.Gameplay.Economy.BankAccount.Validate">
-            <summary>With each tick we need to check if account still has a host. If a host is needed but it is missed - account should be removed.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Economy.BankAccount.DisableHostedObject">
-            <summary> If disable timer has gone off we need to remove bank account as it was not fixes. Remove all currencies from an account first, so there will be no unreachable money.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Economy.BankAccount.AssignHostObject(Eco.Gameplay.Objects.WorldObject)">
-            <summary>WHen bank account is created remember the Bank object as a Host for it and also cache it's Settlement, </summary>
-        </member>
-        <member name="M:Eco.Gameplay.Economy.BankAccount.CanBeAssignedTo(Eco.Gameplay.Placement.IOrphanAssignment)">
-            <summary> For assignment we want to take a bank object that is in a accounts settlement influence but we will assign only account we can manage and require a host. A player should not see an non-managed account.</summary>
-        </member>
         <member name="M:Eco.Gameplay.Economy.BankAccountManager.GetAccountsOfBackedCurrency">
             <summary>Return a tuple of accounts and holdings for all backed currencies.</summary>
         </member>
@@ -1754,8 +1763,8 @@
         <member name="T:Eco.Gameplay.Economy.Reputation.Internal.Reputation">
             <summary>Stores and manipulates reputation for anything deriving IHasReputation (citizens, artwork)</summary>
         </member>
-        <member name="M:Eco.Gameplay.Economy.Reputation.Internal.Reputation.WeightedSum(System.Func{Eco.Gameplay.Players.User,System.Single,System.Single})">
-            <summary>Caluclate a weighted sum, with a passed in mult function.</summary>
+        <member name="M:Eco.Gameplay.Economy.Reputation.Internal.Reputation.WeightedPositiveSum(System.Func{Eco.Gameplay.Players.User,System.Single,System.Single})">
+            <summary>Caluclate a weighted sum, with a passed in mult function. Only counts positive reputation.</summary>
         </member>
         <member name="M:Eco.Gameplay.Economy.Reputation.Internal.Reputation.UpdateColorAndTitle">
             <summary>Given current values update the title and color.</summary>
@@ -1778,7 +1787,7 @@
         <member name="M:Eco.Gameplay.Economy.Reputation.ReputationManager.RepAndTotal(Eco.Gameplay.Economy.Reputation.IHasReputation)">
             <summary>Return the reputation title, and the total in parens.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Economy.Reputation.ReputationManager.CalculateWeightedRep(Eco.Gameplay.Economy.Reputation.IHasReputation,System.Func{Eco.Gameplay.Players.User,System.Single,System.Single})">
+        <member name="M:Eco.Gameplay.Economy.Reputation.ReputationManager.CalculateWeightedPositiveRep(Eco.Gameplay.Economy.Reputation.IHasReputation,System.Func{Eco.Gameplay.Players.User,System.Single,System.Single})">
             <summary>Caluclate a weighted sum, with a passed in mult function.</summary>
         </member>
         <member name="M:Eco.Gameplay.Economy.Reputation.ReputationManager.RepColor(Eco.Gameplay.Economy.Reputation.IHasReputation)">
@@ -1787,7 +1796,7 @@
         <member name="M:Eco.Gameplay.Economy.Reputation.ReputationManager.GetRelativeRep(Eco.Gameplay.Players.User,Eco.Gameplay.Economy.Reputation.IHasReputation)">
             <summary>Return the relative rep of a target to me, and only count rep of people I like, and who they like, etc.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Economy.Reputation.ReputationManager.GiveRep(Eco.Gameplay.Players.User,Eco.Gameplay.Economy.Reputation.IHasReputation,System.Single,System.String,System.Boolean,Eco.Shared.Items.ReputationSource)">
+        <member name="M:Eco.Gameplay.Economy.Reputation.ReputationManager.GiveRep(Eco.Gameplay.Players.User,Eco.Gameplay.Economy.Reputation.IHasReputation,System.Single,System.String,System.Boolean,Eco.Shared.Items.ReputationSource,System.Boolean)">
             <summary>Give reputation from a source to a target, attaching an optional note.</summary>
         </member>
         <member name="M:Eco.Gameplay.Economy.Reputation.ReputationManager.SubscribeReputationChanged(Eco.Gameplay.Economy.Reputation.IHasReputation,System.Action)">
@@ -1904,13 +1913,16 @@
             <summary> Uses provided <see cref="T:Eco.Gameplay.Economy.Transfer.TransferData" /> to change holdings in pack's post effect.
             Some demo cases with different logic: <list type="bullet">
             <item> Store component triggers taxes for whole buy/sell amounts, but transfers only their difference: <see cref="M:Eco.Gameplay.Components.Store.StoreComponent.BuildTransfers(Eco.Gameplay.GameActions.GameActionPack,Eco.Gameplay.Components.Store.Internal.PurchaseData,Eco.Gameplay.Players.User,Eco.Gameplay.Economy.BankAccount)" />. </item>
-            <item> Tax legal action requests a custom value to be paid from users and suppresses game actions to prevent law infinite loops (like "if tax then tax"): <see cref="M:Eco.Gameplay.Civics.LegalActions.Tax_LegalAction.ComposeTransfers(Eco.Gameplay.Civics.LegalActions.MoneyTransfer_LegalAction.TransferInfo)" />. </item>
+            <item> Tax legal action requests a custom value to be paid from users and suppresses game actions to prevent law infinite loops (like "if tax then tax"): <see cref="M:Eco.Gameplay.Civics.Laws.LegalActions.Money.Tax_LegalAction.ComposeTransfers(Eco.Gameplay.Civics.Laws.LegalActions.Money.MoneyTransferBase_LegalAction.TransferInfo)" />. </item>
             <item> Treasury component implements similar taxation logic, but it is focused on accounts instead of users and does trigger game actions. This component is currently the only one who triggers ReceiveGovernmentFunds</item>
             <item> Work party's payment triggers transfer from escrow to laborer's account, but in terms of users it's from creator to laborer, so it ignores auth by granting super access: <see cref="M:Eco.Gameplay.Economy.WorkParties.CurrencyPayment.PayUser(Eco.Gameplay.Economy.WorkParties.Laborer,System.Single)" />. </item>
             </list><returns> Returns transferred amount. </returns></summary> // Return value is not currently used. And it's hard to make it precise untill the pack fully resolves.
         </member>
         <member name="M:Eco.Gameplay.Economy.Transfer.Transfers.TransferNow(Eco.Gameplay.Economy.Transfer.TransferData,System.Boolean)">
             <summary>A shortcut that performs a transfer using internally created pack and returns the result.</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Economy.Transfer.Transfers.TaxNow(Eco.Gameplay.Economy.Transfer.TaxData,System.Boolean)">
+            <summary>A shortcut that performs a tax using internally created pack and returns the result.</summary>
         </member>
         <member name="M:Eco.Gameplay.Economy.Transfer.Transfers.TransferAsPostResult(System.Collections.Generic.IEnumerable{Eco.Gameplay.Economy.Transfer.TransferData})">
             <summary>Using a list of all of the data of the transfers that we want to perform, we compose the transfers using an internally created helperPack returning a PostResult with the according PostEffects.</summary>
@@ -2318,9 +2330,6 @@
         <member name="T:Eco.Gameplay.Housing.PropertyValues.Internal.CulturalPropertyValue">
             <summary>When a property is of type 'cultural', its value will be computed with this class.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Housing.PropertyValues.Internal.CulturalPropertyValue.UpdateAndNotifyTotal(Eco.Gameplay.Property.Deed,System.Single)">
-            <summary>Calculate the new influence range here.</summary>
-        </member>
         <member name="M:Eco.Gameplay.Housing.PropertyValues.Internal.CulturalPropertyValue.SetInfluence(System.Single,Eco.Shared.Localization.LocString)">
             <summary>Returns true if there was a change.</summary>
         </member>
@@ -2367,9 +2376,6 @@
         <member name="F:Eco.Gameplay.Housing.PropertyValues.RoomCategory.CapToPercentOfRestOfProperty">
             <summary>When set, the value of rooms of this type is capped to the value of the rest of the house (the uncapped rooms).  For example, bathrooms are capped at X% of the rest of the house (because its not the main purpose of the dwelling, just a supporting role).</summary>
         </member>
-        <member name="F:Eco.Gameplay.Housing.PropertyValues.RoomCategory.IsRoomValueCappedAgainstRestOfHouse">
-            <summary>If set, rooms of this category are capped against the 'MaxPercentOfPrimaryPropertyValue'</summary>
-        </member>
         <member name="F:Eco.Gameplay.Housing.PropertyValues.RoomCategory.CanBeRoomCategory">
             <summary>When set, this cannot determine the type of a room, its a supporting category only (ex, 'Decoration' is a category of furniture but cannot be a category of room).</summary>
         </member>
@@ -2378,6 +2384,9 @@
         </member>
         <member name="F:Eco.Gameplay.Housing.PropertyValues.RoomCategory.NegatesValue">
             <summary>Set this to true if the category nulls out housing points when in a room.</summary>
+        </member>
+        <member name="T:Eco.Gameplay.InfluenceObjects.IHasBaseInfluence">
+            <summary>Placed on a worldobject component that has base influence, meaning it generates influence without culture. Only works for a deed host object.</summary>
         </member>
         <member name="T:Eco.Gameplay.InfluenceObjects.InfluenceChangeNotifier">
             <summary>Allows watching influence at a given plot position and getting a callback when changes occurr.</summary>
@@ -2471,7 +2480,7 @@
         <member name="P:Eco.Gameplay.Interactions.Interactors.ServerInteractionManager.HandsInteractor">
             <summary>We share the same hands interactor for everyone since it has no state.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Interactions.Interactors.ServerInteractionManager.LiveUpdateInteraction(Eco.Gameplay.Players.User,Eco.Gameplay.Property.Deed,Eco.Shared.Math.Vector3i,Eco.Shared.Networking.INetObject,Eco.Shared.Items.AccessType,System.Boolean)">
+        <member name="M:Eco.Gameplay.Interactions.Interactors.ServerInteractionManager.LiveUpdateInteraction(Eco.Gameplay.Players.User,Eco.Gameplay.Property.Deed,Eco.Shared.Networking.INetObject,Eco.Shared.Items.AccessType,System.Boolean)">
             <summary>Updates an interaction with any extra data that needs to be known when its being displayed to the user.</summary>
         </member>
         <member name="M:Eco.Gameplay.Interactions.Interactors.ServerInteractionManager.Initialize">
@@ -2491,7 +2500,7 @@
             <summary>Handles adding extra information given a specific interaction target, like the authorization of that item, and any adidtional world object params
             that need to be sent to it.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Interactions.Internal.InteractionLiveUpdaterServer.LiveUpdateInteraction(Eco.Gameplay.Players.User,Eco.Gameplay.Property.Deed,Eco.Shared.Math.Vector3i,Eco.Shared.Networking.INetObject,Eco.Shared.Items.AccessType,System.Boolean)">
+        <member name="M:Eco.Gameplay.Interactions.Internal.InteractionLiveUpdaterServer.LiveUpdateInteraction(Eco.Gameplay.Players.User,Eco.Gameplay.Property.Deed,Eco.Shared.Networking.INetObject,Eco.Shared.Items.AccessType,System.Boolean)">
             <summary>Updates an interaction with any extra data that needs to be known when its being displayed to the user.</summary>
             We also pass in a 'forceEnvVarUpdate' which allows the client to tell us they want an update piggybacked here.
         </member>
@@ -2570,7 +2579,7 @@
             RPC that is called by client when its time to actually remove food item from inventory an eat it
             </summary>
         </member>
-        <member name="M:Eco.Gameplay.Items.FoodItem.ConsumeInternal(Eco.Gameplay.Items.ItemStack,Eco.Gameplay.Players.User,System.Boolean,System.Boolean)">
+        <member name="M:Eco.Gameplay.Items.FoodItem.ConsumeInternal(Eco.Gameplay.Items.ItemStack,Eco.Gameplay.Players.User,System.Boolean,System.Action)">
             <summary> Wrapper for food consume process that is reused in Right click on UI (server side) and client request from toolbar </summary>
             <returns></returns>
         </member>
@@ -2583,6 +2592,18 @@
         </member>
         <member name="P:Eco.Gameplay.Items.IEcopediaEntry.IsVisibleInEcopedia">
             <summary> Returns if this entry should be displayed in Ecopedia. </summary>
+        </member>
+        <member name="T:Eco.Gameplay.Items.Internal.DestinationStacksIter">
+            <summary>Base class for all destination stacks enumerators. Wraps <see cref="F:Eco.Gameplay.Items.Internal.DestinationStacksIter.nested" /> enumerator and adds <see cref="M:Eco.Gameplay.Items.Internal.DestinationStacksIter.SetSourceItem(Eco.Gameplay.Items.Item)" /> to API.</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Items.Internal.DestinationStacksIter.SetSourceItem(Eco.Gameplay.Items.Item)">
+            <summary>Set source item for that destination stack enumerator. It may change an enumerator. Returns <c>true</c> if enumerator reset.</summary>
+        </member>
+        <member name="T:Eco.Gameplay.Items.Internal.SingleDestinationStacksIter">
+            <summary>Implementation of <see cref="T:Eco.Gameplay.Items.Internal.DestinationStacksIter" /> for single target stack.</summary>
+        </member>
+        <member name="T:Eco.Gameplay.Items.Internal.GeneralDestinationStacksIter">
+            <summary>Implementation of <see cref="T:Eco.Gameplay.Items.Internal.DestinationStacksIter" /> for items movement. It filters destination stacks to either match item type or be empty. Then stacks ordered descending by quantity.</summary>
         </member>
         <member name="T:Eco.Gameplay.Items.InventoryRelated.ConsolidationUtils">
             <summary> Class used to consolidate storages (order inventories by type, quantity and quality).</summary>
@@ -2693,6 +2714,13 @@
         <member name="M:Eco.Gameplay.Items.InventoryChangeSet.ModifyStack(Eco.Gameplay.Items.ItemStack,Eco.Gameplay.Items.ChangedStack,System.Int32,System.Int32,Eco.Gameplay.Items.Item,System.Boolean)">
             <summary>Modifies inventory <paramref name="stack" />.</summary>
         </member>
+        <member name="M:Eco.Gameplay.Items.InventoryChangeSet.MoveAsManyItemsAsPossible(Eco.Gameplay.Items.Inventory,Eco.Gameplay.Items.Inventory)">
+            <summary>Try to move all items from src to dst inventory with move result.</summary>
+            <remarks>Only returns failure when not a single item is moved otherwise success</remarks>
+        </member>
+        <member name="M:Eco.Gameplay.Items.InventoryChangeSet.MoveAllItems(Eco.Gameplay.Items.Item,System.Int32,Eco.Gameplay.Items.Inventory,Eco.Gameplay.Items.Inventory,System.Func{Eco.Gameplay.Items.ItemStack,System.Boolean})">
+            <summary>Try to move all items from source to dst inventory with result.</summary>
+        </member>
         <member name="M:Eco.Gameplay.Items.InventoryChangeSet.CheckAuthForMove(Eco.Gameplay.Players.User,Eco.Gameplay.Items.Inventory,Eco.Gameplay.Items.Inventory,System.Type,System.Int32@)">
             <summary> Checks if user authorized to move stacks between inventories and adjust allowed quantity for inventories with restricted amount (i.e. for distribution station). </summary>
         </member>
@@ -2704,32 +2732,23 @@
             <summary>Return a comma-separated string of the recent items added to the inventory.</summary>
         </member>
         <member name="M:Eco.Gameplay.Items.InventoryChangeSet.GetDestinationStacksEnumerator(Eco.Gameplay.Items.Item,Eco.Gameplay.Items.Inventory,Eco.Gameplay.Items.ItemStack)">
-            <summary>
-            Returns appropriate destination stacks enumerator based on params.
-            - if targetStack non null then returns <see cref="T:Eco.Gameplay.Items.InventoryChangeSet.MoveToSingleStackDestinationStacksEnumerator" />
-            - if itemType is <see cref="T:Eco.Gameplay.Items.IStackableMergable" /> then returns <see cref="T:Eco.Gameplay.Items.InventoryChangeSet.MoveStackableItemsDestinationStacksEnumerator" />
-            - otherwise returns <see cref="T:Eco.Gameplay.Items.InventoryChangeSet.MoveRegularItemsDestinationStacksEnumerator" />
-            </summary>
+            <summary>Returns appropriate destination stacks enumerator based on params.</summary>
         </member>
-        <member name="T:Eco.Gameplay.Items.InventoryChangeSet.MoveToSingleStackDestinationStacksEnumerator">
-            <summary>Implementation of <see cref="T:Eco.Gameplay.Items.InventoryChangeSet.MoveItemsDestinationStacksEnumerator" /> for single target stack.</summary>
+        <member name="T:Eco.Gameplay.Items.InventoryMoveResult">
+            <summary>Result from inventory change set moved items</summary>
+            <param name="Result"> Normal result from item inventory move changes </param>
+            <param name="PartialMove"> whether or not move managed to take all items or only a portion</param>
         </member>
-        <member name="T:Eco.Gameplay.Items.InventoryChangeSet.MoveRegularItemsDestinationStacksEnumerator">
-            <summary>Implementation of <see cref="T:Eco.Gameplay.Items.InventoryChangeSet.MoveItemsDestinationStacksEnumerator" /> for regular items movement. It filters destination stacks to either match item type or be empty. Then stacks ordered descending by quantity.</summary>
+        <member name="M:Eco.Gameplay.Items.InventoryMoveResult.#ctor(Eco.Core.Utils.Result,System.Boolean)">
+            <summary>Result from inventory change set moved items</summary>
+            <param name="Result"> Normal result from item inventory move changes </param>
+            <param name="PartialMove"> whether or not move managed to take all items or only a portion</param>
         </member>
-        <member name="T:Eco.Gameplay.Items.InventoryChangeSet.MoveStackableItemsDestinationStacksEnumerator">
-            <summary>
-            Implementation of <see cref="T:Eco.Gameplay.Items.InventoryChangeSet.MoveItemsDestinationStacksEnumerator" /> for <see cref="T:Eco.Gameplay.Items.IStackableMergable" /> items movement.
-            First it prepares <see cref="F:Eco.Gameplay.Items.InventoryChangeSet.MoveStackableItemsDestinationStacksEnumerator.suitableStacks" /> which may be used as destination (stacks with same item type or empty stacks).
-            Nested enumerator not created until <see cref="M:Eco.Gameplay.Items.InventoryChangeSet.MoveStackableItemsDestinationStacksEnumerator.SetSourceItem(Eco.Gameplay.Items.Item)" /> called. If you try to access enumerator before that then it will fail with exception.
-            Depending on source item it applies sorting to <see cref="F:Eco.Gameplay.Items.InventoryChangeSet.MoveStackableItemsDestinationStacksEnumerator.suitableStacks" />. It only happens if source item is first or has different stackable quality group.
-            </summary>
+        <member name="P:Eco.Gameplay.Items.InventoryMoveResult.Result">
+            <summary> Normal result from item inventory move changes </summary>
         </member>
-        <member name="T:Eco.Gameplay.Items.InventoryChangeSet.MoveItemsDestinationStacksEnumerator">
-            <summary>Base class for all destination stacks enumerators. Wraps <see cref="F:Eco.Gameplay.Items.InventoryChangeSet.MoveItemsDestinationStacksEnumerator.nested" /> enumerator and adds <see cref="M:Eco.Gameplay.Items.InventoryChangeSet.MoveItemsDestinationStacksEnumerator.SetSourceItem(Eco.Gameplay.Items.Item)" /> to API.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Items.InventoryChangeSet.MoveItemsDestinationStacksEnumerator.SetSourceItem(Eco.Gameplay.Items.Item)">
-            <summary>Set source item for that destination stack enumerator. It may change an enumerator. Returns <c>true</c> if enumerator reset.</summary>
+        <member name="P:Eco.Gameplay.Items.InventoryMoveResult.PartialMove">
+            <summary> whether or not move managed to take all items or only a portion</summary>
         </member>
         <member name="T:Eco.Gameplay.Items.InventoryAccessType">
             <summary>Used to describe the access type of inventory (are we using in with player hands or from vehicle tool, etc)</summary>
@@ -2973,6 +2992,9 @@
         </member>
         <member name="F:Eco.Gameplay.Items.ItemPersistentData.ResetButton">
             <summary>Clickable tooltip section, triggers ClearOnRequest (see ResetDataTooltip).</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Items.ItemPersistentData.ClearPersistentItem(System.Object,Eco.Core.PropertyHandling.MemberChangedBeforeAfterEventArgs)">
+            <summary>We make sure to remove invalid items from the peristent data list.</summary>
         </member>
         <member name="M:Eco.Gameplay.Items.ItemPersistentData.TryGetPersistentData``1(System.Object@)">
             <summary>Tries to obtain persistent data for <typeparamref name="TComponent" /> if it was previously added by <see cref="M:Eco.Gameplay.Items.ItemPersistentData.TryAddPersistentDataFromComponent(Eco.Gameplay.Items.IPersistentData)" />.</summary>
@@ -3239,9 +3261,19 @@
         <member name="M:Eco.Gameplay.Items.WorldObjectItem.GetAllObjectsTooltip(Eco.Gameplay.Players.Player)">
             <summary> Generates tooltip displaying list of all world objects created from this item type in the world </summary>
         </member>
+        <member name="P:Eco.Gameplay.Items.WorldObjectItem.ShouldCreate">
+            <summary>If true, the system will automatically create the world object item when placed. If false, then the item must manually do it in 'PlacingObject'</summary>
+        </member>
         <member name="M:Eco.Gameplay.Items.WorldObjectItem.Place(Eco.Gameplay.Players.Player,Eco.Shared.Math.Vector3i,Eco.Shared.Math.Quaternion)">
             <summary> RPC that attempts to place the WorldObject that is represented by this item. </summary>
             <remarks> Will still do server-side checks to see if it can indeed be placed, and can fail if it can't. </remarks>
+        </member>
+        <member name="M:Eco.Gameplay.Items.WorldObjectItem.CanPlaceObject(Eco.Gameplay.Players.Player,Eco.Shared.Math.Vector3i,Eco.Shared.Math.Quaternion)">
+            <summary> Override this function if you want to have async processing for Place Object action (like asking a citizen for confirmation). </summary>
+        </member>
+        <member name="M:Eco.Gameplay.Items.WorldObjectItem.PlacingObject(Eco.Gameplay.GameActions.GameActionPack,Eco.Gameplay.Players.Player,Eco.Gameplay.Items.ItemStack,Eco.Shared.Math.Vector3i,Eco.Shared.Math.Quaternion)">
+            <summary>Do anything special that needs to be done when this thing is placed, by putting it into a game action pack.  The future placed object can be retreived by 
+            the passed func, inside posteffects (its assigned in a previous post effect, already setup to run when this is called)</summary>
         </member>
         <member name="M:Eco.Gameplay.Items.WorldObjectItem.Move(Eco.Gameplay.Players.Player,Eco.Shared.Math.Vector3i,Eco.Shared.Math.Quaternion,Eco.Shared.Networking.INetObject)">
             <summary> Attempts to move the WorldObject that this item represents, from its existing point to specified position and rotation. </summary>
@@ -3249,13 +3281,6 @@
         <member name="M:Eco.Gameplay.Items.WorldObjectItem.GetMoveInfo(Eco.Gameplay.Players.Player,Eco.Shared.Networking.INetObject)">
             <summary> Retrieves the initial info required for a WorldObject's movement, like deed/settlement restrictions and messages, calories required, etc. </summary>
             <remarks> Contains enough info for the client to do the necessary validations and display things properly. </remarks>
-        </member>
-        <member name="M:Eco.Gameplay.Items.WorldObjectItem.TryPlaceObject(Eco.Gameplay.Players.Player,Eco.Shared.Math.Vector3i,Eco.Shared.Math.Quaternion)">
-            <summary> Override this function if you want to have async processing for Place Object action (like asking a citizen for confirmation). </summary>
-        </member>
-        <member name="M:Eco.Gameplay.Items.WorldObjectItem.OnAreaValid(Eco.Gameplay.GameActions.GameActionPack,Eco.Gameplay.Players.Player,Eco.Shared.Math.Vector3i,Eco.Shared.Math.Quaternion)">
-            <summary> This is called when the area a WorldObjct is about to be placed is valid. </summary>
-            <remarks> Typically used to initialize more PostEffect actions or late checks before the action is performed. </remarks>
         </member>
         <member name="M:Eco.Gameplay.Items.WorldObjectItem.OnPreWorldObjectPlaced(Eco.Gameplay.Objects.WorldObject)">
             <summary>This is called immediately before placement, before initialization and net object activation.</summary>
@@ -3476,7 +3501,7 @@
             <summary>Straight implementation of the IMinimapObject interface, used to allow objects to make use of minimap icons separate from themselves (IE, when we want
             to share a minimap object without syncing the entire object, like with trees/world objects).</summary>
         </member>
-        <member name="M:Eco.Gameplay.Minimap.MinimapObject.UpdatePosition(System.Numerics.Vector3,System.Single)">
+        <member name="M:Eco.Gameplay.Minimap.MinimapObject.UpdatePosition(System.Numerics.Vector3,System.Nullable{System.Single})">
             <summary> Prevents excesive updates of minimap icons. It will update position only if it changed position by 0.3m or if have at least 1 degere of difference of rotation. </summary>
         </member>
         <member name="M:Eco.Gameplay.Modules.AllowPluginModulesAttribute.GetStackables">
@@ -3523,6 +3548,11 @@
         </member>
         <member name="M:Eco.Gameplay.Modules.PluginModule.Modify(Eco.Gameplay.DynamicValues.ModuleModifiedValue)">
             <summary> Modified <paramref name="value" /> using the module. I.e. if <see cref="P:Eco.Gameplay.DynamicValues.ModuleModifiedValue.ValueType" /> is <see cref="F:Eco.Gameplay.DynamicValues.DynamicValueType.Efficiency" /> then it may be decreased by some percent. </summary>
+        </member>
+        <member name="T:Eco.Gameplay.Objects.BuildingWorldObjectBlock">
+            <summary>
+            Solid world object block used as a placeholder in occupied blocks. Marked as solid on the client, for builder purposes.
+            </summary>
         </member>
         <member name="M:Eco.Gameplay.Objects.EcoObjectManager.MarkAsDirty(Eco.Gameplay.Objects.IEcoObject)">
             <summary>
@@ -3575,6 +3605,11 @@
         <member name="M:Eco.Gameplay.Objects.RubbleObject.Spawn(Eco.Gameplay.Players.Player,System.Numerics.Vector3@,System.Type[])">
             <summary> Not inteneded to be invoked directly, use atomic actions or public `Try-` accessors. </summary>
         </member>
+        <member name="T:Eco.Gameplay.Objects.WaterWorldObjectBlock">
+            <summary>
+            A WorldObject Water Block that replaces a Terrain Water Block. Occupies the space in the water, blocking placement
+            </summary>
+        </member>
         <member name="P:Eco.Gameplay.Objects.WorldObject.CachedSettlementAtPos">
             <summary>Get the settlement associate with this world object.  Defined as the lowest level settlement
             that influences this position.  This is cached data built from the influence map.</summary>
@@ -3588,10 +3623,6 @@
         <member name="M:Eco.Gameplay.Objects.WorldObject.ToggleAnimatedState(Eco.Gameplay.Players.Player,System.String)">
             <summary> Toggles the animated state with given name to its opposite state, assuming the calling player has at least consumer access. </summary>
             <remarks> Extra useful for modders that would like to include a variety of states and control them in different ways (e.g.: Player input to turn lights on/off while driving a vehicle). </remarks>
-        </member>
-        <member name="M:Eco.Gameplay.Objects.WorldObject.PickupComponents(Eco.Gameplay.Objects.WorldObject.PickupType,Eco.Gameplay.Items.Inventory,Eco.Gameplay.Players.User,Eco.Gameplay.GameActions.GameActionPack,System.Boolean)">
-            <summary> Calls TryPickup for components in the WorldObject, and adds them to the inventory if applicable. </summary>
-            <remarks> If any 'TryPickup' instance fails, the actionPack will fail, so no items will be moved. </remarks>
         </member>
         <member name="M:Eco.Gameplay.Objects.WorldObject.MoveWorldObjectTo(Eco.Shared.Math.Vector3i,Eco.Shared.Math.Quaternion)">
             <summary>Moves world object by updating position, rotation, block occupancy and triggers moved events.</summary>
@@ -3672,16 +3703,6 @@
             <summary> Called once the object's move action has been confirmed and the position has been updated. </summary>
             <remarks> Use this to re-initialize anything that needs it (e.g.: leftover blocks of stockpile). </remarks>
         </member>
-        <member name="T:Eco.Gameplay.Objects.WaterWorldObjectBlock">
-            <summary>
-            A WorldObject Water Block that replaces a Terrain Water Block. Occupies the space in the water, blocking placement
-            </summary>
-        </member>
-        <member name="T:Eco.Gameplay.Objects.BuildingWorldObjectBlock">
-            <summary>
-            Solid world object block used as a placeholder in occupied blocks. Marked as solid on the client, for builder purposes.
-            </summary>
-        </member>
         <member name="M:Eco.Gameplay.Objects.WorldObjectManager.GetWorldObjectsFromComponent(System.Type,System.Boolean)">
             <summary>We get all the world objects that have the specified component.</summary>
             <param name="includeHiddenObjects">Do we want to also get the hidden objects ?</param>
@@ -3691,18 +3712,6 @@
         </member>
         <member name="M:Eco.Gameplay.Objects.WorldObjectManager.AddToTick(Eco.Gameplay.Objects.ITickOnDemand)">
             <inheritdoc cref="M:Eco.Gameplay.Objects.IWorldObjectManager.AddToTick(Eco.Gameplay.Objects.ITickOnDemand)" />
-        </member>
-        <member name="M:Eco.Gameplay.Objects.WorldObjectManager.IsValidPlacement(Eco.Gameplay.Items.WorldObjectItem,System.Numerics.Vector3,Eco.Shared.Math.Quaternion)">
-            <summary>
-            Same as <see cref="M:Eco.Gameplay.Objects.WorldObjectManager.IsValidPlacement(Eco.Gameplay.Items.WorldObjectItem,System.Numerics.Vector3,Eco.Shared.Math.Quaternion,System.Collections.Generic.List{Eco.Shared.Math.Vector3i}@)" /> except that this version ignores the occupied block positions.
-            Use this if it's not necessary to know what are the occupied blocks.
-            </summary>
-        </member>
-        <member name="M:Eco.Gameplay.Objects.WorldObjectManager.IsValidPlacement(Eco.Gameplay.Items.WorldObjectItem,System.Numerics.Vector3,Eco.Shared.Math.Quaternion,System.Collections.Generic.List{Eco.Shared.Math.Vector3i}@)">
-            <summary>
-            Given a world object, a position and a rotation, check if it's a valid placement position for the world object.
-            <paramref name="occupiedBlockPositions" /> is a list that will be filled inside this function, containing every block position that is already occupied by an object.
-            </summary>
         </member>
         <member name="M:Eco.Gameplay.Objects.WorldObjectManager.TryMoveWorldObject(Eco.Gameplay.Players.Player,Eco.Gameplay.Items.WorldObjectItem,Eco.Gameplay.Objects.WorldObject,Eco.Shared.Math.Vector3i,Eco.Shared.Math.Quaternion)">
             <summary> Attempts to move an already placed WorldObject to a new position. </summary>
@@ -3726,6 +3735,10 @@
         </member>
         <member name="M:Eco.Gameplay.Objects.WorldObjectUtil.SelfAndComponentsWithInterface``1(Eco.Gameplay.Objects.WorldObject)">
             <summary>Return ourselves and any component that derives from the given interface.</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Objects.WorldObjectUtil.TryPickupComponents(Eco.Gameplay.Objects.WorldObject,Eco.Gameplay.Objects.WorldObjectUtil.PickupType,Eco.Gameplay.Items.Inventory,Eco.Gameplay.Players.User,Eco.Gameplay.GameActions.GameActionPack,System.Boolean)">
+            <summary> Calls TryPickup for components in the WorldObject, and adds them to the inventory when possible. </summary>
+            <remarks> If any component 'TryPickup' instance succeeds, the actionPack won't fail and valid items will be moved. </remarks>
         </member>
         <member name="T:Eco.Gameplay.Objects.MemoryManager">
             <summary> Used to find memory leaks, by example, world objects that are still exists in memory even after removal from the world. </summary>
@@ -3923,6 +3936,18 @@
         <member name="M:Eco.Gameplay.Pipes.LiquidComponents.LiquidConsumerComponent.EnsureAmountWanted">
             <summary> Ensures wanted amount calculated. </summary>
         </member>
+        <member name="T:Eco.Gameplay.Placement.BlockPlacementUtils">
+            <summary>Functions to assist in placing blocks</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Placement.BlockPlacementUtils.PlaceAndNotify(Eco.Gameplay.Players.Player,Eco.Gameplay.Items.BlockItem,Eco.Shared.Math.Vector3i)">
+            <summary>Place a block at the given position, stacking or dropping as appropriate.</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Placement.BlockPlacementUtils.PlaceBlockUnstacked(Eco.Gameplay.Players.Player,Eco.Shared.Math.Vector3i,Eco.Gameplay.Items.BlockItem)">
+            <summary> Place a block unstacked, needs unoccupied space. </summary>
+        </member>
+        <member name="M:Eco.Gameplay.Placement.BlockPlacementUtils.PlaceBlockStacked(Eco.Gameplay.Players.Player,Eco.World.Blocks.Block,Eco.Shared.Math.Vector3i,Eco.Gameplay.Items.BlockItem)">
+            <summary> Place a block in an existing stack. </summary>
+        </member>
         <member name="T:Eco.Gameplay.Placement.IHostedObject">
             <summary>Add this interface when an object can't exist without a host object. IE. for a more detailed example see <see cref="T:Eco.Gameplay.Civics.Misc.IProposable" /> and <see cref="T:Eco.Gameplay.Civics.Misc.SimpleProposable" />.</summary>
         </member>
@@ -3961,8 +3986,8 @@
             <summary> Plug'n'Play movement restriction for WorldObjects that can not be moved outside their settlement with the 'MoveWorldObject' action. </summary>
             <remarks> Implement on the affected WorldObject directly. Fail message can be altered per implementing class to better suit its needs. </remarks>
         </member>
-        <member name="T:Eco.Gameplay.Placement.IMoveableWithinDeed">
-            <summary> Plug'n'Play movement restriction for WorldObjects that can not be moved outside their deed with the 'MoveWorldObject' action. </summary>
+        <member name="T:Eco.Gameplay.Placement.IMoveableWithinDeedAndInfluence">
+            <summary> Plug'n'Play movement restriction for WorldObjects that can not be moved outside their deed with the 'MoveWorldObject' action, or outside the influence of the associated settlement. </summary>
             <remarks> Implement on the affected WorldObject directly. Fail message can be altered per implementing class to better suit its needs. </remarks>
         </member>
         <member name="M:Eco.Gameplay.Placement.OrphanAssignmentExtensions.OrphanAssignmentInitializeAsync(Eco.Gameplay.Placement.IOrphanAssignment,System.Boolean)">
@@ -3981,17 +4006,31 @@
         <member name="M:Eco.Gameplay.Placement.OrphanAssignmentExtensions.SetOrphans(Eco.Gameplay.Placement.IOrphanAssignment,Eco.Gameplay.Players.Player,System.Collections.Generic.IEnumerable{Eco.Core.Systems.INamed},System.Collections.Generic.IEnumerable{Eco.Core.Systems.INamed})">
             <summary>Assign a set of proposables as orphans.</summary>
         </member>
-        <member name="T:Eco.Gameplay.Placement.PlacementUtils">
-            <summary>Functions to assist in placing blocks</summary>
+        <member name="T:Eco.Gameplay.Placement.WorldObjectPlacementUtils">
+            <summary>Funcs for helping place world objects.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Placement.PlacementUtils.PlaceAndNotify(Eco.Gameplay.Players.Player,Eco.Gameplay.Items.BlockItem,Eco.Shared.Math.Vector3i)">
-            <summary>Place a block at the given position, stacking or dropping as appropriate.</summary>
+        <member name="M:Eco.Gameplay.Placement.WorldObjectPlacementUtils.TryPlaceWorldObjectNow(Eco.Gameplay.Players.Player,Eco.Gameplay.Items.WorldObjectItem,Eco.Gameplay.Items.ItemStack,Eco.Shared.Math.Vector3i,Eco.Shared.Math.Quaternion)">
+            <inheritdoc cref="M:Eco.Gameplay.Placement.WorldObjectPlacementUtils.TryPlaceWorldObject(Eco.Gameplay.GameActions.GameActionPack,Eco.Gameplay.Players.Player,Eco.Gameplay.Items.WorldObjectItem,Eco.Gameplay.Items.ItemStack,Eco.Shared.Math.Vector3i,Eco.Shared.Math.Quaternion)" />
         </member>
-        <member name="M:Eco.Gameplay.Placement.PlacementUtils.PlaceBlockUnstacked(Eco.Gameplay.Players.Player,Eco.Shared.Math.Vector3i,Eco.Gameplay.Items.BlockItem)">
-            <summary> Place a block unstacked, needs unoccupied space. </summary>
+        <member name="M:Eco.Gameplay.Placement.WorldObjectPlacementUtils.TryPlaceWorldObject(Eco.Gameplay.GameActions.GameActionPack,Eco.Gameplay.Players.Player,Eco.Gameplay.Items.WorldObjectItem,Eco.Gameplay.Items.ItemStack,Eco.Shared.Math.Vector3i,Eco.Shared.Math.Quaternion)">
+            <summary>Do the steps for placing a world object from a worldobjectitem.</summary>
+            <param name="containingStack">Reduces this stack if it succeeds, if set.</param>
+            <return>A function that will let the caller retreive the object that is finally placed in a PostEffect, which can then be used in subsequent PostEffects.</return>
         </member>
-        <member name="M:Eco.Gameplay.Placement.PlacementUtils.PlaceBlockStacked(Eco.Gameplay.Players.Player,Eco.World.Blocks.Block,Eco.Shared.Math.Vector3i,Eco.Gameplay.Items.BlockItem)">
-            <summary> Place a block in an existing stack. </summary>
+        <member name="M:Eco.Gameplay.Placement.WorldObjectPlacementUtils.FinishPlacement(Eco.Gameplay.Players.User,Eco.Gameplay.Objects.WorldObject)">
+            <summary>Do notices for a finished placed world object. If an item doesnt create with 'ShouldCreate' flag, it needs to do this expliclty! Otherwise, it happens automaticall.</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Placement.WorldObjectPlacementUtils.IsValidPlacement(Eco.Gameplay.Items.WorldObjectItem,System.Numerics.Vector3,Eco.Shared.Math.Quaternion)">
+            <summary>
+            Same as <see cref="M:Eco.Gameplay.Placement.WorldObjectPlacementUtils.IsValidPlacement(Eco.Gameplay.Items.WorldObjectItem,System.Numerics.Vector3,Eco.Shared.Math.Quaternion,System.Collections.Generic.List{Eco.Shared.Math.Vector3i}@)" /> except that this version ignores the occupied block positions.
+            Use this if it's not necessary to know what are the occupied blocks.
+            </summary>
+        </member>
+        <member name="M:Eco.Gameplay.Placement.WorldObjectPlacementUtils.IsValidPlacement(Eco.Gameplay.Items.WorldObjectItem,System.Numerics.Vector3,Eco.Shared.Math.Quaternion,System.Collections.Generic.List{Eco.Shared.Math.Vector3i}@)">
+            <summary>
+            Given a world object, a position and a rotation, check if it's a valid placement position for the world object.
+            <paramref name="occupiedBlockPositions" /> is a list that will be filled inside this function, containing every block position that is already occupied by an object.
+            </summary>
         </member>
         <member name="P:Eco.Gameplay.Plants.PlantEntity.SkillType">
             <summary> The skill this plant should give EXP to when harvested. Null if it doesn't return anything</summary>
@@ -4200,7 +4239,7 @@
             Called when the client changes the value of <see cref="P:Eco.Gameplay.Players.Player.TwitchEnabled" />.
             </summary>
         </member>
-        <member name="F:Eco.Gameplay.Players.Player.Mount">
+        <member name="F:Eco.Gameplay.Players.Player.MountManager">
             <summary>Handles all player vehicle mounting and dismounting logic.</summary>
         </member>
         <member name="M:Eco.Gameplay.Players.Player.OpenInfoPanel(System.String,System.String,System.String)">
@@ -4245,6 +4284,10 @@
             <param name="message">The text to be shown.</param>
             <param name="options">Options to be added to the dropdown.</param>
             <returns>Index of the selected item. -1 if the player cancels the dialog.</returns>
+        </member>
+        <member name="M:Eco.Gameplay.Players.Player.SetTwitchState(System.Boolean)">
+            <summary>Sets the client's current Twitch enabled status state.</summary>
+            <param name="state">State that the client is currently in.</param>
         </member>
         <member name="M:Eco.Gameplay.Players.Player.TryDamage(Eco.Shared.Networking.INetObject,System.Single)">
             <summary> Delegates damage to <see cref="P:Eco.Gameplay.Players.Player.User" />. </summary>
@@ -4304,12 +4347,6 @@
             Partial class for <see cref="T:Eco.Gameplay.Players.User" /> for implementing the <seealso cref="T:Eco.Gameplay.Systems.Chat.IChatClient" /> interface
             </summary>
         </member>
-        <member name="P:Eco.Gameplay.Players.User.SelectedItem">
-            <summary> Toolbar selected item ref from user inventory, this is always available to UserView on client and updated in both server/client on changes. </summary>
-        </member>
-        <member name="P:Eco.Gameplay.Players.User.ToolbarOverrideStack">
-            <summary> Interaction override item stack ref for any item that can be forced to override current toolbar held object. </summary>
-        </member>
         <member name="P:Eco.Gameplay.Players.User.AllCitizenships">
             <summary>Citizenship of town, and its country, and its federation, etc (if they exist)</summary>
         </member>
@@ -4317,8 +4354,8 @@
             <summary>List of achievement names.</summary>
             <remarks>We serialize this even though it comes from the Achievement Manager so achievements can work on a given world even without that.</remarks>
         </member>
-        <member name="M:Eco.Gameplay.Players.User.OverrideToolbarSlot(Eco.Gameplay.Items.Item)">
-            <summary> Sets target stack as a force selected slot. Can be used from everywhere, not just a stack from player's inventory </summary>
+        <member name="P:Eco.Gameplay.Players.User.CachedAchievements">
+            <summary>Achievements that were given to user while offline, cached so they can be granted when they log back in for steam achievements to work properly</summary>
         </member>
         <member name="M:Eco.Gameplay.Players.User.#ctor(System.String)">
             <summary> Constructor used only for creating fake users in benchmarks. </summary>
@@ -4326,11 +4363,11 @@
         <member name="M:Eco.Gameplay.Players.User.NotifyIncomeAndExpensesChange">
             <summary>Force a change in Income and expenses object to update the state of it on client side.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Players.User.CheckForUserSelectedItemChange(Eco.Gameplay.Players.User,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.Type,System.Int32}},System.Collections.Generic.Dictionary{Eco.Gameplay.Items.ItemStack,Eco.Gameplay.Items.ChangedStack})">
-            <summary> This is called when any change happen to selected stack for user. Replace, quantity changes, but only for selected item on toolbar,</summary>
-        </member>
         <member name="M:Eco.Gameplay.Players.User.LoginCompleted">
             <summary> To be called when client already have assigned WorldObserver. </summary>
+        </member>
+        <member name="M:Eco.Gameplay.Players.User.ParseCachedAchievements">
+            <summary>Goes over cached achievements for this user and grants them, called when they enter the world</summary>
         </member>
         <member name="M:Eco.Gameplay.Players.User.TabSelected(System.String)">
             <summary> On client-site event used when the user select a tab</summary>
@@ -4495,7 +4532,7 @@
         <member name="M:Eco.Gameplay.Property.ClaimingUtils.PositionNeighborsDeed(Eco.Gameplay.Property.Deed,Eco.Shared.Voxel.PlotPos)">
             <summary>Check if the given plot pos neighbors any plot on this deed.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Property.ClaimingUtils.CheckCanRemovePlotAndNotify(Eco.Gameplay.Property.Deed,Eco.Shared.Voxel.PlotPos,Eco.Gameplay.Players.User)">
+        <member name="M:Eco.Gameplay.Property.ClaimingUtils.CheckCanRemovePlotAndNotify(Eco.Gameplay.Property.Deed,Eco.Shared.Voxel.PlotPos,Eco.Gameplay.Players.User,System.Collections.Generic.IEnumerable{Eco.Shared.Voxel.PlotPos})">
             <summary>Check whether we can remove that plot from this deed or not.</summary>
         </member>
         <member name="M:Eco.Gameplay.Property.ClaimingUtils.CheckDeedIsContiguousAndNotify(Eco.Gameplay.Property.Deed,Eco.Gameplay.Players.User,System.Collections.Generic.List{Eco.Shared.Voxel.PlotPos},System.Collections.Generic.List{Eco.Shared.Voxel.PlotPos},Eco.Shared.Localization.LocString)">
@@ -4513,26 +4550,14 @@
         <member name="M:Eco.Gameplay.Property.ClaimingUtils.DeedOwnedByAbandonedPlayer(Eco.Gameplay.Property.Deed)">
             <summary>If all the owners are abandoned then this deed is considered abandoned also.</summary>
         </member>
-        <member name="P:Eco.Gameplay.Property.Deed.ResidentsChangedEvent">
-            <summary>Event to notify when <see cref="P:Eco.Gameplay.Property.Residency.Residents" /> content has changed (raised by <see cref="T:Eco.Core.PropertyHandling.WatchSubMemberAttribute" />).</summary>
-        </member>
-        <member name="P:Eco.Gameplay.Property.Deed.CenterPos">
-            <summary>The average position of all the plots. May not actually be on a plot contained by the deed. Null if no plots.</summary>
-        </member>
         <member name="P:Eco.Gameplay.Property.Deed.PropertyValue">
             <summary>The value of this deed, based on its type.</summary>
-        </member>
-        <member name="P:Eco.Gameplay.Property.Deed.PropertyValueBoost">
-            <summary>A value that will be applied as a boost to the property value of this deed, whatever type it is.</summary>
-        </member>
-        <member name="P:Eco.Gameplay.Property.Deed.HostObject">
-            <summary>The claim stake or foundation object that has the deed associated with it.</summary>
         </member>
         <member name="P:Eco.Gameplay.Property.Deed.CachedAssignedSettlementOfStake">
             <summary>Return the settlement influencing this position, by looking at the components on the stake. Can be a settlement stake, a foundation, or a homestead stake.</summary>
         </member>
-        <member name="P:Eco.Gameplay.Property.Deed.IndirectInfluencingSettlements">
-            <summary>All the settlements that are influecnign this deed indirectly (lke all the parents of the influencing settlement).</summary>
+        <member name="P:Eco.Gameplay.Property.Deed.BlockChildInfluence">
+            <summary>True if claimed land on this plot is locked to the settlement assigned only.</summary>
         </member>
         <member name="M:Eco.Gameplay.Property.Deed.UpdateInfluencingSettlement">
             <summary>Update what settlement is associated with this deed. This can change when a homemstead component changes allegiances.</summary>
@@ -4540,9 +4565,8 @@
         <member name="P:Eco.Gameplay.Property.Deed.IsHomesteadDeed">
             <summary>Is this deed claimed via a homestead claim stake?</summary>
         </member>
-        <member name="M:Eco.Gameplay.Property.Deed.SetHostObject(Eco.Gameplay.Objects.WorldObject,System.Boolean)">
+        <member name="M:Eco.Gameplay.Property.Deed.ChangeHostObject(Eco.Gameplay.Objects.WorldObject)">
             <summary>Sets the host object, the placed claim stake or foundation that allows the deed to claim property.</summary>
-            <param name="preventUpdate">This is useful when we're changing the host object to a temporary value and we don't want to update anything in the mean time.</param>
         </member>
         <member name="M:Eco.Gameplay.Property.Deed.SetDeedPropertyType(Eco.Gameplay.Players.Player,Eco.Shared.Items.PropertyType)">
             <summary>Verify property change is valid and apply it if so, or inform user why not if not.</summary>
@@ -4569,6 +4593,15 @@
             <param name="okBox"></param>
             <param name="superAccess">There will be no check whether the changer has access to the property. Currently used for sales in the real estate desk.</param>
             <returns>Returns either result of CanChangeOwner chek or the result of the pack.TryPerform() invokation.</returns>
+        </member>
+        <member name="M:Eco.Gameplay.Property.DeedFactory.CreateDeed(Eco.Gameplay.Players.User,System.String,Eco.Shared.Items.PropertyType)">
+            <summary>Creates a new deed with the specified User as the owner and creator.</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Property.DeedFactory.CreateDeed(Eco.Gameplay.Aliases.IAlias,Eco.Gameplay.Players.User,System.String,Eco.Shared.Items.PropertyType)">
+            <summary>Creates a new deed with the specified IAlias as owner and User as creator.
+            The owner should never be null, in case the owner is null, the deed will remain unowned and also the name of the deed will be default (e.g.: Deed 1), unless the deedName is set.
+            If the owner is setted then it would be forced to be the owner of the deed and it would take its name as reference to create a deed name (e.g.: Playertropolis).
+            The creator is the first user that made the deed, also in case of changing the owner, the creator does not retain any rights in the deed, only the title as the creator.</summary>
         </member>
         <member name="T:Eco.Gameplay.Property.IOwnableHandle">
             <summary> A reference to an object which can be owned by a deed.  The deed must be able
@@ -4604,17 +4637,14 @@
             <summary>Given a list of plots, return how many of the neighboring spaces are occupied by a plot from 'neighborPlots' as 'Count', and return the total number of
             neighboring plots as 'Total'.</summary>
         </member>
+        <member name="M:Eco.Gameplay.Property.PropertyManager.AllOwnedDeeds(Eco.Gameplay.Players.User)">
+            <summary>All deeds who have the specified user as part of the owners. This is a slow operation.</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Property.PropertyManager.AllDeedsOwnerIs(Eco.Gameplay.Aliases.IAlias)">
+            <summary>All deeds that are specifically owned by the specified alias. This is a slow operation.</summary>
+        </member>
         <member name="M:Eco.Gameplay.Property.PropertyManager.RemoveDeed(Eco.Gameplay.Property.Deed,Eco.Gameplay.Players.User,System.Boolean)">
             <summary>This removes the deed, when force parameter is true it forces the process avoiding prompts and laws.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Property.PropertyManager.CreateDeed(Eco.Gameplay.Players.User,System.String,Eco.Shared.Items.PropertyType)">
-            <summary>Creates a new deed with the specified User as the owner and creator.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Property.PropertyManager.CreateDeed(Eco.Gameplay.Aliases.IAlias,Eco.Gameplay.Players.User,System.String,Eco.Shared.Items.PropertyType)">
-            <summary>Creates a new deed with the specified IAlias as owner and User as creator.
-            The owner should never be null, in case the owner is null, the deed will remain unowned and also the name of the deed will be default (e.g.: Deed 1), unless the deedName is set.
-            If the owner is setted then it would be forced to be the owner of the deed and it would take its name as reference to create a deed name (e.g.: Playertropolis).
-            The creator is the first user that made the deed, also in case of changing the owner, the creator does not retain any rights in the deed, only the title as the creator.</summary>
         </member>
         <member name="M:Eco.Gameplay.Property.PropertyManager.MakePropertyClaimNotification(System.Collections.Generic.IEnumerable{Eco.Gameplay.Players.User},System.Collections.Generic.IEnumerable{System.Object})">
             <summary>Builds final claim or unclaim notification</summary>
@@ -4732,45 +4762,20 @@
             </summary>
             <param name="positions"></param>
         </member>
-        <member name="T:Eco.Gameplay.Settlements.IAnnexable">
-            <summary>Something that can be annexed (settlement or homestead deed)</summary>
-        </member>
-        <member name="T:Eco.Gameplay.Settlements.AnnexationRecord">
-            <summary>Stores a record of every settlement that can annex another, or its progress towards that.</summary>
-        </member>
-        <member name="T:Eco.Gameplay.Settlements.AnnexationManager">
+        <member name="T:Eco.Gameplay.Settlements.Annexation.AnnexationManager">
             <summary>Maintains a list of all the settlements that can annex another or are in progress of it (so they can get advance warning)</summary>
         </member>
-        <member name="F:Eco.Gameplay.Settlements.AnnexationManager.AnnexationRecordsUpdatedEvent">
-            <summary>Triggers, passing a set of settlements that have had their annexation updated. </summary>
-        </member>
-        <member name="M:Eco.Gameplay.Settlements.AnnexationManager.AnnexationRecordsForSettlement(Eco.Gameplay.Settlements.Settlement,System.Boolean)">
-            <summary>Returns all annexation records for which a given settlement is a source or target.
-            If set, only send ones where this is the source.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Settlements.AnnexationManager.DoAnnex(Eco.Gameplay.Players.User,Eco.Gameplay.Settlements.Settlement,Eco.Gameplay.Settlements.IAnnexable,System.Boolean)">
+        <member name="M:Eco.Gameplay.Settlements.Annexation.AnnexationManager.DoAnnex(Eco.Gameplay.Players.User,Eco.Gameplay.Settlements.Settlement,Eco.Gameplay.Settlements.IAnnexable,System.Boolean)">
             <summary>Perform an annex of target settlement into source settlement. If user set, verify they are the leader.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Settlements.AnnexationManager.RecalcAnnexRecords(System.Collections.Generic.IReadOnlySet{Eco.Gameplay.Settlements.Settlement})">
-            <summary>Update ability of all settlements to annex another, ooking only at given settlements. Null means check all.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Settlements.AnnexationManager.HomsteadUpdated(Eco.Gameplay.Property.Deed)">
-            <summary>We make sure to dirty all the settlements that have the specified deed as target so that we can update the annexation interface related to that deed.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Settlements.AnnexationManager.DirtyTargets(System.Collections.Generic.IReadOnlySet{Eco.Gameplay.Settlements.Settlement})">
-            <summary>Update all the targets of the settlements that were already dirtied.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Settlements.AnnexationManager.AnnexLesserType(Eco.Gameplay.Settlements.Settlement,Eco.Gameplay.Settlements.Settlement)">
+        <member name="M:Eco.Gameplay.Settlements.Annexation.AnnexationManager.AnnexLesserType(Eco.Gameplay.Settlements.Settlement,Eco.Gameplay.Settlements.Settlement)">
             <summary>Annex a type lesser than ours (like a country annexing a town) and return result.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Settlements.AnnexationManager.AnnexSameType(Eco.Gameplay.Settlements.Settlement,Eco.Gameplay.Settlements.Settlement)">
+        <member name="M:Eco.Gameplay.Settlements.Annexation.AnnexationManager.AnnexSameType(Eco.Gameplay.Settlements.Settlement,Eco.Gameplay.Settlements.Settlement)">
             <summary>Annex same type (like a town annexing another town) and return result.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Settlements.AnnexationManager.SendNoticesIfNeeded(Eco.Gameplay.Settlements.AnnexationRecord,Eco.Gameplay.Settlements.AnnexationRecord)">
-            <summary>If it's getting closer to being able to annex, let them know.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Settlements.AnnexationManager.CalcRecord(Eco.Gameplay.Settlements.Settlement,Eco.Gameplay.Settlements.IAnnexable)">
-            <summary>Evaluate how close one settlement is to annexing another and return the result.</summary>
+        <member name="T:Eco.Gameplay.Settlements.Annexation.AnnexationRecord">
+            <summary>Stores a record of every settlement that can annex another, or its progress towards that.</summary>
         </member>
         <member name="T:Eco.Gameplay.Settlements.ClaimStakes.ClaimStakeObject">
             <summary> claim stake objects can have a selectable parent town.</summary>  
@@ -4798,6 +4803,9 @@
             <summary>A settlement claim stake item is different than a homestead one in that it is locked to a given settlement permanently.
             Also will make the store match them to the required settlement in the config options, so you can buy/sell and maintain the settlement associated.</summary>
         </member>
+        <member name="P:Eco.Gameplay.Settlements.ClaimStakes.SettlementClaimStakeItem.Settlement">
+            <summary>The settlement that generaed the claim stake</summary>
+        </member>
         <member name="T:Eco.Gameplay.Settlements.ClaimToolBaseItem">
              <summary>
             The ClaimToolBaseItem serves as a representation of the 'Claim Tool' object.
@@ -4817,6 +4825,9 @@
             <summary>Component that lets a homestead claim stake notify the owner when towns become in range, and displays data about the town its associated to. Personal claimstake can only
             be part of the town youre a citizen of. </summary>
         </member>
+        <member name="M:Eco.Gameplay.Settlements.Components.HomesteadFoundationComponent.Eco#Gameplay#Settlements#Components#IClaimStakeComponent#DeedChanged">
+            <summary>Must be called by the placing thing after the deed is all setup.</summary>
+        </member>
         <member name="T:Eco.Gameplay.Settlements.Components.Internal.SettlementReqs">
             <summary>Lil helper for monitoring culture requirements of a settlement.</summary>
         </member>
@@ -4830,11 +4841,14 @@
         <member name="T:Eco.Gameplay.Settlements.Components.SettlementClaimStakeComponent">
             <summary>A component for claim stakes that can specify a settlement as their parent.  Not used for settlements being parented to other settlements.</summary>
         </member>
+        <member name="M:Eco.Gameplay.Settlements.Components.SettlementClaimStakeComponent.Eco#Gameplay#Settlements#Components#IClaimStakeComponent#DeedChanged">
+            <summary>Must be called by the placing thing after the deed is all setup.</summary>
+        </member>
         <member name="M:Eco.Gameplay.Settlements.Components.SettlementClaimStakeComponent.StakeOwnerUpdated">
             <summary>Update the settlement that owns this stake.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Settlements.Components.SettlementClaimStakeComponent.SetStakeAssignedSettlement(Eco.Gameplay.Settlements.Settlement)">
-            <summary>We set the settlement that's currently using this claim stake.</summary>
+        <member name="M:Eco.Gameplay.Settlements.Components.SettlementClaimStakeComponent.SetInfluencingSettlement(Eco.Gameplay.Settlements.Settlement)">
+            <summary>We update the lowest influencing settlement by also making sure to notify the settlement that's influencing it.</summary>
         </member>
         <member name="M:Eco.Gameplay.Settlements.Components.SettlementFoundationComponent.DoFounding(Eco.Gameplay.Civics.Elections.Election)">
             <summary>Helper that forces founding of the settlement. Called directly when founding via ratification. 
@@ -4874,6 +4888,40 @@
         <member name="M:Eco.Gameplay.Settlements.Culture.CultureManager.DescribeAllCulture">
             <summary>Makes a nice summary for all the culture in the world.</summary>
         </member>
+        <member name="T:Eco.Gameplay.Settlements.IAnnexable">
+            <summary>Something that can be annexed (settlement or homestead deed)</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Settlements.IAnnexable.HasAncestor(Eco.Gameplay.Settlements.Settlement)">
+            <summary>True if the given settlement is a parent anywhere up the hierarchy</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Settlements.Internal.ChangeDetection.SettlementBuilders.AnnexationRecordBuilder.RecalcAnnexRecords(System.Collections.Generic.IEnumerable{Eco.Gameplay.Settlements.Settlement})">
+            <summary>Update ability of all settlements to annex another, ooking only at given settlements. Null means check all.</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Settlements.Internal.ChangeDetection.SettlementBuilders.AnnexationRecordBuilder.DirtyTargets(System.Collections.Generic.IEnumerable{Eco.Gameplay.Settlements.Settlement})">
+            <summary>Update all the targets of the settlements that were already dirtied.</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Settlements.Internal.ChangeDetection.SettlementBuilders.AnnexationRecordBuilder.CalcRecord(Eco.Gameplay.Settlements.Annexation.AnnexationRecord,Eco.Gameplay.Settlements.Settlement,Eco.Gameplay.Settlements.IAnnexable)">
+            <summary>Evaluate how close one settlement is to annexing another and return the result.  Takes an existing record to update, and creates a new one if null is passed.</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Settlements.Internal.ChangeDetection.SettlementBuilders.AnnexationRecordBuilder.SendNoticesIfNeeded(System.Boolean,System.Single,Eco.Gameplay.Settlements.Annexation.AnnexationRecord)">
+            <summary>If it's getting closer to being able to annex, let them know.</summary>
+        </member>
+        <member name="T:Eco.Gameplay.Settlements.Internal.ChangeDetection.SettlementBuilders.CultureGeneratingDeedsBuilder">
+            <summary>Determines which deeds should generate culture in a settlement.</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Settlements.Internal.ChangeDetection.SettlementBuilders.InfluenceBuilder.SetInfluencedPlotsForSettlements(System.Collections.Generic.IEnumerable{Eco.Gameplay.Settlements.Settlement},Eco.Shared.Utils.Array2D{System.Int32})">
+            <summary>Mark the given settlements for their influenced plots</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Settlements.Internal.ChangeDetection.SettlementBuilders.InfluenceBuilder.GetSettlementAccordingToInfluencePointsOnlyAtPos(Eco.Shared.Voxel.PlotPos,System.Nullable{Eco.Shared.Items.SettlementType},Eco.Gameplay.InfluenceObjects.Influence[])">
+            <summary>Gets the point influencing the given position, considering only the influence points, not anything else like assigned settlement on stakes, which can affect it otherwise.
+            Influence points to consider can be injected, or if null, use the settlement's.</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Settlements.Internal.ChangeDetection.SettlementChangeDetector.ForceUpdateAll">
+            <summary>Set everything to update next tick, and make the tick happen right away.</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Settlements.Internal.ChangeDetection.SettlementChangeDetector.HomesteadUpdated(Eco.Gameplay.Property.Deed)">
+            <summary>We make sure to dirty all the settlements that have the specified deed as target so that we can update the annexation interface related to that deed.</summary>
+        </member>
         <member name="T:Eco.Gameplay.Settlements.Internal.SettlementFoldoutBuilder">
             <summary>Handles making tooltips with RPC callbacks for filling in details for settlements.</summary>
         </member>
@@ -4883,11 +4931,8 @@
         <member name="T:Eco.Gameplay.Settlements.Internal.SettlementInfluence">
             <summary>Handles settlement influence for a given settlement.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Settlements.Internal.SettlementInfluence.InfluencingDeeds">
-            <summary>Returns deeds that cast influence, excluding ones that are not selected to do so.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Settlements.Internal.SettlementInfluence.DeedValuesUpdated(Eco.Gameplay.Settlements.Settlement)">
-            <summary>Go through all the deeds of this settlement that are cultural and update their influence. Returns true if any influence changed.</summary>
+        <member name="M:Eco.Gameplay.Settlements.Internal.SettlementInfluence.InfluencePoints">
+            <summary>Calls getInfluenceSourceDeeds which resolves to <see cref="P:Eco.Gameplay.Settlements.Settlement.InfluenceSourceDeeds" /></summary>
         </member>
         <member name="M:Eco.Gameplay.Settlements.Internal.SettlementInfluence.CouldInfluence(Eco.Shared.Voxel.PlotPos)">
             <summary>Return true if the influence could influence the given plot pos, if there wasnt other settlements/homesteads in the way.</summary>
@@ -4895,9 +4940,6 @@
         <member name="T:Eco.Gameplay.Settlements.Internal.SettlementInfluenceManager">
             <summary>Handles management of influence and related systems for all settlements.  Does all the watching and
             notifying that makes settlements update their influence.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Settlements.Internal.SettlementInfluenceManager.ForceUpdateAllInfluence">
-            <summary>Circumvents the dirty updating and updates all influence instantly. Debug only.</summary>
         </member>
         <member name="T:Eco.Gameplay.Settlements.Internal.SettlementInternalUtils">
             <summary>Utils meant to only be used by settlement system.</summary>
@@ -4908,21 +4950,18 @@
         <member name="T:Eco.Gameplay.Settlements.SettlementComponent">
             <summary>Component that has some tracking for a settlement</summary>
         </member>
-        <member name="T:Eco.Gameplay.Settlements.IContextSettlement">
-            <summary>This is used when a context is also dependent on a specific settlement.</summary>
-        </member>
-        <member name="P:Eco.Gameplay.Settlements.IContextSettlement.LimitToCitizensOfSettlement">
-            <summary>When this property is specified, any legal actions would only be applied on citizens and properties of that settlement.</summary>
-        </member>
-        <member name="T:Eco.Gameplay.Settlements.ContextSettlement">
-            <summary>This is used when we have a context that's only dependent on a settlement.</summary>
-        </member>
         <member name="T:Eco.Gameplay.Settlements.Settlement">
             <summary>A settlement defines 'influence' in the world upon which its government is applied and land can be claimed.
             It also maintains a list of citizens associated with the government, and polices for changing citizens.</summary>
         </member>
-        <member name="P:Eco.Gameplay.Settlements.Settlement.CulturalPropertiesProvidingInfluence">
-            <summary>The cultrual properties designated to provide influence</summary>
+        <member name="P:Eco.Gameplay.Settlements.Settlement.AssignedCulturalDeeds">
+            <summary>The cultrual properties chosen on a diplomacy desk, foreced to be part of the set of influencing deeds.</summary>
+        </member>
+        <member name="P:Eco.Gameplay.Settlements.Settlement.InfluenceSourceDeeds">
+            <summary>The current cached list of influence source deeds, which can change when none are assigned. It uses all the assigned ones, then takes remaining ones in descending order to reach the max count.</summary>
+        </member>
+        <member name="F:Eco.Gameplay.Settlements.Settlement.WorldObjectsWithAssignedJurisdiction">
+            <summary>Tracks all world objects that have a jurisdiction which is assigned to us.</summary>
         </member>
         <member name="P:Eco.Gameplay.Settlements.Settlement.AllCurrentCivicArticlesCached">
             <summary>All the active articles, from both the constitution and any amendments that modify that list.  Will contain invalid articles too.</summary>
@@ -4950,6 +4989,21 @@
         </member>
         <member name="M:Eco.Gameplay.Settlements.Settlement.Influences(Eco.Shared.Math.Vector2i)">
             <summary>Returns true if the settlement influences the given position.</summary>
+        </member>
+        <member name="T:Eco.Gameplay.Settlements.SettlementCachedData">
+            <summary>Tracks various properties of settlements needed for different things, and keeps them updated.</summary>
+        </member>
+        <member name="P:Eco.Gameplay.Settlements.SettlementCachedData.CultureDescription">
+            <summary>Cached sum of all culture values on all deeds of the settlement</summary>
+        </member>
+        <member name="P:Eco.Gameplay.Settlements.SettlementCachedData.AnnexationRecords">
+            <summary>Records of annexation where this settlement is the source or target.</summary>
+        </member>
+        <member name="P:Eco.Gameplay.Settlements.SettlementCachedData.Deeds">
+            <summary>Cached list of deeds associated with this settlement</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Settlements.SettlementCachedData.AnnexationRecordsUpdated">
+            <summary>Called by annexation builder when the enumerable may have changed.</summary>
         </member>
         <member name="T:Eco.Gameplay.Settlements.SettlementCitizenship">
             <summary>Tracks the citizens of a settlement using a Roster type, so new citizens can apply/be invited/accepted/etc.</summary>
@@ -4985,9 +5039,8 @@
         <member name="F:Eco.Gameplay.Settlements.SettlementConfig.CultureToInfluenceMappingPerSettlementType">
             <summary>This is linked here so that it can be displayed in the ecopedia details, but its not used directly, the mapper above is called.</summary>
         </member>
-        <member name="P:Eco.Gameplay.Settlements.SettlementConfig.WeightCultureByPercentOfNeighboringPlotsChildSettlement">
-            and max value of the range is 'at this many neighboring plots or lower, the culture is weighted to 100'.
-            Values between are interpolated from 0 - 100."]
+        <member name="F:Eco.Gameplay.Settlements.SettlementConfig.InventorySourceForAnnexationCosts">
+            <summary>This type of object associated with a settlement is queried for inventory to perform an annexation.</summary>
         </member>
         <member name="T:Eco.Gameplay.Settlements.SettlementDebug">
             <summary>Various debug flags concenting settlements that are typically enabled via chat commands.</summary>
@@ -4995,11 +5048,8 @@
         <member name="T:Eco.Gameplay.Settlements.SettlementFactory">
             <summary>Creating and destroying settlements.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Settlements.SettlementFactory.CreateSettlement(Eco.Gameplay.Objects.WorldObject,Eco.Gameplay.Players.User,Eco.Shared.Items.SettlementType,Eco.Gameplay.Civics.Constitution,Eco.Gameplay.Civics.Demographics.Demographic,Eco.Gameplay.Civics.ElectionProcess,System.Boolean,System.Boolean,System.String)">
+        <member name="M:Eco.Gameplay.Settlements.SettlementFactory.CreateSettlement(Eco.Gameplay.Objects.WorldObject,Eco.Gameplay.Players.User,Eco.Shared.Items.SettlementType,Eco.Gameplay.Civics.Constitution,Eco.Gameplay.Civics.Demographics.Demographic,Eco.Gameplay.Civics.ElectionProcess,System.Boolean,System.Boolean,System.String,System.Boolean)">
             <summary>Create a brand new settlement and fill it in, and create extra parts like leaders and immigration.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Settlements.SettlementFactory.DestroySettlementAndConnectedParts(Eco.Gameplay.Settlements.Settlement)">
-            <summary>Destroys a settlement and all referenced parts and announces it.</summary>
         </member>
         <member name="T:Eco.Gameplay.Settlements.SettlementFoundationItem`1">
             <summary>Base class for items that claim a settlement. Contains functions for defining how property can be claimed
@@ -5008,8 +5058,18 @@
         <member name="T:Eco.Gameplay.Settlements.SettlementFoundationObject">
             <summary>Base class for objects that define a new settlement.</summary>
         </member>
+        <member name="M:Eco.Gameplay.Settlements.SettlementInfluenceUtils.PositionIsInsideFoundedOrUnfoundedSettlement(Eco.Gameplay.Settlements.Settlement,Eco.Shared.Voxel.PlotPos)">
+            <summary>Test if a position is considered 'inside' a settlement's influence, where with an unfounded settlement we
+            consider the position once the base influence is cast.</summary>
+        </member>
         <member name="M:Eco.Gameplay.Settlements.SettlementInfluenceUtils.CoversPercentageOfPlots(Eco.Gameplay.Settlements.Settlement,System.Collections.Generic.IEnumerable{Eco.Shared.Voxel.PlotPos},System.Single,System.Single@)">
             <summary>Check if a percentage of Plots are within the radius of our settlement's influence.</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Settlements.SettlementInfluenceUtils.PositionIsInsideUnfoundedSettlement(Eco.Gameplay.Settlements.Settlement,Eco.Shared.Math.Vector2i)">
+            <summary>We check whether the specified position is inside the unfounded settlement or not. If the settlement was already founded, then this will always return true.</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Settlements.SettlementInfluenceUtils.CouldOrWillInfluence(Eco.Gameplay.Settlements.Settlement,Eco.Shared.Math.Vector2i)">
+            <summary></summary>
         </member>
         <member name="M:Eco.Gameplay.Settlements.SettlementInfluenceUtils.InfluenceRangeOverlap(Eco.Gameplay.Settlements.Settlement,Eco.Gameplay.Settlements.Settlement)">
             <summary>Simple check if influences of settlements overlap</summary>
@@ -5025,15 +5085,19 @@
         <member name="T:Eco.Gameplay.Settlements.SettlementManager">
             <summary>Handles settlement creation and tracking, mapping their influence as well.</summary>
         </member>
+        <member name="M:Eco.Gameplay.Settlements.SettlementManager.GetInfluenceAccordingToInfluencePointsOnlyAtPos(Eco.Shared.Voxel.PlotPos,System.Nullable{Eco.Shared.Items.SettlementType},Eco.Gameplay.InfluenceObjects.Influence[])">
+            <summary>Gets the point influencing the given position, considering only the influence points, not anything else like assigned settlement on stakes, which can affect it otherwise.
+            Passed null means take lowest.</summary>
+        </member>
         <member name="T:Eco.Gameplay.Settlements.SettlementParentage">
             <summary>Class that determines the parent settlement for another settlement.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Settlements.SettlementParentage.GetSettlementAtLevel(Eco.Shared.Items.SettlementType)">
+        <member name="M:Eco.Gameplay.Settlements.SettlementParentage.GetSettlementAtHigherLevel(Eco.Shared.Items.SettlementType)">
             <summary>Returns this settlement if the type matches us, otherwise if its a higher type it passes it
             too our parent to check.  If its lower type, it return null.</summary>
         </member>
-        <member name="P:Eco.Gameplay.Settlements.SettlementParentage.Description">
-            <summary>Describes the various children and land we claim with it.</summary>
+        <member name="M:Eco.Gameplay.Settlements.SettlementParentage.HasAncestor(Eco.Gameplay.Settlements.Settlement)">
+            <summary>True if ourself or any parent up the hierarchy matches the given settlement.</summary>
         </member>
         <member name="M:Eco.Gameplay.Settlements.SettlementParentage.Lineage">
             <summary>Return enumerable of this settlement, then each parent in order.</summary>
@@ -5048,8 +5112,8 @@
             <summary>Component to Settlement that handles spawning/despawning stakes and claims as citizens come and go.  
             Handles property crises when not enough citizens for property.</summary>
         </member>
-        <member name="P:Eco.Gameplay.Settlements.SettlementProperty.StakesUsedBySettlement">
-            <summary>These are all the stakes used by this settlement (all the stakes that their property <see cref="P:Eco.Gameplay.Settlements.Components.SettlementClaimStakeComponent.AssignedSettlement" /> reference this settlement).</summary>
+        <member name="P:Eco.Gameplay.Settlements.SettlementProperty.StakesInfluencedBySettlement">
+            <summary>These are all the stakes used by this settlement (all the stakes currently influenced by this settlement).</summary>
         </member>
         <member name="M:Eco.Gameplay.Settlements.SettlementProperty.SettlementParentChanged(System.Object,Eco.Core.PropertyHandling.MemberChangedBeforeAfterEventArgs)">
             <summary>Get called whenever this settlement parent changes.</summary>
@@ -5103,32 +5167,8 @@
         <member name="M:Eco.Gameplay.Settlements.SettlementSpawnHelper.GetSettingsForChildSettlement(System.Int32)">
             <summary>Quick access to child count, child size, and the amount of columns for children. </summary>
         </member>
-        <member name="T:Eco.Gameplay.Settlements.SettlementStats">
-            <summary>Tracks various properties of settlements needed for different things, and keeps them updated.</summary>
-        </member>
-        <member name="P:Eco.Gameplay.Settlements.SettlementStats.CultureDescription">
-            <summary>Cached sum of all culture values on all deeds of the settlement</summary>
-        </member>
-        <member name="P:Eco.Gameplay.Settlements.SettlementStats.AnnexationRecords">
-            <summary>Records of annexation where this settlement is the source or target.</summary>
-        </member>
-        <member name="P:Eco.Gameplay.Settlements.SettlementStats.Deeds">
-            <summary>Cached list of deeds associated with this settlement</summary>
-        </member>
-        <member name="P:Eco.Gameplay.Settlements.SettlementStats.InfluencedPlots">
-            <summary>The plots this settlement influences.  Hashset does not change, upon rebuild a new one is built, thus it doesnt need to be thread safe.</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Settlements.SettlementStats.UpdateInfluencedDeeds">
-            <summary>
-            When the influence radius get bigger we make sure to update the direct influencer of all deeds.
-            Note: we don't care when the influence get smaller because anyway our current system never allows for stakes to lose their influencing settlement.
-            </summary>
-        </member>
-        <member name="M:Eco.Gameplay.Settlements.SettlementStats.SetInfluencedPlotsForSettlements(System.Collections.Generic.IEnumerable{Eco.Gameplay.Settlements.Settlement},Eco.Shared.Utils.Array2D{System.Int32})">
-            <summary>Mark the given settlements for their influenced plots</summary>
-        </member>
-        <member name="M:Eco.Gameplay.Settlements.SettlementStats.HasForeignDeeds">
-            <summary>We check whether this settlement has some deeds owned by non citizens or not.</summary>
+        <member name="M:Eco.Gameplay.Settlements.SettlementUtils.CheckAnnexationTimer(Eco.Gameplay.Settlements.Settlement,Eco.Shared.Localization.LocString)">
+            <summary>See if there's an active annexation clock on this settlement preventing stuff.s</summary>
         </member>
         <member name="M:Eco.Gameplay.Settlements.SettlementUtils.SelfOrParent(Eco.Gameplay.Settlements.Settlement,Eco.Shared.Items.SettlementType)">
             <summary>Return the settlement of the given type, examining parents if it's not our type.</summary>
@@ -5148,13 +5188,19 @@
         <member name="M:Eco.Gameplay.Settlements.SettlementUtils.GetLowestLevelSettlementAtPos(Eco.Shared.Math.Vector2i)">
             <summary>Return the settlement of the lowest type (town before country before federation) at the given position.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Settlements.SettlementUtils.GetSettlementsAtPos(Eco.Shared.Math.Vector3i)">
+        <member name="M:Eco.Gameplay.Settlements.SettlementUtils.InfluencesAtLevel(Eco.Shared.Items.SettlementType)">
+            <summary>Iterators of the influence points at a given level of settlement..</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Settlements.SettlementUtils.GetSettlementsAtPos(System.Nullable{Eco.Shared.Math.Vector3i})">
             <summary>Return the settlements currently influencing the given position, in order of the enum</summary>
         </member>
         <member name="M:Eco.Gameplay.Settlements.SettlementUtils.GetSettlementsAtPos(Eco.Shared.Voxel.PlotPos)">
             <summary>Return the settlements currently influencing the given position, in order of the enum</summary>
         </member>
-        <member name="M:Eco.Gameplay.Settlements.SettlementUtils.ContainsChild(Eco.Gameplay.Settlements.Settlement,Eco.Gameplay.Settlements.Settlement)">
+        <member name="M:Eco.Gameplay.Settlements.SettlementUtils.HasParentOrSelf(Eco.Gameplay.Settlements.Settlement,Eco.Gameplay.Settlements.Settlement)">
+            <summary>Returns true if the given settlement is the same.</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Settlements.SettlementUtils.HasChildOrSelf(Eco.Gameplay.Settlements.Settlement,Eco.Gameplay.Settlements.Settlement)">
             <summary>Returns true if the given settlement is contained as a child settlement of this one, or if it *is* this one.</summary>
         </member>
         <member name="M:Eco.Gameplay.Settlements.SettlementUtils.NotifyLoc(Eco.Gameplay.Settlements.Settlement,System.FormattableString)">
@@ -5169,14 +5215,14 @@
         <member name="M:Eco.Gameplay.Settlements.SettlementUtils.SettlementsOfType(Eco.Shared.Items.SettlementType)">
             <summary>Iterates through all settlements in existance of the given type.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Settlements.SettlementUtils.DoClaimForSettlement(Eco.Gameplay.Players.User,Eco.Shared.Math.Vector3i,Eco.Shared.Items.SettlementType,Eco.Gameplay.Items.WorldObjectItem)">
+        <member name="M:Eco.Gameplay.Settlements.SettlementUtils.DoClaimForSettlement(Eco.Gameplay.GameActions.GameActionPack,Eco.Gameplay.Players.User,Eco.Shared.Math.Vector3i,Eco.Shared.Items.SettlementType,Eco.Gameplay.Items.WorldObjectItem)">
             <summary>Claim land in advance of placing a settlement foundation.</summary>
         </member>
         <member name="M:Eco.Gameplay.Settlements.SettlementUtils.GetOrMakeTown(Eco.Gameplay.Players.User,Eco.Shared.Math.Vector2i)">
             <summary>Return the town influencing the given location, or make a new headless one that covers this location.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Settlements.SettlementUtils.AllChildrenSettlementsRecursive(Eco.Gameplay.Settlements.Settlement)">
-            <summary>Iterate through all children, and their children, etc.</summary>
+        <member name="M:Eco.Gameplay.Settlements.SettlementUtils.SelfAndAllChildrenSettlementsRecursive(Eco.Gameplay.Settlements.Settlement)">
+            <summary>Iterate through all children, and their children, etc, as well as the passed settlement itself.</summary>
         </member>
         <member name="M:Eco.Gameplay.Settlements.SettlementUtils.CanSecedeFromParents(Eco.Gameplay.Settlements.Settlement,Eco.Gameplay.Settlements.Settlement@)">
             <summary>We check whether this settlement can secede and become independant or not.</summary>
@@ -5515,6 +5561,13 @@
         </member>
         <member name="T:Eco.Gameplay.Systems.Messaging.Chat.ChatTabSettingsWhisper">
             <summary>Represent the private tabs that are created automatically when the whisperMode is active and the player send or receive a message from another player. Player cannot modify this tab.</summary>
+        </member>
+        <member name="F:Eco.Gameplay.Systems.Messaging.Chat.Commands.AdminCommands.animalMovementTestSize">
+            <summary>Each animal movement test takes place in enclosed area of this size.</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Systems.Messaging.Chat.Commands.AdminCommands.SpawnDebugAnimalAtPos(Eco.Gameplay.Players.User,System.String,Eco.Shared.Math.Vector3i)">
+            <summary>Spwans animal at specified position and sets it barin to debug mode, making it idle all the time, unlesss other states are forced by commands.</summary>
+            <returns>Spawned animal or null if spawning failed.</returns>
         </member>
         <member name="M:Eco.Gameplay.Systems.Messaging.Chat.Commands.AdminCommands.MakeCutWall(Eco.Shared.Math.Vector3i,Eco.Gameplay.Players.User,System.Int32,System.Int32,System.Int32,System.String)">
             <summary>Make a wall that cuts into the landscape at the given height</summary>
@@ -6347,57 +6400,66 @@
         <member name="T:Eco.Gameplay.Systems.UserTextures.UserTextureConfig">
             <summary>Holds UserTexture related options that can be edited from server config window.</summary>
         </member>
-        <member name="T:Eco.Gameplay.Systems.UserTextures.UserTextureManager">
+        <member name="T:Eco.Gameplay.Systems.UserTextures.UserTextureManagerServer">
             <summary>Holds user texture registrar and texture saving/conversion logic.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManager.GetFolderPath(System.Boolean)">
+        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManagerServer.GetFolderPath(System.Boolean)">
             <summary>Returns folder path to save UserTexture in.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManager.SaveTextureToStorage(Eco.Gameplay.Systems.UserTextures.UserTexture)">
+        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManagerServer.SaveTextureToStorage(Eco.Gameplay.Systems.UserTextures.UserTexture)">
             <summary>Saves texture data as a file on the given path inside the storage folder.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManager.MoveApprovedTexture(Eco.Gameplay.Systems.UserTextures.UserTexture)">
+        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManagerServer.MoveApprovedTexture(Eco.Gameplay.Systems.UserTextures.UserTexture)">
             <summary>Moves texture from unreviewed folder to reviewed folder.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManager.SavePortraitTextureToStorage(Eco.Gameplay.Systems.UserTextures.UserTexture,System.Byte[])">
+        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManagerServer.SavePortraitTextureToStorage(Eco.Gameplay.Systems.UserTextures.UserTexture,System.Byte[])">
             <summary>Handles modifications to UserTexture as setting a new avatar portrait doesn't replace the old one, it only modifies the data.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManager.CreateUserTexture(System.Byte[],Eco.Gameplay.Players.User,System.Boolean)">
+        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManagerServer.CreateUserTexture(System.Byte[],Eco.Gameplay.Players.User,Eco.Gameplay.Systems.UserTextures.UserTextureType,System.Boolean)">
             <summary>Creates a new <see cref="T:Eco.Gameplay.Systems.UserTextures.UserTexture" />, adds it to registrar and returns it.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManager.GetTexturesToReview(Eco.Gameplay.Players.User,Eco.Shared.Items.TextureReviewState)">
+        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManagerServer.GetTexturesToReview(Eco.Gameplay.Players.User,Eco.Shared.Items.TextureReviewState)">
             <summary>If this user is a reviewer - returns list of unreviewed usertextures, called from the client</summary>
         </member>
-        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManager.AddReviewer(Eco.Gameplay.Players.User,Eco.Gameplay.Players.User)">
+        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManagerServer.AddReviewer(Eco.Gameplay.Players.User,Eco.Gameplay.Players.User)">
             <summary>Gives the right to review textures to a non admin user.</summary>
             <param name="authorizer">Person that is giving the right to review textures.</param>
             <param name="recipient">User that will become a reviewer.</param>
             <remarks> Only Admins or Devs can do this action.</remarks>
         </member>
-        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManager.RemoveReviewer(Eco.Gameplay.Players.User,Eco.Gameplay.Players.User)">
+        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManagerServer.RemoveReviewer(Eco.Gameplay.Players.User,Eco.Gameplay.Players.User)">
             <summary>Removes the right to review textures from a non admin user.</summary>
             <param name="authorizer">User that is removing the right to review textures.</param>
             <param name="recipient">User that will stop being a reviewer.</param>
             <remarks> Only Admins or Devs can do this action.</remarks>
         </member>
-        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManager.SetReviewers(Eco.Gameplay.Players.User,System.Collections.Generic.List{System.Object})">
+        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManagerServer.SetReviewers(Eco.Gameplay.Players.User,System.Collections.Generic.List{System.Object})">
             <summary>Directly sets additional reviewers from provided list, used by MultiSelectorPopup on the client.</summary>
             <param name="users">List of users that will become reviewers, Empty if removing all reviewers.</param>
         </member>
-        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManager.ApproveOrBlock(Eco.Gameplay.Players.User,Eco.Gameplay.Systems.UserTextures.UserTexture,System.Boolean)">
+        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManagerServer.ApproveOrBlock(Eco.Gameplay.Players.User,Eco.Gameplay.Systems.UserTextures.UserTexture,System.Boolean)">
             <summary>Approves or blocks the usertexture.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManager.SetupFileWatcher">
+        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManagerServer.SetupFileWatcher">
             <summary>Creates directories for textures and sets up a file watcher to watch changes in the directories. </summary>
         </member>
-        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManager.CheckChangedFiles">
+        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureManagerServer.CheckChangedFiles">
             <summary>Checks the reviewed folder and usertextures registrar to fix any inconsistencies</summary>
         </member>
-        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureUtil.CreateRandomUserTexture(System.String,Eco.Gameplay.Players.User)">
+        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureUtil.CreateRandomUserTexture(System.Int32,System.String,Eco.Gameplay.Players.User)">
             <summary>Make a user texture created by a given user (or new test user, if not set) and fill it with random bytes.</summary>
         </member>
-        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureUtil.CreateRandomPictureItem(System.String,Eco.Gameplay.Players.User)">
+        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureUtil.GenerateUserTextureWithSpecificSize(System.Int32,System.Int32,System.String,Eco.Gameplay.Players.User)">
+            <summary>Make a user texture created by a given user (or new test user, if not set) and fill it with random bytes.</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureUtil.CreateRandomPictureItem(System.Int32,System.String,Eco.Gameplay.Players.User)">
             <summary>Get a picture item filled with a randomly generated image from the given user (or a new test user if null is passed)</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureUtil.CreateSpecificSizePictureItem(System.Int32,System.Int32,System.String,Eco.Gameplay.Players.User)">
+            <summary>Get a picture item filled with a randomly generated image from the given user (or a new test user if null is passed)</summary>
+        </member>
+        <member name="M:Eco.Gameplay.Systems.UserTextures.UserTextureUtil.ResizeJPGTexture(System.Byte[],System.Int32)">
+            <summary> Resizes picture in jpeg format up to maxDimension x maxDimension pixels. It will respect existing ratio by lowering one of two dimensions.</summary>
         </member>
         <member name="T:Eco.Gameplay.Systems.INotifyRecursiveChanged">
             <summary>An interface that will be notified whenever a property that have a property scanner on it is changed using a client side view interface (Ie. an AutoGenSelector).</summary>
@@ -6660,7 +6722,7 @@
             <inheritdoc cref="M:Eco.Gameplay.Utils.ProfanityUtils.WarnPlayer(Eco.Gameplay.Players.Player,System.String,System.String)" />
             <param name="client"><see cref="T:Eco.Shared.Networking.INetClient" /> instance to inform about the detected profanity.</param>
         </member>
-        <member name="M:Eco.Gameplay.Utils.ResultExtensions.Failed(Eco.Core.Utils.Result,Eco.Gameplay.Players.User)">
+        <member name="M:Eco.Gameplay.Utils.ResultExtensions.NotifyIfFailed(Eco.Core.Utils.Result,Eco.Gameplay.Players.User)">
             <summary> If result is failed, notifies <paramref name="notifyUser" /> with failure message and with message style <see cref="F:Eco.Shared.Services.NotificationStyle.Error" />. Returns <c>true</c> if result failed.</summary>
         </member>
         <member name="T:Eco.Gameplay.Utils.RouteManagerUtil">
@@ -6895,11 +6957,68 @@
             that can possibly hear each other, which then get offset by the client.
             </summary>
         </member>
-        <member name="M:Eco.Gameplay.Weather.WeatherManager.StartNewDayWeather">
-            <summary>Calculate if there will be a weather event today</summary>
+        <member name="M:Eco.Gameplay.Weather.WeatherManager.CalculateMaximumWeatherSystemCapacity">
+            <summary>
+            Calculates the maximum number of weather systems that can be active at once.
+            This calculation is based on the size of the world, the minimum distance between storms, and the configured
+            maximum size of a weather system.
+            </summary>
+        </member>
+        <member name="M:Eco.Gameplay.Weather.WeatherManager.GetRainfallAtLocation(Eco.Shared.Math.Vector2i)">
+            <summary>
+            Retrieves the rainfall value at the given position. If the position is in a desert, 
+            the result will always be 0.
+            </summary>
+            <param name="position">Position to check</param>
+            <returns>Rainfall value at the given location.</returns>
+        </member>
+        <member name="M:Eco.Gameplay.Weather.WeatherManager.GetTemperatureAtLocation(Eco.Shared.Math.Vector2i)">
+            <summary>Retrieves the temperature value at the given position.</summary>
+            <param name="position">Position to check</param>
+            <returns>Temperature value at the given location.</returns>
+        </member>
+        <member name="M:Eco.Gameplay.Weather.WeatherManager.PickWeatherEventTypeForLocation(Eco.Shared.Math.Vector2i)">
+            <summary>Attempts to pick the best weather event type for the given location.</summary>
+            <param name="position">Position to pick for.</param>
+            <returns>The appropriate weather event for the given location.</returns>
+        </member>
+        <member name="M:Eco.Gameplay.Weather.WeatherManager.CreateWeatherSystem(Eco.Shared.Weather.WeatherEventType,Eco.Shared.Math.Vector3i)">
+            <summary>Creates a new weather system at the given location with the given weather event.</summary>
+            <param name="weatherEvent">Type of event the system represents.</param>
+            <param name="location">Location of the weather system.</param>
+            <returns>Newly created weather event</returns>
+        </member>
+        <member name="M:Eco.Gameplay.Weather.WeatherManager.ForceAddWeatherSystem(Eco.Shared.Weather.WeatherEventType,Eco.Shared.Math.Vector3i)">
+            <summary>Force adds a weather system to the list of active weather systems. </summary>
+            <param name="weatherEvent">Type of weather event to add</param>
+            <param name="location">Location of the weather event.</param>
+        </member>
+        <member name="M:Eco.Gameplay.Weather.WeatherManager.AttemptSpawnWeatherSystem">
+            <summary>Attempts to spawn a new weather system at a random location.</summary>
+            <returns>True if a weather event was succesfully spawned.</returns>
+        </member>
+        <member name="M:Eco.Gameplay.Weather.WeatherManager.PerformWeatherTick">
+            <summary>
+            Performs a single tick of the weather manager. This tick will
+            attempt to spawn a new weather system, and will expire any
+            systems who's end time has been reached.
+            </summary>
+            <remarks>Runs every 10 seconds as defined by the worker in the initialization step.</remarks>
+        </member>
+        <member name="M:Eco.Gameplay.Weather.WeatherManager.GetWeatherStatus">
+            <summary>
+            Creates a string that displays the current weather status. This is generally used by the GUI status page and the status 
+            helper admin command.
+            </summary>
+            <returns>String with details about the current weather status on the planet.</returns>
         </member>
         <member name="T:Eco.Gameplay.Weather.WeatherPlugin">
             <summary>Use for manage weather. WeatherEffectsManager in client will receive the data</summary>
+        </member>
+        <member name="T:Eco.Gameplay.Weather.WeatherConfig">
+            <summary>
+            Configuration model for the <see cref="T:Eco.Gameplay.Weather.WeatherPlugin" />.
+            </summary>
         </member>
         <member name="M:Eco.Gameplay.WorldGeneratorPlugin.WorldChatCommands.Species(Eco.Gameplay.Players.User,System.String)">
             <summary>
@@ -6924,7 +7043,7 @@
         </member>
         <member name="M:Eco.Core.Utils.PropertyScanning.IReferrerDependentValidity.Valid(System.Type,System.Type)">
             <summary>
-            Check if valid for types that referer to this item.
+            Check if valid for types that refer to this item.  IE, some references to a given object may be valid while others invalid, depending on who's referring to it.
             </summary>
             <param name="referrerType">The immediate parent of the item.</param>
             <param name="referrerRootType">The root object this item belongs to.</param>
@@ -6938,6 +7057,15 @@
             - Fixes parameters referencing bad context 
             - Can apply reference updating (when an object gets swapped for another, modified through election for example).
             - Sets up any instances of IParentedController it finds, configuring the hierarchy.
+            </summary>
+        </member>
+        <member name="F:Eco.Core.Utils.PropertyScanning.PropertyScanner.FirstFullScanInitializer">
+            <summary>Can be subscribed to in order to perform an action after full scan is complete. </summary>
+        </member>
+        <member name="T:Eco.Shared.Weather.WeatherSystem">
+            <summary>
+            Represents a weather system currently in the world. This object is managed by
+            the Weather Manager and is synced to the client.
             </summary>
         </member>
     </members>

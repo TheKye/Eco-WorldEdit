@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Eco.Gameplay.Components;
+using Eco.Gameplay.Components.Storage;
 using Eco.Gameplay.Components.Store;
 using Eco.Gameplay.Items;
 using Eco.Gameplay.Objects;

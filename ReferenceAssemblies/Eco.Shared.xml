@@ -131,18 +131,18 @@
         </member>
         <member name="T:Eco.Shared.Collections.BatchedSet`1">
             <summary>
-            Batched queue which allows to process queued objects by batches of max size <see cref="F:Eco.Shared.Collections.BatchedSet`1.batchSize"/>.
+            Batched queue which allows to process queued objects by batches.
             It should be provided with <see cref="F:Eco.Shared.Collections.BatchedSet`1.fetcher"/> which will perform fetching of new objects to the queue either incremental or with full re-fetch way.
             In case of full re-fetch it will replace current queue content with new data. For incremental fetch it will add fetched items to end of the queue.
-            You can use <see cref="M:Eco.Shared.Collections.BatchedSet`1.Fetch(System.Boolean)"/> and <see cref="M:Eco.Shared.Collections.BatchedSet`1.GetNextBatch"/> separate or you can use <see cref="M:Eco.Shared.Collections.BatchedSet`1.FetchNextBatch(System.Boolean)"/> which combines these two methods calls.
+            You can use <see cref="M:Eco.Shared.Collections.BatchedSet`1.Fetch(System.Boolean)"/> and <see cref="M:Eco.Shared.Collections.BatchedSet`1.GetNextBatch(System.Int32)"/> separate or you can use <see cref="M:Eco.Shared.Collections.BatchedSet`1.FetchNextBatch(System.Boolean,System.Int32)"/> which combines these two methods calls.
             This class isn't thread-safe!
             </summary>
         </member>
-        <member name="M:Eco.Shared.Collections.BatchedSet`1.FetchNextBatch(System.Boolean)">
-            <summary> Combines call to <see cref="M:Eco.Shared.Collections.BatchedSet`1.Fetch(System.Boolean)"/> and <see cref="M:Eco.Shared.Collections.BatchedSet`1.GetNextBatch"/>. </summary>
+        <member name="M:Eco.Shared.Collections.BatchedSet`1.FetchNextBatch(System.Boolean,System.Int32)">
+            <summary> Combines call to <see cref="M:Eco.Shared.Collections.BatchedSet`1.Fetch(System.Boolean)"/> and <see cref="M:Eco.Shared.Collections.BatchedSet`1.GetNextBatch(System.Int32)"/>. </summary>
         </member>
-        <member name="M:Eco.Shared.Collections.BatchedSet`1.GetNextBatch">
-            <summary> Returns next batch of max size <see cref="F:Eco.Shared.Collections.BatchedSet`1.batchSize"/> from pre-fetched objects. </summary>
+        <member name="M:Eco.Shared.Collections.BatchedSet`1.GetNextBatch(System.Int32)">
+            <summary> Returns next batch of max size batchSize from pre-fetched objects. </summary>
         </member>
         <member name="M:Eco.Shared.Collections.BatchedSet`1.Fetch(System.Boolean)">
             <summary>
@@ -838,6 +838,10 @@
         <member name="T:Eco.Shared.Items.SimpleResult">
             <summary>Simple results from a vote.</summary>
         </member>
+        <member name="T:Eco.Shared.Items.ItemCategory">
+            <summary> Maps item type to easy enum def with fixed number that can be used to know item generic type, or in animations on client (merged with old ToolItemName enum).
+            Do not change numbers even even you need to remove some types</summary>
+        </member>
         <member name="T:Eco.Shared.Items.AvatarGender">
             <summary>Helps avoid tracking gender via strings</summary>
         </member>
@@ -941,9 +945,6 @@
         </member>
         <member name="P:Eco.Shared.Localization.LocDescriptionAttribute.LocDescription">
             <summary> Non-resolved <see cref="T:Eco.Shared.Localization.LocString"/> value for the description. </summary>
-        </member>
-        <member name="P:Eco.Shared.Localization.LocDescriptionAttribute.Description">
-            <summary> Localized description. </summary>
         </member>
         <member name="T:Eco.Shared.Localization.NotLocalizedDisplayNameAttribute">
             <summary>
@@ -1509,6 +1510,9 @@
         <member name="M:Eco.Shared.Math.VectorUtils.Average(System.Collections.Generic.IEnumerable{Eco.Shared.Math.Vector2i})">
             <summary> Average position, or zero's if none in list. </summary>
         </member>
+        <member name="M:Eco.Shared.Math.VectorUtils.WrapAll(System.Collections.Generic.IEnumerable{Eco.Shared.Math.Vector2i},Eco.Shared.Math.Vector2i)">
+            <summary> Average position, or zero's if none in list. </summary>
+        </member>
         <member name="M:Eco.Shared.Math.VectorUtils.Average(System.Collections.Generic.IEnumerable{Eco.Shared.Math.Vector3i})">
             <summary> Average position, or zero's if none in list. </summary>
         </member>
@@ -1608,6 +1612,9 @@
             </code></example>
         </member>
         <member name="M:Eco.Shared.Math.WorldRange.XZIter">
+            <summary>Iterates all X,Z positions in the range.</summary>
+        </member>
+        <member name="M:Eco.Shared.Math.WorldRange.PlotPosIter">
             <summary>Iterates all X,Z positions in the range.</summary>
         </member>
         <member name="M:Eco.Shared.Math.WorldRange.WrappedXZIter(Eco.Shared.Math.Vector3i)">
@@ -1826,8 +1833,8 @@
         <member name="T:Eco.Shared.Networking.ClientUpdate">
             <summary>
             Contains data for <see cref="F:Eco.Shared.Networking.NetworkEvent.ClientUpdate"/> events.
-            Every <see cref="T:Eco.Shared.Networking.ClientUpdate"/> belongs to network queue with <see cref="F:Eco.Shared.Networking.ClientUpdate.queueIndex"/>.
-            Queue index defines associated <see cref="T:Eco.Shared.Networking.NetworkEvent"/> as ClientUpdate<i>Index</i> (i.e. <see cref="F:Eco.Shared.Networking.NetworkEvent.ClientUpdate0"/> and <see cref="F:Eco.Shared.Networking.NetworkEvent.ClientUpdate1"/>).
+            Every <see cref="T:Eco.Shared.Networking.ClientUpdate"/> belongs to network queue with <see cref="F:Eco.Shared.Networking.ClientUpdate.networkChannel"/>.
+            Queue index defines associated <see cref="T:Eco.Shared.Networking.NetworkEvent"/> as ClientUpdate<i>Index</i> (i.e. <see cref="F:Eco.Shared.Networking.NetworkEvent.ClientUpdateGeneral"/> and <see cref="F:Eco.Shared.Networking.NetworkEvent.ClientUpdateChunks"/>).
             It has four data arrays for <see cref="F:Eco.Shared.Networking.ClientUpdate.Created"/> objects, <see cref="F:Eco.Shared.Networking.ClientUpdate.Updated"/> objects, <see cref="F:Eco.Shared.Networking.ClientUpdate.Destroyed"/> objects and <see cref="F:Eco.Shared.Networking.ClientUpdate.ViewUpdates"/>.
             They should be filled and then flushed with <see cref="M:Eco.Shared.Networking.ClientUpdate.Send(Eco.Shared.Networking.INetClient)"/> method. Only non-empty arrays sent.
             If all arrays are empty then <see cref="M:Eco.Shared.Networking.ClientUpdate.Send(Eco.Shared.Networking.INetClient)"/> call will be ignored unless <see cref="F:Eco.Shared.Networking.ClientUpdate.ForceSend"/> is set.
@@ -2077,6 +2084,9 @@
             <summary>
             Disposes of the <see cref='T:System.ComponentModel.Component'/>.
             </summary>
+        </member>
+        <member name="T:Eco.Shared.Networking.NetworkChannel">
+            <summary> Network events are sent via different channels, this allows to have better performance, ensuring that heavy stuff from one queue will still allow other objects to be updated. Read more here: https://github.com/StrangeLoopGames/Eco/tree/develop/Server/Eco.Shared/Networking#network-queues-for-client-updates</summary>
         </member>
         <member name="M:Eco.Shared.Networking.NetMessage.EncodePacket``1(System.IO.MemoryStream,Eco.Shared.Networking.NetworkEvent,``0,System.Action{System.IO.MemoryStream,``0},System.Boolean)">
             <summary>
@@ -2473,6 +2483,9 @@
             </summary>
             <param name="minimalCapacity">minimal required capacity for snapshot.</param>
             <returns>Current snapshot reference. It may be null if Capacity == 0.</returns>
+        </member>
+        <member name="M:Eco.Shared.Pools.Collections.PoolableListWrapper`1.EnsureListCapacity(System.Int32)">
+            <summary> It uses exponential capacity, i.e. it will give 2, 4, 8, 16, 32, 64, 128 etc list sizes. Done this way to avoid too frequent re-creation of lists. It's guaranteed that the resulting capacity will be at least minCapacity. </summary>
         </member>
         <member name="T:Eco.Shared.Pools.FixedSizePool`1">
             <summary>Implementation of <see cref="T:Eco.Shared.Pools.ThreadSafeFixedSizePool`1"/> with extended functionality. Obsolete, should be replaced with <see cref="T:Eco.Shared.Pools.PoolService`1"/> when all functionality will be supported.</summary>
@@ -3154,6 +3167,9 @@
             <code>listToOrder.OrderByDescending(tree => GetTotalRank(tree)).ToArray().CurveOrder();</code>
             </example>
         </member>
+        <member name="M:Eco.Shared.Utils.DictionaryExtensions.RemoveWhere``2(System.Collections.Generic.IDictionary{``0,``1},System.Func{``0,``1,System.Boolean})">
+            <summary>Remove matching the given predicate and return true if any were removed.</summary>
+        </member>
         <member name="M:Eco.Shared.Utils.DictionaryExtensions.AddOrUpdate``2(System.Collections.Generic.Dictionary{``0,``1},``0,``1,System.Func{``1,``1,``1})">
             <summary>Add a new element to a dictionary, or update an existing one if the key already exists.
             <paramref name="updateFunc"/> is a function that accepts the existing value and passed value, and returns the new value to store.</summary>
@@ -3279,7 +3295,7 @@
         <member name="T:Eco.Shared.Utils.EcoTagToHTMLConverter">
             <summary>Extension methods for converting Eco tag strings to HTML tag based equivilants.</summary>
         </member>
-        <member name="M:Eco.Shared.Utils.EcoTagToHTMLConverter.ToHTML(System.String,System.Boolean)">
+        <member name="M:Eco.Shared.Utils.EcoTagToHTMLConverter.ToHTML(System.String,System.Boolean,System.Boolean)">
             <summary>Converts a Eco text string to a HTML string for use by Vue/HTML5</summary>
             <param name="input">String to convert.</param>
             <param name="stripFoldouts">Flag used to strip foldout tags. Defaults to false.</param>
@@ -3757,6 +3773,66 @@
         </member>
         <member name="M:Eco.Shared.Utils.MemberUtils.IsSettable(System.Reflection.MemberInfo)">
             <summary> Returns true if this member is a field, or a property with a setter. </summary>
+        </member>
+        <member name="T:Eco.Shared.Utils.MemberwiseEqualityObject">
+            <summary>
+            Base class that provides a dynamic, memberwise Equals/GetHashCode 
+            implementation. Rather than using reflection, methods are created 
+            using compiled expression trees.
+            </summary>
+        </member>
+        <member name="T:Eco.Shared.Utils.MemberwiseEqualityObject.MemberwiseFunctions">
+            <summary>
+            Used to hold delegates for the compiled methods.
+            </summary>
+        </member>
+        <member name="F:Eco.Shared.Utils.MemberwiseEqualityObject.MemberwiseFunctions.EqualsFunc">
+            <summary>
+            Delegate for the Equals method.
+            </summary>
+        </member>
+        <member name="F:Eco.Shared.Utils.MemberwiseEqualityObject.MemberwiseFunctions.GetHashCodeFunc">
+            <summary>
+            Delegate for the GetHashCode method.
+            </summary>
+        </member>
+        <member name="M:Eco.Shared.Utils.MemberwiseEqualityObject.#cctor">
+            <summary>
+            Static contructor.
+            </summary>
+        </member>
+        <member name="M:Eco.Shared.Utils.MemberwiseEqualityObject.MakeGetHashCodeMethod(System.Type)">
+            <summary>
+            Creates the GetHashCode() method.
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Eco.Shared.Utils.MemberwiseEqualityObject.MakeEqualsMethod(System.Type)">
+            <summary>
+            Creates the Equals() method.
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Eco.Shared.Utils.MemberwiseEqualityObject.#ctor">
+            <summary>
+            Dynamically compiles the Equals/GetHashCode functions on the 
+            first call to a subclass constructor.
+            </summary>
+        </member>
+        <member name="M:Eco.Shared.Utils.MemberwiseEqualityObject.GetHashCode">
+            <summary>
+            Returns the member-wise hash code for this instance.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Eco.Shared.Utils.MemberwiseEqualityObject.Equals(System.Object)">
+            <summary>
+            Determines whether two instances are equal, using a member-wise comparison.
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
         </member>
         <member name="M:Eco.Shared.Utils.MemoryStreamExtensions.Write(System.IO.MemoryStream,System.Byte)">
             <summary>
@@ -4249,7 +4325,7 @@
         <member name="M:Eco.Shared.Utils.ReflectionUtils.IsGenericTypeConstructedFrom(System.Type,System.Type)">
             <summary>Checks if <paramref name="genericType"/> is a generic type constructed from <paramref name="genericTypeDefinition"/>.</summary>
         </member>
-        <member name="M:Eco.Shared.Utils.ReflectionUtils.TryGetPropertyByName``1(System.Object,System.String,``0@)">
+        <member name="M:Eco.Shared.Utils.ReflectionUtils.TryGetPropertyValueByName``1(System.Object,System.String,``0@)">
             <summary>Try to get a property using reflection for the given name, and assign it to val, returning true if found.</summary>
         </member>
         <member name="M:Eco.Shared.Utils.ReflectionUtils.InNamespace(System.Type,System.String)">
@@ -4335,6 +4411,15 @@
         </member>
         <member name="M:Eco.Shared.Utils.ReflectionUtils.ReflectionToString(System.Text.StringBuilder,System.Object)">
             <summary>Add details on each of the properties and fields of the passed object.</summary>
+        </member>
+        <member name="M:Eco.Shared.Utils.ReflectionUtils.GetAllMembers(System.Type,System.Reflection.BindingFlags)">
+            <summary>Get the properties on this type, and all properties in interface hierarchies it implements.</summary>
+        </member>
+        <member name="M:Eco.Shared.Utils.ReflectionUtils.GetMemberFromAll(System.Type,System.String,System.Reflection.BindingFlags)">
+            <summary>Get a member from a given type, and include all the sub interfaces too, which usually arent included with default GetMember.</summary>
+        </member>
+        <member name="M:Eco.Shared.Utils.ReflectionUtils.GetPublicProperties(System.Type,System.Reflection.BindingFlags)">
+            <summary>Get the properties on this type, and all properties in interface hierarchies it implements.</summary>
         </member>
         <member name="M:Eco.Shared.Utils.Text.SignedNum(System.Single,System.Boolean,System.Boolean)">
             <summary> Returns styled number with forded sign ('+' - for positive, '-' - for negative, no sign for zero). If <paramref name="invertHighlight"/> set then it will use negative highlight for positive value. </summary>

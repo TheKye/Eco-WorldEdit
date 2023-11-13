@@ -93,6 +93,26 @@
         <member name="M:Eco.Stats.StatInfo.SetCalculatedProperties">
             <summary>Sets calculated properties which may be evaluated from other properties. Used from constructor and <see cref="M:Eco.Stats.StatInfo.OnDeserialized"/> method.</summary>
         </member>
+        <member name="T:Eco.Stats.StatCategory">
+            <summary>A container for stats, used to organize them.</summary>
+        </member>
+        <member name="M:Eco.Stats.StatCategory.Flatten">
+            <summary>Gets all the stat infos in all categories recursively.</summary>
+            <returns>IEnumerable of all stats and child stats contained in this category.</returns>
+        </member>
+        <member name="M:Eco.Stats.StatCategory.Categories">
+            <summary>Gets all the categories in this category recursively.</summary>
+            <returns>IEnumerable of all categories and child categories contained in this category.</returns>
+        </member>
+        <member name="M:Eco.Stats.StatCategory.GetStatPaths(System.String)">
+            <summary>
+            Iterates over all stats and child categories recursively and returns a dictionary
+            containing the tree path seperated by slashes and a value of the stat info.
+            
+            Example: "/Environment/EcoSystem/": StatInfo
+            </summary>
+            <returns>Dictionary containing the paths and stat info of all child stats.</returns>
+        </member>
         <member name="T:Eco.Stats.StatInfoManager">
             <summary> Maintains all the info about stats, and builds that info on init. </summary>
         </member>

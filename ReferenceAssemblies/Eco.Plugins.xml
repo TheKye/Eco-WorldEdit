@@ -320,6 +320,9 @@
         <member name="M:Eco.Core.Controller.Internal.ClientUpdater.UpdateTask">
             <summary>Background task to process client updates. Flushes data from subsystems (currently only view system, to be expanded to chunks, physics etc).</summary>
         </member>
+        <member name="M:Eco.Core.Controller.Internal.ClientUpdater.ChannelForCombiner(Eco.Shared.Networking.NetworkChannel)">
+            <summary> Unreliable channels combines as General ones, because its better to send 1 reliable packet than 1 reliable and 1 not reliable </summary>
+        </member>
         <member name="T:Eco.Core.Controller.Internal.ControllerUpdater">
             <summary>Helper class for background processing of changed properties and notifying bounded clients.</summary>
         </member>

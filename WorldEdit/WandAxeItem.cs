@@ -1,6 +1,7 @@
 ﻿namespace Eco.Mods.WorldEdit
 {
 	using System;
+	using System.Collections.Generic;
 	using System.ComponentModel;
 	using Eco.Core.Utils;
 	using Eco.Core.Utils.AtomicAction;
@@ -17,26 +18,29 @@
 
     [Serialized]
 	[LocDisplayName("Wand Tool")]
+	[LocDescription("Does magical World Edit things")]
 	[Category("Hidden")]
 	public class WandAxeItem : ToolItem, IInteractor
     {
-		public override LocString DisplayDescription { get { return Localizer.DoStr("Does magical World Edit things"); } }
-
         public override float DurabilityRate { get { return 0; } }
         public override IDynamicValue SkilledRepairCost => skilledRepairCost;
 		private static IDynamicValue skilledRepairCost = new ConstantValue(1);
+		public override ItemCategory ItemCategory => ItemCategory.Devtool;
 
-        public override bool IsValidForInteraction(Type block) => true;
-        public override ClientPredictedBlockAction LeftAction => ClientPredictedBlockAction.None;
+		public override bool IsValidForInteraction(Item item)
+		{
+			BlockItem blockItem = item as BlockItem;
+			return blockItem is not null;
+		}
 
-        [Interaction(InteractionTrigger.LeftClick, overrideDescription: "Set First Position", tags: BlockTags.NonPlant, animationDriven: false, interactionDistance: 15)]
-        public bool SetFirstPos(Player player, InteractionTriggerInfo triggerInfo, InteractionTarget target)
+        [Interaction(InteractionTrigger.LeftClick, overrideDescription: "Set First Position", tags: BlockTags.Block, animationDriven: false, interactionDistance: 15)]
+        public void SetFirstPos(Player player, InteractionTriggerInfo trigger, InteractionTarget target)
 		{
 			Log.WriteWarningLineLocStr("WandAxeItem: SetFirstPos");
 			try
 			{
-				if (!target.IsBlock) { return false; }
-				if (target.BlockPosition is null || !target.BlockPosition.HasValue) { return false; }
+				if (!target.IsBlock) { return; }
+				if (target.BlockPosition is null || !target.BlockPosition.HasValue) { return; }
 
 				Vector3i pos = target.BlockPosition.Value;
 
@@ -50,23 +54,21 @@
 				userSession.SetFirstPosition(pos);
 
                 player.MsgLoc($"First Position set to ({pos.x}, {pos.y}, {pos.z})");
-				return true;
 			}
 			catch (Exception e)
 			{
 				Log.WriteError(Localizer.Do($"{e}"));
 			}
-			return false;
 		}
 
-        [Interaction(InteractionTrigger.RightClick, overrideDescription: "Set Second Position", tags: BlockTags.NonPlant, animationDriven: false, interactionDistance: 15)]
-        public bool SetSecondPos(Player player, InteractionTriggerInfo triggerInfo, InteractionTarget target)
+        [Interaction(InteractionTrigger.RightClick, overrideDescription: "Set Second Position", tags: BlockTags.Block, animationDriven: false, interactionDistance: 15)]
+        public void SetSecondPos(Player player, InteractionTriggerInfo triggerInfo, InteractionTarget target)
 		{
             Log.WriteWarningLineLocStr("WandAxeItem: SetSecondPos");
             try
 			{
-                if (!target.IsBlock) { return false; }
-                if (target.BlockPosition is null || !target.BlockPosition.HasValue) { return false; }
+                if (!target.IsBlock) { return; }
+                if (target.BlockPosition is null || !target.BlockPosition.HasValue) { return; }
 
                 Vector3i pos = target.BlockPosition.Value;
 
@@ -80,13 +82,11 @@
 				userSession.SetSecondPosition(pos);
 
                 player.MsgLoc($"Second Position set to ({pos.x}, {pos.y}, {pos.z})");
-                return true;
             }
 			catch (Exception e)
 			{
 				Log.WriteError(Localizer.Do($"{e}"));
 			}
-			return false;
 		}
 	}
 }

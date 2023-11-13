@@ -46,6 +46,9 @@
         <member name="T:Eco.Simulation.Agents.AI.BehaviorSuccess`1">
             <summary> Executes an action then just returns success.</summary>
         </member>
+        <member name="P:Eco.Simulation.Agents.AI.Brain.ClearMemoryWhenNotVisible">
+            <summary>Should this brain loose all memories when there are no players observing it?</summary>
+        </member>
         <member name="M:Eco.Simulation.Agents.AI.Brain.TryUpdatePosition(Eco.Simulation.Agents.Animal)">
             <summary> Try to set new valid position or kill animal on bad location </summary>
             //ANIMAL TODO THIS IS FUCKED CODE  ANIMALTODO
@@ -53,6 +56,16 @@
         <member name="T:Eco.Simulation.Agents.AI.Brain`1">
             <summary>Generic brain with behaviors specific to each species.</summary>
             <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:Eco.Simulation.Agents.AI.DebugBrain">
+            <summary>Simple brain for debugging that makes animal do nothing.</summary>
+        </member>
+        <member name="T:Eco.Simulation.Agents.AI.RunningBrain">
+            <summary>Simple brain for debugging that makes animal run back and forth between two points.</summary>
+        </member>
+        <member name="M:Eco.Simulation.Agents.AI.RunningBrain.SetupAnimal(Eco.Simulation.Agents.Animal,Eco.Shared.Math.Vector3i,Eco.Shared.Math.Vector3i,System.Boolean)">
+            <summary>Sets animal brain and memory to make it run between two points.</summary>
+            <returns>False if setup failed and path wasn't found.</returns>
         </member>
         <member name="M:Eco.Simulation.Agents.AI.GridUtils.DrawLine(System.Numerics.Vector3,System.Numerics.Vector3)">
             <summary> Fast Voxel Traversal Algorithm (Based on Bresenham's line algorithm). Uses trigonometry in comparing to grid traversal algorithm. http://www.cse.yorku.ca/~amana/research/grid.pdf </summary>
@@ -117,6 +130,9 @@
         </member>
         <member name="M:Eco.Simulation.Agents.Animal.SetController(Eco.Shared.Networking.INetObjectViewer,Eco.Shared.Networking.INetObjectViewer)">
             <summary>Thread safe controller setter which checks for old viewer before replace with new viewer.</summary>
+        </member>
+        <member name="M:Eco.Simulation.Agents.Animal.SetMemory(System.String,System.Object)">
+            <summary>Only call this from the simulation thread to keep memory simple</summary>
         </member>
         <member name="T:Eco.Simulation.Agents.ICanTakeDamage">
             <summary> Interface to be implemented by objects which can take damage. It then may be used in simulation (in example for attacking animals). </summary>

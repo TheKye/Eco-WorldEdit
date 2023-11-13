@@ -39,6 +39,9 @@
             Water that is under other water or solid blocks, at maximum level. Does no processing of it's own.
             </summary>
         </member>
+        <member name="M:Eco.World.Blocks.EncasedWaterBlock.FillWithWater(Eco.Shared.Math.Vector3i)">
+            <summary>Set block to Water</summary>
+        </member>
         <member name="T:Eco.World.Blocks.ITickableBlock">
             <summary> Wakes up when a nearby block changes, and ticked while not asleep. </summary>
         </member>

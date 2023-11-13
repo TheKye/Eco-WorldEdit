@@ -259,6 +259,13 @@
         <member name="T:Eco.Core.Controller.ClientNotification">
             <summary> This is used to notify several clients at same time. It saves shared value which will be converted to network packet and send to all of Related Clients via broadcasting. </summary>
         </member>
+        <member name="F:Eco.Core.Controller.ClientNotification.NetworkChannel">
+            <summary> This property allows to select how the property update should be sent in reliable way (TCP-like) either on main channel or on extra one or to send it in not reliable way (UDP-like). 
+            UDP is much faster since it dont need the confirmation of client but you have no guarantee that client will get that update (packet can be lost).
+            To be used when there are a lot of constantly modifying values at the property and it doesnt matter if client will get all of them. By example, client should carry only about last received position of object, not all of them.
+            Another useful option - ExtraChannel. This will allow to send the notification in a separate but reliable channel, avoiding blocking general network channel so clients can still opearte while downloading something here.
+            </summary>
+        </member>
         <member name="T:Eco.Core.Controller.ControllerManager">
             <summary>Manages all controllers on server-side. Controllers are server objects which has view on the client. See ContorllerPacking.md for details. </summary>
             <remarks>For debugging purposes you may run build with /p:DefineConstants=LOG_VIEW_SYSTEM or you can enable it in .csproj file. In this mode it will produce ViewData-{date}.txt file with sorted view data in stable order.</remarks>
@@ -468,14 +475,14 @@
         <member name="M:Eco.Core.Controller.ControllerPacker.PackageViewWithMembers(Eco.Core.Controller.IController,Eco.Shared.Serialization.BsonSerializationContext@,Eco.Core.Controller.IControllerMarshaler,System.Boolean,System.Boolean)">
             <summary> Used when client dont yet have the controller and needs initial packing. </summary>
         </member>
-        <member name="M:Eco.Core.Controller.ControllerPacker.PackControllerForBroadcasting(System.Collections.Generic.IEnumerable{Eco.Core.Controller.IMvcNetClient},Eco.Core.Controller.IController,System.String)">
+        <member name="M:Eco.Core.Controller.ControllerPacker.PackControllerForBroadcasting(System.Collections.Generic.IEnumerable{Eco.Core.Controller.IMvcNetClient},Eco.Core.Controller.IController,System.String,Eco.Shared.Networking.NetworkChannel@)">
             <summary> Package a controller into Bson {id, properties} so it can be sent to all clients at once. </summary>
         </member>
         <member name="M:Eco.Core.Controller.ControllerPacker.OnControllerPropertyChanged(System.Object,System.ComponentModel.PropertyChangedEventArgs)">
             <summary>Used in <see cref="M:Eco.Core.PropertyHandling.PropertyChanges.GlobalSubscribe(System.Type,Eco.Core.PropertyHandling.PropertyChangedBeforeAfterEventHandler)"/> as all controllers property changes handler.</summary>
         </member>
         <member name="M:Eco.Core.Controller.ControllerPacker.PropertySyncs(Eco.Core.Controller.IControllerMarshaler,System.String,System.Boolean@)">
-            <summary>Return true if the property is syncs to the client (marked SyncToView or Eco) </summary>
+            <summary>Return true if the property is synced to the client (marked SyncToView or Eco) </summary>
         </member>
         <member name="T:Eco.Core.Controller.ControllerPropertyNameAttribute">
             <summary>
@@ -1152,6 +1159,12 @@
             If during function call queue consumed by other threads and in the queue less or equals elements than was when initially requested then result will contain all available elements.
             </summary>
         </member>
+        <member name="M:Eco.Core.Utils.ControllerDictionary`2.Add(`0,`1)">
+            <summary>Calls 'OnAdd' callback regardless of whether the item already existed or not.</summary>
+        </member>
+        <member name="M:Eco.Core.Utils.ControllerHashSet`1.ContainsOnly(System.Collections.Generic.IEnumerable{`0})">
+            <summary>Returns true if and only if the set contains each element in the enumerbale and no others.  Does not support duplicates in entries list.</summary>
+        </member>
         <member name="M:Eco.Core.Utils.ControllerHashSet`1.RemoveAndGet(System.Func{System.Collections.Generic.IEnumerable{`0}})">
             <summary>We the specified function to remove a specific range of entries and raise the events accordingly.</summary>
         </member>
@@ -1189,6 +1202,9 @@
         <member name="M:Eco.Core.Utils.DirtyFlag.FinishUpdate">
             <summary>Finishes update started with <see cref="M:Eco.Core.Utils.DirtyFlag.TryStartUpdate"/>. Clears the flag if it wasn't <see cref="M:Eco.Core.Utils.DirtyFlag.SetDirty"/> during the update.</summary>
         </member>
+        <member name="M:Eco.Core.Utils.DirtyFlag.ClearFlag">
+            <summary>Clear without processing.</summary>
+        </member>
         <member name="T:Eco.Core.Utils.DirtySet`1">
             <summary>Component class to maintain a 'dirty' set of entries of type T that will periodically process and clear.
             It will check whenever ticked, and whenever CleanTimer is ready, which must be initialized in the implementing class.</summary>
@@ -1208,6 +1224,9 @@
             are in the dirty list (this it to allow entries to 'queue up', so they can be processed in bulk, 
             meant for systems where a flurry of changes will happen in quick succession, such that the processing
             shouldnt be done immediately after the first change).</summary>
+        </member>
+        <member name="M:Eco.Core.Utils.DirtySet`1.Clear">
+            <summary>Clear dirty list without processing.</summary>
         </member>
         <member name="T:Eco.Core.Utils.Dispository">
             <summary>
@@ -1829,11 +1848,11 @@
             <summary> Properties with [DynamicFlags] attribute will result client side's selector to try to look for this container in their parent.
             If there is an entry with the same name, then selector will use contained flags instead of the default ones.
             Nothing will be replaced if there is no such entry.
-            For a demo see how wages declare their WagesPaidFromAccount and how AppointedTitle clears its GovernmentAccess flag. </summary>
+            For a demo see how wages declare their WagesPaidFromAccount and how AppointedTitle clears its InJurisdiction flag. </summary>
         </member>
         <member name="M:Eco.Core.Utils.ViewExtensions.SetFlags(Eco.Core.Utils.IContainsDynamicFlags,System.String,Eco.Shared.View.ViewSelectorFlags)">
             <summary> Sets view selector flags for the property in the container. 
-            For a demo see how ElectedTitle sets GovernmentAccess flag for its wages source account. </summary>
+            For a demo see how ElectedTitle sets InJurisdiction flag for its wages source account. </summary>
         </member>
         <member name="T:Eco.Core.Utils.WeakKeyConcurrentDictionary`2">
             <summary>
@@ -2188,6 +2207,9 @@
         </member>
         <member name="T:Eco.Core.PropertyHandling.DependsOnSubMemberAttribute">
             <summary>An override for fody's 'DependsOn' attirbute that allows watching a specific sub prop, and the prop or subprop could either be events.
+            NOTE: If you are watching subproperties on a getter-only property, the sub properties wont start tracking until the first property change notification
+            goes out for that root property.  Youll need to manually make sure this happens, or set up its dependencies to detect other members changing and do its 
+            initialization there.
             See wiki guide here: https://github.com/StrangeLoopGames/Eco/wiki/Watching-System /// </summary>
         </member>
         <member name="T:Eco.Core.PropertyHandling.DependsOnMemberAttribute">
@@ -2245,11 +2267,6 @@
         <member name="F:Eco.Core.PropertyHandling.Internal.WatchBaseAttribute.MemberTypeMustDerive">
             <summary>Only watch types that are derived from this specific class or interface.</summary>
             Ex. ElectedTitle has a property of type IAlias called EligibleCandidates (it can accept values of type User, ElectedTitle,...) but we only want to watch the property if it implement the IProposable interface.
-        </member>
-        <member name="F:Eco.Core.PropertyHandling.Internal.WatchBaseAttribute.TriggerCallbackWhenRootPropertyChanges">
-            <summary>When watching sub members, do we also trigger the callback when the root property (which contains the submembers) changes?
-            This needs to be 'off' in the case of DependsOnSubProp, since it's callback will fire a Property Changed notification, which, if we do
-            on the root property change, will become infinitely recursive.</summary>
         </member>
         <member name="F:Eco.Core.PropertyHandling.Internal.WatchBaseAttribute.OverridenType">
             <summary>

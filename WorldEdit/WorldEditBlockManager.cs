@@ -4,6 +4,7 @@ using System.Linq;
 using Eco.Core.Utils;
 using Eco.Gameplay.Blocks;
 using Eco.Gameplay.Components;
+using Eco.Gameplay.Components.Storage;
 using Eco.Gameplay.Components.Store;
 using Eco.Gameplay.Objects;
 using Eco.Gameplay.Occupancy;

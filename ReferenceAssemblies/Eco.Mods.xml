@@ -1683,146 +1683,6 @@
         <member name="P:Eco.Mods.TechTree.AqueductFormType.MinTier">
             <summary>Defines the minimum hammer tier for this block form type</summary>
         </member>
-        <member name="T:Eco.Mods.TechTree.AsphaltCubeFormType">
-            <summary>
-            <para>Server side definition for the "AsphaltCube" form type. </para>
-            <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
-            </summary>
-            <remarks>
-            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
-            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
-            </remarks>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltCubeFormType.Name">
-            <summary>Basic name of the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltCubeFormType.DisplayName">
-            <summary>The plural localization name for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltCubeFormType.DisplayDescription">
-            <summary>The tooltip description for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltCubeFormType.GroupType">
-            <summary>The block FormGroup this form type belongs to</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltCubeFormType.SortOrder">
-            <summary>Defines the sort order used by this block form type</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltCubeFormType.MinTier">
-            <summary>Defines the minimum hammer tier for this block form type</summary>
-        </member>
-        <member name="T:Eco.Mods.TechTree.AsphaltRampAFormType">
-            <summary>
-            <para>Server side definition for the "AsphaltRampA" form type. </para>
-            <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
-            </summary>
-            <remarks>
-            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
-            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
-            </remarks>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampAFormType.Name">
-            <summary>Basic name of the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampAFormType.DisplayName">
-            <summary>The plural localization name for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampAFormType.DisplayDescription">
-            <summary>The tooltip description for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampAFormType.GroupType">
-            <summary>The block FormGroup this form type belongs to</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampAFormType.SortOrder">
-            <summary>Defines the sort order used by this block form type</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampAFormType.MinTier">
-            <summary>Defines the minimum hammer tier for this block form type</summary>
-        </member>
-        <member name="T:Eco.Mods.TechTree.AsphaltRampBFormType">
-            <summary>
-            <para>Server side definition for the "AsphaltRampB" form type. </para>
-            <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
-            </summary>
-            <remarks>
-            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
-            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
-            </remarks>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampBFormType.Name">
-            <summary>Basic name of the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampBFormType.DisplayName">
-            <summary>The plural localization name for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampBFormType.DisplayDescription">
-            <summary>The tooltip description for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampBFormType.GroupType">
-            <summary>The block FormGroup this form type belongs to</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampBFormType.SortOrder">
-            <summary>Defines the sort order used by this block form type</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampBFormType.MinTier">
-            <summary>Defines the minimum hammer tier for this block form type</summary>
-        </member>
-        <member name="T:Eco.Mods.TechTree.AsphaltRampCFormType">
-            <summary>
-            <para>Server side definition for the "AsphaltRampC" form type. </para>
-            <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
-            </summary>
-            <remarks>
-            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
-            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
-            </remarks>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampCFormType.Name">
-            <summary>Basic name of the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampCFormType.DisplayName">
-            <summary>The plural localization name for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampCFormType.DisplayDescription">
-            <summary>The tooltip description for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampCFormType.GroupType">
-            <summary>The block FormGroup this form type belongs to</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampCFormType.SortOrder">
-            <summary>Defines the sort order used by this block form type</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampCFormType.MinTier">
-            <summary>Defines the minimum hammer tier for this block form type</summary>
-        </member>
-        <member name="T:Eco.Mods.TechTree.AsphaltRampDFormType">
-            <summary>
-            <para>Server side definition for the "AsphaltRampD" form type. </para>
-            <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
-            </summary>
-            <remarks>
-            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
-            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
-            </remarks>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampDFormType.Name">
-            <summary>Basic name of the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampDFormType.DisplayName">
-            <summary>The plural localization name for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampDFormType.DisplayDescription">
-            <summary>The tooltip description for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampDFormType.GroupType">
-            <summary>The block FormGroup this form type belongs to</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampDFormType.SortOrder">
-            <summary>Defines the sort order used by this block form type</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.AsphaltRampDFormType.MinTier">
-            <summary>Defines the minimum hammer tier for this block form type</summary>
-        </member>
         <member name="T:Eco.Mods.TechTree.BasicSlopeCornerFormType">
             <summary>
             <para>Server side definition for the "BasicSlopeCorner" form type. </para>
@@ -2017,118 +1877,6 @@
             <summary>Defines the sort order used by this block form type</summary>
         </member>
         <member name="P:Eco.Mods.TechTree.BraceTurnFormType.MinTier">
-            <summary>Defines the minimum hammer tier for this block form type</summary>
-        </member>
-        <member name="T:Eco.Mods.TechTree.BrickRampAFormType">
-            <summary>
-            <para>Server side definition for the "BrickRampA" form type. </para>
-            <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
-            </summary>
-            <remarks>
-            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
-            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
-            </remarks>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampAFormType.Name">
-            <summary>Basic name of the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampAFormType.DisplayName">
-            <summary>The plural localization name for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampAFormType.DisplayDescription">
-            <summary>The tooltip description for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampAFormType.GroupType">
-            <summary>The block FormGroup this form type belongs to</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampAFormType.SortOrder">
-            <summary>Defines the sort order used by this block form type</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampAFormType.MinTier">
-            <summary>Defines the minimum hammer tier for this block form type</summary>
-        </member>
-        <member name="T:Eco.Mods.TechTree.BrickRampBFormType">
-            <summary>
-            <para>Server side definition for the "BrickRampB" form type. </para>
-            <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
-            </summary>
-            <remarks>
-            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
-            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
-            </remarks>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampBFormType.Name">
-            <summary>Basic name of the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampBFormType.DisplayName">
-            <summary>The plural localization name for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampBFormType.DisplayDescription">
-            <summary>The tooltip description for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampBFormType.GroupType">
-            <summary>The block FormGroup this form type belongs to</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampBFormType.SortOrder">
-            <summary>Defines the sort order used by this block form type</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampBFormType.MinTier">
-            <summary>Defines the minimum hammer tier for this block form type</summary>
-        </member>
-        <member name="T:Eco.Mods.TechTree.BrickRampCFormType">
-            <summary>
-            <para>Server side definition for the "BrickRampC" form type. </para>
-            <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
-            </summary>
-            <remarks>
-            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
-            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
-            </remarks>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampCFormType.Name">
-            <summary>Basic name of the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampCFormType.DisplayName">
-            <summary>The plural localization name for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampCFormType.DisplayDescription">
-            <summary>The tooltip description for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampCFormType.GroupType">
-            <summary>The block FormGroup this form type belongs to</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampCFormType.SortOrder">
-            <summary>Defines the sort order used by this block form type</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampCFormType.MinTier">
-            <summary>Defines the minimum hammer tier for this block form type</summary>
-        </member>
-        <member name="T:Eco.Mods.TechTree.BrickRampDFormType">
-            <summary>
-            <para>Server side definition for the "BrickRampD" form type. </para>
-            <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
-            </summary>
-            <remarks>
-            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
-            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
-            </remarks>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampDFormType.Name">
-            <summary>Basic name of the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampDFormType.DisplayName">
-            <summary>The plural localization name for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampDFormType.DisplayDescription">
-            <summary>The tooltip description for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampDFormType.GroupType">
-            <summary>The block FormGroup this form type belongs to</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampDFormType.SortOrder">
-            <summary>Defines the sort order used by this block form type</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.BrickRampDFormType.MinTier">
             <summary>Defines the minimum hammer tier for this block form type</summary>
         </member>
         <member name="T:Eco.Mods.TechTree.CanopyWindowFormType">
@@ -2327,9 +2075,9 @@
         <member name="P:Eco.Mods.TechTree.DocksColumnFormType.MinTier">
             <summary>Defines the minimum hammer tier for this block form type</summary>
         </member>
-        <member name="T:Eco.Mods.TechTree.DocksFenceRopeCornerFormType">
+        <member name="T:Eco.Mods.TechTree.DocksFenceCornerFormType">
             <summary>
-            <para>Server side definition for the "DocksFenceRopeCorner" form type. </para>
+            <para>Server side definition for the "DocksFenceCorner" form type. </para>
             <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
             </summary>
             <remarks>
@@ -2337,27 +2085,27 @@
             If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
             </remarks>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeCornerFormType.Name">
+        <member name="P:Eco.Mods.TechTree.DocksFenceCornerFormType.Name">
             <summary>Basic name of the block form type.</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeCornerFormType.DisplayName">
+        <member name="P:Eco.Mods.TechTree.DocksFenceCornerFormType.DisplayName">
             <summary>The plural localization name for the block form type.</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeCornerFormType.DisplayDescription">
+        <member name="P:Eco.Mods.TechTree.DocksFenceCornerFormType.DisplayDescription">
             <summary>The tooltip description for the block form type.</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeCornerFormType.GroupType">
+        <member name="P:Eco.Mods.TechTree.DocksFenceCornerFormType.GroupType">
             <summary>The block FormGroup this form type belongs to</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeCornerFormType.SortOrder">
+        <member name="P:Eco.Mods.TechTree.DocksFenceCornerFormType.SortOrder">
             <summary>Defines the sort order used by this block form type</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeCornerFormType.MinTier">
+        <member name="P:Eco.Mods.TechTree.DocksFenceCornerFormType.MinTier">
             <summary>Defines the minimum hammer tier for this block form type</summary>
         </member>
-        <member name="T:Eco.Mods.TechTree.DocksFenceRopeEndCapFormType">
+        <member name="T:Eco.Mods.TechTree.DocksFenceEndCapFormType">
             <summary>
-            <para>Server side definition for the "DocksFenceRopeEndCap" form type. </para>
+            <para>Server side definition for the "DocksFenceEndCap" form type. </para>
             <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
             </summary>
             <remarks>
@@ -2365,27 +2113,27 @@
             If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
             </remarks>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeEndCapFormType.Name">
+        <member name="P:Eco.Mods.TechTree.DocksFenceEndCapFormType.Name">
             <summary>Basic name of the block form type.</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeEndCapFormType.DisplayName">
+        <member name="P:Eco.Mods.TechTree.DocksFenceEndCapFormType.DisplayName">
             <summary>The plural localization name for the block form type.</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeEndCapFormType.DisplayDescription">
+        <member name="P:Eco.Mods.TechTree.DocksFenceEndCapFormType.DisplayDescription">
             <summary>The tooltip description for the block form type.</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeEndCapFormType.GroupType">
+        <member name="P:Eco.Mods.TechTree.DocksFenceEndCapFormType.GroupType">
             <summary>The block FormGroup this form type belongs to</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeEndCapFormType.SortOrder">
+        <member name="P:Eco.Mods.TechTree.DocksFenceEndCapFormType.SortOrder">
             <summary>Defines the sort order used by this block form type</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeEndCapFormType.MinTier">
+        <member name="P:Eco.Mods.TechTree.DocksFenceEndCapFormType.MinTier">
             <summary>Defines the minimum hammer tier for this block form type</summary>
         </member>
-        <member name="T:Eco.Mods.TechTree.DocksFenceRopeIntersectionFormType">
+        <member name="T:Eco.Mods.TechTree.DocksFenceEndCapDoubleFormType">
             <summary>
-            <para>Server side definition for the "DocksFenceRopeIntersection" form type. </para>
+            <para>Server side definition for the "DocksFenceEndCapDouble" form type. </para>
             <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
             </summary>
             <remarks>
@@ -2393,27 +2141,27 @@
             If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
             </remarks>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeIntersectionFormType.Name">
+        <member name="P:Eco.Mods.TechTree.DocksFenceEndCapDoubleFormType.Name">
             <summary>Basic name of the block form type.</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeIntersectionFormType.DisplayName">
+        <member name="P:Eco.Mods.TechTree.DocksFenceEndCapDoubleFormType.DisplayName">
             <summary>The plural localization name for the block form type.</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeIntersectionFormType.DisplayDescription">
+        <member name="P:Eco.Mods.TechTree.DocksFenceEndCapDoubleFormType.DisplayDescription">
             <summary>The tooltip description for the block form type.</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeIntersectionFormType.GroupType">
+        <member name="P:Eco.Mods.TechTree.DocksFenceEndCapDoubleFormType.GroupType">
             <summary>The block FormGroup this form type belongs to</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeIntersectionFormType.SortOrder">
+        <member name="P:Eco.Mods.TechTree.DocksFenceEndCapDoubleFormType.SortOrder">
             <summary>Defines the sort order used by this block form type</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeIntersectionFormType.MinTier">
+        <member name="P:Eco.Mods.TechTree.DocksFenceEndCapDoubleFormType.MinTier">
             <summary>Defines the minimum hammer tier for this block form type</summary>
         </member>
-        <member name="T:Eco.Mods.TechTree.DocksFenceRopeMidFormType">
+        <member name="T:Eco.Mods.TechTree.DocksFenceIntersectionFormType">
             <summary>
-            <para>Server side definition for the "DocksFenceRopeMid" form type. </para>
+            <para>Server side definition for the "DocksFenceIntersection" form type. </para>
             <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
             </summary>
             <remarks>
@@ -2421,27 +2169,27 @@
             If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
             </remarks>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeMidFormType.Name">
+        <member name="P:Eco.Mods.TechTree.DocksFenceIntersectionFormType.Name">
             <summary>Basic name of the block form type.</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeMidFormType.DisplayName">
+        <member name="P:Eco.Mods.TechTree.DocksFenceIntersectionFormType.DisplayName">
             <summary>The plural localization name for the block form type.</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeMidFormType.DisplayDescription">
+        <member name="P:Eco.Mods.TechTree.DocksFenceIntersectionFormType.DisplayDescription">
             <summary>The tooltip description for the block form type.</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeMidFormType.GroupType">
+        <member name="P:Eco.Mods.TechTree.DocksFenceIntersectionFormType.GroupType">
             <summary>The block FormGroup this form type belongs to</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeMidFormType.SortOrder">
+        <member name="P:Eco.Mods.TechTree.DocksFenceIntersectionFormType.SortOrder">
             <summary>Defines the sort order used by this block form type</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeMidFormType.MinTier">
+        <member name="P:Eco.Mods.TechTree.DocksFenceIntersectionFormType.MinTier">
             <summary>Defines the minimum hammer tier for this block form type</summary>
         </member>
-        <member name="T:Eco.Mods.TechTree.DocksFenceRopeSoloFormType">
+        <member name="T:Eco.Mods.TechTree.DocksFenceMidFormType">
             <summary>
-            <para>Server side definition for the "DocksFenceRopeSolo" form type. </para>
+            <para>Server side definition for the "DocksFenceMid" form type. </para>
             <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
             </summary>
             <remarks>
@@ -2449,27 +2197,27 @@
             If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
             </remarks>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeSoloFormType.Name">
+        <member name="P:Eco.Mods.TechTree.DocksFenceMidFormType.Name">
             <summary>Basic name of the block form type.</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeSoloFormType.DisplayName">
+        <member name="P:Eco.Mods.TechTree.DocksFenceMidFormType.DisplayName">
             <summary>The plural localization name for the block form type.</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeSoloFormType.DisplayDescription">
+        <member name="P:Eco.Mods.TechTree.DocksFenceMidFormType.DisplayDescription">
             <summary>The tooltip description for the block form type.</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeSoloFormType.GroupType">
+        <member name="P:Eco.Mods.TechTree.DocksFenceMidFormType.GroupType">
             <summary>The block FormGroup this form type belongs to</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeSoloFormType.SortOrder">
+        <member name="P:Eco.Mods.TechTree.DocksFenceMidFormType.SortOrder">
             <summary>Defines the sort order used by this block form type</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeSoloFormType.MinTier">
+        <member name="P:Eco.Mods.TechTree.DocksFenceMidFormType.MinTier">
             <summary>Defines the minimum hammer tier for this block form type</summary>
         </member>
-        <member name="T:Eco.Mods.TechTree.DocksFenceRopeTIntersectionFormType">
+        <member name="T:Eco.Mods.TechTree.DocksFenceSoloFormType">
             <summary>
-            <para>Server side definition for the "DocksFenceRopeTIntersection" form type. </para>
+            <para>Server side definition for the "DocksFenceSolo" form type. </para>
             <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
             </summary>
             <remarks>
@@ -2477,22 +2225,50 @@
             If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
             </remarks>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeTIntersectionFormType.Name">
+        <member name="P:Eco.Mods.TechTree.DocksFenceSoloFormType.Name">
             <summary>Basic name of the block form type.</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeTIntersectionFormType.DisplayName">
+        <member name="P:Eco.Mods.TechTree.DocksFenceSoloFormType.DisplayName">
             <summary>The plural localization name for the block form type.</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeTIntersectionFormType.DisplayDescription">
+        <member name="P:Eco.Mods.TechTree.DocksFenceSoloFormType.DisplayDescription">
             <summary>The tooltip description for the block form type.</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeTIntersectionFormType.GroupType">
+        <member name="P:Eco.Mods.TechTree.DocksFenceSoloFormType.GroupType">
             <summary>The block FormGroup this form type belongs to</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeTIntersectionFormType.SortOrder">
+        <member name="P:Eco.Mods.TechTree.DocksFenceSoloFormType.SortOrder">
             <summary>Defines the sort order used by this block form type</summary>
         </member>
-        <member name="P:Eco.Mods.TechTree.DocksFenceRopeTIntersectionFormType.MinTier">
+        <member name="P:Eco.Mods.TechTree.DocksFenceSoloFormType.MinTier">
+            <summary>Defines the minimum hammer tier for this block form type</summary>
+        </member>
+        <member name="T:Eco.Mods.TechTree.DocksFenceTIntersectionFormType">
+            <summary>
+            <para>Server side definition for the "DocksFenceTIntersection" form type. </para>
+            <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
+            </summary>
+            <remarks>
+            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
+            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
+            </remarks>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksFenceTIntersectionFormType.Name">
+            <summary>Basic name of the block form type.</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksFenceTIntersectionFormType.DisplayName">
+            <summary>The plural localization name for the block form type.</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksFenceTIntersectionFormType.DisplayDescription">
+            <summary>The tooltip description for the block form type.</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksFenceTIntersectionFormType.GroupType">
+            <summary>The block FormGroup this form type belongs to</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksFenceTIntersectionFormType.SortOrder">
+            <summary>Defines the sort order used by this block form type</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksFenceTIntersectionFormType.MinTier">
             <summary>Defines the minimum hammer tier for this block form type</summary>
         </member>
         <member name="T:Eco.Mods.TechTree.DocksPillarFormType">
@@ -2549,6 +2325,34 @@
             <summary>Defines the sort order used by this block form type</summary>
         </member>
         <member name="P:Eco.Mods.TechTree.DocksPillarBeamFormType.MinTier">
+            <summary>Defines the minimum hammer tier for this block form type</summary>
+        </member>
+        <member name="T:Eco.Mods.TechTree.DocksPillarBeamCornerFormType">
+            <summary>
+            <para>Server side definition for the "DocksPillarBeamCorner" form type. </para>
+            <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
+            </summary>
+            <remarks>
+            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
+            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
+            </remarks>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksPillarBeamCornerFormType.Name">
+            <summary>Basic name of the block form type.</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksPillarBeamCornerFormType.DisplayName">
+            <summary>The plural localization name for the block form type.</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksPillarBeamCornerFormType.DisplayDescription">
+            <summary>The tooltip description for the block form type.</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksPillarBeamCornerFormType.GroupType">
+            <summary>The block FormGroup this form type belongs to</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksPillarBeamCornerFormType.SortOrder">
+            <summary>Defines the sort order used by this block form type</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksPillarBeamCornerFormType.MinTier">
             <summary>Defines the minimum hammer tier for this block form type</summary>
         </member>
         <member name="T:Eco.Mods.TechTree.DocksPillarBeamEndFormType">
@@ -2633,6 +2437,62 @@
             <summary>Defines the sort order used by this block form type</summary>
         </member>
         <member name="P:Eco.Mods.TechTree.DocksPillarBeamJunctionFormType.MinTier">
+            <summary>Defines the minimum hammer tier for this block form type</summary>
+        </member>
+        <member name="T:Eco.Mods.TechTree.DocksPillarBeamTFormType">
+            <summary>
+            <para>Server side definition for the "DocksPillarBeamT" form type. </para>
+            <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
+            </summary>
+            <remarks>
+            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
+            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
+            </remarks>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksPillarBeamTFormType.Name">
+            <summary>Basic name of the block form type.</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksPillarBeamTFormType.DisplayName">
+            <summary>The plural localization name for the block form type.</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksPillarBeamTFormType.DisplayDescription">
+            <summary>The tooltip description for the block form type.</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksPillarBeamTFormType.GroupType">
+            <summary>The block FormGroup this form type belongs to</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksPillarBeamTFormType.SortOrder">
+            <summary>Defines the sort order used by this block form type</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksPillarBeamTFormType.MinTier">
+            <summary>Defines the minimum hammer tier for this block form type</summary>
+        </member>
+        <member name="T:Eco.Mods.TechTree.DocksPillarBeamXFormType">
+            <summary>
+            <para>Server side definition for the "DocksPillarBeamX" form type. </para>
+            <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
+            </summary>
+            <remarks>
+            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
+            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
+            </remarks>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksPillarBeamXFormType.Name">
+            <summary>Basic name of the block form type.</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksPillarBeamXFormType.DisplayName">
+            <summary>The plural localization name for the block form type.</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksPillarBeamXFormType.DisplayDescription">
+            <summary>The tooltip description for the block form type.</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksPillarBeamXFormType.GroupType">
+            <summary>The block FormGroup this form type belongs to</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksPillarBeamXFormType.SortOrder">
+            <summary>Defines the sort order used by this block form type</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksPillarBeamXFormType.MinTier">
             <summary>Defines the minimum hammer tier for this block form type</summary>
         </member>
         <member name="T:Eco.Mods.TechTree.DocksPlatformFormType">
@@ -2857,6 +2717,34 @@
             <summary>Defines the sort order used by this block form type</summary>
         </member>
         <member name="P:Eco.Mods.TechTree.DocksRampsCornerFormType.MinTier">
+            <summary>Defines the minimum hammer tier for this block form type</summary>
+        </member>
+        <member name="T:Eco.Mods.TechTree.DocksRampsCornerInvertedFormType">
+            <summary>
+            <para>Server side definition for the "DocksRampsCornerInverted" form type. </para>
+            <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
+            </summary>
+            <remarks>
+            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
+            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
+            </remarks>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksRampsCornerInvertedFormType.Name">
+            <summary>Basic name of the block form type.</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksRampsCornerInvertedFormType.DisplayName">
+            <summary>The plural localization name for the block form type.</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksRampsCornerInvertedFormType.DisplayDescription">
+            <summary>The tooltip description for the block form type.</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksRampsCornerInvertedFormType.GroupType">
+            <summary>The block FormGroup this form type belongs to</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksRampsCornerInvertedFormType.SortOrder">
+            <summary>Defines the sort order used by this block form type</summary>
+        </member>
+        <member name="P:Eco.Mods.TechTree.DocksRampsCornerInvertedFormType.MinTier">
             <summary>Defines the minimum hammer tier for this block form type</summary>
         </member>
         <member name="T:Eco.Mods.TechTree.DoubleWindowFormType">
@@ -3921,146 +3809,6 @@
             <summary>Defines the sort order used by this block form type</summary>
         </member>
         <member name="P:Eco.Mods.TechTree.StairsTurnFormType.MinTier">
-            <summary>Defines the minimum hammer tier for this block form type</summary>
-        </member>
-        <member name="T:Eco.Mods.TechTree.StoneRampAFormType">
-            <summary>
-            <para>Server side definition for the "StoneRampA" form type. </para>
-            <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
-            </summary>
-            <remarks>
-            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
-            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
-            </remarks>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampAFormType.Name">
-            <summary>Basic name of the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampAFormType.DisplayName">
-            <summary>The plural localization name for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampAFormType.DisplayDescription">
-            <summary>The tooltip description for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampAFormType.GroupType">
-            <summary>The block FormGroup this form type belongs to</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampAFormType.SortOrder">
-            <summary>Defines the sort order used by this block form type</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampAFormType.MinTier">
-            <summary>Defines the minimum hammer tier for this block form type</summary>
-        </member>
-        <member name="T:Eco.Mods.TechTree.StoneRampBFormType">
-            <summary>
-            <para>Server side definition for the "StoneRampB" form type. </para>
-            <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
-            </summary>
-            <remarks>
-            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
-            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
-            </remarks>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampBFormType.Name">
-            <summary>Basic name of the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampBFormType.DisplayName">
-            <summary>The plural localization name for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampBFormType.DisplayDescription">
-            <summary>The tooltip description for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampBFormType.GroupType">
-            <summary>The block FormGroup this form type belongs to</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampBFormType.SortOrder">
-            <summary>Defines the sort order used by this block form type</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampBFormType.MinTier">
-            <summary>Defines the minimum hammer tier for this block form type</summary>
-        </member>
-        <member name="T:Eco.Mods.TechTree.StoneRampCFormType">
-            <summary>
-            <para>Server side definition for the "StoneRampC" form type. </para>
-            <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
-            </summary>
-            <remarks>
-            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
-            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
-            </remarks>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampCFormType.Name">
-            <summary>Basic name of the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampCFormType.DisplayName">
-            <summary>The plural localization name for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampCFormType.DisplayDescription">
-            <summary>The tooltip description for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampCFormType.GroupType">
-            <summary>The block FormGroup this form type belongs to</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampCFormType.SortOrder">
-            <summary>Defines the sort order used by this block form type</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampCFormType.MinTier">
-            <summary>Defines the minimum hammer tier for this block form type</summary>
-        </member>
-        <member name="T:Eco.Mods.TechTree.StoneRampDFormType">
-            <summary>
-            <para>Server side definition for the "StoneRampD" form type. </para>
-            <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
-            </summary>
-            <remarks>
-            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
-            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
-            </remarks>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampDFormType.Name">
-            <summary>Basic name of the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampDFormType.DisplayName">
-            <summary>The plural localization name for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampDFormType.DisplayDescription">
-            <summary>The tooltip description for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampDFormType.GroupType">
-            <summary>The block FormGroup this form type belongs to</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampDFormType.SortOrder">
-            <summary>Defines the sort order used by this block form type</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRampDFormType.MinTier">
-            <summary>Defines the minimum hammer tier for this block form type</summary>
-        </member>
-        <member name="T:Eco.Mods.TechTree.StoneRoadCubeFormType">
-            <summary>
-            <para>Server side definition for the "StoneRoadCube" form type. </para>
-            <para>More information about FormType objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Blocks.FormType.html</para>
-            </summary>
-            <remarks>
-            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
-            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
-            </remarks>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRoadCubeFormType.Name">
-            <summary>Basic name of the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRoadCubeFormType.DisplayName">
-            <summary>The plural localization name for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRoadCubeFormType.DisplayDescription">
-            <summary>The tooltip description for the block form type.</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRoadCubeFormType.GroupType">
-            <summary>The block FormGroup this form type belongs to</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRoadCubeFormType.SortOrder">
-            <summary>Defines the sort order used by this block form type</summary>
-        </member>
-        <member name="P:Eco.Mods.TechTree.StoneRoadCubeFormType.MinTier">
             <summary>Defines the minimum hammer tier for this block form type</summary>
         </member>
         <member name="T:Eco.Mods.TechTree.ThinColumnFormType">
@@ -10517,6 +10265,7 @@
             Server side food item definition for the "FriedVegetables" item. 
             This object inherits the FoodItem base class to allow for consumption mechanics.
             </para>
+            <para>This item is currently hidden from the player. It is either an internal use item or not ready for public release. Removing the hidden tag is not recommended.</para>
             <para>More information about FoodItem objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Items.FoodItem.html</para>
             </summary>
             <remarks>
@@ -13351,10 +13100,6 @@
             </remarks>
             <summary> Cameras allow users to capture and store images. </summary>
             <remarks> It's a 'ToolItem' because it needs durability, but it doesn't interact with any other items directly. </remarks>
-        </member>
-        <member name="M:Eco.Mods.TechTree.CameraItem.CaptureImage(Eco.Gameplay.Players.Player,System.Byte[])">
-            <summary> Capture an image and store it on the camera's memory. </summary>
-            <remarks> 'imageData' should be a PNG in 'byte[]' form.         </remarks>
         </member>
         <member name="T:Eco.Mods.TechTree.CameraFilmRecipe">
             <summary>
@@ -16586,6 +16331,16 @@
             If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
             </remarks>
         </member>
+        <member name="T:Eco.Mods.TechTree.CharcoalSteelRecipe">
+            <summary>
+            <para>Server side recipe definition for "CharcoalSteel".</para>
+            <para>More information about RecipeFamily objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Items.RecipeFamily.html</para>
+            </summary>
+            <remarks>
+            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
+            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
+            </remarks>
+        </member>
         <member name="T:Eco.Mods.TechTree.CharredMortarRecipe">
             <summary>
             <para>Server side recipe definition for "CharredMortar".</para>
@@ -17289,6 +17044,16 @@
         <member name="T:Eco.Mods.TechTree.RefineFishRecipe">
             <summary>
             <para>Server side recipe definition for "RefineFish".</para>
+            <para>More information about RecipeFamily objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Items.RecipeFamily.html</para>
+            </summary>
+            <remarks>
+            This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
+            If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
+            </remarks>
+        </member>
+        <member name="T:Eco.Mods.TechTree.RefineHeartOfPalmRecipe">
+            <summary>
+            <para>Server side recipe definition for "RefineHeartOfPalm".</para>
             <para>More information about RecipeFamily objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Items.RecipeFamily.html</para>
             </summary>
             <remarks>
@@ -21808,6 +21573,9 @@
             If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
             </remarks>
         </member>
+        <member name="M:Eco.Mods.TechTree.BallotBoxObject.ModsPostInitialize">
+            <summary>Hook for mods to customize WorldObject after initialization.</summary>
+        </member>
         <member name="T:Eco.Mods.TechTree.BallotBoxRecipe">
             <summary>
             <para>Server side recipe definition for "BallotBox".</para>
@@ -22847,6 +22615,9 @@
             This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization. 
             If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
             </remarks>
+        </member>
+        <member name="T:Eco.Mods.TechTree.EaselObject">
+            <summary>World object with a custom UI (In-Game cameras UI). Allows player to take a reference image and then create a picture while painting on the easel</summary>
         </member>
         <member name="T:Eco.Mods.TechTree.EaselRecipe">
             <summary>
@@ -26542,6 +26313,9 @@
         </member>
         <member name="T:Eco.Mods.TechTree.BlockHarvestItem">
             <summary>Wrapper for tools like sickle and scythe, contains same code.</summary>
+        </member>
+        <member name="M:Eco.Mods.TechTree.InGameCameraUtils.CaptureImage(Eco.Gameplay.Players.Player,Eco.Gameplay.Systems.UserTextures.UserTexture)">
+            <summary>Creates a PictureItem using the image information and tries to add it to the player's inventory.</summary>
         </member>
         <member name="M:Eco.Mods.TechTree.FishingPoleItem.CastLure(Eco.Gameplay.Players.Player,System.Numerics.Vector3,System.Numerics.Vector3)">
             <summary> Creates the LureEntity from a Client-command, assigning its controller, position, and the force to apply at spawn. </summary>
