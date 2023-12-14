@@ -23,6 +23,10 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 	  <DebugType>none</DebugType>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.10.0-beta-release-532" />
+	</ItemGroup>
 	
 	<ItemGroup>
 		<PackageReference Include="K4os.Compression.LZ4" Version="1.2.16" />
@@ -30,50 +34,6 @@
 		<PackageReference Include="K4os.Compression.LZ4.Streams" Version="1.2.16" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
-	
-	<ItemGroup>
-	  <Reference Include="Eco.Core">
-	    <HintPath>..\ReferenceAssemblies\Eco.Core.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.Gameplay">
-	    <HintPath>..\ReferenceAssemblies\Eco.Gameplay.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.ModKit">
-	    <HintPath>..\ReferenceAssemblies\Eco.ModKit.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.Mods">
-	    <HintPath>..\ReferenceAssemblies\Eco.Mods.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.Networking.ENet">
-	    <HintPath>..\ReferenceAssemblies\Eco.Networking.ENet.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.Plugins">
-	    <HintPath>..\ReferenceAssemblies\Eco.Plugins.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.Shared">
-	    <HintPath>..\ReferenceAssemblies\Eco.Shared.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.Simulation">
-	    <HintPath>..\ReferenceAssemblies\Eco.Simulation.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.Stats">
-	    <HintPath>..\ReferenceAssemblies\Eco.Stats.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.WebServer">
-	    <HintPath>..\ReferenceAssemblies\Eco.WebServer.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.World">
-	    <HintPath>..\ReferenceAssemblies\Eco.World.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.WorldGenerator">
-	    <HintPath>..\ReferenceAssemblies\Eco.WorldGenerator.dll</HintPath>
-	  </Reference>
-	  <Reference Include="EcoServer">
-	    <HintPath>..\ReferenceAssemblies\EcoServer.dll</HintPath>
-	  </Reference>
-	</ItemGroup>
-	
-
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<Exec Command="cd $(TargetDir)&#xD;&#xA;del *.pdb&#xD;&#xA;del *.config&#xD;&#xA;del Eco*&#xD;&#xA;del *.json&#xD;&#xA;del A*&#xD;&#xA;del B*&#xD;&#xA;del C*&#xD;&#xA;del D*&#xD;&#xA;del F*&#xD;&#xA;del G*&#xD;&#xA;del H*&#xD;&#xA;del I*&#xD;&#xA;del J*&#xD;&#xA;del K*&#xD;&#xA;del L*&#xD;&#xA;del M*&#xD;&#xA;del N*&#xD;&#xA;del O*&#xD;&#xA;del P*&#xD;&#xA;del Q*&#xD;&#xA;del R*&#xD;&#xA;del S*&#xD;&#xA;del T*&#xD;&#xA;del U*&#xD;&#xA;del V*&#xD;&#xA;del X*&#xD;&#xA;del Y*&#xD;&#xA;del Z*" />

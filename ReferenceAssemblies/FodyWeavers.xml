@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Weavers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="FodyWeavers.xsd">
-  <StrangeLoopGames.PropertyChanged CheckForEquality='true' InjectOnPropertyNameChanged="false" TriggerDependentProperties="false" EventInvokerNames="OnPropertyChanged"
-                                    OnlyNotifyWithAttributes="Eco.Shared.Networking.EcoAttribute,Eco.Core.Controller.SyncToViewAttribute,PropertyChanged.DependsOnAttribute,Eco.Core.Controller.ControllerPropertyAttribute,Eco.Core.PropertyHandling.WatchSubMemberAttribute,Eco.Core.Controller.ClientInterfacePropertyAttribute,Eco.Gameplay.Systems.NewTooltip.NewTooltipChildrenAttribute"
-                                    DisableBeforeAfterForReadOnlyProperties="true" AddPropertyChangedInvoker="Eco.Core.PropertyHandling.INotifyPropertyChangedInvoker, Eco.Core" CleanAttributes="false" />
-  <Eco />
-</Weavers>
