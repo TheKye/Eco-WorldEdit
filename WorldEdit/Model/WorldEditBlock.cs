@@ -164,7 +164,12 @@ namespace Eco.Mods.WorldEdit.Model
 
 		public bool IsPlantBlock() => this.BlockType.DerivesFrom<PlantBlock>() || this.BlockType.DerivesFrom<TreeBlock>();
 		public bool IsWorldObjectBlock() => this.BlockType.DerivesFrom<WorldObjectBlock>();
-		public bool IsEmptyBlock() => this.BlockType.Equals(typeof(EmptyBlock));
+		public bool IsEmptyBlock()
+		{
+			if (this.BlockType.Equals(typeof(EmptyBlock))) { return true; }
+			else if (this.IsWorldObjectBlock() && ((WorldEditWorldObjectBlockData)this.BlockData).WorldObjectType.Equals(typeof(EmptyBlock))) { return true; }
+			return false;
+		}
 
 		public WorldEditBlock Clone()
 		{

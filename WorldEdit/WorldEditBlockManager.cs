@@ -9,7 +9,6 @@ using Eco.Gameplay.Components.Store;
 using Eco.Gameplay.Objects;
 using Eco.Gameplay.Occupancy;
 using Eco.Gameplay.Plants;
-using Eco.Mods.TechTree;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Model.Components;
 using Eco.Shared.IoC;
@@ -95,7 +94,7 @@ namespace Eco.Mods.WorldEdit
 				Log.WriteErrorLineLoc($"Unable spawn WorldObject {worldObjectBlockData.WorldObjectType} at {position}");
 				return;
 			}
-			if(!string.IsNullOrEmpty(worldObjectBlockData.Name)) { worldObject.SetName(worldObjectBlockData.Name); }
+			if (!string.IsNullOrEmpty(worldObjectBlockData.Name)) { worldObject.SetName(worldObjectBlockData.Name); }
 			if (worldObject.HasComponent<StorageComponent>() && worldObjectBlockData.Components.ContainsKey(typeof(StorageComponent)))
 			{
 				StorageComponent storageComponent = worldObject.GetComponent<StorageComponent>();
@@ -142,24 +141,24 @@ namespace Eco.Mods.WorldEdit
 				}
 				mintComponent.InitializeCurrency(mintCurrency.GetCurrency());
 			}
-            //Handle door opening
-            //TODO: Make it work when SLG opens or give ability to set OpensOutwards inside DoorComponent
-            //if(worldObject is TechTree.DoorObject && worldObject.HasComponent<Gameplay.Components.DoorComponent>() && worldObjectBlockData.Components.ContainsKey(typeof(TechTree.DoorObject)))
-            //{
-            //             Gameplay.Components.DoorComponent doorComponent = worldObject.GetComponent<Gameplay.Components.DoorComponent>();
-            //             object obj = worldObjectBlockData.Components[typeof(TechTree.DoorObject)];
-            //             Model.Components.DoorComponent doorData;
-            //             if (obj is JObject jobj)
-            //             {
-            //                 doorData = jobj.ToObject<Model.Components.DoorComponent>();
-            //             }
-            //             else
-            //             {
-            //                 doorData = (Model.Components.DoorComponent)obj;
-            //             }
-            //	doorComponent?.OpensOutwards = doorData.OpensOut;
-            //         }
-            if (worldObject.HasComponent<StoreComponent>() && worldObjectBlockData.Components.ContainsKey(typeof(StoreComponent)))
+			//Handle door opening
+			//TODO: Make it work when SLG opens or give ability to set OpensOutwards inside DoorComponent
+			//if(worldObject is TechTree.DoorObject && worldObject.HasComponent<Gameplay.Components.DoorComponent>() && worldObjectBlockData.Components.ContainsKey(typeof(TechTree.DoorObject)))
+			//{
+			//             Gameplay.Components.DoorComponent doorComponent = worldObject.GetComponent<Gameplay.Components.DoorComponent>();
+			//             object obj = worldObjectBlockData.Components[typeof(TechTree.DoorObject)];
+			//             Model.Components.DoorComponent doorData;
+			//             if (obj is JObject jobj)
+			//             {
+			//                 doorData = jobj.ToObject<Model.Components.DoorComponent>();
+			//             }
+			//             else
+			//             {
+			//                 doorData = (Model.Components.DoorComponent)obj;
+			//             }
+			//	doorComponent?.OpensOutwards = doorData.OpensOut;
+			//         }
+			if (worldObject.HasComponent<StoreComponent>() && worldObjectBlockData.Components.ContainsKey(typeof(StoreComponent)))
 			{
 				StoreComponent storeComponent = worldObject.GetComponent<StoreComponent>();
 				object obj = worldObjectBlockData.Components[typeof(StoreComponent)];

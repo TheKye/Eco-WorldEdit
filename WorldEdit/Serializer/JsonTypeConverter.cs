@@ -27,16 +27,22 @@ namespace Eco.Mods.WorldEdit.Serializer
 			if (reader.TokenType != JsonToken.Null)
 			{
 				JValue value = new JValue(reader.Value);
-				if (reader.TokenType == JsonToken.String)
+				if (reader.TokenType == JsonToken.String || reader.TokenType == JsonToken.PropertyName)
 				{
 					string typeString = (string)value;
 					type = Type.GetType(typeString);
+					//If null, try use conversion
+					if(type is null)
+					{
+						string[] parsedTypeStr = typeString.ToString().Split(',');
+						if (Conversion.TypeConversionDictionary.TryGetValue(parsedTypeStr[0].Trim(), out Type conversionType)) { type = conversionType; }
+					}
 				}
 			}
 
-			if (type == null)
+			if (type is null)
 			{
-				Log.WriteErrorLineLoc($"Error converting [{reader.Value}] to System.Type, fall back to EmptyBlock");
+				Log.WriteErrorLineLoc($"Error converting [{reader.Value}] ({reader.TokenType}) to System.Type, fall back to EmptyBlock");
 				type = typeof(Eco.World.Blocks.EmptyBlock);
 			}
 			return type;

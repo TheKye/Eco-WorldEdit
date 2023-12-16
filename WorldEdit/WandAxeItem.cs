@@ -1,22 +1,19 @@
 ﻿namespace Eco.Mods.WorldEdit
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
-	using Eco.Core.Utils;
-	using Eco.Core.Utils.AtomicAction;
 	using Eco.Gameplay.DynamicValues;
 	using Eco.Gameplay.Interactions.Interactors;
 	using Eco.Gameplay.Items;
 	using Eco.Gameplay.Players;
-    using Eco.Shared.Items;
-    using Eco.Shared.Localization;
-    using Eco.Shared.Math;
+	using Eco.Shared.Items;
+	using Eco.Shared.Localization;
+	using Eco.Shared.Math;
 	using Eco.Shared.Serialization;
-    using Eco.Shared.SharedTypes;
-    using Eco.Shared.Utils;
+	using Eco.Shared.SharedTypes;
+	using Eco.Shared.Utils;
 
-    [Serialized]
+	[Serialized]
 	[LocDisplayName("Wand Tool")]
 	[LocDescription("Does magical World Edit things")]
 	[Category("Hidden")]
