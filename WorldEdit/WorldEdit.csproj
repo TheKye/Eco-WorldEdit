@@ -5,7 +5,7 @@
 		<RootNamespace>Eco.Mods.WorldEdit</RootNamespace>
 		<AssemblyName>WorldEdit</AssemblyName>
 		<PackageId>WorldEdit</PackageId>
-		<Version>2.6.0</Version>
+		<Version>2.6.1</Version>
 		<Authors>Elixr Mods</Authors>
 		<Company>Elixr Solutions</Company>
 		<Product>EM WorldEdit</Product>
@@ -23,6 +23,10 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 	  <DebugType>none</DebugType>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.10.0.2-beta-release-544" />
+	</ItemGroup>
 	
 	<ItemGroup>
 		<PackageReference Include="K4os.Compression.LZ4" Version="1.2.16" />
