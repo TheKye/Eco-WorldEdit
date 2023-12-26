@@ -17,7 +17,7 @@ namespace Eco.Mods.WorldEdit.Model
 		public Type WorldObjectType { get; private set; }
 		[JsonConverter(typeof(JsonQuaternionConverter))] public Quaternion Rotation { get; private set; }
 		public string Name { get; private set; }
-		public Dictionary<Type, Object> Components { get; private set; }
+		[JsonConverter(typeof(ComponentsDictionaryConverter))] public Dictionary<Type, Object> Components { get; private set; }
 
 		public static WorldEditWorldObjectBlockData From(WorldObject worldObject)
 		{

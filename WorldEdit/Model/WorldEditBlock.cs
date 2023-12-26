@@ -17,7 +17,7 @@ using Newtonsoft.Json;
 
 namespace Eco.Mods.WorldEdit.Model
 {
-    internal struct WorldEditBlock
+	internal struct WorldEditBlock
 	{
 		public Type BlockType { get; private set; }
 		[JsonConverter(typeof(JsonVector3iConverter))] public Vector3i Position { get; private set; }
@@ -141,7 +141,7 @@ namespace Eco.Mods.WorldEdit.Model
 						return false;
 					});
 
-					if(type is null) //Default number search not working, trying new name extraction based
+					if (type is null) //Default number search not working, trying new name extraction based
 					{
 						string baseBlockName = variants[0].Name;
 						string baseName = baseBlockName.Substring(0, baseBlockName.LastIndexOf("Block"));
@@ -164,7 +164,12 @@ namespace Eco.Mods.WorldEdit.Model
 
 		public bool IsPlantBlock() => this.BlockType.DerivesFrom<PlantBlock>() || this.BlockType.DerivesFrom<TreeBlock>();
 		public bool IsWorldObjectBlock() => this.BlockType.DerivesFrom<WorldObjectBlock>();
-		public bool IsEmptyBlock() => this.BlockType.Equals(typeof(EmptyBlock));
+		public bool IsEmptyBlock()
+		{
+			if (this.BlockType.Equals(typeof(EmptyBlock))) { return true; }
+			else if (this.IsWorldObjectBlock() && ((WorldEditWorldObjectBlockData)this.BlockData).WorldObjectType.Equals(typeof(EmptyBlock))) { return true; }
+			return false;
+		}
 
 		public WorldEditBlock Clone()
 		{
