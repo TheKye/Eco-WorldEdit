@@ -5,7 +5,7 @@
 		<RootNamespace>Eco.Mods.WorldEdit</RootNamespace>
 		<AssemblyName>WorldEdit</AssemblyName>
 		<PackageId>WorldEdit</PackageId>
-		<Version>2.6.2</Version>
+		<Version>2.6.3</Version>
 		<Authors>Elixr Mods</Authors>
 		<Company>Elixr Solutions</Company>
 		<Product>EM WorldEdit</Product>
@@ -25,7 +25,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.10.0.2-beta-release-544" />
+		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.10.1-beta-release-576" />
 	</ItemGroup>
 	
 	<ItemGroup>
