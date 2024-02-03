@@ -1,4 +1,4 @@
-![welogo](https://camo.githubusercontent.com/af6b07f4dd04a6d51b338366aafb278380e84577fc7f326f65538174b8df0b0e/68747470733a2f2f696d6167652e6d6f6463646e2e696f2f6d656d626572732f663332632f323431373034362f70726f66696c652f70722e6a7067)
+![welogo](https://github.com/TheKye/Eco-WorldEdit/assets/26339332/a5e49a2d-57fd-4105-8475-3aa5b2f8312c)
 # Eco-WorldEdit
 Eco-WorldEdit it is Server Plugin for [Eco](https://play.eco/ "Eco site") - Global Survival Game from Strange Loop Games
 
