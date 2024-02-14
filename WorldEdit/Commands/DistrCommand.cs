@@ -14,6 +14,7 @@ using Eco.Shared.Utils;
 using Eco.Simulation;
 using Eco.Simulation.Agents;
 using Eco.World.Blocks;
+using static Eco.Core.DebugStatistic.DebugStatistic;
 
 namespace Eco.Mods.WorldEdit.Commands
 {
@@ -50,6 +51,10 @@ namespace Eco.Mods.WorldEdit.Commands
 					case WorldObjectBlock worldObjectBlock:
 						WorldObject worldObject = worldObjectBlock.WorldObjectHandle.Object;
 						if (worldObject.Position3i.Equals(pos)) blockType = worldObject.GetType();
+						break;
+					case WaterBlock _:
+					case EncasedWaterBlock _:
+						blockType = typeof(WaterBlock);
 						break;
 					default:
 						if (BlockContainerManager.Obj.IsBlockContained(pos))
