@@ -101,7 +101,7 @@ namespace Eco.Mods.WorldEdit.Serializer
 		public void Serialize(Stream stream)
 		{
 			EcoBlueprint schematic = EcoBlueprint.Create(this.blockList, this.plantList, this.worldObjectList, this.AuthorInformation, this.Dimension);
-			Serialize(stream, schematic);
+			this.Serialize(stream, schematic);
 		}
 
 		public void Serialize(Stream stream, object obj)

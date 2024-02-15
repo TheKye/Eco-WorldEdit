@@ -30,7 +30,7 @@ namespace Eco.Mods.WorldEdit.Commands
 			{
 				if (WorldEditBlockManager.IsImpenetrable(pos)) return;
 				this.AddBlockChangedEntry(pos);
-				blockManager.SetBlock(blockType, pos);
+				blockManager.SetBlock(this.blockType, pos);
 				this.BlocksChanged++;
 			}
 			selection.ForEachInc(DoAction);

@@ -30,23 +30,23 @@ namespace Eco.Mods.WorldEdit
 
 		public WorldEditBlockManager(UserSession userSession)
 		{
-			_userSession = userSession ?? throw new ArgumentNullException(nameof(userSession));
+			this._userSession = userSession ?? throw new ArgumentNullException(nameof(userSession));
 		}
 
 		public void SetBlock(Type type, Vector3i position)
 		{
 			if (IsImpenetrable(position)) return;
-			ClearPosition(position);
+			this.ClearPosition(position);
 			SetBlockInternal(type, position);
 		}
 		public void RestoreBlockOffset(WorldEditBlock block, Vector3i offsetPos)
 		{
-			RestoreBlock(block, ApplyOffset(block.Position, offsetPos));
+			this.RestoreBlock(block, ApplyOffset(block.Position, offsetPos));
 		}
 		public void RestoreBlock(WorldEditBlock block, Vector3i position)
 		{
 			if (IsImpenetrable(position)) return;
-			ClearPosition(position);
+			this.ClearPosition(position);
 			if (block.IsEmptyBlock())
 			{
 				SetBlockInternal(typeof(EmptyBlock), position);
@@ -57,7 +57,7 @@ namespace Eco.Mods.WorldEdit
 			}
 			else if (block.IsWorldObjectBlock())
 			{
-				RestoreWorldObjectBlock(block.BlockType, position, block.BlockData);
+				this.RestoreWorldObjectBlock(block.BlockType, position, block.BlockData);
 			}
 			else
 			{
@@ -81,10 +81,10 @@ namespace Eco.Mods.WorldEdit
 		{
 			if (blockData == null) { return; }
 			WorldEditWorldObjectBlockData worldObjectBlockData = (WorldEditWorldObjectBlockData)blockData;
-			ClearWorldObjectPlace(worldObjectBlockData.WorldObjectType, position, worldObjectBlockData.Rotation);
+			this.ClearWorldObjectPlace(worldObjectBlockData.WorldObjectType, position, worldObjectBlockData.Rotation);
 
 			WorldObject worldObject = null;
-			try { worldObject = WorldObjectManager.ForceAdd(worldObjectBlockData.WorldObjectType, _userSession.User, position, worldObjectBlockData.Rotation, true); }
+			try { worldObject = WorldObjectManager.ForceAdd(worldObjectBlockData.WorldObjectType, this._userSession.User, position, worldObjectBlockData.Rotation, true); }
 			catch (Exception e)
 			{
 				Log.WriteException(e);
@@ -115,7 +115,7 @@ namespace Eco.Mods.WorldEdit
 					Result result = storageComponent.Inventory.TryAddItems(stack.ItemType, stack.Quantity);
 					if (result.Failed)
 					{
-						_userSession.Player.ErrorLocStr(result.Message.Trim());
+						this._userSession.Player.ErrorLocStr(result.Message.Trim());
 						Log.WriteWarningLineLoc($"Unable restore inventory for WorldObject {worldObjectBlockData.WorldObjectType} at {position}: {result.Message.Trim()}");
 						try { storageComponent.Inventory.AddItems(stack.GetItemStack()); } catch (InvalidOperationException) { /*Already show error to user*/ }
 					}
@@ -242,8 +242,8 @@ namespace Eco.Mods.WorldEdit
 				if (blockOccupancy.BlockType != null)
 				{
 					Vector3i worldPos = position + rotation.RotateVector(blockOccupancy.Offset).XYZi();
-					if (!_userSession.ExecutingCommand.PerformingUndo) _userSession.ExecutingCommand.AddBlockChangedEntry(worldPos); //Do not record changes when doing undo
-					ClearPosition(worldPos, true);
+					if (!this._userSession.ExecutingCommand.PerformingUndo) this._userSession.ExecutingCommand.AddBlockChangedEntry(worldPos); //Do not record changes when doing undo
+					this.ClearPosition(worldPos, true);
 				}
 			}
 		}

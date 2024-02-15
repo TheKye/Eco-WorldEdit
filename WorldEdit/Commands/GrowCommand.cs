@@ -16,7 +16,7 @@ namespace Eco.Mods.WorldEdit.Commands
 
 		protected override void Execute(WorldRange selection)
 		{
-			selection = UserSession.Selection;
+			selection = this.UserSession.Selection;
 
 			void DoAction(Vector3i pos)
 			{

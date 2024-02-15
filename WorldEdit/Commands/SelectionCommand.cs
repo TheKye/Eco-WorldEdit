@@ -66,29 +66,29 @@ namespace Eco.Mods.WorldEdit.Commands
 						case Direction.None:
 							if (selection.min.x <= selection.max.x)
 							{
-								selection.min.x -= amount; selection.max.x += amount;
+								selection.min.x -= this.amount; selection.max.x += this.amount;
 							}
 							else
 							{
-								selection.max.x -= amount; selection.min.x += amount;
+								selection.max.x -= this.amount; selection.min.x += this.amount;
 							}
 
 							if (selection.min.y <= selection.max.y)
 							{
-								selection.min.y -= amount; selection.max.y += amount;
+								selection.min.y -= this.amount; selection.max.y += this.amount;
 							}
 							else
 							{
-								selection.max.y -= amount; selection.min.y += amount;
+								selection.max.y -= this.amount; selection.min.y += this.amount;
 							}
 
 							if (selection.min.z <= selection.max.z)
 							{
-								selection.min.z -= amount; selection.max.z += amount;
+								selection.min.z -= this.amount; selection.max.z += this.amount;
 							}
 							else
 							{
-								selection.max.z -= amount; selection.min.z += amount;
+								selection.max.z -= this.amount; selection.min.z += this.amount;
 							}
 							//selection.min -= amount;
 							//selection.max += amount;
@@ -119,29 +119,29 @@ namespace Eco.Mods.WorldEdit.Commands
 						case Direction.None:
 							if (selection.min.x <= selection.max.x)
 							{
-								selection.min.x += amount; selection.max.x -= amount;
+								selection.min.x += this.amount; selection.max.x -= this.amount;
 							}
 							else
 							{
-								selection.max.x += amount; selection.min.x -= amount;
+								selection.max.x += this.amount; selection.min.x -= this.amount;
 							}
 
 							if (selection.min.y <= selection.max.y)
 							{
-								selection.min.y += amount; selection.max.y -= amount;
+								selection.min.y += this.amount; selection.max.y -= this.amount;
 							}
 							else
 							{
-								selection.max.y += amount; selection.min.y -= amount;
+								selection.max.y += this.amount; selection.min.y -= this.amount;
 							}
 
 							if (selection.min.z <= selection.max.z)
 							{
-								selection.min.z += amount; selection.max.z -= amount;
+								selection.min.z += this.amount; selection.max.z -= this.amount;
 							}
 							else
 							{
-								selection.max.z += amount; selection.min.z -= amount;
+								selection.max.z += this.amount; selection.min.z -= this.amount;
 							}
 							//selection.min += amount;
 							//selection.max -= amount;

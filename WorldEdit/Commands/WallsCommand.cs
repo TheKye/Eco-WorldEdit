@@ -24,7 +24,7 @@ namespace Eco.Mods.WorldEdit.Commands
 			{
 				if (WorldEditBlockManager.IsImpenetrable(pos)) continue;
 				this.AddBlockChangedEntry(pos);
-				blockManager.SetBlock(blockType, pos);
+				blockManager.SetBlock(this.blockType, pos);
 				this.BlocksChanged++;
 			}
 		}

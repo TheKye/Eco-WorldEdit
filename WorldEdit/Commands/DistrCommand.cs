@@ -14,7 +14,6 @@ using Eco.Shared.Utils;
 using Eco.Simulation;
 using Eco.Simulation.Agents;
 using Eco.World.Blocks;
-using static Eco.Core.DebugStatistic.DebugStatistic;
 
 namespace Eco.Mods.WorldEdit.Commands
 {

@@ -34,7 +34,7 @@ namespace Eco.Mods.WorldEdit.Commands
 				if(this.skipEmpty && entry.IsEmptyBlock()) continue;
 				Vector3i pos = WorldEditBlockManager.ApplyOffset(entry.Position, this.playerPos);
 				if (WorldEditBlockManager.IsImpenetrable(pos)) continue;
-				AddBlockChangedEntry(pos);
+				this.AddBlockChangedEntry(pos);
 				blockManager.RestoreBlockOffset(entry, this.playerPos);
 			}
 		}

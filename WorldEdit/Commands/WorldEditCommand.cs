@@ -118,6 +118,6 @@ namespace Eco.Mods.WorldEdit.Commands
 		public bool Redo() => this.Invoke(this.Selection);
 
 		protected abstract void Execute(WorldRange selection);
-		protected void Execute() => Execute(this.Selection);
+		protected void Execute() => this.Execute(this.Selection);
 	}
 }

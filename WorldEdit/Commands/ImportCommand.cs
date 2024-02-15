@@ -16,7 +16,7 @@ namespace Eco.Mods.WorldEdit.Commands
 
 		protected override void Execute(WorldRange selection)
 		{
-			if (!File.Exists(this.fileName)) throw new WorldEditCommandException($"Schematic file {fileName} not found!");
+			if (!File.Exists(this.fileName)) throw new WorldEditCommandException($"Schematic file {this.fileName} not found!");
 			using (FileStream stream = File.OpenRead(this.fileName))
 			{
 				WorldEditSerializer serializer = new WorldEditSerializer();

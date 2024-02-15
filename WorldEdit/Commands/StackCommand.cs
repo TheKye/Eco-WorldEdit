@@ -53,7 +53,7 @@ namespace Eco.Mods.WorldEdit.Commands
 					break;
 			}
 
-			for (int i = 1; i <= amount; i++)
+			for (int i = 1; i <= this.amount; i++)
 			{
 				Vector3i offset = directionOffset * i;
 
