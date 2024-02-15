@@ -12,8 +12,8 @@ namespace Eco.Mods.WorldEdit.Commands
 		{
 			Vector3i? pos = WorldEditUtils.GetPositionForUser(user, null) ?? throw new WorldEditCommandException("Unable to determine position!");
 			this.area = WorldRange.SurroundingSpace(pos.Value, square);
-			this.area.min = new Vector3i(this.area.min.X, pos.Value.Y, this.area.min.Z);
-			this.area.max = new Vector3i(this.area.max.X, Shared.Voxel.World.VoxelSize.y, this.area.max.Z);
+			this.area.min.Y = pos.Value.Y;
+			this.area.max.Y = Shared.Voxel.World.VoxelSize.y;
 		}
 
 		protected override void Execute(WorldRange selection)
