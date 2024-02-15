@@ -773,13 +773,13 @@ namespace Eco.Mods.WorldEdit
 		[ChatSubCommand("WorldEdit", "Show World Edit version", "WEversion", ChatAuthorizationLevel.Admin)]
 		public static void Version(User user)
 		{
-			user.Player.MsgLocStr($"World Edit Version:" + EcoWorldEdit.Version);
+			user.Player.MsgLocStr($"World Edit Version: {EcoWorldEdit.Version}");
 		}
 
 		[ChatSubCommand("WorldEdit", "Show user looking direction", "WELooking", ChatAuthorizationLevel.Admin)]
 		public static void Looking(User user)
 		{
-			user.Player.MsgLocStr($"Looking direction:" + DirectionUtils.GetLookingDirection(user));
+			user.Player.MsgLocStr($"Looking direction: {DirectionUtils.GetLookingDirection(user)}");
 		}
 	}
 }
