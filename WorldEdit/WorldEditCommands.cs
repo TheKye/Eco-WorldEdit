@@ -84,6 +84,27 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
+		[ChatSubCommand("WorldEdit", "Clear the place for construction from everything", "clearall", ChatAuthorizationLevel.Admin)]
+		public static void Clearall(User user, int square)
+		{
+			try
+			{
+				ClearallCommand command = new ClearallCommand(user, square);
+				if (command.Invoke())
+				{
+					user.Player.MsgLoc($"{command.BlocksChanged} blocks cleared in {command.ElapsedMilliseconds}ms.");
+				}
+			}
+			catch (WorldEditCommandException e)
+			{
+				user.Player.ErrorLocStr(e.Message);
+			}
+			catch (Exception e)
+			{
+				Log.WriteError(Localizer.Do($"{e}"));
+			}
+		}
+
 		[ChatSubCommand("WorldEdit", "Drain water in Selected Area", "drain", ChatAuthorizationLevel.Admin)]
 		public static void Drain(User user)
 		{
@@ -603,24 +624,11 @@ namespace Eco.Mods.WorldEdit
 		{
 			try
 			{
-				Vector3i pos;
-
-				if (!String.IsNullOrEmpty(coordinate))
-				{
-					if (!WorldEditUtils.ParseCoordinateArgs(user, coordinate, out pos)) { return; }
-				}
-				else
-				{
-					pos = user.Position.Round();
-				}
-
-				pos.X = pos.X < 0 ? pos.X + Shared.Voxel.World.VoxelSize.X : pos.X;
-				pos.Z = pos.Z < 0 ? pos.Z + Shared.Voxel.World.VoxelSize.Z : pos.Z;
-				pos.X %= Shared.Voxel.World.VoxelSize.X;
-				pos.Z %= Shared.Voxel.World.VoxelSize.Z;
+				Vector3i? pos = WorldEditUtils.GetPositionForUser(user, coordinate);
+				if (pos is null) { return; }
 
 				UserSession session = WorldEditManager.GetUserSession(user);
-				session.SetFirstPosition(pos);
+				session.SetFirstPosition(pos.Value);
 
 				user.Player.MsgLoc($"First Position set to {pos}");
 			}
@@ -636,24 +644,11 @@ namespace Eco.Mods.WorldEdit
 		{
 			try
 			{
-				Vector3i pos;
-
-				if (!String.IsNullOrEmpty(coordinate))
-				{
-					if (!WorldEditUtils.ParseCoordinateArgs(user, coordinate, out pos)) { return; }
-				}
-				else
-				{
-					pos = user.Position.Round();
-				}
-
-				pos.X = pos.X < 0 ? pos.X + Shared.Voxel.World.VoxelSize.X : pos.X;
-				pos.Z = pos.Z < 0 ? pos.Z + Shared.Voxel.World.VoxelSize.Z : pos.Z;
-				pos.X %= Shared.Voxel.World.VoxelSize.X;
-				pos.Z %= Shared.Voxel.World.VoxelSize.Z;
+				Vector3i? pos = WorldEditUtils.GetPositionForUser(user, coordinate);
+				if (pos is null) { return; }
 
 				UserSession session = WorldEditManager.GetUserSession(user);
-				session.SetSecondPosition(pos);
+				session.SetSecondPosition(pos.Value);
 
 				user.Player.MsgLoc($"Second Position set to {pos}");
 			}
@@ -678,6 +673,7 @@ namespace Eco.Mods.WorldEdit
 				Log.WriteError(Localizer.Do($"{e}"));
 			}
 		}
+
 		#region Claim related commands
 		[ChatSubCommand("WorldEdit", "Select current claim where player stands on ground level", "selclaim", ChatAuthorizationLevel.Admin)]
 		public static void Selclaim(User user)
@@ -770,6 +766,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 		#endregion Claim related commands
+
 		[ChatSubCommand("WorldEdit", "Show World Edit version", "WEversion", ChatAuthorizationLevel.Admin)]
 		public static void Version(User user)
 		{

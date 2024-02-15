@@ -91,5 +91,26 @@ namespace Eco.Mods.WorldEdit.Utils
 			string file = WorldEditManager.GetSchematicFileName(fileName, ".txt");
 			File.WriteAllText(file, data);
 		}
+
+		public static Vector3i? GetPositionForUser(User user, string inputCoord)
+		{
+			Vector3i pos;
+
+			if (!String.IsNullOrEmpty(inputCoord))
+			{
+				if (!WorldEditUtils.ParseCoordinateArgs(user, inputCoord, out pos)) { return null; }
+			}
+			else
+			{
+				pos = user.Position.Round();
+			}
+
+			pos.X = pos.X < 0 ? pos.X + Shared.Voxel.World.VoxelSize.X : pos.X;
+			pos.Z = pos.Z < 0 ? pos.Z + Shared.Voxel.World.VoxelSize.Z : pos.Z;
+			pos.X %= Shared.Voxel.World.VoxelSize.X;
+			pos.Z %= Shared.Voxel.World.VoxelSize.Z;
+
+			return pos;
+		}
 	}
 }
