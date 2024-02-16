@@ -19,24 +19,23 @@ namespace Eco.Mods.WorldEdit.Utils
 	{
 		private static readonly Dictionary<Type, Type[]> BlockRotatedVariants = new Dictionary<Type, Type[]>(); //Cache possible variants for speed up search
 
-		public static Type GetBlockType(string pBlockName)
+		public static Type GetBlockType(string blockName)
 		{
-			pBlockName = pBlockName.ToLower();
+			blockName = blockName.ToLower();
 
-			if (pBlockName == "air")
-				return typeof(EmptyBlock);
+			if (blockName == "air" || blockName == "empty") return typeof(EmptyBlock);
 
-			Type blockType = BlockManager.BlockTypes.FirstOrDefault(t => t.Name.ToLower() == pBlockName + "floorblock");
+			Type blockType = null;
+			if (TryGetBlockType(blockName + "floorblock", out blockType)) return blockType;
+			if (TryGetBlockType(blockName + "block", out blockType)) return blockType;
 
-			if (blockType != null)
-				return blockType;
+			return BlockManager.BlockTypes.FirstOrDefault(t => t.Name.ToLower() == blockName); //Last we check for correct full name given
+		}
 
-			blockType = BlockManager.BlockTypes.FirstOrDefault(t => t.Name.ToLower() == pBlockName + "block");
-
-			if (blockType != null)
-				return blockType;
-
-			return BlockManager.BlockTypes.FirstOrDefault(t => t.Name.ToLower() == pBlockName + "block");
+		public static bool TryGetBlockType(string blockName, out Type type)
+		{
+			type = BlockManager.BlockTypes.FirstOrDefault(t => t.Name.ToLower() == blockName.ToLower());
+			return type is not null;
 		}
 
 		public static bool HasRotatedVariants(Type blockType, out Type[] variants)
