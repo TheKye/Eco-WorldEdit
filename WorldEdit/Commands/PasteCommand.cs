@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Eco.Gameplay.Players;
+using Eco.Gameplay.Rooms;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Shared.Math;
 
@@ -24,6 +26,7 @@ namespace Eco.Mods.WorldEdit.Commands
 			this.Restore(this.clipboard.GetBlocks());
 			this.Restore(this.clipboard.GetPlants());
 			this.Restore(this.clipboard.GetWorldObjects());
+			this.ScheduleRoomRecalculation();
 		}
 
 		private void Restore(List<WorldEditBlock> list)
@@ -37,6 +40,13 @@ namespace Eco.Mods.WorldEdit.Commands
 				this.AddBlockChangedEntry(pos);
 				blockManager.RestoreBlockOffset(entry, this.playerPos);
 			}
+		}
+
+		private void ScheduleRoomRecalculation()
+		{
+			if(this.AffectedBlocks.Count == 0) return;
+			IEnumerable<Vector3i> positions = this.AffectedBlocks.Select(b => b.Position);
+			RoomData.QueuePositionsTest(positions);
 		}
 	}
 }
