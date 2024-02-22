@@ -84,6 +84,8 @@ namespace Eco.Mods.WorldEdit
 		public static string GetSchematicFileName(string name, string extension = EcoWorldEdit.SchematicDefaultExtension)
 		{
 			string fileName = SanitizeFileName(name);
+			//Strip extension from the filename if provided as we will add it manually
+			if (fileName.EndsWith(extension)) { fileName = fileName.Substring(0, fileName.Length - extension.Length); }
 			return Path.Combine(GetSchematicDirectory(), fileName + extension);
 		}
 	}

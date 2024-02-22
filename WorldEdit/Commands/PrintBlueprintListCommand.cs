@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Eco.Gameplay.Players;
@@ -35,7 +36,7 @@ namespace Eco.Mods.WorldEdit.Commands
 			foreach (EcoBlueprintInfo info in WorldEditManager.BlueprintList.Values.OrderBy(k => k.FileName))
 			{
 				sb.AppendLine(this.MakeRow(
-					info.FileName,
+					Path.GetFileNameWithoutExtension(info.FileName),
 					$"ECO {info.EcoVersion} ({info.Version.ToString("0.00", CultureInfo.InvariantCulture)})",
 					(info.FileSize / 1024).ToString() + " KB",
 					info.FileChangedDate.ToString(),
