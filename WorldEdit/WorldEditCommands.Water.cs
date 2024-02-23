@@ -30,7 +30,7 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[ChatSubCommand("WorldEdit", "Drain water in Selected Area", "fixwater", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand("WorldEdit", "Fix water in Selected Area (fill to default or specified heigh with water and clear water above)", "fixwater", ChatAuthorizationLevel.Admin)]
 		public static void Fixwater(User user, int height = 0)
 		{
 			try
