@@ -96,5 +96,8 @@ namespace Eco.Mods.WorldEdit.Utils
 			}
 			return Localizer.DoStr(blockType.Name); //Not fancy at all :(
 		}
+
+		public static bool IsNullOrEmptyBlock(Block block) => block is null || block is EmptyBlock;
+		public static bool IsWaterBlock(Block block) => block is WaterBlock || block is EncasedWaterBlock;
 	}
 }
