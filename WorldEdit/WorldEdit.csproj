@@ -6,12 +6,9 @@
 		<AssemblyName>WorldEdit</AssemblyName>
 		<PackageId>WorldEdit</PackageId>
 		<Version>2.6.4</Version>
-		<Authors>Elixr Mods</Authors>
-		<Company>Elixr Solutions</Company>
-		<Product>EM WorldEdit</Product>
-		<Copyright>Elixr Solutions 2020</Copyright>
+		<Product>WorldEdit</Product>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://elixrmods.com/</PackageProjectUrl>
+		<PackageProjectUrl>https://mod.io/g/eco/m/ecoworldedit</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/TheKye/Eco-WorldEdit</RepositoryUrl>
 		<RepositoryType>Github</RepositoryType>
 	</PropertyGroup>
