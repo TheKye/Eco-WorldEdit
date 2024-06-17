@@ -22,7 +22,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.10.2-beta-release-640" />
+		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.10.2.3-beta-release-669" />
 	</ItemGroup>
 	
 	<ItemGroup>
