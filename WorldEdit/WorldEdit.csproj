@@ -11,6 +11,7 @@
 		<PackageProjectUrl>https://mod.io/g/eco/m/ecoworldedit</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/TheKye/Eco-WorldEdit</RepositoryUrl>
 		<RepositoryType>Github</RepositoryType>
+		<Nullable>annotations</Nullable>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

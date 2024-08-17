@@ -20,6 +20,7 @@ using Eco.Simulation.Agents;
 using Eco.Simulation.Types;
 using Eco.World.Blocks;
 using Newtonsoft.Json.Linq;
+using Eco.World.Color;
 
 namespace Eco.Mods.WorldEdit
 {
@@ -63,6 +64,12 @@ namespace Eco.Mods.WorldEdit
 			else
 			{
 				SetBlockInternal(block.BlockType, position);
+			}
+
+			//Restore block color if present (from Eco v11)
+			if(!string.IsNullOrEmpty(block.Color))
+			{
+				BlockColorManager.Obj.SetColor(position, ByteColor.FromHex(block.Color));
 			}
 		}
 

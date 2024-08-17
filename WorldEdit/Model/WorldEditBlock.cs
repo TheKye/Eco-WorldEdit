@@ -15,6 +15,8 @@ using Eco.Simulation;
 using Eco.Simulation.Agents;
 using Eco.World.Blocks;
 using Newtonsoft.Json;
+using Eco.World.Color;
+using System.Runtime.CompilerServices;
 
 namespace Eco.Mods.WorldEdit.Model
 {
@@ -25,6 +27,7 @@ namespace Eco.Mods.WorldEdit.Model
 		[JsonIgnore] public Vector3i OriginalPosition { get; private set; }
 		[JsonIgnore] public Vector3i OffsetPosition { get; private set; }
 		[JsonConverter(typeof(JsonWorldEditBlockDataConverter))] public IWorldEditBlockData BlockData { get; private set; }
+		public string? Color { get; private set; }
 
 		public static WorldEditBlock Create(Block block, Vector3i originalPosition, Vector3i offsetPosition)
 		{
@@ -77,6 +80,12 @@ namespace Eco.Mods.WorldEdit.Model
 						}
 					}
 					break;
+			}
+
+			//Get color of the block if it have one (from Eco v11)
+			if(BlockColorManager.Obj.TryGetColorData(originalPosition, out ByteColor colorData))
+			{
+				worldEditBlock.Color = colorData.HexRGBA;
 			}
 
 			return worldEditBlock;
