@@ -1,7 +1,6 @@
 ﻿using Eco.Core.Plugins.Interfaces;
 using Eco.Core.Utils;
 using Eco.Shared.Localization;
-using Eco.Shared.Utils;
 using Eco.Shared.Logging;
 using System.Reflection;
 

@@ -7,7 +7,6 @@ using Eco.Gameplay.Items;
 using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Serializer;
 using Eco.Shared.Logging;
-using Eco.Shared.Utils;
 
 namespace Eco.Mods.WorldEdit
 {
@@ -22,7 +21,7 @@ namespace Eco.Mods.WorldEdit
 
 		public static ItemStack GetWandItemStack()
 		{
-			Item item = Item.Get("WandToolItem");
+			Item item = Item.Get(nameof(WandToolItem));
 			return new ItemStack(item, 1);
 		}
 

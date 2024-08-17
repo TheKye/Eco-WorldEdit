@@ -11,8 +11,7 @@
 	using Eco.Shared.Math;
 	using Eco.Shared.Serialization;
 	using Eco.Shared.SharedTypes;
-    using Eco.Shared.Logging;
-    using Eco.Shared.Utils;
+	using Eco.Shared.Logging;
 
 	[Serialized]
 	[LocDisplayName("Wand Tool")]
