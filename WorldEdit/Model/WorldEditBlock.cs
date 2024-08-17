@@ -10,6 +10,7 @@ using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared.IoC;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
+using Eco.Shared.Logging;
 using Eco.Simulation;
 using Eco.Simulation.Agents;
 using Eco.World.Blocks;

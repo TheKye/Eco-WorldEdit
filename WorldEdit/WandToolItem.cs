@@ -11,18 +11,25 @@
 	using Eco.Shared.Math;
 	using Eco.Shared.Serialization;
 	using Eco.Shared.SharedTypes;
-	using Eco.Shared.Utils;
+    using Eco.Shared.Logging;
+    using Eco.Shared.Utils;
 
 	[Serialized]
 	[LocDisplayName("Wand Tool")]
 	[LocDescription("Does magical World Edit things")]
 	[Category("Hidden")]
-	public class WandAxeItem : ToolItem, IInteractor
+	public class WandToolItem : ToolItem, IInteractor
     {
-        public override float DurabilityRate { get { return 0; } }
-        public override IDynamicValue SkilledRepairCost => skilledRepairCost;
-		private static IDynamicValue skilledRepairCost = new ConstantValue(1);
-		public override ItemCategory ItemCategory => ItemCategory.Devtool;
+        //public override float DurabilityRate { get { return 0; } }
+        public override bool Decays => false; //Don't use durability for this tool.
+
+        //public override IDynamicValue SkilledRepairCost => skilledRepairCost;
+		//private static IDynamicValue skilledRepairCost = new ConstantValue(1);
+
+        private static IDynamicValue skilledRepairCost = new ConstantValue(4);
+        public override IDynamicValue SkilledRepairCost { get { return skilledRepairCost; } }
+
+        //public override ItemCategory ItemCategory => ItemCategory.Devtool;
 
         [Interaction(InteractionTrigger.LeftClick, overrideDescription: "Set First Position", animationDriven: false, interactionDistance: 15, authRequired: AccessType.None)]
         public void SetFirstPos(Player player, InteractionTriggerInfo trigger, InteractionTarget target)

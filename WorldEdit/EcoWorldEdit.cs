@@ -2,6 +2,7 @@
 using Eco.Core.Utils;
 using Eco.Shared.Localization;
 using Eco.Shared.Utils;
+using Eco.Shared.Logging;
 using System.Reflection;
 
 namespace Eco.Mods.WorldEdit

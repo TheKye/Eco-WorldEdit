@@ -3,6 +3,7 @@ using Eco.Gameplay.Systems.Messaging.Chat.Commands;
 using Eco.Mods.WorldEdit.Commands;
 using Eco.Shared.Localization;
 using Eco.Shared.Utils;
+using Eco.Shared.Logging;
 using Eco.World.Blocks;
 using System;
 using static Eco.Mods.WorldEdit.Commands.PyramidCommand;

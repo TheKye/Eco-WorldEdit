@@ -5,6 +5,7 @@ using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared.Localization;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
+using Eco.Shared.Logging;
 using Eco.Shared.Voxel;
 using System;
 
