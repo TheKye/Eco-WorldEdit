@@ -113,7 +113,7 @@ namespace Eco.Mods.WorldEdit
 				foreach (InventoryStack stack in inventoryStacks)
 				{
 					if (stack.ItemType == null) continue;
-					Result result = storageComponent.Inventory.TryAddItems(stack.ItemType, stack.Quantity);
+					Result result = storageComponent.Inventory.TryAddItemsNonUnique(stack.ItemType, stack.Quantity);
 					if (result.Failed)
 					{
 						this._userSession.Player.ErrorLocStr(result.Message.Trim());

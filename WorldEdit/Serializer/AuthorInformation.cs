@@ -12,7 +12,7 @@ namespace Eco.Mods.WorldEdit.Serializer
 		public AuthorInformation(User user)
 		{
 			this.Name = user.Player.DisplayName;
-			this.SlgID = user.SlgId;
+			this.SlgID = user.StrangeId;
 			this.SteamID = user.SteamId;
 		}
 
