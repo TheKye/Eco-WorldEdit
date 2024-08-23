@@ -12,7 +12,6 @@ You can find a guide on Installation, Compatibility, Quick start and Commands in
 
 ## Where download
 * [Github](https://github.com/TheKye/Eco-WorldEdit/releases/ "Github")
-* [Official Eco Forum](https://forum.play.eco/filebase/file/352/ "Official Eco Forums")
 * [Eco.mod.io](https://eco.mod.io/ecoworldedit/ "Eco.mod.io")
 
 ## Translation
@@ -29,6 +28,5 @@ You may not redistribute modified versions of this plugin. This plugin remains t
 Contributions are Welcome! If you feel like you can improve something write to us!
 
 ### Current Contributors:
-* @Kye - Elixr Mods, Eco Modding Community - Code and Project Management
 * @Tavren - Eco Russian Community - Code
-* @StallEF - Eco Russian Community - Project Management Assitance
+* @StallEF - Eco Russian Community - Project Management
