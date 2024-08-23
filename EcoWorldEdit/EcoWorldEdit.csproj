@@ -3,10 +3,10 @@
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
 		<RootNamespace>Eco.Mods.WorldEdit</RootNamespace>
-		<AssemblyName>WorldEdit</AssemblyName>
-		<PackageId>WorldEdit</PackageId>
+		<AssemblyName>EcoWorldEdit</AssemblyName>
+		<PackageId>EcoWorldEdit</PackageId>
 		<Version>2.7.0</Version>
-		<Product>WorldEdit</Product>
+		<Product>EcoWorldEdit</Product>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://mod.io/g/eco/m/ecoworldedit</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/TheKye/Eco-WorldEdit</RepositoryUrl>
