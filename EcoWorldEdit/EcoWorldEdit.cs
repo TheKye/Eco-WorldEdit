@@ -13,15 +13,15 @@ namespace Eco.Mods.WorldEdit
 		public const string SchematicDefaultExtension = ".ecobp";
 
 		public EcoWorldEdit() { Log.WriteLine(Localizer.Do($"Using WorldEdit version {Version}")); }
-		
-		public static ModRegistration Register() => new()
-        {
-            ModName = "EcoWorldEdit",
-            ModDescription = "WorldEdit is the ultimate map editor to get creative, do not engage in routine.",
-            ModDisplayName = "WorldEdit",
-        };
 
-		public void Initialize(TimedTask timer)
+		public static ModRegistration Register() => new()
+		{
+			ModName = "EcoWorldEdit",
+			ModDescription = "WorldEdit is the ultimate map editor to get creative, do not engage in routine.",
+			ModDisplayName = "WorldEdit",
+		};
+
+		void IInitializablePlugin.Initialize(TimedTask timer)
 		{
 			WorldEditManager.UpdateBlueprintList();
 		}
