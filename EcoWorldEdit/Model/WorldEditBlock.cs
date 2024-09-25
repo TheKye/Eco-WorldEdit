@@ -108,11 +108,12 @@ namespace Eco.Mods.WorldEdit.Model
 		}
 
 		[JsonConstructor]
-		public WorldEditBlock(Type blockType, Vector3i position, IWorldEditBlockData blockData) : this()
+		public WorldEditBlock(Type blockType, Vector3i position, IWorldEditBlockData blockData, string color = null) : this()
 		{
 			this.BlockType = blockType ?? throw new ArgumentNullException(nameof(blockType));
 			this.Position = position;
 			this.BlockData = blockData;
+			this.Color = color;
 		}
 
 		public WorldEditBlock(Type blockType, Vector3i position, Vector3i originalPosition, IWorldEditBlockData blockData) : this()

@@ -59,11 +59,10 @@ namespace Eco.Mods.WorldEdit
 		public static void IncrementUsedItem(User user, Item item, int amount)
 		{
 			if (!item.IsPaidItem()) return;
-			string itemName = item.Name.TrimEndString("Item");
 			//TODO: THIS IS NOT THREADSAFE!!!
-			int currenAmount = user.StrangeItemManagement.NameToCountCollected.GetOr(itemName, 0);
+			int currenAmount = user.StrangeItemManagement.TypeToCountCollected.GetOr(item.Type, 0);
 			currenAmount += amount;
-			user.StrangeItemManagement.NameToCountCollected[itemName] = currenAmount;
+			user.StrangeItemManagement.TypeToCountCollected[item.Type] = currenAmount;
 		}
 	}
 }
