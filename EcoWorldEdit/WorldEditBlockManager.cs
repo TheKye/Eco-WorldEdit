@@ -21,6 +21,9 @@ using Eco.Simulation.Types;
 using Eco.World.Blocks;
 using Newtonsoft.Json.Linq;
 using Eco.World.Color;
+using Eco.Gameplay.UI;
+using Eco.Gameplay.Items;
+using System.Collections;
 
 namespace Eco.Mods.WorldEdit
 {
@@ -39,7 +42,7 @@ namespace Eco.Mods.WorldEdit
 		{
 			if (IsImpenetrable(position)) return;
 			this.ClearPosition(position);
-			SetBlockInternal(type, position);
+			this.SetBlockInternal(type, position);
 		}
 		public void RestoreBlockOffset(WorldEditBlock block, Vector3i offsetPos)
 		{
@@ -51,7 +54,7 @@ namespace Eco.Mods.WorldEdit
 			this.ClearPosition(position);
 			if (block.IsEmptyBlock())
 			{
-				SetBlockInternal(typeof(EmptyBlock), position);
+				this.RestoreEmptyBlock(position);
 			}
 			else if (block.IsPlantBlock())
 			{
@@ -63,7 +66,7 @@ namespace Eco.Mods.WorldEdit
 			}
 			else
 			{
-				SetBlockInternal(block.BlockType, position);
+				this.SetBlockInternal(block.BlockType, position);
 			}
 
 			//Restore block color if present (from Eco v11)
@@ -73,22 +76,36 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		public static void RestoreBlock(Type type, Vector3i position)
+		public void RestoreBlock(Type type, Vector3i position)
 		{
 			if (IsImpenetrable(position)) return;
-			SetBlockInternal(type, position);
+			this.SetBlockInternal(type, position);
 		}
 
-		public static void RestoreEmptyBlock(Vector3i position)
+		public void RestoreEmptyBlock(Vector3i position)
 		{
 			if (IsImpenetrable(position)) return;
-			SetBlockInternal(typeof(EmptyBlock), position);
+			this.SetBlockInternal(typeof(EmptyBlock), position);
 		}
 
 		public void RestoreWorldObjectBlock(Type type, Vector3i position, IWorldEditBlockData blockData)
 		{
 			if (blockData == null) { return; }
 			WorldEditWorldObjectBlockData worldObjectBlockData = (WorldEditWorldObjectBlockData)blockData;
+
+			try
+			{
+				Item creatingItem = WorldObjectItem.GetCreatingItemTemplateFromType(worldObjectBlockData.WorldObjectType);
+				Result result = StrangeItemProtection.CanCreateItem(this._userSession.User, creatingItem);
+				if (result.Failed)
+				{
+					this._userSession.Player.ErrorLocStr($"Unable to restore WorldObject: {result.Message}");
+					return;
+				}
+				StrangeItemProtection.IncrementUsedItem(this._userSession.User, creatingItem);
+			}
+			catch (Exception e) { Log.WriteException(e); }
+
 			this.ClearWorldObjectPlace(worldObjectBlockData.WorldObjectType, position, worldObjectBlockData.Rotation);
 
 			WorldObject worldObject = null;
@@ -119,13 +136,21 @@ namespace Eco.Mods.WorldEdit
 
 				foreach (InventoryStack stack in inventoryStacks)
 				{
-					if (stack.ItemType == null) continue;
-					Result result = storageComponent.Inventory.TryAddItemsNonUnique(stack.ItemType, stack.Quantity);
+					if (stack.ItemType is null) continue;
+					Result result = StrangeItemProtection.CanCreateItem(this._userSession.User, Item.Get(stack.ItemType), stack.Quantity);
+					if(result.Success)
+					{
+						result = storageComponent.Inventory.TryAddItemsNonUnique(stack.ItemType, stack.Quantity);
+					}
 					if (result.Failed)
 					{
 						this._userSession.Player.ErrorLocStr(result.Message.Trim());
 						Log.WriteWarningLineLoc($"Unable restore inventory for WorldObject {worldObjectBlockData.WorldObjectType} at {position}: {result.Message.Trim()}");
-						try { storageComponent.Inventory.AddItems(stack.GetItemStack()); } catch (InvalidOperationException) { /*Already show error to user*/ }
+						//try { storageComponent.Inventory.AddItems(stack.GetItemStack()); } catch (InvalidOperationException) { /*Already show error to user*/ } //TODO: Remove that
+					}
+					else
+					{
+						StrangeItemProtection.IncrementUsedItem(this._userSession.User, Item.Get(stack.ItemType), stack.Quantity);
 					}
 				}
 			}
@@ -197,10 +222,19 @@ namespace Eco.Mods.WorldEdit
 			plant.Tended = plantBlockData.Tended;
 		}
 
-		/// <summary>Directly delete or set block WITHOUT safety checks.</summary>
-		protected static void SetBlockInternal(Type type, Vector3i position)
+		/// <summary>Directly delete or set block WITHOUT safety checks. From ECO v.11 follow the restrictions against paid content</summary>
+		protected void SetBlockInternal(Type type, Vector3i position)
 		{
-			if (type == null) { World.DeleteBlock(position); } else { World.SetBlock(type, position); }
+			if (type is null) { World.DeleteBlock(position); } else {
+				Result result = StrangeItemProtection.CanCreateBlock(this._userSession.User, type);
+				if (result.Failed)
+				{
+					this._userSession.Player.ErrorLocStr(result.Message);
+					return;
+				}
+				StrangeItemProtection.IncrementUsedBlock(this._userSession.User, type);
+				World.SetBlock(type, position);
+			}
 		}
 
 		/// <summary>Clears given position from water, plants, trees and objects. Optionally delete block</summary>

@@ -7,7 +7,7 @@ using System.Reflection;
 namespace Eco.Mods.WorldEdit
 {
 	public class EcoWorldEdit : IModKitPlugin, IServerPlugin, IInitializablePlugin, IModInit
-    {
+	{
 		public static readonly string Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 		public const string SchematicDirectoryName = "Blueprints";
 		public const string SchematicDefaultExtension = ".ecobp";
@@ -23,6 +23,7 @@ namespace Eco.Mods.WorldEdit
 
 		void IInitializablePlugin.Initialize(TimedTask timer)
 		{
+			new StrangeItemProtection().Initialize();
 			WorldEditManager.UpdateBlueprintList();
 		}
 
