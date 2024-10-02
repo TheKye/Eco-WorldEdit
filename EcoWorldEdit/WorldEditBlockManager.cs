@@ -25,6 +25,7 @@ using Eco.Gameplay.UI;
 using Eco.Gameplay.Items;
 using System.Collections;
 using Eco.Simulation.Agents.AI;
+using Eco.Gameplay.Settlements.ClaimStakes.Internal;
 
 namespace Eco.Mods.WorldEdit
 {
@@ -93,6 +94,13 @@ namespace Eco.Mods.WorldEdit
 		{
 			if (blockData == null) { return; }
 			WorldEditWorldObjectBlockData worldObjectBlockData = (WorldEditWorldObjectBlockData)blockData;
+
+			//For safety we not paste any kinda of claim stakes. Placed that way they create a lot issues, trust me!
+			if (worldObjectBlockData.WorldObjectType.DerivesFrom<ClaimStakeObjectBase>())
+			{
+				this._userSession.Player.ErrorLocStr($"Claim stake of type {worldObjectBlockData.WorldObjectType} at {position} is ignored for safety reasons.");
+				return;
+			}
 
 			try
 			{
