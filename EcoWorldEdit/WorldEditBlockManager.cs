@@ -24,6 +24,7 @@ using Eco.World.Color;
 using Eco.Gameplay.UI;
 using Eco.Gameplay.Items;
 using System.Collections;
+using Eco.Simulation.Agents.AI;
 
 namespace Eco.Mods.WorldEdit
 {
@@ -123,35 +124,42 @@ namespace Eco.Mods.WorldEdit
 			if (worldObject.HasComponent<StorageComponent>() && worldObjectBlockData.Components.ContainsKey(typeof(StorageComponent)))
 			{
 				StorageComponent storageComponent = worldObject.GetComponent<StorageComponent>();
-				List<InventoryStack> inventoryStacks;
-				object component = worldObjectBlockData.Components[typeof(StorageComponent)];
-				if (component is JArray jArray)
+				if(storageComponent.Inventory is not null)
 				{
-					inventoryStacks = jArray.ToObject<List<InventoryStack>>();
-				}
-				else
-				{
-					inventoryStacks = (List<InventoryStack>)component;
-				}
-
-				foreach (InventoryStack stack in inventoryStacks)
-				{
-					if (stack.ItemType is null) continue;
-					Result result = StrangeItemProtection.CanCreateItem(this._userSession.User, Item.Get(stack.ItemType), stack.Quantity);
-					if(result.Success)
+					List<InventoryStack> inventoryStacks;
+					object component = worldObjectBlockData.Components[typeof(StorageComponent)];
+					if (component is JArray jArray)
 					{
-						result = storageComponent.Inventory.TryAddItemsNonUnique(stack.ItemType, stack.Quantity);
-					}
-					if (result.Failed)
-					{
-						this._userSession.Player.ErrorLocStr(result.Message.Trim());
-						Log.WriteWarningLineLoc($"Unable restore inventory for WorldObject {worldObjectBlockData.WorldObjectType} at {position}: {result.Message.Trim()}");
-						//try { storageComponent.Inventory.AddItems(stack.GetItemStack()); } catch (InvalidOperationException) { /*Already show error to user*/ } //TODO: Remove that
+						inventoryStacks = jArray.ToObject<List<InventoryStack>>();
 					}
 					else
 					{
-						StrangeItemProtection.IncrementUsedItem(this._userSession.User, Item.Get(stack.ItemType), stack.Quantity);
+						inventoryStacks = (List<InventoryStack>)component;
 					}
+
+					foreach (InventoryStack stack in inventoryStacks)
+					{
+						if (stack.ItemType is null) continue;
+						Result result = StrangeItemProtection.CanCreateItem(this._userSession.User, Item.Get(stack.ItemType), stack.Quantity);
+						if (result.Success)
+						{
+							result = storageComponent.Inventory.TryAddItemsNonUnique(stack.ItemType, stack.Quantity);
+						}
+						if (result.Failed)
+						{
+							this._userSession.Player.ErrorLocStr(result.Message.Trim());
+							Log.WriteWarningLineLoc($"Unable restore inventory for WorldObject {worldObjectBlockData.WorldObjectType} at {position}: {result.Message.Trim()}");
+							//try { storageComponent.Inventory.AddItems(stack.GetItemStack()); } catch (InvalidOperationException) { /*Already show error to user*/ } //TODO: Remove that
+						}
+						else
+						{
+							StrangeItemProtection.IncrementUsedItem(this._userSession.User, Item.Get(stack.ItemType), stack.Quantity);
+						}
+					}
+				}
+				else
+				{
+					Log.WriteWarningLineLoc($"Unable restore inventory for WorldObject {worldObjectBlockData.WorldObjectType} at {position}: No inventory for StorageComponent");
 				}
 			}
 			if (worldObject.HasComponent<CustomTextComponent>() && worldObjectBlockData.Components.ContainsKey(typeof(CustomTextComponent)))
