@@ -26,6 +26,7 @@ using Eco.Gameplay.Items;
 using System.Collections;
 using Eco.Simulation.Agents.AI;
 using Eco.Gameplay.Settlements.ClaimStakes.Internal;
+using Eco.Shared.Localization;
 
 namespace Eco.Mods.WorldEdit
 {
@@ -64,7 +65,16 @@ namespace Eco.Mods.WorldEdit
 			}
 			else if (block.IsWorldObjectBlock())
 			{
-				this.RestoreWorldObjectBlock(block.BlockType, position, block.BlockData);
+				try
+				{
+					this.RestoreWorldObjectBlock(block.BlockType, position, block.BlockData);
+				}
+				catch (Exception e)
+				{
+					string errorMsg = $"Exception ocurr when restore world object at {position}";
+					Log.WriteError(Localizer.DoStr(errorMsg), e);
+					this._userSession.Player.ErrorLocStr(errorMsg);
+				}
 			}
 			else
 			{
@@ -212,8 +222,8 @@ namespace Eco.Mods.WorldEdit
 				StoreComponent storeComponent = worldObject.GetComponent<StoreComponent>();
 				object obj = worldObjectBlockData.Components[typeof(StoreComponent)];
 				StoreComponentData componentData = obj is JObject jobj ? jobj.ToObject<StoreComponentData>() : (StoreComponentData)obj;
-				componentData.Buy.ForEach(c => storeComponent.StoreData.BuyCategories.Add(c.GetStoreCategory(storeComponent)));
-				componentData.Sell.ForEach(c => storeComponent.StoreData.SellCategories.Add(c.GetStoreCategory(storeComponent)));
+				componentData.Buy.ForEach(c => storeComponent.StoreData.BuyCategories.Add(c.GetStoreCategory(storeComponent, true)));
+				componentData.Sell.ForEach(c => storeComponent.StoreData.SellCategories.Add(c.GetStoreCategory(storeComponent, false)));
 			}
 		}
 

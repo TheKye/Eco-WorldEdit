@@ -5,7 +5,7 @@
 		<RootNamespace>Eco.Mods.WorldEdit</RootNamespace>
 		<AssemblyName>EcoWorldEdit</AssemblyName>
 		<PackageId>EcoWorldEdit</PackageId>
-		<Version>2.8.0</Version>
+		<Version>2.8.1</Version>
 		<Product>EcoWorldEdit</Product>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://mod.io/g/eco/m/ecoworldedit</PackageProjectUrl>
@@ -23,7 +23,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.11.1-beta-release-750" />
+		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.11.1.1-beta-release-758" />
 	</ItemGroup>
 	
 	<ItemGroup>

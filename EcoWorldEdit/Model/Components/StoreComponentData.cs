@@ -94,9 +94,9 @@ namespace Eco.Mods.WorldEdit.Model.Components
 				return category;
 			}
 
-			public StoreCategory GetStoreCategory(StoreComponent store)
+			public StoreCategory GetStoreCategory(StoreComponent store, bool isBuy)
 			{
-				StoreCategory storeCategory = new StoreCategory(store)
+				StoreCategory storeCategory = new StoreCategory(store, isBuy)
 				{
 					Name = this.Name,
 					GeneratedName = this.GeneratedName,
