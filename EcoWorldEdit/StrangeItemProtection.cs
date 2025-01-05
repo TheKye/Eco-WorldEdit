@@ -1,9 +1,13 @@
-﻿using Eco.Core.Utils;
+﻿using Eco.Core.Items;
+using Eco.Core.Utils;
 using Eco.Gameplay.Items;
+using Eco.Gameplay.Objects;
 using Eco.Gameplay.Players;
 using Eco.Gameplay.StrangeCloudGameplay;
 using Eco.Gameplay.Systems.EcoMarketplace;
+using Eco.Shared;
 using Eco.Shared.Utils;
+using Eco.World.Blocks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +19,7 @@ namespace Eco.Mods.WorldEdit
 {
 	internal class StrangeItemProtection : Singleton<StrangeItemProtection>
 	{
-
+		//TODO: Maybe in future that will be used for made cache
 		public void Initialize() { }
 
 		public static Result CanCreateBlock(User user, Type blockType)
@@ -63,6 +67,34 @@ namespace Eco.Mods.WorldEdit
 			int currenAmount = user.StrangeItemManagement.TypeToCountCollected.GetOr(item.Type, 0);
 			currenAmount += amount;
 			user.StrangeItemManagement.TypeToCountCollected[item.Type] = currenAmount;
+		}
+
+		public static void DecrementUsed(User user, Block block)
+		{
+			if(block is WorldObjectBlock worldObjectBlock)
+			{
+				WorldObject worldObject = worldObjectBlock.WorldObjectHandle.Object;
+				Item creatingItem = WorldObjectItem.GetCreatingItemTemplateFromType(worldObject.GetType());
+				DecrementUsedItem(user, creatingItem);
+			}
+			else
+			{
+				if (BlockItem.FirstCreatingItem(block.GetType()) is { } item && item.IsPaidItem())
+				{
+					DecrementUsedItem(user, item);
+				}
+			}
+			
+		}
+
+		public static void DecrementUsedItem(User user, Item item) => DecrementUsedItem(user, item, 1);
+		public static void DecrementUsedItem(User user, Item item, int amount)
+		{
+			if (!item.IsPaidItem()) return;
+			//TODO: THIS IS NOT THREADSAFE!!!
+			int currenAmount = user.StrangeItemManagement.TypeToCountCollected.GetOr(item.Type, 0);
+			currenAmount -= amount;
+			user.StrangeItemManagement.TypeToCountCollected[item.Type] = Mathf.Max(currenAmount, 0);
 		}
 	}
 }

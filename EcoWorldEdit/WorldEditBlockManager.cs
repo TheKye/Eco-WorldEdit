@@ -251,7 +251,7 @@ namespace Eco.Mods.WorldEdit
 		/// <summary>Directly delete or set block WITHOUT safety checks. From ECO v.11 follow the restrictions against paid content</summary>
 		protected void SetBlockInternal(Type type, Vector3i position)
 		{
-			if (type is null) { World.DeleteBlock(position); } else {
+			if (type is null) { this.ClearPosition(position, true); } else {
 				Result result = StrangeItemProtection.CanCreateBlock(this._userSession.User, type);
 				if (result.Failed)
 				{
@@ -267,8 +267,9 @@ namespace Eco.Mods.WorldEdit
 		private void ClearPosition(Vector3i position, bool delete = false)
 		{
 			Block block = World.GetBlock(position);
+			if (block is EmptyBlock || block is ImpenetrableStoneBlock) return;
 
-			if (block is EmptyBlock) return;
+			StrangeItemProtection.DecrementUsed(this._userSession.User, block);
 
 			switch (block)
 			{
@@ -283,8 +284,6 @@ namespace Eco.Mods.WorldEdit
 				case WorldObjectBlock worldObjectBlock:
 					worldObjectBlock.WorldObjectHandle.Object.Destroy();
 					break;
-				case ImpenetrableStoneBlock _:
-					return;
 				case PlantBlock plantBlock:
 				case TreeBlock treeBlock:
 					Plant plant = EcoSim.PlantSim.GetPlant(position);
