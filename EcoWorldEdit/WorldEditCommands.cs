@@ -2,9 +2,11 @@
 using Eco.Gameplay.Systems.Messaging.Chat.Commands;
 using Eco.Mods.WorldEdit.Commands;
 using Eco.Mods.WorldEdit.Utils;
+using Eco.Shared.Graphics;
 using Eco.Shared.Localization;
-using Eco.Shared.Math;
 using Eco.Shared.Logging;
+using Eco.Shared.Math;
+using Eco.Shared.Utils;
 using System;
 
 namespace Eco.Mods.WorldEdit
@@ -500,6 +502,64 @@ namespace Eco.Mods.WorldEdit
 				if (command.Invoke())
 				{
 					user.Player.MsgLoc($"Grow done.");
+				}
+
+			}
+			catch (WorldEditCommandException e)
+			{
+				user.Player.ErrorLocStr(e.Message);
+			}
+			catch (Exception e)
+			{
+				Log.WriteError(Localizer.Do($"{e}"));
+			}
+		}
+
+		[ChatSubCommand("WorldEdit", "Paint blocks with specified color in selected area", "color", ChatAuthorizationLevel.Admin)]
+		public static void Color(User user, string color)
+		{
+			color = color.Trim().Replace(" ", ",");
+			string[] colorParts = color.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+			try
+			{
+				ByteColor byteColor;
+				if (color.Trim().Equals(nameof(ByteColor.Clear), StringComparison.OrdinalIgnoreCase))
+				{
+					byteColor = ByteColor.Clear;
+				}
+				else if (colorParts.Length == 1 && colorParts[0].StartsWith('#'))
+				{
+					byteColor = ByteColor.FromHex(colorParts[0]);
+				}
+				else if (colorParts.Length <= 2 && Enum.TryParse(colorParts[0], ignoreCase: true, out NamedColors colorName))
+				{
+					byteColor = colorName.GetNamedColor();
+					if(colorParts.Length == 2 && byte.TryParse(colorParts[1], out byte a))
+					{
+						byteColor = byteColor.WithAlpha(a);
+					}
+				}
+				else if (colorParts.Length == 3 || colorParts.Length == 4)
+				{
+					byte r, g, b, a = 255;
+					if (!byte.TryParse(colorParts[0], out r)) { throw new WorldEditCommandException($"Incorrect color name or RGB value for Red"); }
+					if (!byte.TryParse(colorParts[1], out g)) { throw new WorldEditCommandException($"Incorrect color name or RGB value for Green"); }
+					if (!byte.TryParse(colorParts[2], out b)) { throw new WorldEditCommandException($"Incorrect color name or RGB value for Blue"); }
+					if (colorParts.Length == 4)
+					{
+						if (!byte.TryParse(colorParts[3], out a)) { throw new WorldEditCommandException($"Incorrect color name or RGBA value for Alpha"); }
+					}
+					byteColor = new ByteColor(r, g, b, a);
+				}
+				else
+				{
+					throw new WorldEditCommandException($"Incorrect color name, HEX or RGB/RGBA value");
+				}
+
+				WorldEditCommand command = new ColorCommand(user, byteColor);
+				if (command.Invoke())
+				{
+					user.Player.MsgLoc($"Painting job done.");
 				}
 
 			}
