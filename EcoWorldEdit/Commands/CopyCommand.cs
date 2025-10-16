@@ -3,6 +3,7 @@ using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Serializer;
 using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared.Math;
+using System.Collections.Generic;
 
 namespace Eco.Mods.WorldEdit.Commands
 {
@@ -23,7 +24,11 @@ namespace Eco.Mods.WorldEdit.Commands
 			this.UserSession.Clipboard.Dimension = new Vector3i(selection.WidthInc, selection.HeightInc, selection.LengthInc);
 			void DoAction(Vector3i pos)
 			{
-				this.UserSession.Clipboard.Add(WorldEditBlock.Create(Eco.World.World.GetBlock(pos), pos, playerPos));
+				IEnumerable<WorldEditBlock> worldEditBlocks = WorldEditBlock.Create(Eco.World.World.GetBlock(pos), pos, playerPos);
+				foreach (WorldEditBlock worldEditBlock in worldEditBlocks)
+				{
+					this.UserSession.Clipboard.Add(worldEditBlock);
+				}
 			}
 			selection.ForEachInc(DoAction);
 			this.UserSession.Clipboard.SetAuthor(new AuthorInformation(this.UserSession.User));

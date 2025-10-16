@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using Eco.Gameplay.Players;
+﻿using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared.Math;
 using Eco.World.Blocks;
+using System.Collections.Generic;
 
 namespace Eco.Mods.WorldEdit.Commands
 {
@@ -31,8 +31,11 @@ namespace Eco.Mods.WorldEdit.Commands
 			void DoAction(Vector3i pos)
 			{
 				if (WorldEditBlockManager.IsImpenetrable(pos)) return;
-				WorldEditBlock sourceBlock = WorldEditBlock.Create(Eco.World.World.GetBlock(pos), pos);
-				blocks.Push(sourceBlock);
+				IEnumerable<WorldEditBlock> sourceBlocks = WorldEditBlock.Create(Eco.World.World.GetBlock(pos), pos);
+				foreach (WorldEditBlock sourceBlock in sourceBlocks)
+				{
+					blocks.Push(sourceBlock);
+				}
 				this.AddBlockChangedEntry(pos);
 				blockManager.SetBlock(typeof(EmptyBlock), pos);
 			}

@@ -1,22 +1,22 @@
-﻿using System;
-using System.Linq;
-using System.Numerics;
-using System.Text.RegularExpressions;
-using Eco.Gameplay.Blocks;
+﻿using Eco.Gameplay.Blocks;
 using Eco.Gameplay.Objects;
 using Eco.Gameplay.Plants;
 using Eco.Mods.WorldEdit.Serializer;
 using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared.IoC;
+using Eco.Shared.Logging;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
-using Eco.Shared.Logging;
 using Eco.Simulation;
 using Eco.Simulation.Agents;
 using Eco.World.Blocks;
-using Newtonsoft.Json;
 using Eco.World.Color;
-using System.Runtime.CompilerServices;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text.RegularExpressions;
 
 namespace Eco.Mods.WorldEdit.Model
 {
@@ -29,7 +29,41 @@ namespace Eco.Mods.WorldEdit.Model
 		[JsonConverter(typeof(JsonWorldEditBlockDataConverter))] public IWorldEditBlockData BlockData { get; private set; }
 		public string? Color { get; private set; }
 
-		public static WorldEditBlock Create(Block block, Vector3i originalPosition, Vector3i offsetPosition)
+		public static IEnumerable<WorldEditBlock> Create(Block block, Vector3i originalPosition) => Create(block, originalPosition, Vector3i.Zero);
+		public static IEnumerable<WorldEditBlock> Create(Block block, Vector3i originalPosition, Vector3i offsetPosition)
+		{
+			List<WorldEditBlock> blocks = new List<WorldEditBlock>();
+			if (block is WorldObjectManyBlock worldObjectManyBlock)
+			{
+				IEnumerable<WorldObject> objects = worldObjectManyBlock.Objects;
+				foreach (WorldObject obj in objects)
+				{
+					WorldEditBlock worldEditBlock = CreateWorldObject(obj, originalPosition, offsetPosition);
+					blocks.Add(worldEditBlock);
+				}
+			}
+			else
+			{
+				WorldEditBlock worldEditBlock = CreateSingle(block, originalPosition, offsetPosition);
+				blocks.Add(worldEditBlock);
+			}
+			return blocks;
+		}
+
+		private static WorldEditBlock CreateWorldObject(WorldObject worldObject, Vector3i originalPosition, Vector3i offsetPosition)
+		{
+			Vector3i relativePosition = worldObject.Position3i - offsetPosition;
+
+			WorldEditBlock worldEditBlock = new WorldEditBlock();
+			worldEditBlock.OffsetPosition = offsetPosition;
+			worldEditBlock.OriginalPosition = originalPosition;
+			worldEditBlock.BlockType = typeof(WorldObjectBlock);
+			worldEditBlock.BlockData = WorldEditWorldObjectBlockData.From(worldObject);
+			worldEditBlock.Position = relativePosition;
+			return worldEditBlock;
+		}
+
+		private static WorldEditBlock CreateSingle(Block block, Vector3i originalPosition, Vector3i offsetPosition)
 		{
 			Vector3i relativePosition = originalPosition - offsetPosition;
 
@@ -39,14 +73,13 @@ namespace Eco.Mods.WorldEdit.Model
 			worldEditBlock.OriginalPosition = originalPosition;
 			worldEditBlock.BlockType = block.GetType();
 
-
 			switch (block)
 			{
 				case PlantBlock plantBlock:
 				case TreeBlock treeBlock:
 					//Log.Debug($"{worldEditBlock.BlockType.ToString()} at {originalPosition} is a PlantBlock or TreeBlock");
 					Plant plant = EcoSim.PlantSim.GetPlant(originalPosition);
-					if (plant != null)
+					if (plant is not null)
 					{
 						worldEditBlock.Position = plant.Position.XYZi() - offsetPosition;
 						worldEditBlock.BlockData = WorldEditPlantBlockData.From(plant);
@@ -65,8 +98,7 @@ namespace Eco.Mods.WorldEdit.Model
 					break;
 				default:
 					//Log.Debug($"{worldEditBlock.BlockType.ToString()} at {originalPosition} is a Block");
-					System.Reflection.ConstructorInfo constuctor = worldEditBlock.BlockType.GetConstructor(Type.EmptyTypes);
-					if (constuctor == null) { throw new ArgumentOutOfRangeException(message: "Block type is not supported", paramName: worldEditBlock.BlockType.FullName); }
+					System.Reflection.ConstructorInfo constuctor = worldEditBlock.BlockType.GetConstructor(Type.EmptyTypes) ?? throw new ArgumentOutOfRangeException(message: "Block type is not supported", paramName: worldEditBlock.BlockType.FullName);
 					if (BlockContainerManager.Obj.IsBlockContained(originalPosition))
 					{
 						worldEditBlock.BlockType = typeof(EmptyBlock);
@@ -83,7 +115,7 @@ namespace Eco.Mods.WorldEdit.Model
 			}
 
 			//Get color of the block if it have one (from Eco v11)
-			if(BlockColorManager.Obj.TryGetColorData(originalPosition, out ByteColor colorData))
+			if (BlockColorManager.Obj.TryGetColorData(originalPosition, out ByteColor colorData))
 			{
 				worldEditBlock.Color = colorData.HexRGBA;
 			}
@@ -100,11 +132,6 @@ namespace Eco.Mods.WorldEdit.Model
 			worldEditBlock.OriginalPosition = originalPosition;
 			worldEditBlock.BlockType = typeof(EmptyBlock);
 			return worldEditBlock;
-		}
-
-		public static WorldEditBlock Create(Block block, Vector3i originalPosition)
-		{
-			return Create(block, originalPosition, Vector3i.Zero);
 		}
 
 		[JsonConstructor]

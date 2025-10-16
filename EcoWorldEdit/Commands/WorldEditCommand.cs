@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using Eco.Gameplay.Players;
+﻿using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
 using Eco.World.Blocks;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Eco.Mods.WorldEdit.Commands
 {
@@ -22,7 +22,7 @@ namespace Eco.Mods.WorldEdit.Commands
 		{
 			get
 			{
-				if (this.affectedBlocks == null) { this.affectedBlocks = new Stack<WorldEditBlock>(); }
+				this.affectedBlocks ??= new Stack<WorldEditBlock>();
 				return this.affectedBlocks;
 			}
 		}
@@ -36,7 +36,7 @@ namespace Eco.Mods.WorldEdit.Commands
 
 		public WorldEditCommand(User user)
 		{
-			if (user == null) throw new ArgumentNullException(nameof(user));
+			ArgumentNullException.ThrowIfNull(user);
 			this.UserSession = WorldEditManager.GetUserSession(user);
 			if (this.UserSession.ExecutingCommand != null && this.UserSession.ExecutingCommand.IsRunning) throw new WorldEditCommandException("Another command still executing"); //TODO: Probably need to rework that and impliment aborting
 		}
@@ -74,8 +74,11 @@ namespace Eco.Mods.WorldEdit.Commands
 		public void AddBlockChangedEntry(Vector3i position)
 		{
 			Block block = World.GetBlock(position);
-			WorldEditBlock worldEditBlock = WorldEditBlock.Create(block, position);
-			this.AffectedBlocks.Push(worldEditBlock);
+			IEnumerable<WorldEditBlock> worldEditBlocks = WorldEditBlock.Create(block, position);
+			foreach (WorldEditBlock worldEditBlock in worldEditBlocks)
+			{
+				this.AffectedBlocks.Push(worldEditBlock);
+			}
 		}
 
 		public bool Undo()
