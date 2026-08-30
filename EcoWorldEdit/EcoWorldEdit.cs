@@ -1,14 +1,15 @@
-﻿using Eco.Core.Plugins.Interfaces;
+using System.Reflection;
+using Eco.Core.Plugins.Interfaces;
 using Eco.Core.Utils;
+using Eco.Mods.WorldEdit.Core.Managers;
 using Eco.Shared.Localization;
 using Eco.Shared.Logging;
-using System.Reflection;
 
 namespace Eco.Mods.WorldEdit
 {
 	public class EcoWorldEdit : IModKitPlugin, IServerPlugin, IInitializablePlugin, IModInit
 	{
-		public static readonly string Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+		public static readonly string Version = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "0.0.0";
 		public const string SchematicDirectoryName = "Blueprints";
 		public const string SchematicDefaultExtension = ".ecobp";
 
@@ -23,23 +24,13 @@ namespace Eco.Mods.WorldEdit
 
 		void IInitializablePlugin.Initialize(TimedTask timer)
 		{
-			new StrangeItemProtection().Initialize();
-			WorldEditManager.UpdateBlueprintList();
+			WorldEditManager.Obj.Initialize();
+			MigrationManager.Obj.Initialize();
+			WorldEditManager.Obj.UpdateBlueprintList();
 		}
 
-		public string GetCategory()
-		{
-			return string.Empty;
-		}
-
-		public string GetStatus()
-		{
-			return string.Empty;
-		}
-
-		public override string ToString()
-		{
-			return "Eco.Mods.WorldEdit";
-		}
+		public string GetCategory() => string.Empty;
+		public string GetStatus() => string.Empty;
+		public override string ToString() => "Eco.Mods.WorldEdit";
 	}
 }

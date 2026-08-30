@@ -1,119 +1,108 @@
-﻿using Eco.Gameplay.Components;
+using Eco.Gameplay.Components;
 using Eco.Gameplay.Components.Store;
 using Eco.Gameplay.Components.Store.Internal;
+using Eco.Shared.Utils;
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Eco.Mods.WorldEdit.Model.Components
 {
-    internal struct StoreComponentData
+	[WorldObjectComponentContract(WorldObjectComponentType.Store)]
+	internal sealed record StoreComponentData : IWorldObjectComponentData
 	{
-		public List<Category> Sell { get; private set; }
-		public List<Category> Buy { get; private set; }
-
-		public static StoreComponentData Create(StoreComponent storeComponent)
-		{
-			StoreComponentData data = new StoreComponentData
-			{
-                Sell = storeComponent.StoreData.SellCategories.Select(c => Category.Create(c)).ToList(),
-				Buy = storeComponent.StoreData.BuyCategories.Select(c => Category.Create(c)).ToList()
-			};
-			return data;
-		}
+		public IReadOnlyList<StoreCategoryData> Sell { get; init; }
+		public IReadOnlyList<StoreCategoryData> Buy { get; init; }
 
 		[JsonConstructor]
-		public StoreComponentData(List<Category> sell, List<Category> buy)
+		public StoreComponentData(List<StoreCategoryData> sell, List<StoreCategoryData> buy)
 		{
 			this.Sell = sell;
 			this.Buy = buy;
 		}
 
-		internal struct Offer
+		public static StoreComponentData? Create(StoreComponent storeComponent)
 		{
-			public InventoryStack Stack { get; private set; }
-			public float Price { get; private set; }
-			public int Limit { get; private set; }
-			public float MinDurability { get; private set; } = -1;
-			public float MaxDurability { get; private set; } = -1;
-			public bool IsBuying { get; private set; }
+			List<StoreCategoryData> sell = storeComponent.StoreData.SellCategories.Select(c => StoreCategoryData.Create(c)).NonNull().ToList();
+			List<StoreCategoryData> buy = storeComponent.StoreData.BuyCategories.Select(c => StoreCategoryData.Create(c)).NonNull().ToList();
 
-			public static Offer Create(TradeOffer tradeOffer)
-			{
-				Offer offer = new Offer
-				{
-					Stack = new InventoryStack(tradeOffer.Stack.Item.Type, tradeOffer.Stack.Quantity), //Unable use .Create(tradeOffer) because it have empty check and TradeOffer can have empty stack
-					Price = tradeOffer.Price,
-					Limit = tradeOffer.Limit,
-					MinDurability = tradeOffer.MinDurability,
-					MaxDurability = tradeOffer.MaxDurability,
-					IsBuying = tradeOffer.Buying
-				};
-				return offer;
-			}
+			return new StoreComponentData(sell, buy);
+		}
+	}
 
-			public TradeOffer GetTradeOffer()
-			{
-				TradeOffer tradeOffer = new TradeOffer(this.Stack.GetItemStack().Item, this.Price, this.IsBuying)
-				{
-					Limit= this.Limit,
-					MinDurability = this.MinDurability,
-					MaxDurability = this.MaxDurability
-				};
-				return tradeOffer;
-			}
+	internal sealed record StoreCategoryData
+	{
+		public string Name { get; init; }
+		public string GeneratedName { get; init; }
+		public bool IsBuying { get; init; }
+		public IReadOnlyList<StoreOfferData> Offers { get; init; }
 
-			[JsonConstructor]
-			public Offer(InventoryStack stack, float price, int limit, float minDurability, float maxDurability, bool isBuying)
-			{
-				this.Stack = stack;
-				this.Price = price;
-				this.Limit = limit;
-				this.MinDurability = minDurability;
-				this.MaxDurability = maxDurability;
-				this.IsBuying = isBuying;
-			}
+		[JsonConstructor]
+		public StoreCategoryData(string name, string generatedName, bool isBuying, List<StoreOfferData> offers)
+		{
+			this.Name = name;
+			this.GeneratedName = generatedName;
+			this.IsBuying = isBuying;
+			this.Offers = offers;
 		}
 
-		internal struct Category
+		public static StoreCategoryData? Create(StoreCategory storeCategory)
 		{
-			public string Name { get; private set; }
-			public string GeneratedName { get; private set; }
-			public bool IsBuying { get; private set; }
-			public List<Offer> Offers { get; private set; }
+			List<StoreOfferData> offers = storeCategory.Offers.Select(o => StoreOfferData.Create(o)).NonNull().ToList();
+			return new StoreCategoryData(storeCategory.Name, storeCategory.GeneratedName, storeCategory.IsBuy, offers);
+		}
 
-			public static Category Create(StoreCategory storeCategory)
+		public StoreCategory GetStoreCategory(StoreComponent store, bool isBuy, CancellationToken ct)
+		{
+			ct.ThrowIfCancellationRequested();
+			StoreCategory storeCategory = new StoreCategory(store, isBuy)
 			{
-				Category category = new Category
-				{
-					Name = storeCategory.Name,
-					GeneratedName = storeCategory.GeneratedName,
-					IsBuying = storeCategory.IsBuy,
-					Offers = storeCategory.Offers.Select(o => Offer.Create(o)).ToList(),
-				};
-				return category;
+				Name = this.Name,
+				GeneratedName = this.GeneratedName,
+				IsBuy = this.IsBuying
+			};
+			foreach (StoreOfferData offer in this.Offers)
+			{
+				ct.ThrowIfCancellationRequested();
+				storeCategory.Offers.Add(offer.GetTradeOffer());
 			}
+			return storeCategory;
+		}
+	}
 
-			public StoreCategory GetStoreCategory(StoreComponent store, bool isBuy)
-			{
-				StoreCategory storeCategory = new StoreCategory(store, isBuy)
-				{
-					Name = this.Name,
-					GeneratedName = this.GeneratedName,
-					IsBuy = this.IsBuying
-				};
-				this.Offers.ForEach(o => storeCategory.Offers.Add(o.GetTradeOffer()));
-				return storeCategory;
-			}
+	internal sealed record StoreOfferData
+	{
+		public InventoryStackData Stack { get; init; }
+		public float Price { get; init; }
+		public int Limit { get; init; }
+		public float MinDurability { get; init; }
+		public float MaxDurability { get; init; }
+		public bool IsBuying { get; init; }
 
-			[JsonConstructor]
-			public Category(string name, string generatedName, bool isBuying, List<Offer> offers)
+		[JsonConstructor]
+		public StoreOfferData(InventoryStackData stack, float price, int limit, float minDurability, float maxDurability, bool isBuying)
+		{
+			this.Stack = stack;
+			this.Price = price;
+			this.Limit = limit;
+			this.MinDurability = minDurability;
+			this.MaxDurability = maxDurability;
+			this.IsBuying = isBuying;
+		}
+
+		public static StoreOfferData? Create(TradeOffer tradeOffer)
+		{
+			InventoryStackData stack = new InventoryStackData(tradeOffer.Stack.Item.Type, tradeOffer.Stack.Quantity); //Unable use .Create(tradeOffer.Stack) because it have empty check and TradeOffer can have empty stack
+			return new StoreOfferData(stack, tradeOffer.Price, tradeOffer.Limit, tradeOffer.MinDurability, tradeOffer.MaxDurability, tradeOffer.Buying);
+		}
+
+		public TradeOffer GetTradeOffer()
+		{
+			TradeOffer tradeOffer = new TradeOffer(this.Stack.GetItemStack().Item, this.Price, this.IsBuying)
 			{
-				this.Name = name;
-				this.GeneratedName = generatedName;
-				this.IsBuying = isBuying;
-				this.Offers = offers;
-			}
+				Limit = this.Limit,
+				MinDurability = this.MinDurability,
+				MaxDurability = this.MaxDurability
+			};
+			return tradeOffer;
 		}
 	}
 }

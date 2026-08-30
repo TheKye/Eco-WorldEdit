@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Concurrent;
 using Eco.Gameplay.Blocks;
-using Eco.Gameplay.Items;
-using Eco.Gameplay.Objects;
-using Eco.Gameplay.Systems.NewTooltip;
-using Eco.Gameplay.Systems.TextLinks;
-using Eco.Shared.Localization;
-using Eco.Shared.Utils;
-using Eco.Simulation;
-using Eco.Simulation.Types;
 using Eco.World;
 using Eco.World.Blocks;
 
@@ -17,87 +7,112 @@ namespace Eco.Mods.WorldEdit.Utils
 {
 	internal static class BlockUtils
 	{
-		private static readonly Dictionary<Type, Type[]> BlockRotatedVariants = new Dictionary<Type, Type[]>(); //Cache possible variants for speed up search
+		private static readonly ConcurrentDictionary<Type, Type[]> RotatedVariantCache = new();
 
-		public static Type GetBlockType(string blockName)
+		public static Type? GetBlockType(string blockName)
 		{
-			blockName = blockName.ToLower();
+			Type? blockType = null;
+			if (string.IsNullOrWhiteSpace(blockName)) return blockType;
+			blockName = blockName.Replace(" ", "");
 
-			if (blockName == "air" || blockName == "empty") return typeof(EmptyBlock);
+			if (blockName.Equals("air", StringComparison.InvariantCultureIgnoreCase) || blockName.Equals("empty", StringComparison.InvariantCultureIgnoreCase)) return typeof(EmptyBlock);
 
-			Type blockType = null;
 			if (TryGetBlockType(blockName + "floorblock", out blockType)) return blockType;
 			if (TryGetBlockType(blockName + "block", out blockType)) return blockType;
-
-			return BlockManager.BlockTypes.FirstOrDefault(t => t.Name.ToLower() == blockName); //Last we check for correct full name given
+			_ = TryGetBlockType(blockName, out blockType); //Last we check for correct full name given
+			return blockType;
 		}
 
-		public static bool TryGetBlockType(string blockName, out Type type)
+		public static bool TryGetBlockType(string blockName, out Type? type)
 		{
-			type = BlockManager.BlockTypes.FirstOrDefault(t => t.Name.ToLower() == blockName.ToLower());
+			type = null;
+			if (string.IsNullOrWhiteSpace(blockName)) return false;
+			type = BlockManager.BlockTypes.FirstOrDefault(t => t.Name.Equals(blockName, StringComparison.InvariantCultureIgnoreCase));
 			return type is not null;
 		}
 
-		public static bool HasRotatedVariants(Type blockType, out Type[] variants)
+		public static bool TryGetRotatedVariant(Type blockType, int quarterTurns, out Type rotatedType)
 		{
-			Type[] possibleVariants = new Type[] { blockType };
-			//Cached search
-			if (BlockRotatedVariants.TryGetValue(blockType, out variants))
+			ArgumentNullException.ThrowIfNull(blockType);
+			quarterTurns = ((quarterTurns % 4) + 4) % 4;
+			if (quarterTurns == 0)
 			{
-				return variants.Length > 1;
-			}
-			//DeepSearch
-			if (BlockFormManager.Data.BlockForms.Any(form =>
-				{
-					if (form.BlockTypes.Contains(blockType))
-					{
-						foreach (Type type in form.BlockTypes) //Probably can just check the length, if there no variants it have only one type = self type
-						{
-							if (Block.Get<RotatedVariants>(type)?.Variants != null)
-							{
-								possibleVariants = form.BlockTypes;
-								return true;
-							}
-						}
-					}
-					return false;
-				}
-			))
-			{
-				//Cache results for later
-				foreach (Type type in possibleVariants)
-				{
-					BlockRotatedVariants.Add(type, possibleVariants);
-				}
-				variants = possibleVariants;
+				rotatedType = blockType;
 				return true;
 			}
-			BlockRotatedVariants.Add(blockType, possibleVariants); //Cache results for later
-			variants = possibleVariants;
+
+			Type[] variants = RotatedVariantCache.GetOrAdd(blockType, FindRotatedVariants);
+			if (variants.Length <= 1)
+			{
+				rotatedType = blockType;
+				return true;
+			}
+
+			if (TryGetNamedRotation(blockType, out string baseName, out int currentAngle))
+			{
+				int wantedAngle = (currentAngle + quarterTurns * 90) % 360;
+				Type? namedVariant = variants.FirstOrDefault(candidate =>
+					TryGetNamedRotation(candidate, out string candidateBase, out int candidateAngle) &&
+					candidateBase.Equals(baseName, StringComparison.Ordinal) &&
+					candidateAngle == wantedAngle);
+				if (namedVariant is not null)
+				{
+					rotatedType = namedVariant;
+					return true;
+				}
+			}
+
+			// Eco exposes the variants as an ordered array. Keep this as a fallback for
+			// block families whose generated type names do not include their angle.
+			int currentIndex = Array.IndexOf(variants, blockType);
+			if (currentIndex >= 0 && variants.Length == 4)
+			{
+				rotatedType = variants[(currentIndex + quarterTurns) % variants.Length];
+				return true;
+			}
+
+			rotatedType = blockType;
 			return false;
 		}
 
-		public static LocString GetBlockFancyName(Type blockType)
+		private static Type[] FindRotatedVariants(Type blockType)
 		{
-			if (blockType.DerivesFrom<PlantSpecies>())
+			Type[]? directVariants = Block.Get<RotatedVariants>(blockType)?.Variants;
+			if (directVariants is { Length: > 0 })
 			{
-				Species species = EcoSim.AllSpecies.OfType<PlantSpecies>().First(species => species.GetType() == blockType);
-				if (species != null) return species.UILink();
+				Type[] variants = directVariants.Contains(blockType) ? directVariants : [blockType, .. directVariants];
+				foreach (Type variant in variants) RotatedVariantCache.TryAdd(variant, variants);
+				return variants;
 			}
-			Item item = blockType.TryGetAttribute<Ramp>(false, out var rampAttr) ? Item.Get(rampAttr.RampType) : BlockItem.GetBlockItem(blockType) ?? BlockItem.CreatingItem(blockType);
-			if (item == null && blockType.DerivesFrom<WorldObject>())
+
+			foreach (BlockForm? form in BlockFormManager.Data.BlockForms)
 			{
-				item = WorldObjectItem.GetCreatingItemTemplateFromType(blockType);
+				if (!form.BlockTypes.Contains(blockType)) continue;
+				Type[] variants = form.BlockTypes;
+				if (!variants.Any(type => Block.Get<RotatedVariants>(type)?.Variants is { Length: > 0 })) break;
+				foreach (Type variant in variants) RotatedVariantCache.TryAdd(variant, variants);
+				return variants;
 			}
-			if (item != null) return item.UILink();
-			if (blockType.BaseType != null && blockType.BaseType != typeof(Block))
-			{
-				return GetBlockFancyName(blockType.BaseType);
-			}
-			return Localizer.DoStr(blockType.Name); //Not fancy at all :(
+
+			return [blockType];
 		}
 
-		public static bool IsNullOrEmptyBlock(Block block) => block is null || block is EmptyBlock;
-		public static bool IsWaterBlock(Block block) => block is WaterBlock || block is EncasedWaterBlock;
+		private static bool TryGetNamedRotation(Type blockType, out string baseName, out int angle)
+		{
+			const string blockSuffix = "Block";
+			string name = blockType.Name;
+			string stem = name.EndsWith(blockSuffix, StringComparison.Ordinal) ? name[..^blockSuffix.Length] : name;
+			int digitStart = stem.Length;
+			while (digitStart > 0 && char.IsAsciiDigit(stem[digitStart - 1])) digitStart--;
+
+			baseName = stem[..digitStart];
+			if (digitStart == stem.Length)
+			{
+				angle = 0;
+				return true;
+			}
+
+			return int.TryParse(stem.AsSpan(digitStart), out angle) && angle is >= 0 and < 360 && angle % 90 == 0;
+		}
 	}
 }

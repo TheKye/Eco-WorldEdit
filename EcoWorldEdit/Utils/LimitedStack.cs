@@ -1,7 +1,4 @@
-﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Eco.Mods.WorldEdit.Utils
 {
@@ -18,7 +15,7 @@ namespace Eco.Mods.WorldEdit.Utils
 		}
 		public LimitedStack(int maxSize)
 		{
-			if (maxSize < 1) { throw new ArgumentOutOfRangeException(paramName: nameof(maxSize), message: "Accept only values greater than 1"); }
+			if (maxSize < 1) throw new ArgumentOutOfRangeException(paramName: nameof(maxSize), message: "Accept only values greater than 1");
 			this._stack = new LinkedList<T>();
 			this.MaxSize = maxSize;
 		}
@@ -26,11 +23,12 @@ namespace Eco.Mods.WorldEdit.Utils
 		{
 			this._stack = new LinkedList<T>(collection);
 			this.MaxSize = this._stack.Count;
-			if (this.MaxSize < 1) { this.MaxSize = 1; }
+			if (this.MaxSize < 1)
+			{ this.MaxSize = 1; }
 		}
 		public LimitedStack(IEnumerable<T> collection, int maxSize)
 		{
-			if (maxSize < 1) { throw new ArgumentOutOfRangeException(paramName: nameof(maxSize), message: "Accept only values greater than 1"); }
+			if (maxSize < 1) throw new ArgumentOutOfRangeException(paramName: nameof(maxSize), message: "Accept only values greater than 1");
 			this._stack = new LinkedList<T>(collection.Take(maxSize));
 			this.MaxSize = maxSize;
 		}
@@ -38,20 +36,16 @@ namespace Eco.Mods.WorldEdit.Utils
 		public void Clear() => this._stack.Clear();
 		public bool Contains(T item) => this._stack.Contains(item);
 		public void CopyTo(T[] array, int arrayIndex) => this._stack.CopyTo(array, arrayIndex);
-#nullable enable
 		public override bool Equals(object? obj) => this._stack.Equals(obj);
-#nullable disable
 		public override int GetHashCode() => this._stack.GetHashCode();
 		public T Peek()
 		{
-			LinkedListNode<T> item = this._stack.First;
-			if (item == null) throw new InvalidOperationException("Stack empty");
+			LinkedListNode<T> item = this._stack.First ?? throw new InvalidOperationException("Stack empty");
 			return item.Value;
 		}
 		public T Pop()
 		{
-			LinkedListNode<T> item = this._stack.First;
-			if (item == null) throw new InvalidOperationException("Stack empty");
+			LinkedListNode<T> item = this._stack.First ?? throw new InvalidOperationException("Stack empty");
 			this._stack.RemoveFirst();
 			return item.Value;
 		}
@@ -63,10 +57,12 @@ namespace Eco.Mods.WorldEdit.Utils
 			}
 			this._stack.AddFirst(item);
 		}
+		/// <summary>Adds a temporary top entry without evicting a regular bounded entry.</summary>
+		public void PushTransient(T item) => this._stack.AddFirst(item);
 		public T[] ToArray() => this._stack.ToArray();
 		public bool TryPeek(out T result)
 		{
-			result = default(T);
+			result = default;
 			LinkedListNode<T> item = this._stack.First;
 			if (item == null) return false;
 			result = item.Value;
@@ -74,7 +70,7 @@ namespace Eco.Mods.WorldEdit.Utils
 		}
 		public bool TryPop(out T result)
 		{
-			result = default(T);
+			result = default;
 			LinkedListNode<T> item = this._stack.First;
 			if (item == null) return false;
 			this._stack.RemoveFirst();

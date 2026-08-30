@@ -1,0 +1,99 @@
+# Makes LF the default line feed for all text files
+* text=auto eol=lf
+
+# Explicitly specify file types that should always be LF (even on Windows)
+*.cs text eol=lf
+*.json text eol=lf
+*.xml text eol=lf
+*.yaml text eol=lf
+*.txt text eol=lf
+*.md text eol=lf
+*.cginc text eol=lf
+*.shader text eol=lf
+*.compute text eol=lf
+*.glsl text eol=lf
+*.hlsl text eol=lf
+
+# Visual Studio solution files
+*.sln text eol=lf
+*.csproj text eol=lf
+
+# Unity meta files and settings files must ALWAYS be text with LF
+*.meta text eol=lf
+*.asset text eol=lf
+*.unity text eol=lf
+*.prefab text eol=lf
+*.mat text eol=lf
+*.anim text eol=lf
+*.controller text eol=lf
+*.overrideController text eol=lf
+*.physicMaterial text eol=lf
+*.physicsMaterial2D text eol=lf
+*.playable text eol=lf
+*.mask text eol=lf
+*.terrainlayer text eol=lf
+*.spriteatlas text eol=lf
+*.inputactions text eol=lf
+
+# Binary files (images, archives) should not be touched by Git
+# Images and textures
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.tga binary
+*.psd binary
+*.tiff binary
+*.iff binary
+*.bmp binary
+*.exr binary
+*.hdr binary
+*.ico binary
+
+# 3D Models and Animation
+*.fbx binary
+*.obj binary
+*.max binary
+*.blend binary
+*.dae binary
+*.3ds binary
+
+# Audio and Video
+*.mp3 binary
+*.ogg binary
+*.wav binary
+*.aiff binary
+*.aif binary
+*.mod binary
+*.mp4 binary
+*.mov binary
+
+# Fonts
+*.ttf binary
+*.otf binary
+*.fon binary
+
+# Compiled Libraries and Plugins
+*.dll binary
+*.pdb binary
+*.lib binary
+*.dylib binary
+*.so binary
+*.bundle binary
+*.jar binary
+*.aar binary
+
+# Archives and Unity Packages
+*.zip binary
+*.rar binary
+*.7z binary
+*.unitypackage binary
+*.unity3d binary
+*.assetbundle binary
+*.bundle binary
+
+# Other Unity binary assets and cache
+*.cubemap binary
+*.flare binary
+*.renderTexture binary
+*.guiskin binary
+*.swe binary
