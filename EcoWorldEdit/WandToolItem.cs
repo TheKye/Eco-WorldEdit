@@ -2,6 +2,7 @@ namespace Eco.Mods.WorldEdit
 {
 	using System;
 	using System.ComponentModel;
+	using Eco.Core.Items;
 	using Eco.Gameplay.DynamicValues;
 	using Eco.Gameplay.Interactions.Interactors;
 	using Eco.Gameplay.Items;
@@ -19,6 +20,10 @@ namespace Eco.Mods.WorldEdit
 	[LocDisplayName("Wand Tool")]
 	[LocDescription("Does magical World Edit things")]
 	[Category("Hidden")]
+	[Tag(nameof(SurfaceTags.CanBeOnSurface), Unset = true)]
+	// ToolItem adds CanBeOnSurface through an inherited tag.
+	// It must be explicitly unset because the wand has no placeable 3D model.
+	// Item + IInteractor cannot currently be used because the Eco client does not activate its block interactions.
 	public class WandToolItem : ToolItem, IInteractor
 	{
 		public override bool Decays => false; //Don't use durability for this tool.
@@ -28,7 +33,8 @@ namespace Eco.Mods.WorldEdit
 
 		//public override ItemCategory ItemCategory => ItemCategory.Devtool;
 
-		[Interaction(InteractionTrigger.LeftClick, overrideDescription: "Set First Position", animationDriven: false, interactionDistance: 15, authRequired: AccessType.None)]
+		[Interaction(InteractionTrigger.LeftClick, overrideDescription: "Set First Position", animationDriven: false, interactionDistance: 15, authRequired: AccessType.None,
+			tags: new[] { BlockTags.Constructed, BlockTags.CanBeRoad, BlockTags.Road, BlockTags.Minable, BlockTags.Tillable, BlockTags.Diggable, BlockTags.Excavatable, BlockTags.Tilled, BlockTags.Liquid })]
 		public void SetFirstPos(Player player, InteractionTriggerInfo trigger, InteractionTarget target)
 		{
 			try
@@ -55,7 +61,8 @@ namespace Eco.Mods.WorldEdit
 			}
 		}
 
-		[Interaction(InteractionTrigger.RightClick, overrideDescription: "Set Second Position", animationDriven: false, interactionDistance: 15, authRequired: AccessType.None)]
+		[Interaction(InteractionTrigger.RightClick, overrideDescription: "Set Second Position", animationDriven: false, interactionDistance: 15, authRequired: AccessType.None,
+			tags: new[] { BlockTags.Constructed, BlockTags.CanBeRoad, BlockTags.Road, BlockTags.Minable, BlockTags.Tillable, BlockTags.Diggable, BlockTags.Excavatable, BlockTags.Tilled, BlockTags.Liquid })]
 		public void SetSecondPos(Player player, InteractionTriggerInfo triggerInfo, InteractionTarget target)
 		{
 			try
