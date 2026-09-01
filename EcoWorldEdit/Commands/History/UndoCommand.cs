@@ -16,7 +16,7 @@ namespace Eco.Mods.WorldEdit.Commands.History
 		protected override LimitedStack<HistoryEntry> GetSource(UserSession session) => session.UndoHistory;
 		protected override LimitedStack<HistoryEntry> GetDestination(UserSession session) => session.RedoHistory;
 
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "undo will revert the last action done using world edit, up to 10 times", shortCut: "undo", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Undoes one or more WorldEdit actions.", shortCut: "undo", level: ChatAuthorizationLevel.Admin)]
 		public static void Undo(User user, int count = 1)
 		{
 			try

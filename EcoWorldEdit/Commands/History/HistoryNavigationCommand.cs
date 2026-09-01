@@ -29,7 +29,7 @@ namespace Eco.Mods.WorldEdit.Commands.History
 			{
 				LimitedStack<HistoryEntry> source = this.GetSource(session);
 				LimitedStack<HistoryEntry> destination = this.GetDestination(session);
-				bool applyingRecovery = source.TryPeek(out HistoryEntry firstEntry) && firstEntry.IsRecovery;
+				bool applyingRecovery = source.TryPeek(out HistoryEntry? firstEntry) && firstEntry.IsRecovery;
 				if (session.PendingRecoveryDirection == this.Direction && !applyingRecovery) throw new InvalidOperationException($"Pending {this.ActionName} recovery is not at the top of its history stack.");
 				if (applyingRecovery && session.PendingRecoveryDirection is null) session.MarkPendingRecovery(this.Direction);
 
@@ -39,7 +39,7 @@ namespace Eco.Mods.WorldEdit.Commands.History
 				for (int i = 1; i <= actualCount; i++)
 				{
 					ct.ThrowIfCancellationRequested();
-					if (!source.TryPeek(out HistoryEntry entry)) throw new WorldEditCommandException($"Nothing to {this.ActionName.ToLowerInvariant()}.");
+					if (!source.TryPeek(out HistoryEntry? entry)) throw new WorldEditCommandException($"Nothing to {this.ActionName.ToLowerInvariant()}.");
 
 					CommandScope reverseScope = context.CreateScope();
 					CommandChangeSet reverseChangeSet = reverseScope.Changes;

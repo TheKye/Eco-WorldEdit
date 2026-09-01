@@ -16,7 +16,7 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 	[ChatCommandHandler]
 	internal sealed class CopyCommand : IWorldEditCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "copy will copy the selected area ready for pasting or exporting", shortCut: "copy", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Copies the selection to your clipboard.", shortCut: "copy", level: ChatAuthorizationLevel.Admin)]
 		public static void Copy(User user)
 		{
 			try

@@ -117,16 +117,16 @@ namespace Eco.Mods.WorldEdit.Serializer
 
 		private static bool IsLZ4Stream(Stream stream)
 		{
+			long startPosition = stream.Position;
 			byte[] buff = new byte[8];
-			stream.Read(buff, 0, 8);
-			string header = Encoding.ASCII.GetString(buff, 0, LZ4_HEADER.Length);
-			if (LZ4_HEADER.Equals(header, StringComparison.Ordinal))
+			int bytesRead = stream.ReadAtLeast(buff, buff.Length, false);
+			if (bytesRead == buff.Length && Encoding.ASCII.GetString(buff, 0, LZ4_HEADER.Length).Equals(LZ4_HEADER, StringComparison.Ordinal))
 			{
 				return true;
 			}
 			else
 			{
-				stream.Seek(0, SeekOrigin.Begin);
+				stream.Seek(startPosition, SeekOrigin.Begin);
 				return false;
 			}
 		}

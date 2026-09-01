@@ -1,6 +1,31 @@
 # Changelog
 
-## [3.0.0] - Unreleased
+## [3.0.2] - Unreleased
+
+### Added
+
+- Added an in-world visual highlight for completed selections, supporting dimensions of up to 8192 blocks per axis. Highlight objects are updated with the selection and cleaned up when users log out or after an unclean server shutdown. ([#6](https://github.com/TheKye/Eco-WorldEdit/issues/6))
+
+### Fixed
+
+- Added world-height validation throughout capture, restore, and batched placement. `paste`, `move`, and `stack` now reject destinations outside the valid world height before changing the world. ([#93](https://github.com/TheKye/Eco-WorldEdit/issues/93))
+- Corrected unset-selection detection and ensured internal selection-highlight objects are ignored by capture, clearing, occupancy checks, and paid-item accounting.
+- Made blueprint header detection handle short streams safely and restored the original stream position when the input is not LZ4-compressed.
+
+### Changed
+
+- Consolidated block-grid alignment and plant-block classification in `BlockUtils`, while retaining payload-based classification for blueprint and snapshot restoration.
+- Standardized the help text and attribute formatting for all WorldEdit chat commands. Renamed `WEversion` and `WELooking` shortcuts to `weversion` and `welooking`.
+- Corrected nullable contracts for history stack operations and removed the remaining compiler and analyzer warnings.
+
+## [3.0.1] - 2026-08-31
+
+### Fixed
+
+- Restored wand interactions by explicitly targeting supported block tags, including liquids. ([#99](https://github.com/TheKye/Eco-WorldEdit/issues/99))
+- Prevented the wand from being treated as a placeable surface item despite inheriting from `ToolItem`. ([#98](https://github.com/TheKye/Eco-WorldEdit/issues/98))
+
+## [3.0.0] - 2026-08-30
 
 ### Highlights
 
@@ -27,4 +52,4 @@ First-run `/set` throughput increased from approximately 79.7K to 106.0K blocks/
 
 - [#35: parallel execute](https://github.com/TheKye/Eco-WorldEdit/issues/35) — partially addressed by selective batching. General `Parallel.ForEach` execution was not adopted because its limited expected benefit did not justify the correctness and thread-safety risks.
 - [#94: Support for new placement system](https://github.com/TheKye/Eco-WorldEdit/issues/94) — `WorldObjectManyBlock` support is preserved and integrated into the new capture, restore, clearing, history, and clipboard transformation paths.
-- [#93: World height validation](https://github.com/TheKye/Eco-WorldEdit/issues/93) — not considered resolved: selections are normalized against the voxel world size, but the separate generation/build-height behavior still needs in-game verification.
+- [#93: World height validation](https://github.com/TheKye/Eco-WorldEdit/issues/93) — initial selection normalization landed in 3.0.0; complete capture, restore, and placement validation followed in 3.0.2.

@@ -13,7 +13,7 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 	[ChatCommandHandler]
 	internal sealed class WallsCommand(Type BlockType) : IWorldEditCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Sets the Area on the outside of the selection to selected wall type", shortCut: "walls", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Builds outer walls around the selection.", shortCut: "walls", level: ChatAuthorizationLevel.Admin)]
 		public static void Walls(User user, string typeName)
 		{
 			try

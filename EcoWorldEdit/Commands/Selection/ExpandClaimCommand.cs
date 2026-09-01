@@ -15,7 +15,7 @@ namespace Eco.Mods.WorldEdit.Commands.Selection
 	[ChatCommandHandler]
 	internal static class ExpandClaimCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Expands selection to include amount of claims in given direction or where player looking", shortCut: "expclaim", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Expands the selection by claim plots in a direction.", shortCut: "expclaim", level: ChatAuthorizationLevel.Admin)]
 		public static void ExpandClaim(User user, string args = "1")
 		{
 			try

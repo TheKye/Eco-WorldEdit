@@ -4,10 +4,10 @@ using Eco.Gameplay.Components;
 using Eco.Gameplay.Components.Storage;
 using Eco.Gameplay.Components.Store;
 using Eco.Gameplay.Objects;
-using Eco.Gameplay.Plants;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Model.BlockData;
 using Eco.Mods.WorldEdit.Model.Components;
+using Eco.Mods.WorldEdit.Utils;
 using Eco.Mods.WorldEdit.Utils.Eco;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
 using Eco.Shared.Math;
@@ -48,7 +48,7 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 				return captured;
 			}
 
-			if (block is PlantBlock or TreeBlock)
+			if (BlockUtils.IsPlantBlock(block))
 			{
 				Plant? plant = EcoSim.PlantSim.GetPlant(worldPosition);
 				if (plant is not null)

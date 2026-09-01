@@ -13,12 +13,12 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 	[ChatCommandHandler]
 	internal sealed class ClearAllCommand(int Radius, Vector3i Origin) : IWorldEditCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Clear the place for construction from everything", shortCut: "clearall", level: ChatAuthorizationLevel.Admin)]
-		public static void ClearAll(User user, int square = 20)
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Clears everything above your position within the specified radius.", shortCut: "clearall", level: ChatAuthorizationLevel.Admin)]
+		public static void ClearAll(User user, int radius = 20)
 		{
 			try
 			{
-				ClearAllCommand command = new(Math.Max(0, square), CommandParsing.GetPosition(user));
+				ClearAllCommand command = new(Math.Max(0, radius), CommandParsing.GetPosition(user));
 				CommandResult result = CommandDispatcher.Obj.Execute(user, command);
 				if (result.Result.Success) user.Player.MsgLoc($"{result.BlocksChanged} blocks changed in {result.Elapsed.TotalMilliseconds}ms.");
 				else user.Player.Error(result.Result.Message);

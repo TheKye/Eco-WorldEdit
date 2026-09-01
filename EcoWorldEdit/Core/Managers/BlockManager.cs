@@ -3,8 +3,8 @@ using Eco.Core.Utils;
 using Eco.Gameplay.Blocks;
 using Eco.Gameplay.Items;
 using Eco.Gameplay.Objects;
-using Eco.Gameplay.Plants;
 using Eco.Mods.WorldEdit.Core.Commands;
+using Eco.Mods.WorldEdit.Utils;
 using Eco.Mods.WorldEdit.Utils.Eco;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
 using Eco.Shared.IoC;
@@ -22,8 +22,6 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 
 	internal sealed partial class BlockManager
 	{
-		private const float BlockPositionTolerance = 0.0001f;
-
 		private readonly UserSession _userSession;
 		private readonly CommandChangeSet _changes;
 		private readonly BlockCaptureContext _undoCaptureContext = new();
@@ -132,7 +130,7 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 				return true;
 			}
 
-			if (block is PlantBlock or TreeBlock)
+			if (BlockUtils.IsPlantBlock(block))
 			{
 				Plant? plant = EcoSim.PlantSim.GetPlant(position);
 				if (plant is null) return false;
@@ -187,8 +185,7 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 
 		private static Vector3i ToBlockPosition(Vector3 position)
 		{
-			Vector3i blockPosition = (Vector3i)position;
-			if (Vector3.DistanceSquared(position, blockPosition) > BlockPositionTolerance * BlockPositionTolerance) throw new WorldEditCommandException($"Position {position} is not aligned to the block grid.");
+			if (!BlockUtils.TryGetBlockPosition(position, out Vector3i blockPosition)) throw new WorldEditCommandException($"Position {position} is not aligned to the block grid.");
 			return blockPosition;
 		}
 

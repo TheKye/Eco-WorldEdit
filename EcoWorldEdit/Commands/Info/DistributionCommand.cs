@@ -18,7 +18,7 @@ namespace Eco.Mods.WorldEdit.Commands.Info
 	[ChatCommandHandler]
 	internal sealed class DistributionCommand(bool Detailed, string? OutputFile) : IWorldEditCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "distr will give you a detailed list of all items in your selected area", shortCut: "distr", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Shows the block distribution within the selection.", shortCut: "distr", level: ChatAuthorizationLevel.Admin)]
 		public static void Distribution(User user, string type = "brief", string? fileName = null)
 		{
 			try

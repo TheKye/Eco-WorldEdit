@@ -17,7 +17,7 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 	[ChatCommandHandler]
 	internal sealed class CutCommand : IWorldEditCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Copy and clean selected area", shortCut: "cut", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Copies the selection to your clipboard and clears it.", shortCut: "cut", level: ChatAuthorizationLevel.Admin)]
 		public static void Cut(User user)
 		{
 			try

@@ -14,7 +14,7 @@ namespace Eco.Mods.WorldEdit.Commands.Selection
 	[ChatCommandHandler]
 	internal static class ShiftCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "shift will move the selected area by the specified amount in the looking direction", shortCut: "shift", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Moves the selection bounds without moving blocks.", shortCut: "shift", level: ChatAuthorizationLevel.Admin)]
 		public static void Shift(User user, string directionAndAmount = "1")
 		{
 			try

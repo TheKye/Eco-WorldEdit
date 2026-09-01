@@ -16,7 +16,7 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 	[ChatCommandHandler]
 	internal sealed class StackCommand(Direction Direction, int Amount, int Gap) : IWorldEditCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Duplicate the Selected Area based on repeating amounts to a direction", shortCut: "stack", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Repeats the selected area in a direction.", shortCut: "stack", level: ChatAuthorizationLevel.Admin)]
 		public static void Stack(User user, string directionAndAmount = "1", int offset = 0)
 		{
 			try

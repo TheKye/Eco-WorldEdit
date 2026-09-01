@@ -14,7 +14,7 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 	[ChatCommandHandler]
 	internal sealed class SetCommand(Type BlockType) : IWorldEditCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Sets The Selected Area to the desired Block", shortCut: "set", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Fills the selection with the specified block.", shortCut: "set", level: ChatAuthorizationLevel.Admin)]
 		public static void Set(User user, string blockName)
 		{
 			try

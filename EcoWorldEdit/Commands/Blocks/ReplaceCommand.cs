@@ -14,7 +14,7 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 	[ChatCommandHandler]
 	internal sealed class ReplaceCommand(Type FindType, Type ReplaceType, bool ReplaceAllNonEmpty) : IWorldEditCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Replace a Specific Block Type with Another Block", shortCut: "replace", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Replaces one block type with another in the selection.", shortCut: "replace", level: ChatAuthorizationLevel.Admin)]
 		public static void Replace(User user, string findType, string replaceType = "")
 		{
 			try

@@ -16,7 +16,7 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 	{
 		public enum PyramidStyle { Full, Thin, Thick, Hollow }
 
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Create pyramid at user position with desired height", shortCut: "pyramid", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Builds a pyramid at your position.", shortCut: "pyramid", level: ChatAuthorizationLevel.Admin)]
 		public static void Pyramid(User user, int height, string? blockType = null, string styleStr = "full", bool clear = true)
 		{
 			try

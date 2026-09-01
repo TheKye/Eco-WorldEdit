@@ -12,7 +12,7 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 	[ChatCommandHandler]
 	internal sealed class RotateCommand(float Degrees) : IWorldEditCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "rotate will rotate all blocks and items in your clipboard", shortCut: "rotate", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Rotates the contents of your clipboard.", shortCut: "rotate", level: ChatAuthorizationLevel.Admin)]
 		public static void Rotate(User user, float degrees = 90f)
 		{
 			try

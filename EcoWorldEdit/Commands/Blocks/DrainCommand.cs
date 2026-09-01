@@ -13,7 +13,7 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 	[ChatCommandHandler]
 	internal sealed class DrainCommand : IWorldEditCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Drain water in Selected Area", shortCut: "drain", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Removes water from the selection.", shortCut: "drain", level: ChatAuthorizationLevel.Admin)]
 		public static void Drain(User user)
 		{
 			try

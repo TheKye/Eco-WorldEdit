@@ -14,7 +14,7 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 	[ChatCommandHandler]
 	internal sealed class PasteCommand(bool SkipEmpty) : IWorldEditCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "paste will paste the copied selection or imported schematic from where the player is standing", shortCut: "paste", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Pastes the clipboard at your position.", shortCut: "paste", level: ChatAuthorizationLevel.Admin)]
 		public static void Paste(User user, bool skipEmpty = false)
 		{
 			try

@@ -96,7 +96,7 @@ namespace Eco.Mods.WorldEdit.Core
 		public void MarkPendingRecovery(HistoryDirection direction)
 		{
 			LimitedStack<HistoryEntry> history = this.GetHistory(direction);
-			if (!history.TryPeek(out HistoryEntry entry) || !entry.IsRecovery) throw new InvalidOperationException($"{direction} recovery must be at the top of its history stack.");
+			if (!history.TryPeek(out HistoryEntry? entry) || !entry.IsRecovery) throw new InvalidOperationException($"{direction} recovery must be at the top of its history stack.");
 			this.PendingRecoveryDirection = direction;
 		}
 
@@ -104,7 +104,7 @@ namespace Eco.Mods.WorldEdit.Core
 		{
 			HistoryDirection previousDirection = completedDirection == HistoryDirection.Undo ? HistoryDirection.Redo : HistoryDirection.Undo;
 			LimitedStack<HistoryEntry> previousHistory = this.GetHistory(previousDirection);
-			this.PendingRecoveryDirection = previousHistory.TryPeek(out HistoryEntry previous) && previous.IsRecovery ? previousDirection : null;
+			this.PendingRecoveryDirection = previousHistory.TryPeek(out HistoryEntry? previous) && previous.IsRecovery ? previousDirection : null;
 		}
 
 		public bool DiscardPendingRecoveries()
@@ -137,7 +137,7 @@ namespace Eco.Mods.WorldEdit.Core
 		private static bool DiscardRecoveryEntries(LimitedStack<HistoryEntry> history)
 		{
 			bool discarded = false;
-			while (history.TryPeek(out HistoryEntry entry) && entry.IsRecovery)
+			while (history.TryPeek(out HistoryEntry? entry) && entry.IsRecovery)
 			{
 				history.Pop();
 				discarded = true;
@@ -148,7 +148,7 @@ namespace Eco.Mods.WorldEdit.Core
 		private static List<HistoryEntry> DetachRecoveryEntries(LimitedStack<HistoryEntry> history)
 		{
 			List<HistoryEntry> entries = new();
-			while (history.TryPeek(out HistoryEntry entry) && entry.IsRecovery)
+			while (history.TryPeek(out HistoryEntry? entry) && entry.IsRecovery)
 			{
 				entries.Add(history.Pop());
 			}

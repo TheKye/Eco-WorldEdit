@@ -7,7 +7,7 @@ namespace Eco.Mods.WorldEdit.Commands.General
 	[ChatCommandHandler]
 	internal sealed class WandCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Gives the player a Wand for using world edit", shortCut: "wand", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Adds a WorldEdit wand to your inventory.", shortCut: "wand", level: ChatAuthorizationLevel.Admin)]
 		public static void Wand(User user)
 		{
 			try
@@ -17,7 +17,7 @@ namespace Eco.Mods.WorldEdit.Commands.General
 			catch (Exception e) { Log.WriteException(e); }
 		}
 
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Removes the wand from the players inventory", shortCut: "rmwand", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Removes a WorldEdit wand from your inventory.", shortCut: "rmwand", level: ChatAuthorizationLevel.Admin)]
 		public static void RmWand(User user)
 		{
 			try

@@ -12,7 +12,7 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 	[ChatCommandHandler]
 	internal sealed class GrowCommand : IWorldEditCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Set max growth for Plants and Trees in Selected Area", shortCut: "grow", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Fully grows plants and trees in the selection.", shortCut: "grow", level: ChatAuthorizationLevel.Admin)]
 		public static void Grow(User user)
 		{
 			try

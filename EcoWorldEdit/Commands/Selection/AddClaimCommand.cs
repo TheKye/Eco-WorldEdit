@@ -13,7 +13,7 @@ namespace Eco.Mods.WorldEdit.Commands.Selection
 	[ChatCommandHandler]
 	internal static class AddClaimCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Add current claim where player stands to the selection", shortCut: "addclaim", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Expands the selection to include the claim plot at your position.", shortCut: "addclaim", level: ChatAuthorizationLevel.Admin)]
 		public static void AddClaim(User user)
 		{
 			try

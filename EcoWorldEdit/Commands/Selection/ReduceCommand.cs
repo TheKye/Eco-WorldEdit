@@ -14,7 +14,7 @@ namespace Eco.Mods.WorldEdit.Commands.Selection
 	[ChatCommandHandler]
 	internal static class ReduceCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Reduce the selected area by the specified amount in the looking direction if not provided", shortCut: "reduce", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Reduces the selection by an amount in a direction.", shortCut: "reduce", level: ChatAuthorizationLevel.Admin)]
 		public static void Reduce(User user, string directionAndAmount = "1")
 		{
 			try

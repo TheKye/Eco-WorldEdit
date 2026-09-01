@@ -12,7 +12,7 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 	[ChatCommandHandler]
 	internal sealed class UpMeCommand(int Count, Vector3i Origin) : IWorldEditCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Upme will move the player upwards and place a block under the player", shortCut: "upme", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Moves you upward and places a support block below you.", shortCut: "upme", level: ChatAuthorizationLevel.Admin)]
 		public static void UpMe(User user, int count = 1)
 		{
 			try

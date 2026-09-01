@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Eco.Mods.WorldEdit.Utils
 {
@@ -60,18 +61,18 @@ namespace Eco.Mods.WorldEdit.Utils
 		/// <summary>Adds a temporary top entry without evicting a regular bounded entry.</summary>
 		public void PushTransient(T item) => this._stack.AddFirst(item);
 		public T[] ToArray() => this._stack.ToArray();
-		public bool TryPeek(out T result)
+		public bool TryPeek([MaybeNullWhen(false)] out T result)
 		{
 			result = default;
-			LinkedListNode<T> item = this._stack.First;
+			LinkedListNode<T>? item = this._stack.First;
 			if (item == null) return false;
 			result = item.Value;
 			return true;
 		}
-		public bool TryPop(out T result)
+		public bool TryPop([MaybeNullWhen(false)] out T result)
 		{
 			result = default;
-			LinkedListNode<T> item = this._stack.First;
+			LinkedListNode<T>? item = this._stack.First;
 			if (item == null) return false;
 			this._stack.RemoveFirst();
 			result = item.Value;

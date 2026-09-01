@@ -3,6 +3,7 @@ using Eco.Gameplay.Objects;
 using Eco.Gameplay.Occupancy;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Model.BlockData;
+using Eco.Mods.WorldEdit.Utils;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
@@ -11,8 +12,6 @@ namespace Eco.Mods.WorldEdit.Core.Transformers
 {
 	internal static class ClipboardTransformer
 	{
-		private const float BlockPositionTolerance = 0.0001f;
-
 		public static Clipboard Rotate(Clipboard source, float degrees, CancellationToken ct = default)
 		{
 			ArgumentNullException.ThrowIfNull(source);
@@ -169,8 +168,7 @@ namespace Eco.Mods.WorldEdit.Core.Transformers
 
 		private static Vector3i ToBlockPosition(Vector3 position)
 		{
-			Vector3i blockPosition = (Vector3i)position;
-			if (Vector3.DistanceSquared(position, blockPosition) > BlockPositionTolerance * BlockPositionTolerance)
+			if (!BlockUtils.TryGetBlockPosition(position, out Vector3i blockPosition))
 				throw new WorldEditCommandException($"Rotated WorldObject occupancy position {position} is not aligned to the block grid.");
 			return blockPosition;
 		}

@@ -13,7 +13,7 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 	[ChatCommandHandler]
 	internal sealed class ExportCommand(string FileName) : IWorldEditCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "export will turn your copied selection into a schematic that you can share", shortCut: "exportbp", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Exports your clipboard to a shareable blueprint file.", shortCut: "exportbp", level: ChatAuthorizationLevel.Admin)]
 		public static void Export(User user, string fileName)
 		{
 			try

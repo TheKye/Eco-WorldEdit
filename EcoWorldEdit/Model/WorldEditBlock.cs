@@ -1,8 +1,5 @@
 using System.Numerics;
-using Eco.Gameplay.Objects;
-using Eco.Gameplay.Plants;
 using Eco.Mods.WorldEdit.Model.BlockData;
-using Eco.Shared.Utils;
 using Eco.World.Blocks;
 using Newtonsoft.Json;
 
@@ -23,9 +20,6 @@ namespace Eco.Mods.WorldEdit.Model
 			this.BlockData = blockData;
 			this.Color = color;
 		}
-
-		public bool IsPlantBlock() => this.BlockType.DerivesFrom<PlantBlock>() || this.BlockType.DerivesFrom<TreeBlock>();
-		public bool IsWorldObjectBlock() => this.BlockType.DerivesFrom<WorldObjectBlock>();
 
 		/// <summary>Classifies the serialized payload, independently of the external game block type.</summary>
 		public bool IsBlockInternally() => this.BlockData is null;

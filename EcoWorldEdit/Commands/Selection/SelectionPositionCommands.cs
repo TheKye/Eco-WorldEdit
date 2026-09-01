@@ -13,13 +13,13 @@ namespace Eco.Mods.WorldEdit.Commands.Selection
 	[ChatCommandHandler]
 	internal static class SelectionPositionCommands
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Set First Position to given coordinate or player position", shortCut: "setpos1", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Sets the first selection point to the given coordinates or your position.", shortCut: "setpos1", level: ChatAuthorizationLevel.Admin)]
 		public static void SetPos1(User user, string? coordinate = null) => SetPosition(user, coordinate, true);
 
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Set Second Position to given coordinate or player position", shortCut: "setpos2", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Sets the second selection point to the given coordinates or your position.", shortCut: "setpos2", level: ChatAuthorizationLevel.Admin)]
 		public static void SetPos2(User user, string? coordinate = null) => SetPosition(user, coordinate, false);
 
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Resets selection and both positions", shortCut: "reset", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Clears the current selection.", shortCut: "reset", level: ChatAuthorizationLevel.Admin)]
 		public static void Reset(User user)
 		{
 			try

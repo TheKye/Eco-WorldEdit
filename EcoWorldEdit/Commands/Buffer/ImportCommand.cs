@@ -15,7 +15,7 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 	[ChatCommandHandler]
 	internal sealed class ImportCommand(string FileName) : IWorldEditCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "import will import a schematic that you or someone else has exported", shortCut: "importbp", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Imports a blueprint file into your clipboard.", shortCut: "importbp", level: ChatAuthorizationLevel.Admin)]
 		public static void Import(User user, string? fileName = null)
 		{
 			try

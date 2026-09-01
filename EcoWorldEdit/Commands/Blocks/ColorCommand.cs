@@ -14,7 +14,7 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 	[ChatCommandHandler]
 	internal sealed class ColorCommand(ByteColor Color) : IWorldEditCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Paint blocks with specified color in selected area", shortCut: "color", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Paints blocks in the selection with the specified color.", shortCut: "color", level: ChatAuthorizationLevel.Admin)]
 		public static void ColorBlocks(User user, string color)
 		{
 			try

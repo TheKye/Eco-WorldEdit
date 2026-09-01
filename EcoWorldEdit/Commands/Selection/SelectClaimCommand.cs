@@ -13,7 +13,7 @@ namespace Eco.Mods.WorldEdit.Commands.Selection
 	[ChatCommandHandler]
 	internal static class SelectClaimCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Select current claim where player stands on ground level", shortCut: "selclaim", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Selects the claim plot at your position.", shortCut: "selclaim", level: ChatAuthorizationLevel.Admin)]
 		public static void SelectClaim(User user)
 		{
 			try

@@ -17,7 +17,7 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 	[ChatCommandHandler]
 	internal sealed class MoveCommand(Direction Direction, int Amount) : IWorldEditCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Move blocks in the Selected Area to a direction", shortCut: "move", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Moves the selected area in a direction.", shortCut: "move", level: ChatAuthorizationLevel.Admin)]
 		public static void Move(User user, string directionAndAmount = "1")
 		{
 			try

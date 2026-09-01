@@ -1,5 +1,8 @@
 using System.Collections.Concurrent;
+using System.Numerics;
 using Eco.Gameplay.Blocks;
+using Eco.Gameplay.Plants;
+using Eco.Shared.Math;
 using Eco.World;
 using Eco.World.Blocks;
 
@@ -7,7 +10,27 @@ namespace Eco.Mods.WorldEdit.Utils
 {
 	internal static class BlockUtils
 	{
+		private const float BlockPositionTolerance = 0.0001f;
 		private static readonly ConcurrentDictionary<Type, Type[]> RotatedVariantCache = new();
+
+		public static bool IsPlantBlock(Block block)
+		{
+			ArgumentNullException.ThrowIfNull(block);
+			return block is PlantBlock or TreeBlock;
+		}
+
+		public static bool TryGetBlockPosition(Vector3 position, out Vector3i blockPosition)
+		{
+			blockPosition = (Vector3i)position;
+			return IsBlockPositionAligned(position, blockPosition);
+		}
+
+		public static bool IsVoxelAligned(Vector3 position) => IsBlockPositionAligned(position, RoundToVoxel(position));
+
+		public static Vector3 RoundToVoxel(Vector3 position) => new(
+			MathF.Round(position.X, MidpointRounding.AwayFromZero),
+			MathF.Round(position.Y, MidpointRounding.AwayFromZero),
+			MathF.Round(position.Z, MidpointRounding.AwayFromZero));
 
 		public static Type? GetBlockType(string blockName)
 		{
@@ -114,5 +137,8 @@ namespace Eco.Mods.WorldEdit.Utils
 
 			return int.TryParse(stem.AsSpan(digitStart), out angle) && angle is >= 0 and < 360 && angle % 90 == 0;
 		}
+
+		private static bool IsBlockPositionAligned(Vector3 position, Vector3 blockPosition) =>
+			Vector3.DistanceSquared(position, blockPosition) <= BlockPositionTolerance * BlockPositionTolerance;
 	}
 }

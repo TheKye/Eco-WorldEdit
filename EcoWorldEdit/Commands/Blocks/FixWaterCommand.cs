@@ -14,7 +14,7 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 	[ChatCommandHandler]
 	internal sealed class FixWaterCommand(int Height) : IWorldEditCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Fix water in Selected Area", shortCut: "fixwater", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Restores the specified water level within the selection.", shortCut: "fixwater", level: ChatAuthorizationLevel.Admin)]
 		public static void FixWater(User user, int height = 0)
 		{
 			try

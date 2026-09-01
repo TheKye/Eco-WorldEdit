@@ -14,7 +14,7 @@ namespace Eco.Mods.WorldEdit.Commands.Selection
 	[ChatCommandHandler]
 	internal static class ExpandCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "expand the selected area by the specified amount in the looking direction", shortCut: "expand", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Expands the selection by an amount in a direction.", shortCut: "expand", level: ChatAuthorizationLevel.Admin)]
 		public static void Expand(User user, string directionAndAmount = "1")
 		{
 			try

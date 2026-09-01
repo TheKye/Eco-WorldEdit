@@ -6,6 +6,6 @@ namespace Eco.Mods.WorldEdit.Commands.General
 	[ChatCommandHandler]
 	internal class WorldEditCommand
 	{
-		[ChatCommand(helpText: "Lists of world edit commands", shortCut: "we", level: ChatAuthorizationLevel.Admin)] public static void WorldEdit(User user) { }
+		[ChatCommand(helpText: "Lists available WorldEdit commands.", shortCut: "we", level: ChatAuthorizationLevel.Admin)] public static void WorldEdit(User user) { }
 	}
 }

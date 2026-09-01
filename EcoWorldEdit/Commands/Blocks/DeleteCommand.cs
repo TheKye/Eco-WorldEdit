@@ -13,7 +13,7 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 	[ChatCommandHandler]
 	internal sealed class DeleteCommand : IWorldEditCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Clears the Selected Area", shortCut: "del", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Clears the selection.", shortCut: "del", level: ChatAuthorizationLevel.Admin)]
 		public static void Delete(User user)
 		{
 			try

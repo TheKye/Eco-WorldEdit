@@ -16,7 +16,7 @@ namespace Eco.Mods.WorldEdit.Commands.Info
 	[ChatCommandHandler]
 	internal static class BlueprintInfoCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), "BInfo will give you information about blueprint", "binfo", ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Shows block and size information for a blueprint file.", shortCut: "binfo", level: ChatAuthorizationLevel.Admin)]
 		public static void BlueprintInfo(User user, string fileName, string? outFileName = null)
 		{
 			try

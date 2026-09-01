@@ -11,8 +11,6 @@ namespace Eco.Mods.WorldEdit.Core.Transformers
 {
 	internal static class BlockTransformer
 	{
-		private const float VoxelAlignmentTolerance = 0.0001f;
-
 		public static WorldEditBlock Rotate(WorldEditBlock block, Matrix4x4 structuralTransform, float exactAngle, int quarterTurns)
 		{
 			ArgumentNullException.ThrowIfNull(block);
@@ -20,8 +18,9 @@ namespace Eco.Mods.WorldEdit.Core.Transformers
 			bool isWorldObject = block.BlockData is WorldObjectBlockData;
 			if (!isWorldObject)
 			{
-				EnsureVoxelAligned(block.LocalPosition, block);
-				localPosition = RoundToVoxel(localPosition);
+				if (!BlockUtils.IsVoxelAligned(block.LocalPosition))
+					throw new WorldEditCommandException($"Clipboard block {block.BlockType} at {block.LocalPosition} is not aligned to the voxel grid.");
+				localPosition = BlockUtils.RoundToVoxel(localPosition);
 			}
 
 			return block with
@@ -50,17 +49,5 @@ namespace Eco.Mods.WorldEdit.Core.Transformers
 			if (!EcoQuaternion.IsValid(rotation)) throw new WorldEditCommandException($"WorldObject {objectData.WorldObjectType} has an invalid rotation.");
 			return objectData with { Rotation = rotation };
 		}
-
-		private static void EnsureVoxelAligned(Vector3 position, WorldEditBlock block)
-		{
-			Vector3 rounded = RoundToVoxel(position);
-			if (Vector3.DistanceSquared(position, rounded) > VoxelAlignmentTolerance * VoxelAlignmentTolerance)
-				throw new WorldEditCommandException($"Clipboard block {block.BlockType} at {position} is not aligned to the voxel grid.");
-		}
-
-		private static Vector3 RoundToVoxel(Vector3 position) => new(
-			MathF.Round(position.X, MidpointRounding.AwayFromZero),
-			MathF.Round(position.Y, MidpointRounding.AwayFromZero),
-			MathF.Round(position.Z, MidpointRounding.AwayFromZero));
 	}
 }
