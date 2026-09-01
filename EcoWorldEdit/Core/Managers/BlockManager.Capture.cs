@@ -107,6 +107,8 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 				components.Add(doorData);
 			if (worldObject.GetComponent<StoreComponent>() is { } store && StoreComponentData.Create(store) is { } storeData)
 				components.Add(storeData);
+			if (worldObject.GetComponent<PluginModulesComponent>() is { } pluginModules && PluginModulesData.Create(pluginModules) is { } pluginModulesData)
+				components.Add(pluginModulesData);
 			ct.ThrowIfCancellationRequested();
 
 			return components;

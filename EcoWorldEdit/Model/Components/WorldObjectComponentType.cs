@@ -6,6 +6,7 @@ namespace Eco.Mods.WorldEdit.Model.Components
 		CustomText = 2,
 		Mint = 3,
 		Door = 4,
-		Store = 5
+		Store = 5,
+		PluginModules = 6
 	}
 }

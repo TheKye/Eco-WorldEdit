@@ -243,6 +243,10 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 					case DoorComponentData:
 						// Eco exposes OpensOutwards as read-only; preserve the DTO until the game API supports restoring it.
 						break;
+
+					case PluginModulesData pluginModulesData when worldObject.GetComponent<PluginModulesComponent>() is { } pluginModules:
+						pluginModulesData.Restore(pluginModules, this._userSession.User, ct);
+						break;
 				}
 			}
 		}

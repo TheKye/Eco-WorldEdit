@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Eco.Gameplay.Items;
+using Eco.Gameplay.Modules;
 using Eco.Gameplay.Objects;
 using Eco.Mods.WorldEdit.Core.Managers;
 using Eco.Mods.WorldEdit.Model.BlockData;
@@ -117,7 +118,41 @@ namespace Eco.Mods.WorldEdit.Serializer
 						NormalizeStoreCategories(data["Buy"] as JArray);
 						NormalizeStoreCategories(data["Sell"] as JArray);
 						break;
+					case WorldObjectComponentType.PluginModules:
+						NormalizePluginModules(data["Modules"] as JArray);
+						break;
 				}
+			}
+		}
+
+		private static void NormalizePluginModules(JArray? modules)
+		{
+			if (modules is null) return;
+
+			HashSet<string> slotTags = new(StringComparer.Ordinal);
+			foreach (JObject module in modules.OfType<JObject>().ToArray())
+			{
+				JToken? slotTagToken = module["SlotTag"];
+				string? slotTag = slotTagToken?.Type == JTokenType.String ? slotTagToken.Value<string>() : null;
+				if (string.IsNullOrWhiteSpace(slotTag))
+				{
+					LogIgnored(slotTagToken, module, "ignored plugin module with missing or empty slot tag");
+					module.Remove();
+					continue;
+				}
+
+				JToken? moduleTypeToken = module["ModuleType"];
+				if (!TryResolveExpectedType(moduleTypeToken, typeof(PluginModule), out _))
+				{
+					LogUnavailable(moduleTypeToken, module, "ignored plugin module with unavailable or invalid PluginModule type");
+					module.Remove();
+					continue;
+				}
+
+				if (slotTags.Add(slotTag)) continue;
+
+				LogIgnored(slotTagToken, module, $"ignored duplicate plugin module slot '{slotTag}'");
+				module.Remove();
 			}
 		}
 
