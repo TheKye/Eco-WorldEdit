@@ -4,7 +4,7 @@
 		<RootNamespace>Eco.Mods.WorldEdit</RootNamespace>
 		<AssemblyName>EcoWorldEdit</AssemblyName>
 		<PackageId>EcoWorldEdit</PackageId>
-		<Version>3.0.2</Version>
+		<Version>3.0.3</Version>
 		<Product>EcoWorldEdit</Product>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://mod.io/g/eco/m/ecoworldedit</PackageProjectUrl>
