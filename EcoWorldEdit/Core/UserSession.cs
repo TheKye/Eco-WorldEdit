@@ -1,5 +1,7 @@
+using Eco.Gameplay.Objects;
 using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Utils;
+using Eco.Mods.WorldEdit.Utils.Eco;
 using Eco.Shared.Math;
 
 namespace Eco.Mods.WorldEdit.Core
@@ -10,6 +12,7 @@ namespace Eco.Mods.WorldEdit.Core
 		public Player Player => this.User.Player;
 
 		public WorldRange Selection { get; private set; } = WorldRange.Invalid;
+		public WorldObjectHandle HighlightingObject { get; private set; }
 
 		public Clipboard Clipboard { get; set; } = Clipboard.Empty;
 
@@ -43,6 +46,49 @@ namespace Eco.Mods.WorldEdit.Core
 		public void SetSelection(WorldRange range)
 		{
 			this.Selection = range;
+			this.UpdateHighlightingObject();
+		}
+
+		public void DestroyHighlightingObject()
+		{
+			WorldObjectHandle handle = this.HighlightingObject;
+			this.HighlightingObject = default;
+			if (handle.TryGetObject(out WorldObject worldObject) && worldObject is WorldEditHighlightingObject) worldObject.Destroy();
+		}
+
+		private void UpdateHighlightingObject()
+		{
+			if (!this.Selection.IsSet())
+			{
+				this.DestroyHighlightingObject();
+				return;
+			}
+
+			WorldEditHighlightingObject? highlightingObject = null;
+			bool created = false;
+			if (this.HighlightingObject.TryGetObject(out WorldObject trackedObject)) highlightingObject = trackedObject as WorldEditHighlightingObject;
+
+			if (highlightingObject is null)
+			{
+				highlightingObject = WorldObjectManager.ForceAdd(
+					typeof(WorldEditHighlightingObject),
+					this.User,
+					this.Selection.min,
+					Quaternion.Identity,
+					validatePlacement: false) as WorldEditHighlightingObject ?? throw new InvalidOperationException($"Unable to create {nameof(WorldEditHighlightingObject)}.");
+				this.HighlightingObject = new WorldObjectHandle(highlightingObject);
+				created = true;
+			}
+
+			try
+			{
+				highlightingObject.SetHighlightArea(this.Selection);
+			}
+			catch
+			{
+				if (created) this.DestroyHighlightingObject();
+				throw;
+			}
 		}
 
 		public LimitedStack<HistoryEntry> GetHistory(HistoryDirection direction) => direction == HistoryDirection.Undo ? this.UndoHistory : this.RedoHistory;

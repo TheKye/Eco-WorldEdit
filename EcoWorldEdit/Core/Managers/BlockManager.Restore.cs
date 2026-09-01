@@ -151,6 +151,7 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 		private WorldObject? RestoreWorldObject(WorldEditBlock block, WorldObjectBlockData objectData, Vector3 origin, BlockRestoreContext context, CancellationToken ct)
 		{
 			ct.ThrowIfCancellationRequested();
+			if (IsIgnoredWorldObjectType(objectData.WorldObjectType)) return null;
 			if (objectData.ObjectId is Guid existingId && context.TryGetRestoredObject(existingId, out WorldObject existing)) return existing;
 
 			Guid? objectId = objectData.ObjectId;

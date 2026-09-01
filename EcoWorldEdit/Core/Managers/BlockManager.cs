@@ -109,7 +109,7 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 			if (block is WorldObjectManyBlock manyBlock)
 			{
 				bool destroyed = false;
-				List<WorldObject> objectsToDestroy = manyBlock.Objects.Where(x => !ReferenceEquals(x, protectedObject)).ToList();
+				List<WorldObject> objectsToDestroy = manyBlock.Objects.Where(x => !ReferenceEquals(x, protectedObject) && !IsIgnoredWorldObject(x)).ToList();
 				foreach (WorldObject worldObject in objectsToDestroy)
 				{
 					Item creatingItem = WorldObjectItem.GetCreatingItemTemplateFromType(worldObject.GetType());
@@ -124,7 +124,7 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 			if (block is WorldObjectBlock worldObjectBlock)
 			{
 				WorldObject worldObject = worldObjectBlock.WorldObjectHandle.Object;
-				if (ReferenceEquals(worldObject, protectedObject)) return false;
+				if (ReferenceEquals(worldObject, protectedObject) || IsIgnoredWorldObject(worldObject)) return false;
 				Item creatingItem = WorldObjectItem.GetCreatingItemTemplateFromType(worldObject.GetType());
 				if (!worldObject.Destroy()) return false;
 				this._changes.RegisterChangedBlock(position);
@@ -178,9 +178,12 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 			foreach (WorldObject worldObject in ServiceHolder<IWorldObjectManager>.Obj.All)
 			{
 				ct.ThrowIfCancellationRequested();
-				if (worldObject.WorldOccupancy.Contains(position)) yield return worldObject;
+				if (!IsIgnoredWorldObject(worldObject) && worldObject.WorldOccupancy.Contains(position)) yield return worldObject;
 			}
 		}
+
+		private static bool IsIgnoredWorldObject(WorldObject? worldObject) => worldObject is WorldEditHighlightingObject;
+		private static bool IsIgnoredWorldObjectType(Type worldObjectType) => worldObjectType == typeof(WorldEditHighlightingObject);
 
 		private static Vector3i ToBlockPosition(Vector3 position)
 		{

@@ -55,7 +55,9 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 		{
 			if (block is WorldObjectBlock worldObjectBlock)
 			{
-				DecrementUsedItem(user, WorldObjectItem.GetCreatingItemTemplateFromType(worldObjectBlock.WorldObjectHandle.Object.GetType()));
+				WorldObject worldObject = worldObjectBlock.WorldObjectHandle.Object;
+				if (worldObject is WorldEditHighlightingObject) return;
+				DecrementUsedItem(user, WorldObjectItem.GetCreatingItemTemplateFromType(worldObject.GetType()));
 				return;
 			}
 

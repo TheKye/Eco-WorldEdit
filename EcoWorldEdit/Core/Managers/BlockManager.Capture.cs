@@ -78,6 +78,7 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 		private void CaptureWorldObject(WorldObject worldObject, Vector3 origin, BlockCaptureContext context, List<WorldEditBlock> captured, CancellationToken ct)
 		{
 			ct.ThrowIfCancellationRequested();
+			if (IsIgnoredWorldObject(worldObject)) return;
 			if (!context.TryCapture(worldObject)) return;
 
 			WorldObject? parent = null;

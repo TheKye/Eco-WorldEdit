@@ -37,6 +37,7 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 
 				if (block.BlockData is WorldObjectBlockData objectData && typeof(WorldObject).IsAssignableFrom(objectData.WorldObjectType))
 				{
+					if (IsIgnoredWorldObjectType(objectData.WorldObjectType)) continue;
 					// The anchor may be fractional, but it must still remain inside the vertical world bounds.
 					range = Include(range, (int)MathF.Floor(block.LocalPosition.Y));
 					foreach (BlockOccupancy occupancy in WorldObject.GetOccupancy(objectData.WorldObjectType))

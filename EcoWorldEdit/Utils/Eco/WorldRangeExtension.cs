@@ -4,7 +4,7 @@ namespace Eco.Mods.WorldEdit.Utils.Eco
 {
 	internal static class WorldRangeExtension
 	{
-		public static bool IsSet(this WorldRange range) => !range.min.Equals(Vector3i.MaxValue) && !range.max.Equals(Vector3i.MaxValue);
+		public static bool IsSet(this WorldRange range) => !range.min.Equals(Vector3i.MaxValue) && !range.max.Equals(Vector3i.MinValue);
 
 		public static IEnumerable<int> AxisIterator(this WorldRange range, Axis a)
 		{

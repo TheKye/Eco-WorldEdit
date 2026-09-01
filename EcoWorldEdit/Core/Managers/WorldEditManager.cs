@@ -1,9 +1,11 @@
+using Eco.Gameplay.Objects;
 using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Model.BlockData;
 using Eco.Mods.WorldEdit.Model.Components;
 using Eco.Mods.WorldEdit.Serializer;
 using Eco.Mods.WorldEdit.Utils;
+using Eco.Shared.IoC;
 using Eco.Shared.Logging;
 using Eco.Shared.Utils;
 
@@ -30,6 +32,9 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 
 			this._blockDataRegistry = blockDataRegistry;
 			this._componentRegistry = componentRegistry;
+
+			this.CleanupOrphanedHighlightingObjects();
+			UserManager.OnUserLoggedOut.Add(this.OnUserLoggedOut);
 		}
 
 		public UserSession GetUserSession(User user)
@@ -40,6 +45,21 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 				this._userSessions.Add(user.Id, session);
 			}
 			return session;
+		}
+
+		private void OnUserLoggedOut(User user)
+		{
+			if (!this._userSessions.Remove(user.Id, out UserSession? session)) return;
+			session.DestroyHighlightingObject();
+		}
+
+		private void CleanupOrphanedHighlightingObjects()
+		{
+			WorldEditHighlightingObject[] objects = ServiceHolder<IWorldObjectManager>.Obj.All.OfType<WorldEditHighlightingObject>().ToArray();
+			foreach (WorldEditHighlightingObject highlightingObject in objects)
+				highlightingObject.Destroy();
+
+			if (objects.Length > 0) Log.WriteLineLoc($"WorldEdit removed {objects.Length} orphaned highlighting object(s).");
 		}
 
 		public void UpdateBlueprintList()
