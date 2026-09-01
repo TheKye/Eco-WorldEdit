@@ -1,9 +1,9 @@
-using System.Numerics;
 using Eco.Gameplay.Objects;
 using Eco.Gameplay.Occupancy;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Model.BlockData;
 using Eco.Mods.WorldEdit.Utils.Eco;
+using Eco.Shared.Math;
 
 namespace Eco.Mods.WorldEdit.Core.Managers
 {
@@ -40,12 +40,13 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 					if (IsIgnoredWorldObjectType(objectData.WorldObjectType)) continue;
 					// The anchor may be fractional, but it must still remain inside the vertical world bounds.
 					range = Include(range, (int)MathF.Floor(block.LocalPosition.Y));
+					Vector3i occupancyOrigin = block.LocalPosition.XYZi();
 					foreach (BlockOccupancy occupancy in WorldObject.GetOccupancy(objectData.WorldObjectType))
 					{
 						ct.ThrowIfCancellationRequested();
 						if (occupancy.BlockType is null) continue;
-						Vector3 occupiedPosition = block.LocalPosition + objectData.Rotation.RotateVector(occupancy.Offset);
-						range = Include(range, ToBlockPosition(occupiedPosition).Y);
+						Vector3i occupiedPosition = occupancyOrigin + objectData.Rotation.RotateVector(occupancy.Offset).XYZi();
+						range = Include(range, occupiedPosition.Y);
 					}
 					continue;
 				}

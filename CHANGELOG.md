@@ -5,6 +5,7 @@
 ### Fixed
 
 - Added an Eco-version blueprint migration that corrects stair and roof block rotations when importing blueprints created before Eco 0.10.0.0. Missing rotated variants are logged and left unchanged. ([#89](https://github.com/TheKye/Eco-WorldEdit/issues/89))
+- Fixed paste, rotation validation, and undo restoration for freely placed world objects whose exact positions are not aligned to the block grid.
 
 ## [3.0.2] - Unreleased
 

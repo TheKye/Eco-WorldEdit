@@ -284,12 +284,15 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 
 		private void ClearWorldObjectPlace(Type worldObjectType, Vector3 position, EcoQuaternion rotation, WorldObject? protectedParent, CancellationToken ct)
 		{
-			List<Vector3i> occupiedPositions = new();
-			foreach (BlockOccupancy occupancy in WorldObject.GetOccupancy(worldObjectType))
+			List<BlockOccupancy> occupancies = WorldObject.GetOccupancy(worldObjectType);
+			Vector3i occupancyOrigin = OccupancyUtils.PickOriginCell(worldObjectType, position, rotation, occupancies);
+			List<Vector3i> worldPositions = OccupancyUtils.ToWorldPositions(occupancyOrigin, occupancies, rotation);
+			List<Vector3i> occupiedPositions = new(worldPositions.Count);
+			for (int i = 0; i < occupancies.Count; i++)
 			{
 				ct.ThrowIfCancellationRequested();
-				if (occupancy.BlockType is null) continue;
-				Vector3i occupiedPosition = ToBlockPosition(position + rotation.RotateVector(occupancy.Offset));
+				if (occupancies[i].BlockType is null) continue;
+				Vector3i occupiedPosition = worldPositions[i];
 				if (!WorldHeight.IsValid(occupiedPosition.Y)) throw new WorldEditCommandException($"Cannot restore WorldObject {worldObjectType}: occupied height {occupiedPosition.Y} is outside world height {WorldHeight.Min}..{WorldHeight.Max}.");
 				occupiedPositions.Add(occupiedPosition);
 			}

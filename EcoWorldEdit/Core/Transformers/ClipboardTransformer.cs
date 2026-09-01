@@ -95,12 +95,13 @@ namespace Eco.Mods.WorldEdit.Core.Transformers
 				try { occupancies = WorldObject.GetOccupancy(objectData.WorldObjectType).ToList(); }
 				catch (Exception exception) { throw new WorldEditCommandException($"Unable to determine occupancy for WorldObject {objectData.WorldObjectType}: {exception.Message}", exception); }
 
+				Vector3i occupancyOrigin = block.LocalPosition.XYZi();
 				foreach (BlockOccupancy occupancy in occupancies)
 				{
 					ct.ThrowIfCancellationRequested();
 					if (occupancy.BlockType is null) continue;
-					Vector3 occupiedPosition = block.LocalPosition + objectData.Rotation.RotateVector(occupancy.Offset);
-					AddOccupant(occupied, ToBlockPosition(occupiedPosition), new Occupant(block, occupancy.BlockType, objectData.ObjectId, true), ct, parents);
+					Vector3i occupiedPosition = occupancyOrigin + objectData.Rotation.RotateVector(occupancy.Offset).XYZi();
+					AddOccupant(occupied, occupiedPosition, new Occupant(block, occupancy.BlockType, objectData.ObjectId, true), ct, parents);
 				}
 			}
 		}
@@ -162,14 +163,12 @@ namespace Eco.Mods.WorldEdit.Core.Transformers
 		private static bool AreRelated(Guid? first, Guid? second, IReadOnlyDictionary<Guid, Guid?> parents)
 		{
 			if (first is not Guid firstId || second is not Guid secondId) return false;
-			return parents.TryGetValue(firstId, out Guid? firstParent) && firstParent == secondId ||
-				parents.TryGetValue(secondId, out Guid? secondParent) && secondParent == firstId;
+			return parents.TryGetValue(firstId, out Guid? firstParent) && firstParent == secondId || parents.TryGetValue(secondId, out Guid? secondParent) && secondParent == firstId;
 		}
 
 		private static Vector3i ToBlockPosition(Vector3 position)
 		{
-			if (!BlockUtils.TryGetBlockPosition(position, out Vector3i blockPosition))
-				throw new WorldEditCommandException($"Rotated WorldObject occupancy position {position} is not aligned to the block grid.");
+			if (!BlockUtils.TryGetBlockPosition(position, out Vector3i blockPosition)) throw new WorldEditCommandException($"Rotated WorldObject occupancy position {position} is not aligned to the block grid.");
 			return blockPosition;
 		}
 
@@ -181,8 +180,7 @@ namespace Eco.Mods.WorldEdit.Core.Transformers
 
 		private static void ValidateDimension(Vector3i dimension)
 		{
-			if (dimension.X <= 0 || dimension.Y <= 0 || dimension.Z <= 0)
-				throw new WorldEditCommandException($"Clipboard dimension {dimension} is invalid; all dimensions must be positive.");
+			if (dimension.X <= 0 || dimension.Y <= 0 || dimension.Z <= 0) throw new WorldEditCommandException($"Clipboard dimension {dimension} is invalid; all dimensions must be positive.");
 		}
 
 		private sealed record Occupant(WorldEditBlock Block, Type OccupancyBlockType, Guid? ObjectId, bool IsWorldObject);
