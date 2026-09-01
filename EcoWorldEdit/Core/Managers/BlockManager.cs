@@ -5,6 +5,7 @@ using Eco.Gameplay.Items;
 using Eco.Gameplay.Objects;
 using Eco.Gameplay.Plants;
 using Eco.Mods.WorldEdit.Core.Commands;
+using Eco.Mods.WorldEdit.Utils.Eco;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
 using Eco.Shared.IoC;
 using Eco.Shared.Logging;
@@ -38,6 +39,11 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 			ct.ThrowIfCancellationRequested();
 			if (this.HasPendingBatch) throw new InvalidOperationException("Commit the pending block batch before applying an immediate block change.");
 			ValidateBlockType(blockType);
+			if (!WorldHeight.IsValid(position.Y))
+			{
+				Log.WriteWarningLineLoc($"Skipped setting block {blockType} at {position}: height is outside the world.");
+				return false;
+			}
 			if (IsImpenetrable(position))
 			{
 				Log.WriteWarningLineLoc($"Skipped setting block {blockType} at {position}: position is impenetrable.");
@@ -65,6 +71,7 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 		public bool TrySetColor(Vector3i position, ByteColor color, CancellationToken ct = default)
 		{
 			ct.ThrowIfCancellationRequested();
+			if (!WorldHeight.IsValid(position.Y)) return false;
 			if (IsImpenetrable(position)) return false;
 			this.CaptureChange(position, ct);
 			if (color == ByteColor.Clear) BlockColorManager.Obj.ClearColors([position], true);
@@ -76,6 +83,7 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 		public bool TryGrowPlant(Vector3i position, CancellationToken ct = default)
 		{
 			ct.ThrowIfCancellationRequested();
+			if (!WorldHeight.IsValid(position.Y)) return false;
 			Plant? plant = EcoSim.PlantSim.GetPlant(position);
 			if (plant is null || plant.Position != position) return false;
 			this.CaptureChange(position, ct);
@@ -89,6 +97,7 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 		private bool ClearPosition(Vector3i position, bool deleteBlock, WorldObject? protectedObject = null, CancellationToken cancellationToken = default)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
+			if (!WorldHeight.IsValid(position.Y)) return false;
 			if (IsImpenetrable(position))
 			{
 				Log.WriteWarningLineLoc($"Skipped clearing position {position}: position is impenetrable.");

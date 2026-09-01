@@ -23,9 +23,16 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 			{
 				(Direction direction, int amount) = CommandParsing.ParseDirectionAndAmount(user, directionAndAmount);
 				if (direction is Direction.Unknown or Direction.None) throw new WorldEditCommandException("Unable to determine direction.");
+
 				CommandResult result = CommandDispatcher.Obj.Execute(user, new StackCommand(direction, amount, offset));
-				if (result.Result.Success) user.Player.MsgLoc($"{result.BlocksChanged} blocks changed in {result.Elapsed.TotalMilliseconds}ms.");
-				else user.Player.Error(result.Result.Message);
+				if (result.Result.Success)
+				{
+					user.Player.MsgLoc($"{result.BlocksChanged} blocks changed in {result.Elapsed.TotalMilliseconds}ms.");
+				}
+				else
+				{
+					user.Player.Error(result.Result.Message);
+				}
 			}
 			catch (WorldEditCommandException exception) { user.Player.ErrorLocStr(exception.Message); }
 			catch (Exception exception) { Log.WriteException(exception); }
@@ -50,6 +57,13 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 				_ => selection.LengthInc,
 			};
 			Vector3 step = (Vector3)(Direction.ToVec() * (selectionSize + Gap));
+			if (Amount > 0 && context.BlockManager.GetPlacementHeightRange(snapshot, false, ct) is { } sourceRange)
+			{
+				int firstOffsetY = checked((int)step.Y);
+				int lastOffsetY = checked(firstOffsetY * Amount);
+				PlacementHeightRange targetRange = sourceRange.Offset(firstOffsetY).Union(sourceRange.Offset(lastOffsetY));
+				if (!targetRange.FitsWorld()) throw new WorldEditCommandException($"Cannot stack selection at height {targetRange.MinY}..{targetRange.MaxY}. Valid world height is {WorldHeight.Min}..{WorldHeight.Max}.");
+			}
 			for (int copy = 1; copy <= Amount; copy++)
 			{
 				ct.ThrowIfCancellationRequested();

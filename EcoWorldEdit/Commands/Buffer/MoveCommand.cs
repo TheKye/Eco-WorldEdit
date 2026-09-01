@@ -36,12 +36,18 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 		{
 			if (!context.Selection.IsSet()) throw new WorldEditCommandException("Please set both points first!");
 			WorldRange selection = context.Selection.FixToWorldSize();
+			Vector3i offset = Direction.ToVec() * Amount;
 			List<WorldEditBlock> snapshot = new();
 			BlockCaptureContext captureContext = new();
 			foreach (Vector3i position in selection.XYZIterInc())
 			{
 				ct.ThrowIfCancellationRequested();
 				snapshot.AddRange(context.BlockManager.Capture(position, Vector3.Zero, captureContext, ct));
+			}
+			if (context.BlockManager.GetPlacementHeightRange(snapshot, false, ct) is { } sourceRange)
+			{
+				PlacementHeightRange targetRange = sourceRange.Offset(offset.Y);
+				if (!targetRange.FitsWorld()) throw new WorldEditCommandException($"Cannot move selection to height {targetRange.MinY}..{targetRange.MaxY}. Valid world height is {WorldHeight.Min}..{WorldHeight.Max}.");
 			}
 
 			foreach (Vector3i position in selection.XYZIterInc())
@@ -51,7 +57,6 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 			}
 			context.BlockManager.CommitBatch(ct);
 
-			Vector3i offset = Direction.ToVec() * Amount;
 			context.BlockManager.Restore(snapshot, (Vector3)offset, ct);
 			context.UserSession.SetSelection(new WorldRange(selection.min + offset, selection.max + offset));
 		}

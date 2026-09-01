@@ -10,6 +10,7 @@ using Eco.Gameplay.Settlements.ClaimStakes.Internal;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Model.BlockData;
 using Eco.Mods.WorldEdit.Model.Components;
+using Eco.Mods.WorldEdit.Utils.Eco;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
 using Eco.Shared.Logging;
 using Eco.Shared.Math;
@@ -116,6 +117,11 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 		{
 			ct.ThrowIfCancellationRequested();
 			Vector3i position = ToBlockPosition(origin + block.LocalPosition);
+			if (!WorldHeight.IsValid(position.Y))
+			{
+				Log.WriteWarningLineLoc($"Skipped restoring plant {plantData.PlantType} at {position}: height is outside the world.");
+				return;
+			}
 			if (IsImpenetrable(position))
 			{
 				Log.WriteWarningLineLoc($"Skipped restoring plant {plantData.PlantType} at {position}: position is impenetrable.");
@@ -277,11 +283,19 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 
 		private void ClearWorldObjectPlace(Type worldObjectType, Vector3 position, EcoQuaternion rotation, WorldObject? protectedParent, CancellationToken ct)
 		{
+			List<Vector3i> occupiedPositions = new();
 			foreach (BlockOccupancy occupancy in WorldObject.GetOccupancy(worldObjectType))
 			{
 				ct.ThrowIfCancellationRequested();
 				if (occupancy.BlockType is null) continue;
 				Vector3i occupiedPosition = ToBlockPosition(position + rotation.RotateVector(occupancy.Offset));
+				if (!WorldHeight.IsValid(occupiedPosition.Y)) throw new WorldEditCommandException($"Cannot restore WorldObject {worldObjectType}: occupied height {occupiedPosition.Y} is outside world height {WorldHeight.Min}..{WorldHeight.Max}.");
+				occupiedPositions.Add(occupiedPosition);
+			}
+
+			foreach (Vector3i occupiedPosition in occupiedPositions)
+			{
+				ct.ThrowIfCancellationRequested();
 				this.CaptureChange(occupiedPosition, ct);
 				this.ClearPosition(occupiedPosition, true, protectedParent, ct);
 			}

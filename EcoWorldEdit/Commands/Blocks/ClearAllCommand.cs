@@ -30,7 +30,7 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 		{
 			WorldRange area = WorldRange.SurroundingSpace(Origin, Radius);
 			area.min.y = Origin.y;
-			area.max.y = Shared.Voxel.World.VoxelSize.y;
+			area.max.y = WorldHeight.Max;
 			area = area.FixToWorldSize();
 			foreach (Vector3i position in area.XYZIterInc())
 			{

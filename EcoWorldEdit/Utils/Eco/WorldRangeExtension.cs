@@ -1,5 +1,4 @@
 using Eco.Shared.Math;
-using Eco.Shared.Utils;
 
 namespace Eco.Mods.WorldEdit.Utils.Eco
 {
@@ -44,10 +43,9 @@ namespace Eco.Mods.WorldEdit.Utils.Eco
 			range.Fix(worldSize);
 			if (worldSize != default)
 			{
-				if (MathUtil.Min(start.y, end.y) < 0)
-					range.min.y = 0;
-				if (MathUtil.Max(start.y, end.y) > worldSize.y)
-					range.max.y = worldSize.y;
+				// Unlike X and Z, the vertical axis does not wrap. Restore the original vertical ordering after WorldRange.Fix and clamp it independently.
+				range.min.y = WorldHeight.Clamp(Math.Min(start.y, end.y));
+				range.max.y = WorldHeight.Clamp(Math.Max(start.y, end.y));
 			}
 			return range;
 		}

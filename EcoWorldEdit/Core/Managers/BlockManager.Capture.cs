@@ -8,6 +8,8 @@ using Eco.Gameplay.Plants;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Model.BlockData;
 using Eco.Mods.WorldEdit.Model.Components;
+using Eco.Mods.WorldEdit.Utils.Eco;
+using Eco.Mods.WorldEdit.Utils.Exceptions;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
 using Eco.Simulation;
@@ -25,6 +27,7 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 		{
 			ct.ThrowIfCancellationRequested();
 			ArgumentNullException.ThrowIfNull(context);
+			if (!WorldHeight.IsValid(worldPosition.Y)) throw new WorldEditCommandException($"Cannot capture position {worldPosition}: height is outside world height {WorldHeight.Min}..{WorldHeight.Max}.");
 
 			List<WorldEditBlock> captured = new();
 			Block block = World.GetBlock(worldPosition);

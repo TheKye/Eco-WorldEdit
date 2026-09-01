@@ -4,6 +4,7 @@ using Eco.Mods.WorldEdit.Commands.General;
 using Eco.Mods.WorldEdit.Core;
 using Eco.Mods.WorldEdit.Core.Commands;
 using Eco.Mods.WorldEdit.Core.Managers;
+using Eco.Mods.WorldEdit.Utils.Eco;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
 using Eco.Shared.Logging;
 using Eco.Shared.Math;
@@ -43,6 +44,11 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 			if (clipboard.Count <= 0) throw new WorldEditCommandException($"Please /copy a selection or /import blueprint first!");
 			Vector3i playerPos = context.User.Position.Round();
 			BlockManager blockManager = context.BlockManager;
+			if (blockManager.GetPlacementHeightRange(clipboard.Blocks, clipboard.Plants, clipboard.WorldObjects, SkipEmpty, ct) is { } localRange)
+			{
+				PlacementHeightRange targetRange = localRange.Offset(playerPos.Y);
+				if (!targetRange.FitsWorld()) throw new WorldEditCommandException($"Cannot paste clipboard at height {targetRange.MinY}..{targetRange.MaxY}. Valid world height is {WorldHeight.Min}..{WorldHeight.Max}.");
+			}
 			blockManager.Restore(clipboard.Blocks, clipboard.Plants, clipboard.WorldObjects, playerPos, SkipEmpty, ct);
 		}
 	}
