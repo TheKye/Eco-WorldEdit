@@ -2,9 +2,7 @@ using System.Numerics;
 using Eco.Mods.WorldEdit.Core;
 using Eco.Mods.WorldEdit.Core.Commands;
 using Eco.Mods.WorldEdit.Core.Managers;
-using Eco.Mods.WorldEdit.Utils;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
-using Eco.Shared.Logging;
 
 namespace Eco.Mods.WorldEdit.Commands.History
 {
@@ -99,8 +97,7 @@ namespace Eco.Mods.WorldEdit.Commands.History
 
 		private static void Notify(CommandContext context, FormattableString message)
 		{
-			try { context.Player.MsgLoc(message); }
-			catch (Exception exception) { Log.WriteException(exception); }
+			Logging.Success(message, context.Player);
 		}
 	}
 }

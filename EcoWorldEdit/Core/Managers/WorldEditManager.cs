@@ -4,9 +4,7 @@ using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Model.BlockData;
 using Eco.Mods.WorldEdit.Model.Components;
 using Eco.Mods.WorldEdit.Serializer;
-using Eco.Mods.WorldEdit.Utils;
 using Eco.Shared.IoC;
-using Eco.Shared.Logging;
 using Eco.Shared.Utils;
 
 namespace Eco.Mods.WorldEdit.Core.Managers
@@ -59,7 +57,7 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 			foreach (WorldEditHighlightingObject highlightingObject in objects)
 				highlightingObject.Destroy();
 
-			if (objects.Length > 0) Log.WriteLineLoc($"WorldEdit removed {objects.Length} orphaned highlighting object(s).");
+			if (objects.Length > 0) Logging.Info($"WorldEdit removed {objects.Length} orphaned highlighting object(s).");
 		}
 
 		public void UpdateBlueprintList()
@@ -90,7 +88,7 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 						this.BlueprintList[file] = blueprintInfo;
 					}
 				}
-				catch (Exception e) { Log.WriteWarningLineLoc($"Unable to load file [{file}] error: {e.Message}"); }
+				catch (Exception e) { Logging.Warning($"Unable to load file [{file}] error: {e.Message}"); }
 			}
 		}
 	}

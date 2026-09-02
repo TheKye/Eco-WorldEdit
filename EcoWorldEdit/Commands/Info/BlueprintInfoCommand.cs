@@ -5,9 +5,7 @@ using Eco.Mods.WorldEdit.Commands.General;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Model.BlockData;
 using Eco.Mods.WorldEdit.Serializer;
-using Eco.Mods.WorldEdit.Utils;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
-using Eco.Shared.Logging;
 using Eco.Shared.Math;
 using Eco.World.Blocks;
 
@@ -58,12 +56,12 @@ namespace Eco.Mods.WorldEdit.Commands.Info
 					Directory.CreateDirectory(SchematicUtils.GetSchematicDirectory());
 					string safeName = SchematicUtils.SanitizeFileName(outFileName);
 					File.WriteAllText(Path.Combine(SchematicUtils.GetSchematicDirectory(), safeName + ".txt"), report.ToString());
-					user.Player.MsgLoc($"Report saved into file with name <{safeName}.txt>");
+					Logging.Success($"Report saved into file with name <{safeName}.txt>", user.Player);
 				}
 				user.Player.OpenInfoPanel("WorldEdit Blueprint Report", report.ToString(), "WorldEditBInfo");
 			}
-			catch (WorldEditCommandException exception) { user.Player.ErrorLocStr(exception.Message); }
-			catch (Exception exception) { Log.WriteException(exception); }
+			catch (WorldEditCommandException exception) { Logging.ErrorLocStr(exception.Message, user.Player); }
+			catch (Exception exception) { Logging.Exception(exception, user.Player); }
 		}
 	}
 }

@@ -12,7 +12,6 @@ using Eco.Mods.WorldEdit.Model.BlockData;
 using Eco.Mods.WorldEdit.Model.Components;
 using Eco.Mods.WorldEdit.Utils.Eco;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
-using Eco.Shared.Logging;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
 using Eco.Simulation;
@@ -119,19 +118,19 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 			Vector3i position = ToBlockPosition(origin + block.LocalPosition);
 			if (!WorldHeight.IsValid(position.Y))
 			{
-				Log.WriteWarningLineLoc($"Skipped restoring plant {plantData.PlantType} at {position}: height is outside the world.");
+				Logging.Warning($"Skipped restoring plant {plantData.PlantType} at {position}: height is outside the world.");
 				return;
 			}
 			if (IsImpenetrable(position))
 			{
-				Log.WriteWarningLineLoc($"Skipped restoring plant {plantData.PlantType} at {position}: position is impenetrable.");
+				Logging.Warning($"Skipped restoring plant {plantData.PlantType} at {position}: position is impenetrable.");
 				return;
 			}
 
 			PlantSpecies? species = FindPlantSpecies(plantData.PlantType, ct);
 			if (species is null)
 			{
-				Log.WriteWarningLineLoc($"Skipped restoring plant {plantData.PlantType} at {position}: matching PlantSpecies was not found.");
+				Logging.Warning($"Skipped restoring plant {plantData.PlantType} at {position}: matching PlantSpecies was not found.");
 				return;
 			}
 
@@ -218,7 +217,7 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 							Result result = canCreate.Success ? inventory.TryAddItemsNonUnique(stack.ItemType, stack.Quantity, this._userSession.User) : canCreate;
 							if (result.Failed)
 							{
-								this._userSession.Player.Error(result.Message);
+								Logging.Error(result.Message, this._userSession.Player);
 								continue;
 							}
 							StrangeItemProtection.IncrementUsedItem(this._userSession.User, item, stack.Quantity);

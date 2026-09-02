@@ -8,7 +8,6 @@ using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Model.BlockData;
 using Eco.Mods.WorldEdit.Utils.Eco;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
-using Eco.Shared.Logging;
 using Eco.Shared.Math;
 
 namespace Eco.Mods.WorldEdit.Commands.Buffer
@@ -22,10 +21,10 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 			try
 			{
 				CommandResult result = CommandDispatcher.Obj.Execute(user, new CopyCommand());
-				if (result.Result.Success) user.Player.MsgLoc($"Copy done in {result.Elapsed.TotalMilliseconds}ms.");
-				else user.Player.Error(result.Result.Message);
+				if (result.Result.Success) Logging.Success($"Copy done in {result.Elapsed.TotalMilliseconds}ms.", user.Player);
+				else Logging.Error(result.Result.Message, user.Player);
 			}
-			catch (Exception exception) { Log.WriteException(exception); }
+			catch (Exception exception) { Logging.Exception(exception, user.Player); }
 		}
 
 		public void Execute(CommandContext context, CancellationToken ct)

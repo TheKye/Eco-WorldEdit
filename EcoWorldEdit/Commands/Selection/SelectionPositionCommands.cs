@@ -3,9 +3,7 @@ using Eco.Gameplay.Systems.Messaging.Chat.Commands;
 using Eco.Mods.WorldEdit.Commands.General;
 using Eco.Mods.WorldEdit.Core;
 using Eco.Mods.WorldEdit.Core.Managers;
-using Eco.Mods.WorldEdit.Utils;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
-using Eco.Shared.Logging;
 using Eco.Shared.Math;
 
 namespace Eco.Mods.WorldEdit.Commands.Selection
@@ -26,9 +24,9 @@ namespace Eco.Mods.WorldEdit.Commands.Selection
 			{
 				UserSession session = WorldEditManager.Obj.GetUserSession(user);
 				session.ResetSelection();
-				user.Player.MsgLocStr("WorldEdit: Positions reset");
+				Logging.SuccessLocStr("WorldEdit: Positions reset", user.Player);
 			}
-			catch (Exception exception) { Log.WriteException(exception); }
+			catch (Exception exception) { Logging.Exception(exception, user.Player); }
 		}
 
 		private static void SetPosition(User user, string? coordinate, bool first)
@@ -39,10 +37,10 @@ namespace Eco.Mods.WorldEdit.Commands.Selection
 				UserSession session = WorldEditManager.Obj.GetUserSession(user);
 				if (first) session.SetFirstPosition(position);
 				else session.SetSecondPosition(position);
-				user.Player.MsgLoc($"{(first ? "First" : "Second")} Position set to {position}");
+				Logging.Success($"{(first ? "First" : "Second")} Position set to {position}", user.Player);
 			}
-			catch (WorldEditCommandException exception) { user.Player.ErrorLocStr(exception.Message); }
-			catch (Exception exception) { Log.WriteException(exception); }
+			catch (WorldEditCommandException exception) { Logging.ErrorLocStr(exception.Message, user.Player); }
+			catch (Exception exception) { Logging.Exception(exception, user.Player); }
 		}
 	}
 }

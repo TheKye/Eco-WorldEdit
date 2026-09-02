@@ -1,5 +1,4 @@
 using Eco.Mods.WorldEdit.Core.Managers;
-using Eco.Shared.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -30,7 +29,7 @@ namespace Eco.Mods.WorldEdit.Serializer.Converters
 			}
 			catch (Exception ex)
 			{
-				Log.WriteErrorLineLoc($"Error while converting [{reader.Value}] ({reader.TokenType}) to System.Type: {ex.Message}");
+				Logging.Error($"Error while converting [{reader.Value}] ({reader.TokenType}) to System.Type: {ex.Message}");
 			}
 			return null;
 		}

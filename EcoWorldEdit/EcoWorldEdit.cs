@@ -2,8 +2,6 @@ using System.Reflection;
 using Eco.Core.Plugins.Interfaces;
 using Eco.Core.Utils;
 using Eco.Mods.WorldEdit.Core.Managers;
-using Eco.Shared.Localization;
-using Eco.Shared.Logging;
 
 namespace Eco.Mods.WorldEdit
 {
@@ -13,7 +11,7 @@ namespace Eco.Mods.WorldEdit
 		public const string SchematicDirectoryName = "Blueprints";
 		public const string SchematicDefaultExtension = ".ecobp";
 
-		public EcoWorldEdit() { Log.WriteLine(Localizer.Do($"Using WorldEdit version {Version}")); }
+		public EcoWorldEdit() { Logging.Info($"Using WorldEdit version {Version}"); }
 
 		public static ModRegistration Register() => new()
 		{

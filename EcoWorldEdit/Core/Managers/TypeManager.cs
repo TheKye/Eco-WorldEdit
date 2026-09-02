@@ -1,4 +1,3 @@
-using Eco.Shared.Logging;
 using Eco.Shared.Utils;
 
 namespace Eco.Mods.WorldEdit.Core.Managers
@@ -15,7 +14,7 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 			}
 			catch (Exception ex)
 			{
-				Log.WriteException(ex);
+				Logging.Exception(ex);
 				return null;
 			}
 		}

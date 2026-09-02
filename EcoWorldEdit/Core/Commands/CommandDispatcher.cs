@@ -4,7 +4,6 @@ using Eco.Gameplay.Players;
 using Eco.Gameplay.Rooms;
 using Eco.Mods.WorldEdit.Core.Managers;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
-using Eco.Shared.Logging;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
 
@@ -72,7 +71,7 @@ namespace Eco.Mods.WorldEdit.Core.Commands
 			}
 			catch (Exception exception)
 			{
-				Log.WriteException(exception);
+				Logging.Exception(exception, context.Player);
 				Result result = Result.FailLocStr("An unexpected error occurred.");
 				result.AppendDebug(exception.Message);
 				return new(result, context.ChangedBlocks, invocation.Elapsed);
@@ -84,11 +83,13 @@ namespace Eco.Mods.WorldEdit.Core.Commands
 			try
 			{
 				if (invocation.Command.HistoryPolicy == CommandHistoryPolicy.RecordWorldChanges)
+				{
 					this.CommitChanges(invocation.Context.UserSession, invocation.Context.Changes);
+				}
 			}
 			catch (Exception exception)
 			{
-				Log.WriteException(exception);
+				Logging.Exception(exception, invocation.Context.Player);
 			}
 
 			try
@@ -97,7 +98,7 @@ namespace Eco.Mods.WorldEdit.Core.Commands
 			}
 			catch (Exception exception)
 			{
-				Log.WriteException(exception);
+				Logging.Exception(exception, invocation.Context.Player);
 			}
 			finally
 			{
@@ -111,7 +112,7 @@ namespace Eco.Mods.WorldEdit.Core.Commands
 			bool discardedRecovery = userSession.DiscardPendingRecoveries();
 			userSession.UndoHistory.Push(new HistoryEntry(changeSet));
 			userSession.RedoHistory.Clear();
-			if (discardedRecovery) userSession.Player.MsgLoc($"A pending history recovery was discarded because another world-changing command was executed.");
+			if (discardedRecovery) Logging.Success($"A pending history recovery was discarded because another world-changing command was executed.", userSession.Player);
 		}
 
 		private void ScheduleRoomRecalculation(IEnumerable<CommandScope> scopes)

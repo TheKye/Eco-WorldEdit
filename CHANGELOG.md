@@ -9,6 +9,7 @@
 ### Changed
 
 - Updated the required Eco reference assemblies to 0.14.0.3 beta release-1060.
+- Centralized WorldEdit logging so player-visible errors and command exceptions are recorded in the server log, while successful command messages are also logged in debug builds.
 
 ### Fixed
 

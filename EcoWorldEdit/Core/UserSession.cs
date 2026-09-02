@@ -1,6 +1,5 @@
 using Eco.Gameplay.Objects;
 using Eco.Gameplay.Players;
-using Eco.Mods.WorldEdit.Utils;
 using Eco.Mods.WorldEdit.Utils.Eco;
 using Eco.Shared.Math;
 

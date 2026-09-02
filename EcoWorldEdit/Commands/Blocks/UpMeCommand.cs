@@ -3,8 +3,6 @@ using Eco.Gameplay.Systems.Messaging.Chat.Commands;
 using Eco.Mods.TechTree;
 using Eco.Mods.WorldEdit.Commands.General;
 using Eco.Mods.WorldEdit.Core.Commands;
-using Eco.Mods.WorldEdit.Utils;
-using Eco.Shared.Logging;
 using Eco.Shared.Math;
 
 namespace Eco.Mods.WorldEdit.Commands.Blocks
@@ -18,10 +16,10 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 			try
 			{
 				CommandResult result = CommandDispatcher.Obj.Execute(user, new UpMeCommand(count, CommandParsing.GetPosition(user)));
-				if (result.Result.Success) user.Player.MsgLoc($"Moved up in {result.Elapsed.TotalMilliseconds}ms.");
-				else user.Player.Error(result.Result.Message);
+				if (result.Result.Success) Logging.Success($"Moved up in {result.Elapsed.TotalMilliseconds}ms.", user.Player);
+				else Logging.Error(result.Result.Message, user.Player);
 			}
-			catch (Exception exception) { Log.WriteException(exception); }
+			catch (Exception exception) { Logging.Exception(exception, user.Player); }
 		}
 
 		public void Execute(CommandContext context, CancellationToken ct)

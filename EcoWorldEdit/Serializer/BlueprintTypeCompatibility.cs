@@ -5,7 +5,6 @@ using Eco.Gameplay.Objects;
 using Eco.Mods.WorldEdit.Core.Managers;
 using Eco.Mods.WorldEdit.Model.BlockData;
 using Eco.Mods.WorldEdit.Model.Components;
-using Eco.Shared.Logging;
 using Eco.Simulation.Types;
 using Eco.World.Blocks;
 using Newtonsoft.Json.Linq;
@@ -254,7 +253,7 @@ namespace Eco.Mods.WorldEdit.Serializer
 		{
 			string path = token?.Path ?? owner.Path;
 			if (string.IsNullOrEmpty(path)) path = "$";
-			Log.WriteWarningLineLoc($"Blueprint compatibility: {message}. Path: {path}.");
+			Logging.Warning($"Blueprint compatibility: {message}. Path: {path}.");
 		}
 	}
 }

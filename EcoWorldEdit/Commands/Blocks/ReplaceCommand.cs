@@ -2,10 +2,8 @@ using Eco.Gameplay.Players;
 using Eco.Gameplay.Systems.Messaging.Chat.Commands;
 using Eco.Mods.WorldEdit.Commands.General;
 using Eco.Mods.WorldEdit.Core.Commands;
-using Eco.Mods.WorldEdit.Utils;
 using Eco.Mods.WorldEdit.Utils.Eco;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
-using Eco.Shared.Logging;
 using Eco.Shared.Math;
 using Eco.World.Blocks;
 
@@ -23,11 +21,11 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 				bool replaceAll = string.IsNullOrWhiteSpace(replaceType);
 				Type replacement = replaceAll ? find : BlockUtils.GetBlockType(replaceType) ?? throw new WorldEditCommandException($"No BlockType with name {replaceType} found!");
 				CommandResult result = CommandDispatcher.Obj.Execute(user, new ReplaceCommand(find, replacement, replaceAll));
-				if (result.Result.Success) user.Player.MsgLoc($"{result.BlocksChanged} blocks changed in {result.Elapsed.TotalMilliseconds}ms.");
-				else user.Player.Error(result.Result.Message);
+				if (result.Result.Success) Logging.Success($"{result.BlocksChanged} blocks changed in {result.Elapsed.TotalMilliseconds}ms.", user.Player);
+				else Logging.Error(result.Result.Message, user.Player);
 			}
-			catch (WorldEditCommandException exception) { user.Player.ErrorLocStr(exception.Message); }
-			catch (Exception exception) { Log.WriteException(exception); }
+			catch (WorldEditCommandException exception) { Logging.ErrorLocStr(exception.Message, user.Player); }
+			catch (Exception exception) { Logging.Exception(exception, user.Player); }
 		}
 
 		public void Execute(CommandContext context, CancellationToken ct)

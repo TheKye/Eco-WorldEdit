@@ -1,6 +1,5 @@
 using Eco.Gameplay.Players;
 using Eco.Gameplay.Systems.Messaging.Chat.Commands;
-using Eco.Shared.Logging;
 
 namespace Eco.Mods.WorldEdit.Commands.General
 {
@@ -14,7 +13,7 @@ namespace Eco.Mods.WorldEdit.Commands.General
 			{
 				user.Inventory.AddItems(WandToolItem.GetWandItemStack());
 			}
-			catch (Exception e) { Log.WriteException(e); }
+			catch (Exception e) { Logging.Exception(e, user.Player); }
 		}
 
 		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Removes a WorldEdit wand from your inventory.", shortCut: "rmwand", level: ChatAuthorizationLevel.Admin)]
@@ -24,7 +23,7 @@ namespace Eco.Mods.WorldEdit.Commands.General
 			{
 				user.Inventory.TryRemoveItems(WandToolItem.GetWandItemStack());
 			}
-			catch (Exception e) { Log.WriteException(e); }
+			catch (Exception e) { Logging.Exception(e, user.Player); }
 		}
 	}
 }

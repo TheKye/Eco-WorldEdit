@@ -3,10 +3,8 @@ using Eco.Gameplay.Systems.Messaging.Chat.Commands;
 using Eco.Mods.WorldEdit.Commands.General;
 using Eco.Mods.WorldEdit.Core;
 using Eco.Mods.WorldEdit.Core.Managers;
-using Eco.Mods.WorldEdit.Utils;
 using Eco.Mods.WorldEdit.Utils.Eco;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
-using Eco.Shared.Logging;
 using Eco.Shared.Math;
 
 namespace Eco.Mods.WorldEdit.Commands.Selection
@@ -39,10 +37,10 @@ namespace Eco.Mods.WorldEdit.Commands.Selection
 				}
 
 				session.SetSelection(selection);
-				user.Player.MsgLoc($"Expanded selection {amount} {direction}");
+				Logging.Success($"Expanded selection {amount} {direction}", user.Player);
 			}
-			catch (WorldEditCommandException exception) { user.Player.ErrorLocStr(exception.Message); }
-			catch (Exception exception) { Log.WriteException(exception); }
+			catch (WorldEditCommandException exception) { Logging.ErrorLocStr(exception.Message, user.Player); }
+			catch (Exception exception) { Logging.Exception(exception, user.Player); }
 		}
 	}
 }

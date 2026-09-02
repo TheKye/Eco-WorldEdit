@@ -3,8 +3,6 @@ using Eco.Gameplay.Systems.Messaging.Chat.Commands;
 using Eco.Mods.WorldEdit.Commands.General;
 using Eco.Mods.WorldEdit.Core;
 using Eco.Mods.WorldEdit.Core.Managers;
-using Eco.Mods.WorldEdit.Utils;
-using Eco.Shared.Logging;
 using Eco.Shared.Math;
 using Eco.Shared.Voxel;
 
@@ -24,10 +22,10 @@ namespace Eco.Mods.WorldEdit.Commands.Selection
 				WorldRange selection = new(plot.X_Z(position.y - 1), oppositeCorner.X_Z(position.y - 1));
 				UserSession session = WorldEditManager.Obj.GetUserSession(user);
 				session.SetSelection(selection);
-				user.Player.MsgLoc($"First Position now at {selection.min}");
-				user.Player.MsgLoc($"Second Position now at {selection.max}");
+				Logging.Success($"First Position now at {selection.min}", user.Player);
+				Logging.Success($"Second Position now at {selection.max}", user.Player);
 			}
-			catch (Exception exception) { Log.WriteException(exception); }
+			catch (Exception exception) { Logging.Exception(exception, user.Player); }
 		}
 	}
 }

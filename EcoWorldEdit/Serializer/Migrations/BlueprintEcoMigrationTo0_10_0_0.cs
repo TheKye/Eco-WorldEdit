@@ -1,6 +1,5 @@
 using Eco.Mods.WorldEdit.Core.Managers;
 using Eco.Mods.WorldEdit.Model;
-using Eco.Shared.Logging;
 using Newtonsoft.Json.Linq;
 
 using EcoBlock = Eco.World.Blocks.Block;
@@ -137,7 +136,7 @@ namespace Eco.Mods.WorldEdit.Serializer.Migrations
 			if (targetType is null || !typeof(EcoBlock).IsAssignableFrom(targetType))
 			{
 				string path = string.IsNullOrEmpty(typeToken!.Path) ? "$" : typeToken.Path;
-				Log.WriteWarningLineLoc($"Blueprint Eco migration to {MigrationVersion}: rotated variant '{targetFullName}' for '{sourceTypeString}' was not found; kept the original block type. Path: {path}.");
+				Logging.Warning($"Blueprint Eco migration to {MigrationVersion}: rotated variant '{targetFullName}' for '{sourceTypeString}' was not found; kept the original block type. Path: {path}.");
 				return;
 			}
 

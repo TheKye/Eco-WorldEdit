@@ -1,21 +1,19 @@
+using System.ComponentModel;
+using Eco.Core.Items;
+using Eco.Gameplay.DynamicValues;
+using Eco.Gameplay.Interactions.Interactors;
+using Eco.Gameplay.Items;
+using Eco.Gameplay.Players;
+using Eco.Mods.WorldEdit.Core;
+using Eco.Mods.WorldEdit.Core.Managers;
+using Eco.Shared.Items;
+using Eco.Shared.Localization;
+using Eco.Shared.Math;
+using Eco.Shared.Serialization;
+using Eco.Shared.SharedTypes;
+
 namespace Eco.Mods.WorldEdit
 {
-	using System;
-	using System.ComponentModel;
-	using Eco.Core.Items;
-	using Eco.Gameplay.DynamicValues;
-	using Eco.Gameplay.Interactions.Interactors;
-	using Eco.Gameplay.Items;
-	using Eco.Gameplay.Players;
-	using Eco.Mods.WorldEdit.Core;
-	using Eco.Mods.WorldEdit.Core.Managers;
-	using Eco.Shared.Items;
-	using Eco.Shared.Localization;
-	using Eco.Shared.Logging;
-	using Eco.Shared.Math;
-	using Eco.Shared.Serialization;
-	using Eco.Shared.SharedTypes;
-
 	[Serialized]
 	[LocDisplayName("Wand Tool")]
 	[LocDescription("Does magical World Edit things")]
@@ -53,11 +51,11 @@ namespace Eco.Mods.WorldEdit
 				UserSession userSession = WorldEditManager.Obj.GetUserSession(player.User);
 				userSession.SetFirstPosition(pos);
 
-				player.MsgLoc($"First position set to ({pos.x}, {pos.y}, {pos.z})");
+				Logging.Success($"First position set to ({pos.x}, {pos.y}, {pos.z})", player);
 			}
 			catch (Exception e)
 			{
-				Log.WriteError(Localizer.Do($"{e}"));
+				Logging.Exception(e, player);
 			}
 		}
 
@@ -81,11 +79,11 @@ namespace Eco.Mods.WorldEdit
 				UserSession userSession = WorldEditManager.Obj.GetUserSession(player.User);
 				userSession.SetSecondPosition(pos);
 
-				player.MsgLoc($"Second position set to ({pos.x}, {pos.y}, {pos.z})");
+				Logging.Success($"Second position set to ({pos.x}, {pos.y}, {pos.z})", player);
 			}
 			catch (Exception e)
 			{
-				Log.WriteError(Localizer.Do($"{e}"));
+				Logging.Exception(e, player);
 			}
 		}
 

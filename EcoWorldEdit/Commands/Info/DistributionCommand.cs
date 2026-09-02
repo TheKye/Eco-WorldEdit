@@ -6,10 +6,8 @@ using Eco.Mods.WorldEdit.Core.Commands;
 using Eco.Mods.WorldEdit.Core.Managers;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Model.BlockData;
-using Eco.Mods.WorldEdit.Utils;
 using Eco.Mods.WorldEdit.Utils.Eco;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
-using Eco.Shared.Logging;
 using Eco.Shared.Math;
 using Eco.World.Blocks;
 
@@ -25,9 +23,9 @@ namespace Eco.Mods.WorldEdit.Commands.Info
 			{
 				bool detailed = type.Trim().StartsWith("d", StringComparison.OrdinalIgnoreCase);
 				CommandResult result = CommandDispatcher.Obj.Execute(user, new DistributionCommand(detailed, fileName));
-				if (result.Result.Failed) user.Player.Error(result.Result.Message);
+				if (result.Result.Failed) Logging.Error(result.Result.Message, user.Player);
 			}
-			catch (Exception exception) { Log.WriteException(exception); }
+			catch (Exception exception) { Logging.Exception(exception, user.Player); }
 		}
 
 		public void Execute(CommandContext context, CancellationToken ct)
@@ -72,7 +70,7 @@ namespace Eco.Mods.WorldEdit.Commands.Info
 				Directory.CreateDirectory(SchematicUtils.GetSchematicDirectory());
 				string safeName = SchematicUtils.SanitizeFileName(OutputFile);
 				File.WriteAllText(Path.Combine(SchematicUtils.GetSchematicDirectory(), safeName + ".txt"), report.ToString());
-				context.Player.MsgLoc($"Report saved into file with name <{safeName}.txt>");
+				Logging.Success($"Report saved into file with name <{safeName}.txt>", context.Player);
 			}
 			context.Player.OpenInfoPanel("WorldEdit Blocks Report", report.ToString(), "WorldEditDistr");
 		}

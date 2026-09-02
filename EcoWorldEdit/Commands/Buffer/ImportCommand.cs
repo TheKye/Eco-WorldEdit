@@ -6,9 +6,7 @@ using Eco.Mods.WorldEdit.Core;
 using Eco.Mods.WorldEdit.Core.Commands;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Serializer;
-using Eco.Mods.WorldEdit.Utils;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
-using Eco.Shared.Logging;
 
 namespace Eco.Mods.WorldEdit.Commands.Buffer
 {
@@ -25,12 +23,12 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 					CommandResult result = CommandDispatcher.Obj.Execute(user, new ImportCommand(SchematicUtils.GetSchematicFilePath(fileName)));
 					if (result.Result.Success)
 					{
-						user.Player.MsgLoc($"Import done in {result.Elapsed.TotalMilliseconds}ms. Use /paste");
+						Logging.Success($"Import done in {result.Elapsed.TotalMilliseconds}ms. Use /paste", user.Player);
 						return;
 					}
 					else
 					{
-						user.Player.Error(result.Result.Message);
+						Logging.Error(result.Result.Message, user.Player);
 						BlueprintListCommand.Print(user);
 					}
 				}
@@ -39,7 +37,7 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 					BlueprintListCommand.Print(user);
 				}
 			}
-			catch (Exception e) { Log.WriteException(e); }
+			catch (Exception e) { Logging.Exception(e, user.Player); }
 		}
 
 		public void Execute(CommandContext context, CancellationToken ct)

@@ -5,7 +5,6 @@ using Eco.Mods.WorldEdit.Core;
 using Eco.Mods.WorldEdit.Core.Commands;
 using Eco.Mods.WorldEdit.Core.Transformers;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
-using Eco.Shared.Logging;
 
 namespace Eco.Mods.WorldEdit.Commands.Buffer
 {
@@ -20,20 +19,20 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 				CommandResult result = CommandDispatcher.Obj.Execute(user, new RotateCommand(degrees));
 				if (result.Result.Success)
 				{
-					user.Player.MsgLoc($"Clipboard rotated by {degrees} degrees in {result.Elapsed.TotalMilliseconds}ms.");
+					Logging.Success($"Clipboard rotated by {degrees} degrees in {result.Elapsed.TotalMilliseconds}ms.", user.Player);
 				}
 				else
 				{
-					user.Player.Error(result.Result.Message);
+					Logging.Error(result.Result.Message, user.Player);
 				}
 			}
 			catch (WorldEditCommandException exception)
 			{
-				user.Player.ErrorLocStr(exception.Message);
+				Logging.ErrorLocStr(exception.Message, user.Player);
 			}
 			catch (Exception exception)
 			{
-				Log.WriteException(exception);
+				Logging.Exception(exception, user.Player);
 			}
 		}
 

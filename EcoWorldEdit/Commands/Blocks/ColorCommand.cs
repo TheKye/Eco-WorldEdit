@@ -5,7 +5,6 @@ using Eco.Mods.WorldEdit.Core.Commands;
 using Eco.Mods.WorldEdit.Utils.Eco;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
 using Eco.Shared.Graphics;
-using Eco.Shared.Logging;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
 
@@ -42,11 +41,11 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 				else throw new WorldEditCommandException("Incorrect color name, HEX or RGB/RGBA value.");
 
 				CommandResult result = CommandDispatcher.Obj.Execute(user, new ColorCommand(parsedColor));
-				if (result.Result.Success) user.Player.MsgLoc($"{result.BlocksChanged} blocks painted in {result.Elapsed.TotalMilliseconds}ms.");
-				else user.Player.Error(result.Result.Message);
+				if (result.Result.Success) Logging.Success($"{result.BlocksChanged} blocks painted in {result.Elapsed.TotalMilliseconds}ms.", user.Player);
+				else Logging.Error(result.Result.Message, user.Player);
 			}
-			catch (WorldEditCommandException exception) { user.Player.ErrorLocStr(exception.Message); }
-			catch (Exception exception) { Log.WriteException(exception); }
+			catch (WorldEditCommandException exception) { Logging.ErrorLocStr(exception.Message, user.Player); }
+			catch (Exception exception) { Logging.Exception(exception, user.Player); }
 		}
 
 		public void Execute(CommandContext context, CancellationToken ct)

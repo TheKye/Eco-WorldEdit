@@ -1,7 +1,6 @@
 using System.Numerics;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Model.BlockData;
-using Eco.Mods.WorldEdit.Utils;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
 using Eco.World.Blocks;
 

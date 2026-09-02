@@ -4,7 +4,6 @@ using Eco.Gameplay.Items;
 using Eco.Gameplay.Modules;
 using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Core.Managers;
-using Eco.Shared.Logging;
 using Newtonsoft.Json;
 
 namespace Eco.Mods.WorldEdit.Model.Components
@@ -39,7 +38,7 @@ namespace Eco.Mods.WorldEdit.Model.Components
 		{
 			if (component.Inventory is not { } inventory)
 			{
-				Log.WriteWarningLineLoc($"Skipped restoring plugin modules to {component.Parent.MarkedUpName}: the component has no initialized plugin module inventory.");
+				Logging.Warning($"Skipped restoring plugin modules to {component.Parent.MarkedUpName}: the component has no initialized plugin module inventory.");
 				return;
 			}
 
@@ -52,7 +51,7 @@ namespace Eco.Mods.WorldEdit.Model.Components
 					Inventory? slot = inventory.GetSlot(moduleData.SlotTag);
 					if (slot is null)
 					{
-						Log.WriteWarningLineLoc($"Skipped restoring {moduleData.ModuleType.Name} to {component.Parent.MarkedUpName}: plugin module slot '{moduleData.SlotTag}' is not available.");
+						Logging.Warning($"Skipped restoring {moduleData.ModuleType.Name} to {component.Parent.MarkedUpName}: plugin module slot '{moduleData.SlotTag}' is not available.");
 						continue;
 					}
 
@@ -61,7 +60,7 @@ namespace Eco.Mods.WorldEdit.Model.Components
 					Result result = canCreate.Success ? slot.TryAddItemsNonUnique(moduleData.ModuleType, 1) : canCreate;
 					if (result.Failed)
 					{
-						user.Player.Error(result.Message);
+						Logging.Error(result.Message, user.Player);
 						continue;
 					}
 

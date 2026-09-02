@@ -3,10 +3,8 @@ using Eco.Gameplay.Systems.Messaging.Chat.Commands;
 using Eco.Mods.WorldEdit.Commands.General;
 using Eco.Mods.WorldEdit.Core.Commands;
 using Eco.Mods.WorldEdit.Core.Managers;
-using Eco.Mods.WorldEdit.Utils;
 using Eco.Mods.WorldEdit.Utils.Eco;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
-using Eco.Shared.Logging;
 using Eco.Shared.Math;
 
 namespace Eco.Mods.WorldEdit.Commands.Blocks
@@ -25,19 +23,19 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 
 				if (result.Result.Success)
 				{
-					user.Player.MsgLoc($"{result.BlocksChanged} blocks changed in {result.Elapsed.TotalMilliseconds}ms.");
+					Logging.Success($"{result.BlocksChanged} blocks changed in {result.Elapsed.TotalMilliseconds}ms.", user.Player);
 					return;
 				}
 				else
 				{
-					user.Player.Error(result.Result.Message);
+					Logging.Error(result.Result.Message, user.Player);
 				}
 			}
 			catch (WorldEditCommandException e)
 			{
-				user.Player.ErrorLocStr(e.Message);
+				Logging.ErrorLocStr(e.Message, user.Player);
 			}
-			catch (Exception e) { Log.WriteException(e); }
+			catch (Exception e) { Logging.Exception(e, user.Player); }
 		}
 
 		public void Execute(CommandContext context, CancellationToken ct)

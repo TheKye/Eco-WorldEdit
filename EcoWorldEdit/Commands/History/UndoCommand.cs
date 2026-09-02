@@ -3,8 +3,6 @@ using Eco.Gameplay.Systems.Messaging.Chat.Commands;
 using Eco.Mods.WorldEdit.Commands.General;
 using Eco.Mods.WorldEdit.Core;
 using Eco.Mods.WorldEdit.Core.Commands;
-using Eco.Mods.WorldEdit.Utils;
-using Eco.Shared.Logging;
 
 namespace Eco.Mods.WorldEdit.Commands.History
 {
@@ -24,16 +22,16 @@ namespace Eco.Mods.WorldEdit.Commands.History
 				CommandResult result = CommandDispatcher.Obj.Execute(user, new UndoCommand(count));
 				if (result.Result.Success)
 				{
-					user.Player.MsgLoc($"Undo done in {result.Elapsed.TotalMilliseconds}ms.");
+					Logging.Success($"Undo done in {result.Elapsed.TotalMilliseconds}ms.", user.Player);
 				}
 				else
 				{
-					user.Player.Error(result.Result.Message);
+					Logging.Error(result.Result.Message, user.Player);
 				}
 			}
 			catch (Exception exception)
 			{
-				Log.WriteException(exception);
+				Logging.Exception(exception, user.Player);
 			}
 		}
 	}

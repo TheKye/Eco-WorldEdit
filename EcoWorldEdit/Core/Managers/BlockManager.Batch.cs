@@ -5,7 +5,6 @@ using Eco.Gameplay.Objects;
 using Eco.Gameplay.Plants;
 using Eco.Gameplay.Systems.EcoMarketplace;
 using Eco.Mods.WorldEdit.Utils.Eco;
-using Eco.Shared.Logging;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;
 using Eco.World.Blocks;
@@ -42,7 +41,7 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 				ct.ThrowIfCancellationRequested();
 				if (IsImpenetrable(change.Position))
 				{
-					Log.WriteWarningLineLoc($"Skipped setting block {change.BlockType} at {change.Position}: position is impenetrable.");
+					Logging.Warning($"Skipped setting block {change.BlockType} at {change.Position}: position is impenetrable.");
 					continue;
 				}
 
@@ -53,9 +52,7 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 				Result canCreate = StrangeItemProtection.CanCreateBlock(this._userSession.User, change.BlockType, pendingPaidDelta + 1);
 				if (canCreate.Failed)
 				{
-					Log.WriteWarningLineLoc($"Skipped setting block {change.BlockType} at {change.Position}: StrangeItemProtection denied creation. {canCreate.Message.Trim()}");
-					try { this._userSession.Player.Error(canCreate.Message); }
-					catch (Exception exception) { Log.WriteException(exception); }
+					Logging.Warning($"Skipped setting block {change.BlockType} at {change.Position}: StrangeItemProtection denied creation. {canCreate.Message.Trim()}", this._userSession.Player);
 					continue;
 				}
 
@@ -103,12 +100,12 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 			ValidateBlockType(blockType);
 			if (!WorldHeight.IsValid(position.Y))
 			{
-				Log.WriteWarningLineLoc($"Skipped setting block {blockType} at {position}: height is outside the world.");
+				Logging.Warning($"Skipped setting block {blockType} at {position}: height is outside the world.");
 				return false;
 			}
 			if (IsImpenetrable(position))
 			{
-				Log.WriteWarningLineLoc($"Skipped setting block {blockType} at {position}: position is impenetrable.");
+				Logging.Warning($"Skipped setting block {blockType} at {position}: position is impenetrable.");
 				return false;
 			}
 

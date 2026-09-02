@@ -3,7 +3,6 @@ using Eco.Gameplay.Objects;
 using Eco.Gameplay.Occupancy;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Model.BlockData;
-using Eco.Mods.WorldEdit.Utils;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
 using Eco.Shared.Math;
 using Eco.Shared.Utils;

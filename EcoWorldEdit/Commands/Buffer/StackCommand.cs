@@ -5,10 +5,8 @@ using Eco.Mods.WorldEdit.Commands.General;
 using Eco.Mods.WorldEdit.Core.Commands;
 using Eco.Mods.WorldEdit.Core.Managers;
 using Eco.Mods.WorldEdit.Model;
-using Eco.Mods.WorldEdit.Utils;
 using Eco.Mods.WorldEdit.Utils.Eco;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
-using Eco.Shared.Logging;
 using Eco.Shared.Math;
 
 namespace Eco.Mods.WorldEdit.Commands.Buffer
@@ -27,15 +25,15 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 				CommandResult result = CommandDispatcher.Obj.Execute(user, new StackCommand(direction, amount, offset));
 				if (result.Result.Success)
 				{
-					user.Player.MsgLoc($"{result.BlocksChanged} blocks changed in {result.Elapsed.TotalMilliseconds}ms.");
+					Logging.Success($"{result.BlocksChanged} blocks changed in {result.Elapsed.TotalMilliseconds}ms.", user.Player);
 				}
 				else
 				{
-					user.Player.Error(result.Result.Message);
+					Logging.Error(result.Result.Message, user.Player);
 				}
 			}
-			catch (WorldEditCommandException exception) { user.Player.ErrorLocStr(exception.Message); }
-			catch (Exception exception) { Log.WriteException(exception); }
+			catch (WorldEditCommandException exception) { Logging.ErrorLocStr(exception.Message, user.Player); }
+			catch (Exception exception) { Logging.Exception(exception, user.Player); }
 		}
 
 		public void Execute(CommandContext context, CancellationToken ct)
