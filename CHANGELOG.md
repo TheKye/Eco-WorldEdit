@@ -1,6 +1,18 @@
 # Changelog
 
-## [3.0.3] - Unreleased
+## [3.0.4] - Unreleased
+
+### Changed
+
+- Updated the Eco reference assemblies to 0.14.1-beta-release-1077.
+- Highlighting Object material update for two sided render.
+
+### Fixed
+
+- A single unreadable or corrupted blueprint file prevented the server from starting.
+- Used incorrect version of Newtonsoft.Json.
+
+## [3.0.3] - 2026-09-02
 
 ### Added
 
