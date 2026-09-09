@@ -30,7 +30,7 @@
 		<PackageReference Include="K4os.Compression.LZ4" Version="1.2.16" />
 		<PackageReference Include="K4os.Compression.LZ4.Legacy" Version="1.2.16" />
 		<PackageReference Include="K4os.Compression.LZ4.Streams" Version="1.2.16" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">

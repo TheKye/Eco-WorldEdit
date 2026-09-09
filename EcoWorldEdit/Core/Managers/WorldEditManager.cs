@@ -79,10 +79,9 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 			WorldEditSerializer serializer = new WorldEditSerializer();
 			foreach (string file in list)
 			{
-				EcoBlueprintInfo blueprintInfo = serializer.DeserializeInfo(file);
-
 				try
 				{
+					EcoBlueprintInfo blueprintInfo = serializer.DeserializeInfo(file);
 					if (!this.BlueprintList.TryAdd(file, blueprintInfo))
 					{
 						this.BlueprintList[file] = blueprintInfo;
