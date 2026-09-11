@@ -5,6 +5,8 @@
 ### Added
 
 - New `sphere` command. Builds a sphere at your position, arguments: radius, block type, style (full (default), halftop, halfbottom), hollow, clear. ([#96](https://github.com/TheKye/Eco-WorldEdit/issues/96))
+- New `cylinder` command. Builds a vertical circular or square cylinder at your position, with filled or hollow variants and optional area clearing. ([#95](https://github.com/TheKye/Eco-WorldEdit/issues/95))
+- New `tube` command. Builds a horizontal circular or square tube in a specified direction or the direction the player is looking, with filled or hollow variants and optional area clearing.
 
 ### Changed
 
