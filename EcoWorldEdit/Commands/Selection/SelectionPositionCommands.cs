@@ -17,7 +17,7 @@ namespace Eco.Mods.WorldEdit.Commands.Selection
 		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Sets the second selection point to the given coordinates or your position.", shortCut: "setpos2", level: ChatAuthorizationLevel.Admin)]
 		public static void SetPos2(User user, string? coordinate = null) => SetPosition(user, coordinate, false);
 
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Clears the current selection.", shortCut: "reset", level: ChatAuthorizationLevel.Admin)]
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Clears the current selection.", shortCut: "resetpos", level: ChatAuthorizationLevel.Admin)]
 		public static void Reset(User user)
 		{
 			try

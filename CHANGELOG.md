@@ -17,6 +17,7 @@
 
 - A single unreadable or corrupted blueprint file prevented the server from starting.
 - Used incorrect version of Newtonsoft.Json.
+- Renamed the selection reset shortcut from `/reset` to `/resetpos`; since Eco 0.12.0.0, the client intercepts `/reset` as a local command and does not send it to the server. The full `/we reset` command remains available.
 
 ## [3.0.3] - 2026-09-02
 
