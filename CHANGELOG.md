@@ -2,6 +2,10 @@
 
 ## [3.0.4] - Unreleased
 
+### Added
+
+- New `sphere` command. Builds a sphere at your position, arguments: radius, block type, style (full (default), halftop, halfbottom), hollow, clear. ([#96](https://github.com/TheKye/Eco-WorldEdit/issues/96))
+
 ### Changed
 
 - Updated the Eco reference assemblies to 0.14.1-beta-release-1077.
