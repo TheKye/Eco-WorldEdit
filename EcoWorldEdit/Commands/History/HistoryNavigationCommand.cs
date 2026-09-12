@@ -9,6 +9,7 @@ namespace Eco.Mods.WorldEdit.Commands.History
 	internal abstract class HistoryNavigationCommand(int ActionCount) : IWorldEditCommand
 	{
 		public CommandHistoryPolicy HistoryPolicy => CommandHistoryPolicy.ManageHistory;
+		public bool PreserveClipboardAnchor => true;
 
 		protected abstract string ActionName { get; }
 		protected abstract HistoryDirection Direction { get; }

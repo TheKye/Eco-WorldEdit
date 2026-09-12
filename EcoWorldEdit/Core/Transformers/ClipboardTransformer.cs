@@ -11,6 +11,26 @@ namespace Eco.Mods.WorldEdit.Core.Transformers
 {
 	internal static class ClipboardTransformer
 	{
+		public static Clipboard Normalize(Clipboard source, CancellationToken ct = default)
+		{
+			ArgumentNullException.ThrowIfNull(source);
+			ct.ThrowIfCancellationRequested();
+			ValidateDimension(source.Dimension);
+
+			Vector3i maximum = source.Dimension - new Vector3i(1, 1, 1);
+			ClipboardBounds bounds = new(Vector3i.Zero, maximum);
+			IncludeBounds(bounds, source.Blocks, ct);
+			IncludeBounds(bounds, source.Plants, ct);
+			IncludeBounds(bounds, source.WorldObjects, ct);
+
+			Vector3 offset = -(Vector3)bounds.Minimum;
+			Vector3i dimension = bounds.Maximum - bounds.Minimum + new Vector3i(1, 1, 1);
+			List<WorldEditBlock> blocks = Translate(source.Blocks, offset, ct);
+			List<WorldEditBlock> plants = Translate(source.Plants, offset, ct);
+			List<WorldEditBlock> worldObjects = Translate(source.WorldObjects, offset, ct);
+			return Clipboard.Create(blocks, plants, worldObjects, source.Author, dimension);
+		}
+
 		public static Clipboard Rotate(Clipboard source, float degrees, CancellationToken ct = default)
 		{
 			ArgumentNullException.ThrowIfNull(source);
@@ -34,7 +54,7 @@ namespace Eco.Mods.WorldEdit.Core.Transformers
 			ct.ThrowIfCancellationRequested();
 			ValidateCollisions(blocks, plants, worldObjects, ct);
 			ct.ThrowIfCancellationRequested();
-			return Clipboard.Create(blocks, plants, worldObjects, source.Author, dimension);
+			return Normalize(Clipboard.Create(blocks, plants, worldObjects, source.Author, dimension), ct);
 		}
 
 		private static List<WorldEditBlock> Transform(IReadOnlyList<WorldEditBlock> source, Matrix4x4 transform, float exactAngle, int quarterTurns, CancellationToken ct)
@@ -46,6 +66,46 @@ namespace Eco.Mods.WorldEdit.Core.Transformers
 				transformed.Add(BlockTransformer.Rotate(block, transform, exactAngle, quarterTurns));
 			}
 			return transformed;
+		}
+
+		private static List<WorldEditBlock> Translate(IReadOnlyList<WorldEditBlock> source, Vector3 offset, CancellationToken ct)
+		{
+			List<WorldEditBlock> translated = new(source.Count);
+			foreach (WorldEditBlock block in source)
+			{
+				ct.ThrowIfCancellationRequested();
+				translated.Add(block with { LocalPosition = block.LocalPosition + offset });
+			}
+			return translated;
+		}
+
+		private static void IncludeBounds(ClipboardBounds bounds, IReadOnlyList<WorldEditBlock> blocks, CancellationToken ct)
+		{
+			foreach (WorldEditBlock block in blocks)
+			{
+				ct.ThrowIfCancellationRequested();
+				if (block.BlockData is not WorldObjectBlockData objectData)
+				{
+					bounds.Include(ToBlockPosition(block.LocalPosition));
+					continue;
+				}
+
+				if (!objectData.WorldObjectType.DerivesFrom<WorldObject>())
+					throw new WorldEditCommandException($"Type {objectData.WorldObjectType} is not a WorldObject type.");
+
+				// Keep the exact object anchor inside the clipboard as well as its occupied cells.
+				bounds.Include(new Vector3i(
+					(int)MathF.Floor(block.LocalPosition.X),
+					(int)MathF.Floor(block.LocalPosition.Y),
+					(int)MathF.Floor(block.LocalPosition.Z)));
+				Vector3i occupancyOrigin = block.LocalPosition.XYZi();
+				foreach (BlockOccupancy occupancy in WorldObject.GetOccupancy(objectData.WorldObjectType))
+				{
+					ct.ThrowIfCancellationRequested();
+					if (occupancy.BlockType is null) continue;
+					bounds.Include(occupancyOrigin + objectData.Rotation.RotateVector(occupancy.Offset).XYZi());
+				}
+			}
 		}
 
 		private static (Vector3 Shift, Vector3i Dimension) CalculateBounds(Vector3i dimension, Matrix4x4 rotation)
@@ -180,6 +240,24 @@ namespace Eco.Mods.WorldEdit.Core.Transformers
 		private static void ValidateDimension(Vector3i dimension)
 		{
 			if (dimension.X <= 0 || dimension.Y <= 0 || dimension.Z <= 0) throw new WorldEditCommandException($"Clipboard dimension {dimension} is invalid; all dimensions must be positive.");
+		}
+
+		private sealed class ClipboardBounds(Vector3i minimum, Vector3i maximum)
+		{
+			public Vector3i Minimum { get; private set; } = minimum;
+			public Vector3i Maximum { get; private set; } = maximum;
+
+			public void Include(Vector3i position)
+			{
+				this.Minimum = new Vector3i(
+					Math.Min(this.Minimum.X, position.X),
+					Math.Min(this.Minimum.Y, position.Y),
+					Math.Min(this.Minimum.Z, position.Z));
+				this.Maximum = new Vector3i(
+					Math.Max(this.Maximum.X, position.X),
+					Math.Max(this.Maximum.Y, position.Y),
+					Math.Max(this.Maximum.Z, position.Z));
+			}
 		}
 
 		private sealed record Occupant(WorldEditBlock Block, Type OccupancyBlockType, Guid? ObjectId, bool IsWorldObject);

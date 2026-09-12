@@ -5,6 +5,7 @@
 ### Added
 
 - New `cancel` command (also available as `/we cancel`) to request cancellation of the caller's currently executing WorldEdit command.
+- New `anchor` command previews the clipboard paste area at the player's position. The preview can be repositioned with `shift`, follows clipboard rotation and import dimensions, and can be cleared with `/anchor false`.
 - New `sphere` command. Builds a sphere at your position, arguments: radius, block type, style (full (default), halftop, halfbottom), hollow, clear. ([#96](https://github.com/TheKye/Eco-WorldEdit/issues/96))
 - New `cylinder` command. Builds a vertical circular or square cylinder at your position, with filled or hollow variants and optional area clearing. ([#95](https://github.com/TheKye/Eco-WorldEdit/issues/95))
 - New `tube` command. Builds a horizontal circular or square tube in a specified direction or the direction the player is looking, with filled or hollow variants and optional area clearing.
@@ -13,9 +14,13 @@
 
 - Updated the Eco reference assemblies to 0.14.1-beta-release-1077.
 - Highlighting Object material update for two sided render.
+- Clipboard coordinates and blueprint format 1.5 are normalized to the clipboard's minimum corner. Copy and cut dimensions now include the full occupancy of captured world objects, and format 1.4 blueprints are migrated automatically.
 
 ### Fixed
 
+- Blueprint migration now reconstructs explicitly zero legacy dimensions from stored block positions.
+- Imported claim stakes and their attached child objects are filtered before paste instead of aborting paste after partial world changes.
+- Failed commands now report the command name, elapsed time, reason, and any partial block changes in normal chat while retaining an error entry in the server log.
 - A single unreadable or corrupted blueprint file prevented the server from starting.
 - Used incorrect version of Newtonsoft.Json.
 - Renamed the selection reset shortcut from `/reset` to `/resetpos`; since Eco 0.12.0.0, the client intercepts `/reset` as a local command and does not send it to the server. The full `/we reset` command remains available.

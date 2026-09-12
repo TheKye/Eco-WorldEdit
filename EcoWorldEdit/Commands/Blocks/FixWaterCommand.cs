@@ -21,7 +21,7 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 				int waterLevel = height == 0 ? WorldGeneratorPlugin.Settings.WaterLevel : height;
 				CommandResult result = CommandDispatcher.Obj.Execute(user, new FixWaterCommand(waterLevel));
 				if (result.Result.Success) Logging.Success($"{result.BlocksChanged} blocks changed in {result.Elapsed.TotalMilliseconds}ms.", user.Player);
-				else Logging.Error(result.Result.Message, user.Player);
+				else Logging.CommandFailed("Fix water", result, user.Player);
 			}
 			catch (Exception exception) { Logging.Exception(exception, user.Player); }
 		}

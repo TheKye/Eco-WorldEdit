@@ -3,6 +3,7 @@ using Eco.Core.Utils;
 using Eco.Gameplay.Blocks;
 using Eco.Gameplay.Items;
 using Eco.Gameplay.Objects;
+using Eco.Gameplay.Settlements.ClaimStakes.Internal;
 using Eco.Mods.WorldEdit.Core.Commands;
 using Eco.Mods.WorldEdit.Utils.Eco;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
@@ -178,6 +179,7 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 
 		private static bool IsIgnoredWorldObject(WorldObject? worldObject) => worldObject is WorldEditHighlightingObject;
 		private static bool IsIgnoredWorldObjectType(Type worldObjectType) => worldObjectType == typeof(WorldEditHighlightingObject);
+		private static bool IsClaimStakeWorldObjectType(Type worldObjectType) => worldObjectType.DerivesFrom<ClaimStakeObjectBase>();
 
 		private static Vector3i ToBlockPosition(Vector3 position)
 		{

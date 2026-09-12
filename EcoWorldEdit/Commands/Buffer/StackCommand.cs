@@ -29,7 +29,7 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 				}
 				else
 				{
-					Logging.Error(result.Result.Message, user.Player);
+					Logging.CommandFailed("Stack", result, user.Player);
 				}
 			}
 			catch (WorldEditCommandException exception) { Logging.ErrorLocStr(exception.Message, user.Player); }

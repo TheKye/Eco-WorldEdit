@@ -1,4 +1,5 @@
 using Eco.Gameplay.Players;
+using Eco.Mods.WorldEdit.Core.Commands;
 using Eco.Shared.Localization;
 using Eco.Shared.Logging;
 using Eco.Shared.Services;
@@ -24,6 +25,27 @@ namespace Eco.Mods.WorldEdit.Utils
 		}
 
 		public static void SuccessLocStr(string message, Player? player = null) => Success(Localizer.DoStr(message), player);
+
+		public static void CommandFailed(string commandName, CommandResult result, Player? player = null, bool recommendUndo = true)
+		{
+			ArgumentException.ThrowIfNullOrWhiteSpace(commandName);
+			ArgumentNullException.ThrowIfNull(result);
+			FormattableString message;
+			if (result.BlocksChanged > 0 && recommendUndo)
+			{
+				message = $"{commandName} stopped with an error after changing {result.BlocksChanged} blocks in {result.Elapsed.TotalMilliseconds}ms. Run /undo to revert the partial changes. Reason: {result.Result.Message}";
+			}
+			else if (result.BlocksChanged > 0)
+			{
+				message = $"{commandName} stopped with an error after changing {result.BlocksChanged} blocks in {result.Elapsed.TotalMilliseconds}ms. Reason: {result.Result.Message}";
+			}
+			else
+			{
+				message = $"{commandName} failed in {result.Elapsed.TotalMilliseconds}ms. Reason: {result.Result.Message}";
+			}
+			Log.WriteErrorLineLoc(message);
+			Notify(player, message, NotificationStyle.Chat);
+		}
 
 		public static void Info(FormattableString message) => Log.WriteLineLoc(message);
 

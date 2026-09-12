@@ -15,12 +15,19 @@ namespace Eco.Mods.WorldEdit.Serializer.Migrations
 			JObject[] blocks = BlueprintMigrationJson.Blocks(root).ToArray();
 			BlueprintMigrationJson.EnsureAuthor(root);
 
-			if (root[nameof(EcoBlueprint.Dimension)] is null or { Type: JTokenType.Null })
+			JToken? dimensionToken = root[nameof(EcoBlueprint.Dimension)];
+			if (dimensionToken is null or { Type: JTokenType.Null } || HasMissingDimension(dimensionToken, root))
 			{
 				root[nameof(EcoBlueprint.Dimension)] = CalculateDimension(blocks);
 			}
 
 			BlueprintMigrationJson.SetVersion(root, this.TargetVersion);
+		}
+
+		private static bool HasMissingDimension(JToken dimensionToken, JObject root)
+		{
+			float[] dimension = BlueprintMigrationJson.RequireVector3(dimensionToken, "Blueprint Dimension", root);
+			return dimension.Any(coordinate => coordinate <= 0);
 		}
 
 		private static JArray CalculateDimension(IEnumerable<JObject> blocks)

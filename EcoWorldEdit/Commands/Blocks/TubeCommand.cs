@@ -28,7 +28,7 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 				TubeCommand command = new(Math.Max(1, radius), Math.Max(1, amount), direction, type, style, hollow, clear, CommandParsing.GetPosition(user));
 				CommandResult result = CommandDispatcher.Obj.Execute(user, command);
 				if (result.Result.Success) Logging.Success($"{result.BlocksChanged} blocks changed in {result.Elapsed.TotalMilliseconds}ms.", user.Player);
-				else Logging.Error(result.Result.Message, user.Player);
+				else Logging.CommandFailed("Tube", result, user.Player);
 			}
 			catch (WorldEditCommandException exception) { Logging.ErrorLocStr(exception.Message, user.Player); }
 			catch (Exception exception) { Logging.Exception(exception, user.Player); }

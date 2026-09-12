@@ -19,7 +19,7 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 				Type blockType = BlockUtils.GetBlockType(typeName) ?? throw new WorldEditCommandException($"No BlockType with name {typeName} found!");
 				CommandResult result = CommandDispatcher.Obj.Execute(user, new WallsCommand(blockType));
 				if (result.Result.Success) Logging.Success($"{result.BlocksChanged} blocks changed in {result.Elapsed.TotalMilliseconds}ms.", user.Player);
-				else Logging.Error(result.Result.Message, user.Player);
+				else Logging.CommandFailed("Walls", result, user.Player);
 			}
 			catch (WorldEditCommandException exception) { Logging.ErrorLocStr(exception.Message, user.Player); }
 			catch (Exception exception) { Logging.Exception(exception, user.Player); }

@@ -22,7 +22,7 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 				Type replacement = replaceAll ? find : BlockUtils.GetBlockType(replaceType) ?? throw new WorldEditCommandException($"No BlockType with name {replaceType} found!");
 				CommandResult result = CommandDispatcher.Obj.Execute(user, new ReplaceCommand(find, replacement, replaceAll));
 				if (result.Result.Success) Logging.Success($"{result.BlocksChanged} blocks changed in {result.Elapsed.TotalMilliseconds}ms.", user.Player);
-				else Logging.Error(result.Result.Message, user.Player);
+				else Logging.CommandFailed("Replace", result, user.Player);
 			}
 			catch (WorldEditCommandException exception) { Logging.ErrorLocStr(exception.Message, user.Player); }
 			catch (Exception exception) { Logging.Exception(exception, user.Player); }

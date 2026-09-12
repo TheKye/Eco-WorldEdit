@@ -59,6 +59,7 @@ namespace Eco.Mods.WorldEdit.Core.Commands
 			{
 				invocation.Invoke();
 				if (context.Scopes.Any(x => x.BlockManager.HasPendingBatch)) throw new InvalidOperationException("A command completed with an uncommitted block batch.");
+				if (!invocation.Command.PreserveClipboardAnchor) context.UserSession.DisableClipboardAnchor();
 				return new(Result.Succeeded, context.ChangedBlocks, invocation.Elapsed);
 			}
 			catch (OperationCanceledException) when (invocation.IsCancellationRequested)

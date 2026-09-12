@@ -13,6 +13,8 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 	[ChatCommandHandler]
 	internal sealed class ImportCommand(string FileName) : IWorldEditCommand
 	{
+		public bool PreserveClipboardAnchor => true;
+
 		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Imports a blueprint file into your clipboard.", shortCut: "importbp", level: ChatAuthorizationLevel.Admin)]
 		public static void Import(User user, string? fileName = null)
 		{
@@ -28,7 +30,7 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 					}
 					else
 					{
-						Logging.Error(result.Result.Message, user.Player);
+						Logging.CommandFailed("Import", result, user.Player);
 						BlueprintListCommand.Print(user);
 					}
 				}
@@ -45,7 +47,7 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 			if (!File.Exists(FileName)) throw new WorldEditCommandException($"Schematic file {FileName} not found!");
 			WorldEditSerializer serializer = new WorldEditSerializer();
 			EcoBlueprint blueprint = serializer.Deserialize(FileName);
-			context.UserSession.Clipboard = Clipboard.Create(blueprint);
+			context.UserSession.SetClipboard(Clipboard.Create(blueprint), refreshAnchor: true);
 		}
 	}
 }

@@ -24,7 +24,7 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 				if (direction is Direction.Unknown or Direction.None) throw new WorldEditCommandException("Unable to determine direction.");
 				CommandResult result = CommandDispatcher.Obj.Execute(user, new MoveCommand(direction, amount));
 				if (result.Result.Success) Logging.Success($"{result.BlocksChanged} blocks changed in {result.Elapsed.TotalMilliseconds}ms.", user.Player);
-				else Logging.Error(result.Result.Message, user.Player);
+				else Logging.CommandFailed("Move", result, user.Player);
 			}
 			catch (WorldEditCommandException exception) { Logging.ErrorLocStr(exception.Message, user.Player); }
 			catch (Exception exception) { Logging.Exception(exception, user.Player); }

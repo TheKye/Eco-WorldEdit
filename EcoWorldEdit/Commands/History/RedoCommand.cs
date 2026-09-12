@@ -26,7 +26,7 @@ namespace Eco.Mods.WorldEdit.Commands.History
 				}
 				else
 				{
-					Logging.Error(result.Result.Message, user.Player);
+					Logging.CommandFailed("Redo", result, user.Player, recommendUndo: false);
 				}
 			}
 			catch (Exception exception)

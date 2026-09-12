@@ -19,7 +19,7 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 			{
 				CommandResult result = CommandDispatcher.Obj.Execute(user, new DeleteCommand());
 				if (result.Result.Success) Logging.Success($"{result.BlocksChanged} blocks changed in {result.Elapsed.TotalMilliseconds}ms.", user.Player);
-				else Logging.Error(result.Result.Message, user.Player);
+				else Logging.CommandFailed("Delete", result, user.Player);
 			}
 			catch (Exception exception) { Logging.Exception(exception, user.Player); }
 		}

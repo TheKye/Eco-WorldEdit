@@ -6,14 +6,12 @@ using Eco.Gameplay.Components.Store;
 using Eco.Gameplay.Items;
 using Eco.Gameplay.Objects;
 using Eco.Gameplay.Occupancy;
-using Eco.Gameplay.Settlements.ClaimStakes.Internal;
 using Eco.Mods.WorldEdit.Model;
 using Eco.Mods.WorldEdit.Model.BlockData;
 using Eco.Mods.WorldEdit.Model.Components;
 using Eco.Mods.WorldEdit.Utils.Eco;
 using Eco.Mods.WorldEdit.Utils.Exceptions;
 using Eco.Shared.Math;
-using Eco.Shared.Utils;
 using Eco.Simulation;
 using Eco.Simulation.Agents;
 using Eco.Simulation.Types;
@@ -151,6 +149,11 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 		{
 			ct.ThrowIfCancellationRequested();
 			if (IsIgnoredWorldObjectType(objectData.WorldObjectType)) return null;
+			if (IsClaimStakeWorldObjectType(objectData.WorldObjectType))
+			{
+				Logging.Warning($"Skipped restoring claim stake {objectData.WorldObjectType} for safety reasons.");
+				return null;
+			}
 			if (objectData.ObjectId is Guid existingId && context.TryGetRestoredObject(existingId, out WorldObject existing)) return existing;
 
 			Guid? objectId = objectData.ObjectId;
@@ -167,8 +170,6 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 						parent = this.RestoreWorldObject(parentBlock, parentData, origin, context, ct);
 					}
 				}
-
-				if (objectData.WorldObjectType.DerivesFrom<ClaimStakeObjectBase>()) throw new WorldEditCommandException($"Claim stake {objectData.WorldObjectType} is ignored for safety reasons.");
 
 				Item creatingItem = WorldObjectItem.GetCreatingItemTemplateFromType(objectData.WorldObjectType);
 				Result canCreate = StrangeItemProtection.CanCreateItem(this._userSession.User, creatingItem);

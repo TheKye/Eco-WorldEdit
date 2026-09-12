@@ -42,7 +42,7 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 
 				CommandResult result = CommandDispatcher.Obj.Execute(user, new ColorCommand(parsedColor));
 				if (result.Result.Success) Logging.Success($"{result.BlocksChanged} blocks painted in {result.Elapsed.TotalMilliseconds}ms.", user.Player);
-				else Logging.Error(result.Result.Message, user.Player);
+				else Logging.CommandFailed("Color", result, user.Player);
 			}
 			catch (WorldEditCommandException exception) { Logging.ErrorLocStr(exception.Message, user.Player); }
 			catch (Exception exception) { Logging.Exception(exception, user.Player); }

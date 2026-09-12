@@ -11,6 +11,8 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 	[ChatCommandHandler]
 	internal sealed class RotateCommand(float Degrees) : IWorldEditCommand
 	{
+		public bool PreserveClipboardAnchor => true;
+
 		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Rotates the contents of your clipboard.", shortCut: "rotate", level: ChatAuthorizationLevel.Admin)]
 		public static void Rotate(User user, float degrees = 90f)
 		{
@@ -23,7 +25,7 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 				}
 				else
 				{
-					Logging.Error(result.Result.Message, user.Player);
+					Logging.CommandFailed("Rotate", result, user.Player);
 				}
 			}
 			catch (WorldEditCommandException exception)
@@ -42,7 +44,7 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 			if (source.Count <= 0) throw new WorldEditCommandException("Please /copy a selection or /import blueprint first!");
 			Clipboard rotated = ClipboardTransformer.Rotate(source, Degrees, ct);
 			ct.ThrowIfCancellationRequested();
-			context.UserSession.Clipboard = rotated;
+			context.UserSession.SetClipboard(rotated, refreshAnchor: true);
 		}
 	}
 }

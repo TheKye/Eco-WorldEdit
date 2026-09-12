@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using Eco.Gameplay.Items;
 using Eco.Gameplay.Modules;
 using Eco.Gameplay.Objects;
+using Eco.Gameplay.Settlements.ClaimStakes.Internal;
 using Eco.Mods.WorldEdit.Core.Managers;
 using Eco.Mods.WorldEdit.Model.BlockData;
 using Eco.Mods.WorldEdit.Model.Components;
@@ -77,6 +78,14 @@ namespace Eco.Mods.WorldEdit.Serializer
 				if (!TryResolveExpectedType(worldObjectTypeToken, typeof(WorldObject), out Type? worldObjectType))
 				{
 					LogUnavailable(worldObjectTypeToken, worldObject, "ignored world object with unavailable WorldObject type");
+					RemoveWorldObject(worldObject, data, removedObjectIds);
+					continue;
+				}
+
+				if (typeof(ClaimStakeObjectBase).IsAssignableFrom(worldObjectType))
+				{
+					string typeName = worldObjectTypeToken?.Value<string>() ?? worldObjectType.FullName ?? worldObjectType.Name;
+					LogIgnored(worldObjectTypeToken, worldObject, $"ignored claim stake for safety reasons: '{typeName}'");
 					RemoveWorldObject(worldObject, data, removedObjectIds);
 					continue;
 				}
@@ -199,7 +208,7 @@ namespace Eco.Mods.WorldEdit.Serializer
 					if (!TryGetBlockData(worldObject, BlockDataType.WorldObject, out JObject? data)) continue;
 					if (!TryReadGuid(data["ParentId"], out Guid parentId) || !removedObjectIds.Contains(parentId)) continue;
 
-					LogIgnored(data["ParentId"], worldObject, $"ignored child world object because parent {parentId} was unavailable");
+					LogIgnored(data["ParentId"], worldObject, $"ignored child world object because parent {parentId} was ignored");
 					RemoveWorldObject(worldObject, data, removedObjectIds);
 					removed = true;
 				}

@@ -17,7 +17,7 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 			{
 				CommandResult result = CommandDispatcher.Obj.Execute(user, new UpMeCommand(count, CommandParsing.GetPosition(user)));
 				if (result.Result.Success) Logging.Success($"Moved up in {result.Elapsed.TotalMilliseconds}ms.", user.Player);
-				else Logging.Error(result.Result.Message, user.Player);
+				else Logging.CommandFailed("Up me", result, user.Player);
 			}
 			catch (Exception exception) { Logging.Exception(exception, user.Player); }
 		}

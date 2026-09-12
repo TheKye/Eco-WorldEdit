@@ -74,21 +74,31 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 			return captured;
 		}
 
-		private void CaptureWorldObject(WorldObject worldObject, Vector3 origin, BlockCaptureContext context, List<WorldEditBlock> captured, CancellationToken ct)
+		private bool CaptureWorldObject(WorldObject worldObject, Vector3 origin, BlockCaptureContext context, List<WorldEditBlock> captured, CancellationToken ct)
 		{
 			ct.ThrowIfCancellationRequested();
-			if (IsIgnoredWorldObject(worldObject)) return;
-			if (!context.TryCapture(worldObject)) return;
+			if (context.IsIgnored(worldObject)) return false;
+			if (IsIgnoredWorldObject(worldObject) || IsClaimStakeWorldObjectType(worldObject.GetType()))
+			{
+				context.Ignore(worldObject);
+				return false;
+			}
+			if (!context.TryCapture(worldObject)) return true;
 
 			WorldObject? parent = null;
 			if (worldObject.AttachedTo.IsSet) worldObject.AttachedTo.TryGetObject(out parent);
-			if (parent is not null) this.CaptureWorldObject(parent, origin, context, captured, ct);
+			if (parent is not null && !this.CaptureWorldObject(parent, origin, context, captured, ct))
+			{
+				context.Ignore(worldObject);
+				return false;
+			}
 
 			Guid objectId = context.GetObjectId(worldObject);
 			Guid? parentId = parent is null ? null : context.GetObjectId(parent);
 			WorldObjectBlockData objectData = new(worldObject.GetType(), worldObject.Rotation, objectId, parentId, worldObject.Name, this.CaptureComponents(worldObject, ct));
 
 			captured.Add(new WorldEditBlock(typeof(WorldObjectBlock), worldObject.Position - origin, objectData, null));
+			return true;
 		}
 
 		private List<IWorldObjectComponentData> CaptureComponents(WorldObject worldObject, CancellationToken ct)

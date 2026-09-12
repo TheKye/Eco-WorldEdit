@@ -16,6 +16,8 @@ namespace Eco.Mods.WorldEdit.Commands.Info
 	[ChatCommandHandler]
 	internal sealed class DistributionCommand(bool Detailed, string? OutputFile) : IWorldEditCommand
 	{
+		public bool PreserveClipboardAnchor => true;
+
 		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Shows the block distribution within the selection.", shortCut: "distr", level: ChatAuthorizationLevel.Admin)]
 		public static void Distribution(User user, string type = "brief", string? fileName = null)
 		{
@@ -23,7 +25,7 @@ namespace Eco.Mods.WorldEdit.Commands.Info
 			{
 				bool detailed = type.Trim().StartsWith("d", StringComparison.OrdinalIgnoreCase);
 				CommandResult result = CommandDispatcher.Obj.Execute(user, new DistributionCommand(detailed, fileName));
-				if (result.Result.Failed) Logging.Error(result.Result.Message, user.Player);
+				if (result.Result.Failed) Logging.CommandFailed("Distribution", result, user.Player);
 			}
 			catch (Exception exception) { Logging.Exception(exception, user.Player); }
 		}

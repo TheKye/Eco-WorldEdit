@@ -22,10 +22,7 @@ namespace Eco.Mods.WorldEdit.Commands.Selection
 				(Direction direction, int amount) = CommandParsing.ParseDirectionAndAmount(user, directionAndAmount);
 				if (direction is Direction.Unknown or Direction.None) throw new WorldEditCommandException("Unable to determine direction.");
 				Vector3i offset = direction.ToVec() * amount;
-				WorldRange selection = session.Selection;
-				selection.min += offset;
-				selection.max += offset;
-				session.SetSelection(selection);
+				session.ShiftSelection(offset);
 				Logging.Success($"Shifted selection {amount} {direction}", user.Player);
 			}
 			catch (WorldEditCommandException exception) { Logging.ErrorLocStr(exception.Message, user.Player); }

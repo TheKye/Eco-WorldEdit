@@ -13,7 +13,9 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 	[ChatCommandHandler]
 	internal sealed class PasteCommand(bool SkipEmpty) : IWorldEditCommand
 	{
-		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Pastes the clipboard at your position.", shortCut: "paste", level: ChatAuthorizationLevel.Admin)]
+		public bool PreserveClipboardAnchor => true;
+
+		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Pastes the clipboard at its active anchor or your position.", shortCut: "paste", level: ChatAuthorizationLevel.Admin)]
 		public static void Paste(User user, bool skipEmpty = false)
 		{
 			try
@@ -27,7 +29,7 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 				}
 				else
 				{
-					Logging.Error(result.Result.Message, user.Player);
+					Logging.CommandFailed("Paste", result, user.Player);
 				}
 			}
 			catch (WorldEditCommandException e)
@@ -41,14 +43,14 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 		{
 			Clipboard clipboard = context.UserSession.Clipboard;
 			if (clipboard.Count <= 0) throw new WorldEditCommandException($"Please /copy a selection or /import blueprint first!");
-			Vector3i playerPos = context.User.Position.Round();
+			Vector3i pasteOrigin = context.UserSession.IsClipboardAnchored ? context.Selection.min : context.User.Position.Round();
 			BlockManager blockManager = context.BlockManager;
 			if (blockManager.GetPlacementHeightRange(clipboard.Blocks, clipboard.Plants, clipboard.WorldObjects, SkipEmpty, ct) is { } localRange)
 			{
-				PlacementHeightRange targetRange = localRange.Offset(playerPos.Y);
+				PlacementHeightRange targetRange = localRange.Offset(pasteOrigin.Y);
 				if (!targetRange.FitsWorld()) throw new WorldEditCommandException($"Cannot paste clipboard at height {targetRange.MinY}..{targetRange.MaxY}. Valid world height is {WorldHeight.Min}..{WorldHeight.Max}.");
 			}
-			blockManager.Restore(clipboard.Blocks, clipboard.Plants, clipboard.WorldObjects, playerPos, SkipEmpty, ct);
+			blockManager.Restore(clipboard.Blocks, clipboard.Plants, clipboard.WorldObjects, pasteOrigin, SkipEmpty, ct);
 		}
 	}
 }

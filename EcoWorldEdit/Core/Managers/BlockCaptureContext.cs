@@ -7,6 +7,7 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 	{
 		private readonly Dictionary<WorldObject, Guid> _objectIds = new(ReferenceEqualityComparer.Instance);
 		private readonly HashSet<WorldObject> _capturedObjects = new(ReferenceEqualityComparer.Instance);
+		private readonly HashSet<WorldObject> _ignoredObjects = new(ReferenceEqualityComparer.Instance);
 
 		public Guid GetObjectId(WorldObject worldObject)
 		{
@@ -23,6 +24,18 @@ namespace Eco.Mods.WorldEdit.Core.Managers
 		{
 			ArgumentNullException.ThrowIfNull(worldObject);
 			return this._capturedObjects.Add(worldObject);
+		}
+
+		public bool IsIgnored(WorldObject worldObject)
+		{
+			ArgumentNullException.ThrowIfNull(worldObject);
+			return this._ignoredObjects.Contains(worldObject);
+		}
+
+		public void Ignore(WorldObject worldObject)
+		{
+			ArgumentNullException.ThrowIfNull(worldObject);
+			this._ignoredObjects.Add(worldObject);
 		}
 	}
 }

@@ -13,7 +13,7 @@ namespace Eco.Mods.WorldEdit.Serializer
 		private const string LZ4_HEADER = "LZ4";
 
 		// Versions
-		public static readonly Version CurrentVersion = new(1, 4);
+		public static readonly Version CurrentVersion = new(1, 5);
 		/* Version History:
 		 * 1.0 - Old and unused format, supported blocks only.
 		 * 1.1 - Support plants, objects, blocks at separate layers
@@ -21,6 +21,7 @@ namespace Eco.Mods.WorldEdit.Serializer
 		 *	added AuthorInformation
 		 * 1.3 - Added Dimension information
 		 * 1.4 - Support for v3.
+		 * 1.5 - Normalized block positions to the clipboard minimum corner.
 		 * */
 		public static string CurrentEcoVersion => Shared.EcoVersion.VersionNumber;
 

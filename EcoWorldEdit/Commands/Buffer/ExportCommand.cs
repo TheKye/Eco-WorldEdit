@@ -11,6 +11,8 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 	[ChatCommandHandler]
 	internal sealed class ExportCommand(string FileName) : IWorldEditCommand
 	{
+		public bool PreserveClipboardAnchor => true;
+
 		[ChatSubCommand(nameof(WorldEditCommand.WorldEdit), helpText: "Exports your clipboard to a shareable blueprint file.", shortCut: "exportbp", level: ChatAuthorizationLevel.Admin)]
 		public static void Export(User user, string fileName)
 		{
@@ -18,7 +20,7 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 			{
 				CommandResult result = CommandDispatcher.Obj.Execute(user, new ExportCommand(SchematicUtils.GetSchematicFilePath(fileName)));
 				if (result.Result.Success) Logging.Success($"Export done in {result.Elapsed.TotalMilliseconds}ms.", user.Player);
-				else Logging.Error(result.Result.Message, user.Player);
+				else Logging.CommandFailed("Export", result, user.Player);
 			}
 			catch (Exception exception) { Logging.Exception(exception, user.Player); }
 		}

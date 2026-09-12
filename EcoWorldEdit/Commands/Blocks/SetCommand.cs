@@ -28,7 +28,7 @@ namespace Eco.Mods.WorldEdit.Commands.Blocks
 				}
 				else
 				{
-					Logging.Error(result.Result.Message, user.Player);
+					Logging.CommandFailed("Set", result, user.Player);
 				}
 			}
 			catch (WorldEditCommandException e)

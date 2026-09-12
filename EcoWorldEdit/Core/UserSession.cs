@@ -1,6 +1,7 @@
 using Eco.Gameplay.Objects;
 using Eco.Gameplay.Players;
 using Eco.Mods.WorldEdit.Utils.Eco;
+using Eco.Mods.WorldEdit.Utils.Exceptions;
 using Eco.Shared.Math;
 
 namespace Eco.Mods.WorldEdit.Core
@@ -13,7 +14,8 @@ namespace Eco.Mods.WorldEdit.Core
 		public WorldRange Selection { get; private set; } = WorldRange.Invalid;
 		public WorldObjectHandle HighlightingObject { get; private set; }
 
-		public Clipboard Clipboard { get; set; } = Clipboard.Empty;
+		public Clipboard Clipboard { get; private set; } = Clipboard.Empty;
+		public bool IsClipboardAnchored { get; private set; }
 
 		public LimitedStack<HistoryEntry> UndoHistory { get; } = new LimitedStack<HistoryEntry>(10);
 		public LimitedStack<HistoryEntry> RedoHistory { get; } = new LimitedStack<HistoryEntry>(10);
@@ -39,13 +41,73 @@ namespace Eco.Mods.WorldEdit.Core
 
 		public void ResetSelection()
 		{
-			this.SetSelection(WorldRange.Invalid);
+			this.IsClipboardAnchored = false;
+			this.SetSelectionCore(WorldRange.Invalid);
 		}
 
 		public void SetSelection(WorldRange range)
 		{
+			this.IsClipboardAnchored = false;
+			this.SetSelectionCore(range);
+		}
+
+		public void ShiftSelection(Vector3i offset)
+		{
+			WorldRange selection = this.Selection;
+			selection.min += offset;
+			selection.max += offset;
+			this.SetSelectionCore(selection);
+		}
+
+		public void SetClipboard(Clipboard clipboard, bool refreshAnchor = false)
+		{
+			ArgumentNullException.ThrowIfNull(clipboard);
+			if (refreshAnchor && this.IsClipboardAnchored)
+			{
+				if (!this.Selection.IsSet()) throw new InvalidOperationException("An active clipboard anchor requires a valid selection.");
+				this.SetSelectionCore(CreateClipboardRange(this.Selection.min, clipboard.Dimension));
+			}
+			this.Clipboard = clipboard;
+		}
+
+		public void EnableClipboardAnchor(Vector3i origin)
+		{
+			if (this.Clipboard.Count <= 0) throw new WorldEditCommandException("Please /copy a selection or /import blueprint first!");
+			this.SetSelectionCore(CreateClipboardRange(origin, this.Clipboard.Dimension));
+			this.IsClipboardAnchored = true;
+		}
+
+		public void DisableClipboardAnchor(bool resetSelection = false)
+		{
+			this.IsClipboardAnchored = false;
+			if (resetSelection) this.SetSelectionCore(WorldRange.Invalid);
+		}
+
+		private void SetSelectionCore(WorldRange range)
+		{
 			this.Selection = range;
 			this.UpdateHighlightingObject();
+		}
+
+		private static WorldRange CreateClipboardRange(Vector3i origin, Vector3i dimension)
+		{
+			if (dimension.X <= 0 || dimension.Y <= 0 || dimension.Z <= 0) throw new WorldEditCommandException($"Clipboard dimension {dimension} is invalid; all dimensions must be positive.");
+			if (dimension.X > WorldEditHighlightingObject.MaximumAnimatedSize ||
+				dimension.Y > WorldEditHighlightingObject.MaximumAnimatedSize ||
+				dimension.Z > WorldEditHighlightingObject.MaximumAnimatedSize) throw new WorldEditCommandException($"Clipboard dimensions cannot exceed {WorldEditHighlightingObject.MaximumAnimatedSize} blocks per axis.");
+
+			try
+			{
+				Vector3i maximum = new(
+					checked(origin.X + dimension.X - 1),
+					checked(origin.Y + dimension.Y - 1),
+					checked(origin.Z + dimension.Z - 1));
+				return new WorldRange(origin, maximum);
+			}
+			catch (OverflowException exception)
+			{
+				throw new WorldEditCommandException("Clipboard anchor coordinates exceed the supported coordinate range.", exception);
+			}
 		}
 
 		public void DestroyHighlightingObject()
