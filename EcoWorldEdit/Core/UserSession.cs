@@ -41,13 +41,13 @@ namespace Eco.Mods.WorldEdit.Core
 
 		public void ResetSelection()
 		{
-			this.IsClipboardAnchored = false;
+			this.DisableClipboardAnchor(notify: false);
 			this.SetSelectionCore(WorldRange.Invalid);
 		}
 
 		public void SetSelection(WorldRange range)
 		{
-			this.IsClipboardAnchored = false;
+			this.DisableClipboardAnchor();
 			this.SetSelectionCore(range);
 		}
 
@@ -77,9 +77,11 @@ namespace Eco.Mods.WorldEdit.Core
 			this.IsClipboardAnchored = true;
 		}
 
-		public void DisableClipboardAnchor(bool resetSelection = false)
+		public void DisableClipboardAnchor(bool resetSelection = false, bool notify = true)
 		{
+			bool wasAnchored = this.IsClipboardAnchored;
 			this.IsClipboardAnchored = false;
+			if (wasAnchored && notify) Logging.SuccessLocStr("Clipboard anchor disabled; selection remains active.", this.Player);
 			if (resetSelection) this.SetSelectionCore(WorldRange.Invalid);
 		}
 

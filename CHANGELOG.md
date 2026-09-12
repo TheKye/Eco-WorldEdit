@@ -18,6 +18,7 @@
 
 ### Fixed
 
+- Players are notified when a command automatically disables the clipboard anchor while retaining the selection.
 - Blueprint migration now reconstructs explicitly zero legacy dimensions from stored block positions.
 - Imported claim stakes and their attached child objects are filtered before paste instead of aborting paste after partial world changes.
 - Failed commands now report the command name, elapsed time, reason, and any partial block changes in normal chat while retaining an error entry in the server log.

@@ -24,7 +24,7 @@ namespace Eco.Mods.WorldEdit.Commands.Buffer
 				}
 				else
 				{
-					session.DisableClipboardAnchor(resetSelection: true);
+					session.DisableClipboardAnchor(resetSelection: true, notify: false);
 					Logging.SuccessLocStr("Clipboard anchor disabled and selection reset.", user.Player);
 				}
 			}
